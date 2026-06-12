@@ -48,16 +48,63 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../css/site.css">
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col nav-on-services">
 <div class="float-layer" aria-hidden="true" id="floatLayer"></div>
 
-<nav class="sticky top-4 z-50 w-[94%] max-w-5xl mx-auto mt-4">
-    <div class="flex justify-between items-center pl-6 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
-        <a href="../index.html" class="text-2xl font-extrabold tracking-tighter">Yuzu<span class="text-yellow-500">.</span>solutions</a>
-        <div class="flex items-center gap-4 font-semibold text-sm sm:text-base">
-            <a href="../index.html#services" class="hidden sm:inline hover:text-yellow-600 transition-colors">Services</a>
-            <a href="../index.html#founder" class="hidden sm:inline hover:text-yellow-600 transition-colors">Founder</a>
-            <a href="../index.html" class="px-5 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 shadow-sm transition">Get Started</a>
+<nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
+    <div class="nav-bar-inner pl-5 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
+        <div class="text-xl sm:text-2xl font-extrabold tracking-tighter shrink-0">
+            <a href="../index.html" class="hover:text-yellow-600 transition-colors">Yuzu<span class="text-yellow-500">.</span>solutions</a>
+        </div>
+
+        <div class="nav-bar-center">
+            <div class="nav-pill-group" id="navPillGroup">
+                <a href="../index.html#impact" class="nav-pill-item">Vision</a>
+                <div class="nav-services-wrap" id="servicesNavWrap">
+                    <button type="button" class="nav-pill-btn active" id="servicesNavBtn" aria-expanded="false" aria-haspopup="true">
+                        Services <span class="nav-chevron">▾</span>
+                    </button>
+                    <div class="mega-menu" id="servicesMegaMenu" role="menu">
+                        <div class="mega-menu-grid">
+                            <a href="ai-automation.html" class="mega-item" role="menuitem" aria-current="page">
+                                <div class="mega-icon">🤖</div>
+                                <div>
+                                    <h4>AI &amp; Automation</h4>
+                                    <p>Agents, workflows &amp; LLM integrations · The Zest</p>
+                                </div>
+                            </a>
+                            <a href="infrastructure-data.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🏗️</div>
+                                <div>
+                                    <h4>Infrastructure &amp; Data</h4>
+                                    <p>Fabric lakehouses, ETL &amp; semantic models · The Core</p>
+                                </div>
+                            </a>
+                            <a href="technical-debt.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🛠️</div>
+                                <div>
+                                    <h4>Technical Debt &amp; Rescue</h4>
+                                    <p>Legacy fixes, performance &amp; model cleanup · The Detox</p>
+                                </div>
+                            </a>
+                            <a href="mvp-builds.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🚀</div>
+                                <div>
+                                    <h4>MVP Builds</h4>
+                                    <p>Internal tools, portals &amp; rapid prototypes · The First Press</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <a href="../index.html#founder" class="nav-pill-item">Founder</a>
+            </div>
+        </div>
+
+        <div class="nav-bar-end">
+            <a href="../index.html#services" class="md:hidden text-sm font-semibold hover:text-yellow-600">Services</a>
+            <a href="../index.html#founder" class="md:hidden text-sm font-semibold hover:text-yellow-600">Founder</a>
+            <a href="../index.html#founder" class="px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap">Get Started</a>
         </div>
     </div>
 </nav>
@@ -192,5 +239,6 @@
     <p class="text-sm mt-2">© 2026 Yuzu.solutions</p>
 </footer>
 <script src="../js/site.js"></script>
+<script src="../js/nav.js"></script>
 </body>
 </html>
