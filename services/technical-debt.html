@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Debt & Rescue | Yuzu.solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/site.css">
+</head>
+<body class="min-h-screen flex flex-col">
+<div class="float-layer" aria-hidden="true" id="floatLayer"></div>
+
+<nav class="sticky top-4 z-50 w-[94%] max-w-5xl mx-auto mt-4">
+    <div class="flex justify-between items-center pl-6 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
+        <a href="../index.html" class="text-2xl font-extrabold tracking-tighter">Yuzu<span class="text-yellow-500">.</span>solutions</a>
+        <div class="flex items-center gap-4 font-semibold text-sm sm:text-base">
+            <a href="../index.html#services" class="hidden sm:inline hover:text-yellow-600 transition-colors">Services</a>
+            <a href="../index.html#founder" class="hidden sm:inline hover:text-yellow-600 transition-colors">Founder</a>
+            <a href="../index.html" class="px-5 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 shadow-sm transition">Get Started</a>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-7xl mx-auto px-6 py-12 w-full">
+    <a href="../index.html#services" class="text-yellow-700 font-semibold text-sm hover:underline">← Back to Services</a>
+
+    <header class="mt-6 mb-14">
+        <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🛠️ The Detox</span>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mt-2">Technical Debt & Rescue</h1>
+        <p class="mt-4 text-lg text-stone-600 max-w-3xl leading-relaxed">
+            Got legacy reports that take 40 minutes to refresh? A semantic model nobody dares touch? We diagnose the root cause, refactor the mess, and get your production environment back to peak freshness — without bringing the system down.
+        </p>
+    </header>
+
+    <section class="grid md:grid-cols-2 gap-8 mb-16">
+        <div class="yuzu-card p-8 rounded-2xl">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Common rescue missions</h2>
+            <ul class="space-y-3 text-stone-600">
+                <li class="flex gap-2"><span>⚡</span> Report refresh times from hours → minutes</li>
+                <li class="flex gap-2"><span>⚡</span> Broken DAX measures &amp; circular dependencies</li>
+                <li class="flex gap-2"><span>⚡</span> Duplicate tables across 15 workbook copies</li>
+                <li class="flex gap-2"><span>⚡</span> Failed scheduled refreshes &amp; gateway issues</li>
+                <li class="flex gap-2"><span>⚡</span> Post-migration data reconciliation</li>
+            </ul>
+        </div>
+        <div class="yuzu-card p-8 rounded-2xl">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Our approach</h2>
+            <ol class="space-y-3 text-stone-600 list-decimal list-inside">
+                <li>Profile &amp; benchmark current state</li>
+                <li>Identify top 3 bottlenecks (usually 80% of pain)</li>
+                <li>Fix in a staging environment, validate with stakeholders</li>
+                <li>Cut over with rollback plan — zero downtime</li>
+            </ol>
+        </div>
+    </section>
+
+    <h2 class="text-2xl font-extrabold text-gray-900 mb-6">Example deliverables</h2>
+
+    <!-- Mockup 1: Before/After metrics -->
+    <div class="mb-10">
+        <p class="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-3">Performance Recovery Report</p>
+        <div class="mock-frame">
+            <div class="mock-titlebar">
+                <span class="mock-dot bg-red-400"></span><span class="mock-dot bg-yellow-400"></span><span class="mock-dot bg-green-400"></span>
+                <span class="text-gray-400 text-xs ml-2">Rescue Project · Sales Analytics PBIX</span>
+            </div>
+            <div class="mock-body">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <h4 class="text-xs font-bold text-red-800 uppercase mb-3">Before (Week 0)</h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between"><span class="text-stone-600">Report refresh</span><span class="font-bold text-red-700">42 min</span></div>
+                            <div class="flex justify-between"><span class="text-stone-600">Failed queries / day</span><span class="font-bold text-red-700">23%</span></div>
+                            <div class="flex justify-between"><span class="text-stone-600">Model size</span><span class="font-bold text-red-700">2.1 GB</span></div>
+                            <div class="flex justify-between"><span class="text-stone-600">Duplicate measures</span><span class="font-bold text-red-700">47</span></div>
+                            <div class="flex justify-between"><span class="text-stone-600">User complaints / wk</span><span class="font-bold text-red-700">12</span></div>
+                        </div>
+                    </div>
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <h4 class="text-xs font-bold text-green-800 uppercase mb-3">After (Week 6)</h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between"><span class="text-stone-600">Report refresh</span><span class="font-bold text-green-700">4 min ▼90%</span></div>
+                            <div class="flex justify-between"><span class="text-stone-600">Failed queries / day</span><span class="font-bold text-green-700">1% ▼96%</span></div>
+                            <div class="flex justify-between"><span class="text-stone-600">Model size</span><span class="font-bold text-green-700">680 MB ▼68%</span></div>
+                            <div class="flex justify-between"><span class="text-stone-600">Duplicate measures</span><span class="font-bold text-green-700">0</span></div>
+                            <div class="flex justify-between"><span class="text-stone-600">User complaints / wk</span><span class="font-bold text-green-700">0</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mockup 2: Incident timeline -->
+    <div class="mb-10">
+        <p class="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-3">Root Cause Analysis Timeline</p>
+        <div class="mock-frame">
+            <div class="mock-titlebar">
+                <span class="mock-dot bg-red-400"></span><span class="mock-dot bg-yellow-400"></span><span class="mock-dot bg-green-400"></span>
+                <span class="text-gray-400 text-xs ml-2">Incident #2026-0341 · Executive dashboard timeout</span>
+            </div>
+            <div class="mock-body" style="background:white">
+                <div class="space-y-0 max-w-lg mx-auto">
+                    <div class="flex gap-4 pb-4 border-l-2 border-red-300 pl-4 ml-2">
+                        <div><span class="text-[10px] font-bold text-red-600">09:14</span><p class="text-sm font-bold">Alert: refresh failed 3x consecutively</p><p class="text-xs text-stone-500">Gateway timeout after 30 min</p></div>
+                    </div>
+                    <div class="flex gap-4 pb-4 border-l-2 border-yellow-300 pl-4 ml-2">
+                        <div><span class="text-[10px] font-bold text-yellow-600">09:45</span><p class="text-sm font-bold">Diagnosis: cartesian product in fact join</p><p class="text-xs text-stone-500">Sales × Promotions = 840M rows inflated</p></div>
+                    </div>
+                    <div class="flex gap-4 pb-4 border-l-2 border-yellow-300 pl-4 ml-2">
+                        <div><span class="text-[10px] font-bold text-yellow-600">11:20</span><p class="text-sm font-bold">Fix: bridge table + inactive relationship</p><p class="text-xs text-stone-500">Deployed to staging, validated by finance</p></div>
+                    </div>
+                    <div class="flex gap-4 border-l-2 border-green-400 pl-4 ml-2">
+                        <div><span class="text-[10px] font-bold text-green-600">14:00</span><p class="text-sm font-bold">Production cutover — refresh in 3m 48s</p><p class="text-xs text-stone-500">Rollback window closed. Incident resolved.</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mockup 3: Model cleanup -->
+    <div class="mb-10">
+        <p class="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-3">Data Model Cleanup</p>
+        <div class="mock-frame">
+            <div class="mock-titlebar">
+                <span class="mock-dot bg-red-400"></span><span class="mock-dot bg-yellow-400"></span><span class="mock-dot bg-green-400"></span>
+                <span class="text-gray-400 text-xs ml-2">Tabular Editor · Model comparison</span>
+            </div>
+            <div class="mock-body">
+                <div class="grid md:grid-cols-2 gap-4 text-xs">
+                    <div class="bg-red-50 rounded-lg p-4 border border-red-200">
+                        <h4 class="font-bold text-red-800 mb-2">Legacy model (v14)</h4>
+                        <pre class="text-[10px] text-stone-600 leading-relaxed font-mono">Tables: 34 (12 hidden duplicates)
+Relationships: 28 (4 bi-directional ⚠)
+Measures: 112 (47 duplicates)
+Calculated cols: 89 ← should be in ETL
+Import mode: 2.1 GB
+Refresh: Import all tables</pre>
+                    </div>
+                    <div class="bg-green-50 rounded-lg p-4 border border-green-200">
+                        <h4 class="font-bold text-green-800 mb-2">Refactored model (v15)</h4>
+                        <pre class="text-[10px] text-stone-600 leading-relaxed font-mono">Tables: 18 (star schema)
+Relationships: 16 (all single-direction)
+Measures: 65 (documented, grouped)
+Calculated cols: 12 (display only)
+Import mode: 680 MB
+Refresh: Incremental on facts</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-gray-950 text-gray-500 py-10 text-center mt-auto">
+    <p><span class="text-xl mr-1">🍋</span> <span class="font-bold text-gray-300">Yuzu.solutions</span></p>
+    <p class="text-sm mt-2">© 2026 Yuzu.solutions</p>
+</footer>
+<script src="../js/site.js"></script>
+</body>
+</html>

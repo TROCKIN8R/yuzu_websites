@@ -133,6 +133,154 @@
 
         body > *:not(.float-layer):not(nav) { position: relative; z-index: 1; }
         nav { position: sticky; }
+
+        /* Nav mega-menu */
+        .nav-pill-group {
+            display: none;
+            align-items: center;
+            gap: 2px;
+            background: #F5F5F4;
+            border-radius: 9999px;
+            padding: 4px;
+            position: relative;
+        }
+        @media (min-width: 768px) { .nav-pill-group { display: flex; } }
+        .nav-pill-item {
+            padding: 8px 18px;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #57534E;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .nav-pill-item:hover { color: #1C1917; }
+        .nav-pill-item.active {
+            background: #1C1917;
+            color: #FFFFFF;
+        }
+        .nav-services-wrap { position: static; }
+
+        .mega-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%) translateY(8px);
+            width: min(640px, 92vw);
+            background: #FFFFFF;
+            border-radius: 20px;
+            border: 1px solid #F5F5F4;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.12), 0 4px 16px rgba(161,98,7,0.08);
+            padding: 20px;
+            padding-top: 12px;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+            z-index: 60;
+        }
+        .mega-menu::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 0;
+            right: 0;
+            height: 12px;
+        }
+        .nav-pill-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 18px;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #57534E;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .nav-pill-btn:hover { color: #1C1917; }
+        .nav-pill-btn.active {
+            background: #1C1917;
+            color: #FFFFFF;
+        }
+        .nav-chevron { font-size: 10px; transition: transform 0.2s; }
+        .nav-pill-btn.active .nav-chevron { transform: rotate(180deg); }
+
+        .mega-menu.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(0);
+        }
+        .mega-menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        @media (max-width: 520px) { .mega-menu-grid { grid-template-columns: 1fr; } }
+        .mega-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px;
+            border-radius: 14px;
+            transition: background 0.15s;
+            text-decoration: none;
+            color: inherit;
+        }
+        .mega-item:hover { background: #FFFBEB; }
+        .mega-icon {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            background: #1C1917;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .mega-item h4 { font-weight: 800; font-size: 0.95rem; color: #1C1917; line-height: 1.2; }
+        .mega-item p { font-size: 0.75rem; color: #B45309; margin-top: 4px; line-height: 1.4; font-weight: 500; }
+
+        .nav-bar-inner {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            overflow: visible;
+        }
+        .nav-bar-center {
+            display: flex;
+            justify-content: center;
+        }
+        .nav-bar-end {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .detail-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 16px;
+            padding: 10px 20px;
+            background: #1C1917;
+            color: #FFFFFF;
+            font-size: 0.875rem;
+            font-weight: 700;
+            border-radius: 9999px;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+        .detail-cta:hover { background: #44403C; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -140,13 +288,60 @@
 <!-- Floating lemons, juice drops & binary bits -->
 <div class="float-layer" aria-hidden="true" id="floatLayer"></div>
 
-<nav class="sticky top-4 z-50 w-[94%] max-w-5xl mx-auto mt-4">
-    <div class="flex justify-between items-center pl-6 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
-        <div class="text-2xl font-extrabold tracking-tighter">Yuzu<span class="text-yellow-500">.</span>solutions</div>
-        <div class="flex items-center gap-6 font-semibold">
-            <a href="#impact" class="hidden sm:inline hover:text-yellow-600 transition-colors">Philosophy</a>
-            <a href="#services" class="hidden sm:inline hover:text-yellow-600 transition-colors">Services</a>
-            <a href="#" class="px-5 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 shadow-sm transition">Get Started</a>
+<nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
+    <div class="nav-bar-inner pl-5 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
+        <div class="text-xl sm:text-2xl font-extrabold tracking-tighter shrink-0">
+            <a href="#" class="hover:text-yellow-600 transition-colors">Yuzu<span class="text-yellow-500">.</span>solutions</a>
+        </div>
+
+        <div class="nav-bar-center">
+            <div class="nav-pill-group" id="navPillGroup">
+                <a href="#impact" class="nav-pill-item">Vision</a>
+                <div class="nav-services-wrap" id="servicesNavWrap">
+                    <button type="button" class="nav-pill-btn" id="servicesNavBtn" aria-expanded="false" aria-haspopup="true">
+                        Services <span class="nav-chevron">▾</span>
+                    </button>
+                    <div class="mega-menu" id="servicesMegaMenu" role="menu">
+                        <div class="mega-menu-grid">
+                            <a href="services/ai-automation.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🤖</div>
+                                <div>
+                                    <h4>AI &amp; Automation</h4>
+                                    <p>Agents, workflows &amp; LLM integrations · The Zest</p>
+                                </div>
+                            </a>
+                            <a href="services/infrastructure-data.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🏗️</div>
+                                <div>
+                                    <h4>Infrastructure &amp; Data</h4>
+                                    <p>Fabric lakehouses, ETL &amp; semantic models · The Core</p>
+                                </div>
+                            </a>
+                            <a href="services/technical-debt.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🛠️</div>
+                                <div>
+                                    <h4>Technical Debt &amp; Rescue</h4>
+                                    <p>Legacy fixes, performance &amp; model cleanup · The Detox</p>
+                                </div>
+                            </a>
+                            <a href="services/mvp-builds.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🚀</div>
+                                <div>
+                                    <h4>MVP Builds</h4>
+                                    <p>Internal tools, portals &amp; rapid prototypes · The First Press</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <a href="#founder" class="nav-pill-item">Founder</a>
+            </div>
+        </div>
+
+        <div class="nav-bar-end">
+            <a href="#services" class="md:hidden text-sm font-semibold hover:text-yellow-600">Services</a>
+            <a href="#founder" class="md:hidden text-sm font-semibold hover:text-yellow-600">Founder</a>
+            <a href="#founder" class="px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap">Get Started</a>
         </div>
     </div>
 </nav>
@@ -166,113 +361,237 @@
         <div class="hero-visual p-6 shadow-2xl shadow-yellow-100">
             <svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Yuzu data juicer turning lemons into dashboards and data">
                 <defs>
-                    <linearGradient id="lemonGrad" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#FEF08A"/>
-                        <stop offset="100%" stop-color="#EAB308"/>
-                    </linearGradient>
-                    <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
+                    <radialGradient id="lemonGrad" cx="35%" cy="30%" r="75%">
+                        <stop offset="0%" stop-color="#FEF9C3"/>
+                        <stop offset="45%" stop-color="#FDE047"/>
+                        <stop offset="100%" stop-color="#CA8A04"/>
+                    </radialGradient>
+                    <linearGradient id="bodyGrad" x1="0" y1="0" x2="1" y2="1">
                         <stop offset="0%" stop-color="#FFFFFF"/>
-                        <stop offset="100%" stop-color="#E7E5E4"/>
+                        <stop offset="55%" stop-color="#F1EFEC"/>
+                        <stop offset="100%" stop-color="#D6D3D1"/>
+                    </linearGradient>
+                    <linearGradient id="bodyDark" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#E7E5E4"/>
+                        <stop offset="100%" stop-color="#A8A29E"/>
                     </linearGradient>
                     <linearGradient id="glassGrad" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.85"/>
-                        <stop offset="100%" stop-color="#FEF9C3" stop-opacity="0.6"/>
+                        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
+                        <stop offset="55%" stop-color="#FEF9C3" stop-opacity="0.55"/>
+                        <stop offset="100%" stop-color="#FDE68A" stop-opacity="0.5"/>
+                    </linearGradient>
+                    <linearGradient id="juiceGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#FDE047"/>
+                        <stop offset="100%" stop-color="#F59E0B"/>
                     </linearGradient>
                     <linearGradient id="panelGrad" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stop-color="#FFFFFF"/>
                         <stop offset="100%" stop-color="#FFFBEB"/>
                     </linearGradient>
-                    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#FACC15" stop-opacity="0.55"/>
+                        <stop offset="100%" stop-color="#FACC15" stop-opacity="0.05"/>
+                    </linearGradient>
+                    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
                         <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#A16207" flood-opacity="0.18"/>
                     </filter>
                 </defs>
 
-                <!-- surface -->
-                <line x1="30" y1="330" x2="320" y2="330" stroke="#D6D3D1" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- ground shadow + surface -->
+                <ellipse cx="196" cy="334" rx="120" ry="12" fill="#A16207" opacity="0.12"/>
+                <line x1="26" y1="332" x2="330" y2="332" stroke="#D6D3D1" stroke-width="2.5" stroke-linecap="round"/>
 
                 <!-- ===== JUICER (left) : lemons in, data out ===== -->
                 <!-- funnel -->
-                <path d="M120 110 L250 110 L222 165 L148 165 Z" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2.5" stroke-linejoin="round"/>
-                <ellipse cx="185" cy="110" rx="65" ry="13" fill="#F5F5F4" stroke="#44403C" stroke-width="2.5"/>
+                <path d="M118 112 L252 112 L224 166 L146 166 Z" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2.5" stroke-linejoin="round"/>
+                <ellipse cx="185" cy="112" rx="67" ry="14" fill="#F5F5F4" stroke="#44403C" stroke-width="2.5"/>
+                <ellipse cx="185" cy="112" rx="55" ry="9" fill="#E7E5E4" stroke="#78716C" stroke-width="1"/>
 
-                <!-- lemons piled in funnel -->
+                <!-- lemons piled in funnel (textured) -->
                 <g filter="url(#softShadow)">
-                    <circle cx="160" cy="96" r="17" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                    <circle cx="195" cy="90" r="16" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                    <circle cx="180" cy="68" r="15" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                    <circle cx="212" cy="70" r="14" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                    <circle cx="160" cy="58" r="13" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
+                    <g>
+                        <circle cx="158" cy="96" r="17" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
+                        <ellipse cx="152" cy="89" rx="6" ry="4" fill="#FFFFFF" opacity="0.55"/>
+                        <path d="M174 92 l5 -2" stroke="#A16207" stroke-width="1.4" stroke-linecap="round"/>
+                    </g>
+                    <g>
+                        <circle cx="196" cy="90" r="16" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
+                        <ellipse cx="190" cy="84" rx="5" ry="3.5" fill="#FFFFFF" opacity="0.55"/>
+                    </g>
+                    <g>
+                        <circle cx="178" cy="67" r="15" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
+                        <ellipse cx="172" cy="61" rx="5" ry="3.5" fill="#FFFFFF" opacity="0.55"/>
+                        <circle cx="178" cy="52" r="2" fill="#CA8A04"/>
+                    </g>
+                    <g>
+                        <circle cx="212" cy="69" r="13" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
+                        <ellipse cx="207" cy="64" rx="4" ry="3" fill="#FFFFFF" opacity="0.55"/>
+                    </g>
+                    <g>
+                        <circle cx="156" cy="57" r="12" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
+                        <ellipse cx="151" cy="52" rx="4" ry="3" fill="#FFFFFF" opacity="0.55"/>
+                    </g>
                 </g>
-                <!-- little leaves -->
-                <path d="M180 53 q6 -9 15 -6 q-3 9 -15 6 Z" fill="#84CC16" stroke="#44403C" stroke-width="1"/>
+                <!-- leaf + stem -->
+                <path d="M178 50 q8 -12 19 -8 q-4 12 -19 8 Z" fill="#84CC16" stroke="#44403C" stroke-width="1.2"/>
+                <line x1="187" y1="46" x2="183" y2="51" stroke="#3F6212" stroke-width="1"/>
 
                 <!-- machine body -->
-                <rect x="118" y="165" width="150" height="135" rx="18" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2.5" filter="url(#softShadow)"/>
+                <rect x="114" y="166" width="158" height="132" rx="20" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2.5" filter="url(#softShadow)"/>
+                <!-- side seam + rivets -->
+                <line x1="114" y1="232" x2="272" y2="232" stroke="#D6D3D1" stroke-width="1.5"/>
+                <circle cx="124" cy="176" r="2" fill="#A8A29E"/>
+                <circle cx="262" cy="176" r="2" fill="#A8A29E"/>
+                <circle cx="124" cy="288" r="2" fill="#A8A29E"/>
+                <circle cx="262" cy="288" r="2" fill="#A8A29E"/>
+                <!-- ventilation slots -->
+                <g stroke="#A8A29E" stroke-width="2" stroke-linecap="round">
+                    <line x1="250" y1="244" x2="262" y2="244"/>
+                    <line x1="250" y1="251" x2="262" y2="251"/>
+                    <line x1="250" y1="258" x2="262" y2="258"/>
+                </g>
 
                 <!-- glass press chamber -->
-                <rect x="142" y="183" width="102" height="78" rx="22" fill="url(#glassGrad)" stroke="#44403C" stroke-width="2.5"/>
+                <rect x="138" y="184" width="108" height="80" rx="24" fill="url(#glassGrad)" stroke="#44403C" stroke-width="2.5"/>
+                <!-- auger / press screw -->
+                <line x1="192" y1="192" x2="192" y2="252" stroke="#A8A29E" stroke-width="6" stroke-linecap="round"/>
+                <path d="M180 200 q12 6 24 0 M180 214 q12 6 24 0 M180 228 q12 6 24 0 M180 242 q12 6 24 0" stroke="#CA8A04" stroke-width="2" fill="none"/>
                 <!-- lemon half being pressed -->
-                <path d="M163 222 a30 30 0 0 1 60 0 Z" fill="#FEF3C7" stroke="#44403C" stroke-width="2"/>
-                <path d="M193 222 m-26 0 a26 26 0 0 1 52 0" fill="none" stroke="#FACC15" stroke-width="2"/>
-                <line x1="193" y1="222" x2="193" y2="197" stroke="#EAB308" stroke-width="1.5"/>
-                <line x1="193" y1="222" x2="172" y2="208" stroke="#EAB308" stroke-width="1.5"/>
-                <line x1="193" y1="222" x2="214" y2="208" stroke="#EAB308" stroke-width="1.5"/>
-                <!-- glass shine -->
-                <path d="M150 192 q8 -6 18 -4" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+                <path d="M165 232 a27 27 0 0 1 54 0 Z" fill="#FEF3C7" stroke="#44403C" stroke-width="2"/>
+                <path d="M192 232 m-23 0 a23 23 0 0 1 46 0" fill="none" stroke="#FACC15" stroke-width="2"/>
+                <g stroke="#EAB308" stroke-width="1.4">
+                    <line x1="192" y1="232" x2="192" y2="210"/>
+                    <line x1="192" y1="232" x2="174" y2="219"/>
+                    <line x1="192" y1="232" x2="210" y2="219"/>
+                    <line x1="192" y1="232" x2="180" y2="214"/>
+                    <line x1="192" y1="232" x2="204" y2="214"/>
+                </g>
+                <!-- juice pooling at chamber base -->
+                <path d="M142 256 q50 12 100 0 v4 a24 24 0 0 1 -24 4 h-52 a24 24 0 0 1 -24 -4 Z" fill="url(#juiceGrad)" opacity="0.85"/>
+                <!-- glass reflections -->
+                <path d="M148 194 q8 -7 18 -5" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+                <line x1="234" y1="198" x2="234" y2="244" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.45"/>
 
-                <!-- control dial -->
-                <circle cx="155" cy="282" r="11" fill="#FFFFFF" stroke="#44403C" stroke-width="2"/>
-                <line x1="155" y1="282" x2="162" y2="276" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"/>
-                <!-- power light -->
-                <circle cx="232" cy="282" r="6" fill="#84CC16" stroke="#44403C" stroke-width="1.5"/>
+                <!-- control panel -->
+                <rect x="126" y="272" width="134" height="20" rx="6" fill="url(#bodyDark)" stroke="#44403C" stroke-width="1.5"/>
+                <!-- dial with ticks -->
+                <circle cx="146" cy="282" r="9" fill="#FFFFFF" stroke="#44403C" stroke-width="1.8"/>
+                <line x1="146" y1="282" x2="152" y2="277" stroke="#D97706" stroke-width="2.2" stroke-linecap="round"/>
+                <g stroke="#78716C" stroke-width="1">
+                    <line x1="146" y1="271" x2="146" y2="273"/>
+                    <line x1="157" y1="282" x2="155" y2="282"/>
+                    <line x1="146" y1="293" x2="146" y2="291"/>
+                    <line x1="135" y1="282" x2="137" y2="282"/>
+                </g>
+                <!-- mini gauge -->
+                <circle cx="172" cy="282" r="8" fill="#FEFCE8" stroke="#44403C" stroke-width="1.5"/>
+                <path d="M166 285 a6 6 0 0 1 12 0" fill="none" stroke="#84CC16" stroke-width="2"/>
+                <line x1="172" y1="282" x2="176" y2="279" stroke="#44403C" stroke-width="1.2" stroke-linecap="round"/>
+                <!-- buttons -->
+                <rect x="186" y="277" width="12" height="10" rx="2" fill="#FACC15" stroke="#44403C" stroke-width="1.2"/>
+                <rect x="202" y="277" width="12" height="10" rx="2" fill="#E7E5E4" stroke="#44403C" stroke-width="1.2"/>
+                <!-- power LED -->
+                <circle cx="236" cy="282" r="5" fill="#84CC16" stroke="#44403C" stroke-width="1.4"/>
+                <circle cx="234" cy="280" r="1.5" fill="#FFFFFF" opacity="0.8"/>
 
-                <!-- spout -->
-                <path d="M268 232 L294 232 L289 252 L273 252 Z" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2"/>
+                <!-- brand plate -->
+                <rect x="150" y="174" width="86" height="4" rx="2" fill="#FDE68A"/>
+
+                <!-- feet -->
+                <rect x="128" y="296" width="16" height="8" rx="3" fill="#78716C"/>
+                <rect x="242" y="296" width="16" height="8" rx="3" fill="#78716C"/>
+
+                <!-- spout + dripping juice -->
+                <path d="M270 230 L298 230 L292 252 L276 252 Z" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2"/>
+                <path d="M284 252 q-3 8 0 14 q3 -6 0 -14 Z" fill="url(#juiceGrad)"/>
+                <circle cx="284" cy="272" r="3" fill="#FACC15"/>
 
                 <!-- ===== DATA OUTPUT (right) : the "juice" is data ===== -->
-                <!-- binary trickling from spout -->
-                <g font-family="monospace" font-size="13" font-weight="bold" fill="#A16207">
-                    <text x="300" y="250">1</text>
-                    <text x="312" y="266">0</text>
-                    <text x="300" y="282">0</text>
-                    <text x="316" y="294">1</text>
+                <!-- juice-to-binary transition -->
+                <g font-family="monospace" font-size="12" font-weight="bold">
+                    <text x="298" y="248" fill="#D97706">1</text>
+                    <text x="290" y="266" fill="#CA8A04">0</text>
+                    <text x="302" y="282" fill="#A16207">1</text>
+                    <text x="288" y="298" fill="#A16207" opacity="0.7">0</text>
+                    <text x="304" y="312" fill="#A16207" opacity="0.5">1</text>
                 </g>
 
-                <!-- dashboard card stack -->
+                <!-- dashboard card -->
                 <g filter="url(#softShadow)">
-                    <rect x="300" y="70" width="130" height="150" rx="16" fill="url(#panelGrad)" stroke="#44403C" stroke-width="2.5"/>
+                    <rect x="296" y="56" width="150" height="178" rx="16" fill="url(#panelGrad)" stroke="#44403C" stroke-width="2.5"/>
                 </g>
-                <text x="316" y="93" font-family="'Outfit',sans-serif" font-size="11" font-weight="700" fill="#44403C">INSIGHTS</text>
-                <circle cx="418" cy="88" r="4" fill="#FACC15" stroke="#44403C" stroke-width="1"/>
+                <!-- title bar -->
+                <path d="M296 72 a16 16 0 0 1 16 -16 h118 a16 16 0 0 1 16 16 v6 H296 Z" fill="#FEF3C7"/>
+                <circle cx="308" cy="66" r="3" fill="#F87171" stroke="#44403C" stroke-width="0.6"/>
+                <circle cx="318" cy="66" r="3" fill="#FBBF24" stroke="#44403C" stroke-width="0.6"/>
+                <circle cx="328" cy="66" r="3" fill="#84CC16" stroke="#44403C" stroke-width="0.6"/>
+                <text x="434" y="70" text-anchor="end" font-family="'Outfit',sans-serif" font-size="10" font-weight="800" fill="#44403C">INSIGHTS</text>
+                <line x1="296" y1="78" x2="446" y2="78" stroke="#44403C" stroke-width="1.5"/>
 
-                <!-- pie -->
-                <circle cx="332" cy="128" r="18" fill="#FEF9C3" stroke="#44403C" stroke-width="2"/>
-                <path d="M332 128 L332 110 A18 18 0 0 1 348 136 Z" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="1.5"/>
-                <path d="M332 128 L348 136 A18 18 0 0 1 320 138 Z" fill="#FDE047" stroke="#44403C" stroke-width="1.5"/>
+                <!-- donut chart (segmented) -->
+                <g transform="rotate(-90 332 116)">
+                    <circle cx="332" cy="116" r="17" fill="none" stroke="#FEF3C7" stroke-width="11"/>
+                    <circle cx="332" cy="116" r="17" fill="none" stroke="#FACC15" stroke-width="11" stroke-dasharray="46 107" stroke-dashoffset="0"/>
+                    <circle cx="332" cy="116" r="17" fill="none" stroke="#EAB308" stroke-width="11" stroke-dasharray="32 107" stroke-dashoffset="-46"/>
+                    <circle cx="332" cy="116" r="17" fill="none" stroke="#D97706" stroke-width="11" stroke-dasharray="29 107" stroke-dashoffset="-78"/>
+                </g>
+                <text x="332" y="120" text-anchor="middle" font-family="'Outfit',sans-serif" font-size="11" font-weight="800" fill="#44403C">78%</text>
 
-                <!-- bar chart -->
-                <line x1="364" y1="146" x2="414" y2="146" stroke="#44403C" stroke-width="1.5"/>
-                <rect x="368" y="128" width="8" height="18" fill="#FDE047" stroke="#44403C" stroke-width="1.2"/>
-                <rect x="380" y="118" width="8" height="28" fill="#FACC15" stroke="#44403C" stroke-width="1.2"/>
-                <rect x="392" y="124" width="8" height="22" fill="#EAB308" stroke="#44403C" stroke-width="1.2"/>
-                <rect x="404" y="110" width="8" height="36" fill="#FACC15" stroke="#44403C" stroke-width="1.2"/>
+                <!-- bar chart with axis + gridlines -->
+                <g stroke="#E7E5E4" stroke-width="1">
+                    <line x1="368" y1="98" x2="436" y2="98"/>
+                    <line x1="368" y1="112" x2="436" y2="112"/>
+                    <line x1="368" y1="126" x2="436" y2="126"/>
+                </g>
+                <line x1="368" y1="138" x2="436" y2="138" stroke="#44403C" stroke-width="1.5"/>
+                <rect x="372" y="120" width="9" height="18" fill="#FDE047" stroke="#44403C" stroke-width="1"/>
+                <rect x="386" y="108" width="9" height="30" fill="#FACC15" stroke="#44403C" stroke-width="1"/>
+                <rect x="400" y="116" width="9" height="22" fill="#EAB308" stroke="#44403C" stroke-width="1"/>
+                <rect x="414" y="100" width="9" height="38" fill="#D97706" stroke="#44403C" stroke-width="1"/>
 
-                <!-- trend line -->
-                <rect x="316" y="166" width="98" height="42" rx="8" fill="#FFFFFF" stroke="#44403C" stroke-width="1.5"/>
-                <polyline points="324,198 344,184 360,190 378,172 406,176" fill="none" stroke="#D97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <polyline points="378,172 406,176" fill="none" stroke="#D97706" stroke-width="2.5"/>
-                <path d="M400 170 L408 174 L402 180" fill="none" stroke="#D97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- area/line chart panel -->
+                <rect x="308" y="150" width="126" height="46" rx="8" fill="#FFFFFF" stroke="#44403C" stroke-width="1.5"/>
+                <path d="M315 188 L315 180 L335 168 L352 174 L372 156 L400 160 L426 152 L426 188 Z" fill="url(#areaFill)"/>
+                <polyline points="315,180 335,168 352,174 372,156 400,160 426,152" fill="none" stroke="#D97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <g fill="#FFFFFF" stroke="#D97706" stroke-width="1.5">
+                    <circle cx="335" cy="168" r="2.2"/>
+                    <circle cx="372" cy="156" r="2.2"/>
+                    <circle cx="426" cy="152" r="2.2"/>
+                </g>
 
-                <!-- foreground lemon + slice on surface -->
+                <!-- KPI row -->
+                <text x="308" y="218" font-family="'Outfit',sans-serif" font-size="15" font-weight="800" fill="#44403C">2.4x</text>
+                <path d="M340 216 l5 -7 l5 7 Z" fill="#84CC16" stroke="#3F6212" stroke-width="0.6"/>
+                <text x="356" y="218" font-family="'Outfit',sans-serif" font-size="9" font-weight="600" fill="#16A34A">ROI</text>
+                <rect x="392" y="208" width="42" height="14" rx="7" fill="#ECFCCB" stroke="#84CC16" stroke-width="1"/>
+                <text x="413" y="218" text-anchor="middle" font-family="'Outfit',sans-serif" font-size="8" font-weight="700" fill="#3F6212">LIVE</text>
+
+                <!-- floating data bits between machine and dashboard -->
+                <g font-family="monospace" font-size="10" font-weight="bold" fill="#CA8A04" opacity="0.6">
+                    <text x="276" y="190">0</text>
+                    <text x="282" y="170">1</text>
+                    <text x="272" y="150">1</text>
+                </g>
+
+                <!-- foreground lemon + detailed slice -->
                 <g filter="url(#softShadow)">
-                    <circle cx="92" cy="312" r="18" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                    <path d="M92 300 q5 -7 12 -5 q-2 7 -12 5 Z" fill="#84CC16" stroke="#44403C" stroke-width="0.8"/>
+                    <circle cx="92" cy="312" r="19" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
+                    <ellipse cx="85" cy="304" rx="6" ry="4" fill="#FFFFFF" opacity="0.55"/>
+                    <path d="M92 298 q6 -9 15 -6 q-3 9 -15 6 Z" fill="#84CC16" stroke="#44403C" stroke-width="1"/>
                 </g>
-                <circle cx="60" cy="320" r="14" fill="#FEF3C7" stroke="#44403C" stroke-width="2"/>
-                <circle cx="60" cy="320" r="11" fill="none" stroke="#FACC15" stroke-width="1.5"/>
-                <line x1="60" y1="320" x2="60" y2="309" stroke="#EAB308" stroke-width="1.2"/>
-                <line x1="60" y1="320" x2="71" y2="320" stroke="#EAB308" stroke-width="1.2"/>
-                <line x1="60" y1="320" x2="52" y2="328" stroke="#EAB308" stroke-width="1.2"/>
+                <!-- halved lemon with segments -->
+                <circle cx="56" cy="320" r="15" fill="#FEF9C3" stroke="#44403C" stroke-width="2"/>
+                <circle cx="56" cy="320" r="11.5" fill="#FEFCE8" stroke="#FACC15" stroke-width="1.6"/>
+                <g stroke="#FACC15" stroke-width="1.3">
+                    <line x1="56" y1="320" x2="56" y2="309"/>
+                    <line x1="56" y1="320" x2="66" y2="314"/>
+                    <line x1="56" y1="320" x2="67" y2="323"/>
+                    <line x1="56" y1="320" x2="60" y2="331"/>
+                    <line x1="56" y1="320" x2="50" y2="331"/>
+                    <line x1="56" y1="320" x2="45" y2="323"/>
+                    <line x1="56" y1="320" x2="46" y2="314"/>
+                </g>
+                <circle cx="56" cy="320" r="2" fill="#EAB308"/>
             </svg>
         </div>
     </div>
@@ -298,6 +617,32 @@
 
         <div class="mt-8 text-center text-stone-600" id="impactInsight">
             <p class="text-lg"><strong>The Yuzu Squeeze:</strong> 80% of our engagement time is spent engineering solutions, writing code, and deploying agents. Strategy is the byproduct of building.</p>
+        </div>
+    </div>
+</section>
+
+<section id="clients" class="py-16 px-6 max-w-7xl mx-auto">
+    <div class="text-center mb-10">
+        <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🍋 Right Fruit, Right Press</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-3">Who We Work With</h2>
+        <p class="mt-3 text-lg text-stone-500 max-w-2xl mx-auto">Whether you're squeezing your first warehouse or wringing sense out of a decade of spreadsheets — we've got the juicer for that.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="yuzu-card p-8 rounded-3xl">
+            <div class="text-4xl mb-4">🌱</div>
+            <h3 class="text-xl font-bold text-gray-900">Growing Companies</h3>
+            <p class="mt-3 text-stone-600 leading-relaxed">SMBs outgrowing Excel, ready for their first warehouse and governed reporting. Time to trade the squeeze-by-hand for a real press.</p>
+        </div>
+        <div class="yuzu-card p-8 rounded-3xl">
+            <div class="text-4xl mb-4">🏢</div>
+            <h3 class="text-xl font-bold text-gray-900">Enterprise Consolidation</h3>
+            <p class="mt-3 text-stone-600 leading-relaxed">Larger orgs unifying siloed systems, conflicting KPIs, and years of accumulated data. One orchard, one juice standard.</p>
+        </div>
+        <div class="yuzu-card p-8 rounded-3xl">
+            <div class="text-4xl mb-4">🤝</div>
+            <h3 class="text-xl font-bold text-gray-900">Post-Merger Integration</h3>
+            <p class="mt-3 text-stone-600 leading-relaxed">Merging teams that need one stack, one source of truth, and one reporting culture. Two groves, one blend — no pulp left behind.</p>
         </div>
     </div>
 </section>
@@ -344,6 +689,7 @@
                 <p class="text-lg text-stone-600 leading-relaxed" id="detailDesc">
                     Your manual workflows are low-hanging fruit. I build and deploy agents to handle the heavy lifting, connecting your apps and databases with glue code that actually sticks.
                 </p>
+                <a href="services/ai-automation.html" id="detailLink" class="detail-cta">See dashboards &amp; workflows →</a>
             </div>
 
             <div class="mt-auto grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
@@ -394,6 +740,121 @@
                 <p class="text-gray-300 leading-relaxed">
                     When I propose a solution, the roadmap comes for free. You aren't paying for a plan; you're paying for the juice. Strategy is the natural byproduct of technical mastery.
                 </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="founder" class="py-20 px-6 bg-[#FEFCE8] border-t border-yellow-100">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-14">
+            <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🍋 The Head Squeezer</span>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-3">About the Founder</h2>
+            <p class="mt-4 text-lg text-stone-500 max-w-2xl mx-auto">One senior specialist, zero middlemen, and a serious grudge against zest-less dashboards.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Founder identity card -->
+            <div class="lg:col-span-5 yuzu-card p-8 rounded-3xl shadow-xl shadow-yellow-100 flex flex-col">
+                <div class="flex items-center gap-5">
+                    <img src="assets/adrien-yvin.jpg" alt="Adrien Yvin" class="w-20 h-20 rounded-2xl object-cover border-2 border-yellow-300 shadow-md shrink-0">
+                    <div>
+                        <h3 class="text-2xl font-extrabold text-gray-900">Adrien Yvin</h3>
+                        <p class="text-yellow-700 font-semibold">Data Platform Architect &amp; BI Leader</p>
+                    </div>
+                </div>
+
+                <p class="mt-6 text-stone-600 leading-relaxed">
+                    Seven years immersed in data — from ETL pipelines at an energy utility to machine-learning pricing models inside a <strong class="text-gray-900">$4B packaging company</strong>. Currently leading a BI squad at <strong class="text-gray-900">Cascades</strong>, architecting Microsoft Fabric solutions that turn raw transactional data into boardroom-ready decisions.
+                </p>
+                <p class="mt-4 text-stone-600 leading-relaxed">
+                    <strong class="text-gray-900">Yuzu.solutions</strong> brings that same precision directly to you — one senior specialist who gets hands dirty in the pipes, owns every medallion layer, and delivers reports you can stake decisions on.
+                </p>
+
+                <div class="mt-6 inline-flex items-start gap-2 bg-yellow-50 rounded-xl p-4 border-l-4 border-yellow-500">
+                    <span class="text-xl">🎓</span>
+                    <p class="text-sm text-stone-700"><strong>BBA, Business Intelligence</strong> · HEC Montréal · <em>Cum Laude</em></p>
+                </div>
+
+                <div class="mt-auto pt-6 flex flex-wrap items-center gap-3">
+                    <a href="https://www.linkedin.com/in/adrienyvin/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white font-semibold rounded-full hover:bg-gray-700 transition">
+                        <span>in</span> LinkedIn
+                    </a>
+                    <div class="flex items-center gap-2">
+                        <span class="px-3 py-1.5 rounded-full bg-white border border-yellow-200 text-sm font-bold text-yellow-700">FR</span>
+                        <span class="px-3 py-1.5 rounded-full bg-white border border-yellow-200 text-sm font-bold text-yellow-700">EN</span>
+                        <span class="px-3 py-1.5 rounded-full bg-white border border-yellow-200 text-sm font-bold text-yellow-700">ES</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats, timeline & stack -->
+            <div class="lg:col-span-7 flex flex-col gap-8">
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="yuzu-card p-6 rounded-2xl text-center">
+                        <div class="text-4xl font-extrabold text-yellow-500">7</div>
+                        <div class="mt-1 text-sm font-semibold text-stone-500 uppercase tracking-wide">Years in Data</div>
+                    </div>
+                    <div class="yuzu-card p-6 rounded-2xl text-center">
+                        <div class="text-4xl font-extrabold text-yellow-500">4</div>
+                        <div class="mt-1 text-sm font-semibold text-stone-500 uppercase tracking-wide">Companies</div>
+                    </div>
+                    <div class="yuzu-card p-6 rounded-2xl text-center">
+                        <div class="text-4xl font-extrabold text-yellow-500">3</div>
+                        <div class="mt-1 text-sm font-semibold text-stone-500 uppercase tracking-wide">Languages</div>
+                    </div>
+                </div>
+
+                <!-- Experience timeline -->
+                <div class="yuzu-card p-8 rounded-2xl">
+                    <h4 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2"><span>🧃</span> Experience</h4>
+                    <ol class="relative border-l-2 border-yellow-200 ml-3 space-y-6">
+                        <li class="pl-6 relative">
+                            <span class="absolute -left-[11px] top-1 w-5 h-5 rounded-full yuzu-gradient border-2 border-white shadow"></span>
+                            <span class="text-xs font-bold text-yellow-600 uppercase tracking-wider">2024 – now</span>
+                            <p class="font-bold text-gray-900">Expert BI Analyst &amp; Squad Leader</p>
+                            <p class="text-stone-500 text-sm">Cascades</p>
+                        </li>
+                        <li class="pl-6 relative">
+                            <span class="absolute -left-[11px] top-1 w-5 h-5 rounded-full bg-yellow-300 border-2 border-white shadow"></span>
+                            <span class="text-xs font-bold text-yellow-600 uppercase tracking-wider">2021 – 2023</span>
+                            <p class="font-bold text-gray-900">Business Intelligence Analyst</p>
+                            <p class="text-stone-500 text-sm">Keurig Dr Pepper Canada</p>
+                        </li>
+                        <li class="pl-6 relative">
+                            <span class="absolute -left-[11px] top-1 w-5 h-5 rounded-full bg-yellow-300 border-2 border-white shadow"></span>
+                            <span class="text-xs font-bold text-yellow-600 uppercase tracking-wider">2021</span>
+                            <p class="font-bold text-gray-900">BI Consultant</p>
+                            <p class="text-stone-500 text-sm">Énergir</p>
+                        </li>
+                        <li class="pl-6 relative">
+                            <span class="absolute -left-[11px] top-1 w-5 h-5 rounded-full bg-yellow-300 border-2 border-white shadow"></span>
+                            <span class="text-xs font-bold text-yellow-600 uppercase tracking-wider">2020 – 2021</span>
+                            <p class="font-bold text-gray-900">BI Intern</p>
+                            <p class="text-stone-500 text-sm">HEC Montréal</p>
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Core stack -->
+                <div class="yuzu-card p-8 rounded-2xl">
+                    <h4 class="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2"><span>⚙️</span> Core Stack</h4>
+                    <div class="flex flex-wrap gap-2.5">
+                        <span class="px-4 py-2 rounded-full yuzu-bg text-yellow-900 font-semibold text-sm">Power BI</span>
+                        <span class="px-4 py-2 rounded-full yuzu-bg text-yellow-900 font-semibold text-sm">Microsoft Fabric</span>
+                        <span class="px-4 py-2 rounded-full yuzu-bg text-yellow-900 font-semibold text-sm">SQL</span>
+                        <span class="px-4 py-2 rounded-full yuzu-bg text-yellow-900 font-semibold text-sm">DAX</span>
+                        <span class="px-4 py-2 rounded-full yuzu-bg text-yellow-900 font-semibold text-sm">BigQuery</span>
+                        <span class="px-4 py-2 rounded-full yuzu-bg text-yellow-900 font-semibold text-sm">Snowflake</span>
+                        <span class="px-4 py-2 rounded-full yuzu-bg text-yellow-900 font-semibold text-sm">Python</span>
+                        <span class="px-4 py-2 rounded-full yuzu-bg text-yellow-900 font-semibold text-sm">scikit-learn</span>
+                        <span class="px-4 py-2 rounded-full yuzu-bg text-yellow-900 font-semibold text-sm">Tableau</span>
+                        <span class="px-4 py-2 rounded-full yuzu-bg text-yellow-900 font-semibold text-sm">ETL / ELT</span>
+                        <span class="px-4 py-2 rounded-full yuzu-bg text-yellow-900 font-semibold text-sm">Cursor</span>
+                        <span class="px-4 py-2 rounded-full yuzu-bg text-yellow-900 font-semibold text-sm">Copilot Agents</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -520,24 +981,61 @@
         ai: {
             title: "AI & Automation",
             desc: "Your manual workflows are low-hanging fruit. I build and deploy agents to handle the heavy lifting, connecting your apps and databases with glue code that actually sticks.",
-            list: ["Autonomous Agents", "API Integration Glue Code", "Custom LLM Wrappers"]
+            list: ["Autonomous Agents", "API Integration Glue Code", "Custom LLM Wrappers"],
+            page: "services/ai-automation.html"
         },
         infra: {
             title: "Infrastructure & Data",
             desc: "I build the backbone. From IaC that doesn't break to data pipelines that deliver clean results, I ensure your foundation is rock solid and scales effortlessly.",
-            list: ["Terraform/IaC Deployments", "Resilient ETL Pipelines", "Secure API Gateways"]
+            list: ["Terraform/IaC Deployments", "Resilient ETL Pipelines", "Secure API Gateways"],
+            page: "services/infrastructure-data.html"
         },
         debt: {
             title: "Technical Debt & Rescue",
             desc: "Got legacy code that's gone sour? I find the root cause, refactor the mess, and get your production environment back to peak freshness without bringing the system down.",
-            list: ["Legacy Code Refactoring", "Latency Bottleneck Fixes", "Production Hotfixes"]
+            list: ["Legacy Code Refactoring", "Latency Bottleneck Fixes", "Production Hotfixes"],
+            page: "services/technical-debt.html"
         },
         mvp: {
             title: "MVP Builds",
             desc: "Need a new tool? I ship fast, clean, and maintainable applications designed to last long after the initial rollout. We build for the future, not just the demo.",
-            list: ["Custom Internal Tools", "Modern Stack Architecture", "Rapid Prototyping"]
+            list: ["Custom Internal Tools", "Modern Stack Architecture", "Rapid Prototyping"],
+            page: "services/mvp-builds.html"
         }
     };
+
+    // Services mega-menu
+    (function initMegaMenu() {
+        const group = document.getElementById('navPillGroup');
+        const wrap = document.getElementById('servicesNavWrap');
+        const btn = document.getElementById('servicesNavBtn');
+        const menu = document.getElementById('servicesMegaMenu');
+        if (!group || !wrap || !btn || !menu) return;
+
+        function open() {
+            btn.classList.add('active');
+            btn.setAttribute('aria-expanded', 'true');
+            menu.classList.add('open');
+        }
+        function close() {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-expanded', 'false');
+            menu.classList.remove('open');
+        }
+        function toggle() {
+            menu.classList.contains('open') ? close() : open();
+        }
+
+        btn.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
+        wrap.addEventListener('mouseenter', open);
+        wrap.addEventListener('mouseleave', close);
+        document.addEventListener('click', (e) => {
+            if (!wrap.contains(e.target)) close();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') close();
+        });
+    })();
 
     // Floating particles — negative delays so they're already on screen on load
     (function initFloatLayer() {
@@ -641,6 +1139,7 @@
     const detailDesc = document.getElementById('detailDesc');
     const detailList = document.getElementById('detailList');
     const detailView = document.getElementById('serviceDetailView');
+    const detailLink = document.getElementById('detailLink');
 
     serviceCards.forEach(card => {
         card.addEventListener('click', () => {
@@ -662,6 +1161,7 @@
 
             detailTitle.textContent = data.title;
             detailDesc.textContent = data.desc;
+            detailLink.href = data.page;
 
             detailList.innerHTML = '';
             data.list.forEach(item => {

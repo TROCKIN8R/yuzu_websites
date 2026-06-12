@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI & Automation | Yuzu.solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/site.css">
+</head>
+<body class="min-h-screen flex flex-col">
+<div class="float-layer" aria-hidden="true" id="floatLayer"></div>
+
+<nav class="sticky top-4 z-50 w-[94%] max-w-5xl mx-auto mt-4">
+    <div class="flex justify-between items-center pl-6 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
+        <a href="../index.html" class="text-2xl font-extrabold tracking-tighter">Yuzu<span class="text-yellow-500">.</span>solutions</a>
+        <div class="flex items-center gap-4 font-semibold text-sm sm:text-base">
+            <a href="../index.html#services" class="hidden sm:inline hover:text-yellow-600 transition-colors">Services</a>
+            <a href="../index.html#founder" class="hidden sm:inline hover:text-yellow-600 transition-colors">Founder</a>
+            <a href="../index.html" class="px-5 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 shadow-sm transition">Get Started</a>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-7xl mx-auto px-6 py-12 w-full">
+    <a href="../index.html#services" class="text-yellow-700 font-semibold text-sm hover:underline">← Back to Services</a>
+
+    <header class="mt-6 mb-14">
+        <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🤖 The Zest</span>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mt-2">AI & Automation</h1>
+        <p class="mt-4 text-lg text-stone-600 max-w-3xl leading-relaxed">
+            Your manual workflows are low-hanging fruit. We build and deploy agents that read emails, call APIs, classify documents, and push clean data into your warehouse — so your team stops copy-pasting between tabs.
+        </p>
+    </header>
+
+    <section class="grid md:grid-cols-2 gap-8 mb-16">
+        <div class="yuzu-card p-8 rounded-2xl">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">What we automate</h2>
+            <ul class="space-y-3 text-stone-600">
+                <li class="flex gap-2"><span>⚡</span> Invoice &amp; PO intake → ERP posting</li>
+                <li class="flex gap-2"><span>⚡</span> Customer support triage &amp; draft replies</li>
+                <li class="flex gap-2"><span>⚡</span> Scheduled report generation &amp; distribution</li>
+                <li class="flex gap-2"><span>⚡</span> Data quality alerts with root-cause hints</li>
+                <li class="flex gap-2"><span>⚡</span> Cross-system sync (CRM ↔ warehouse ↔ finance)</li>
+            </ul>
+        </div>
+        <div class="yuzu-card p-8 rounded-2xl">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Typical stack</h2>
+            <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1.5 rounded-full yuzu-bg text-yellow-900 text-sm font-semibold">Python</span>
+                <span class="px-3 py-1.5 rounded-full yuzu-bg text-yellow-900 text-sm font-semibold">OpenAI / Azure OpenAI</span>
+                <span class="px-3 py-1.5 rounded-full yuzu-bg text-yellow-900 text-sm font-semibold">Power Automate</span>
+                <span class="px-3 py-1.5 rounded-full yuzu-bg text-yellow-900 text-sm font-semibold">Fabric Notebooks</span>
+                <span class="px-3 py-1.5 rounded-full yuzu-bg text-yellow-900 text-sm font-semibold">REST APIs</span>
+                <span class="px-3 py-1.5 rounded-full yuzu-bg text-yellow-900 text-sm font-semibold">Slack / Teams webhooks</span>
+            </div>
+            <p class="mt-5 text-sm text-stone-500">Every agent ships with logging, retry logic, and a human-approval gate where it matters.</p>
+        </div>
+    </section>
+
+    <h2 class="text-2xl font-extrabold text-gray-900 mb-6">Example deliverables</h2>
+
+    <!-- Mockup 1: Agent Ops Dashboard -->
+    <div class="mb-10">
+        <p class="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-3">Agent Operations Dashboard</p>
+        <div class="mock-frame">
+            <div class="mock-titlebar">
+                <span class="mock-dot bg-red-400"></span><span class="mock-dot bg-yellow-400"></span><span class="mock-dot bg-green-400"></span>
+                <span class="text-gray-400 text-xs ml-2">Agent Ops — Power BI · Refreshed 6 min ago</span>
+            </div>
+            <div class="mock-body">
+                <div class="pbi-header">
+                    <span class="text-sm font-bold text-gray-800">AP Invoice Agent · Production</span>
+                    <span class="text-xs text-gray-500">Week of Jun 2–8, 2026</span>
+                </div>
+                <div class="pbi-kpi-row">
+                    <div class="pbi-kpi"><div class="label">Invoices processed</div><div class="value">847</div><div class="delta up">▲ 12% vs last week</div></div>
+                    <div class="pbi-kpi" style="border-color:#22c55e"><div class="label">Straight-through rate</div><div class="value">94.2%</div><div class="delta up">▲ 3.1 pts</div></div>
+                    <div class="pbi-kpi" style="border-color:#3b82f6"><div class="label">Avg. processing time</div><div class="value">18s</div><div class="delta up">▼ 42s vs manual</div></div>
+                    <div class="pbi-kpi" style="border-color:#ef4444"><div class="label">Exceptions queued</div><div class="value">12</div><div class="delta down">4 need review</div></div>
+                </div>
+                <div class="pbi-charts">
+                    <div class="pbi-chart">
+                        <h4>Daily volume by outcome</h4>
+                        <div class="bar-chart">
+                            <div class="bar" style="height:72%"></div><div class="bar" style="height:85%"></div><div class="bar" style="height:68%"></div>
+                            <div class="bar" style="height:90%"></div><div class="bar alt" style="height:12%"></div><div class="bar" style="height:88%"></div><div class="bar" style="height:95%"></div>
+                        </div>
+                        <div class="flex justify-between text-[9px] text-gray-400 mt-1"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+                    </div>
+                    <div class="pbi-chart">
+                        <h4>Exception queue</h4>
+                        <table class="pbi-table">
+                            <tr><th>Invoice</th><th>Vendor</th><th>Reason</th><th>Status</th></tr>
+                            <tr><td>INV-88421</td><td>Cascades Supply</td><td>PO mismatch</td><td><span class="status-pill warn">Review</span></td></tr>
+                            <tr><td>INV-88419</td><td>WestPack Inc.</td><td>Duplicate</td><td><span class="status-pill err">Blocked</span></td></tr>
+                            <tr><td>INV-88415</td><td>GreenFiber Co.</td><td>Tax code</td><td><span class="status-pill ok">Resolved</span></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mockup 2: Workflow -->
+    <div class="mb-10">
+        <p class="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-3">Invoice Processing Workflow</p>
+        <div class="mock-frame">
+            <div class="mock-titlebar">
+                <span class="mock-dot bg-red-400"></span><span class="mock-dot bg-yellow-400"></span><span class="mock-dot bg-green-400"></span>
+                <span class="text-gray-400 text-xs ml-2">Fabric Data Pipeline · ap_invoice_agent</span>
+            </div>
+            <div class="mock-body">
+                <div class="workflow">
+                    <div class="wf-node"><div class="icon">📧</div><div class="name">Email Inbox</div><div class="sub">shared-ap@co.com</div></div>
+                    <span class="wf-arrow">→</span>
+                    <div class="wf-node active"><div class="icon">🤖</div><div class="name">OCR + LLM</div><div class="sub">Extract fields</div></div>
+                    <span class="wf-arrow">→</span>
+                    <div class="wf-node"><div class="icon">✓</div><div class="name">Validation</div><div class="sub">PO · vendor · $</div></div>
+                    <span class="wf-arrow">→</span>
+                    <div class="wf-node"><div class="icon">🔗</div><div class="name">SAP API</div><div class="sub">Post invoice</div></div>
+                    <span class="wf-arrow">→</span>
+                    <div class="wf-node"><div class="icon">💬</div><div class="name">Teams Alert</div><div class="sub">On exception</div></div>
+                </div>
+                <p class="text-center text-xs text-stone-500 mt-4">Avg. end-to-end latency: <strong>18 seconds</strong> · Human touch only on flagged exceptions</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mockup 3: Agent config terminal -->
+    <div class="mb-10">
+        <p class="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-3">Agent deployment log</p>
+        <div class="mock-frame">
+            <div class="mock-titlebar">
+                <span class="mock-dot bg-red-400"></span><span class="mock-dot bg-yellow-400"></span><span class="mock-dot bg-green-400"></span>
+                <span class="text-gray-400 text-xs ml-2">deploy · ap-invoice-agent v2.3.1</span>
+            </div>
+            <div class="term">
+                <div><span class="prompt">$</span> <span class="cmd">agent deploy --env production --config invoice_agent.yaml</span></div>
+                <div class="out">Loading config… model=gpt-4o-mini, temp=0.1, max_retries=3</div>
+                <div class="out">Connecting SAP BAPI ZFI_POST_INVOICE… OK</div>
+                <div class="out">Registering webhook shared-ap@co.com… OK</div>
+                <div class="out">Smoke test: 3 sample invoices → 3/3 posted</div>
+                <div class="out" style="color:#4ade80">✓ Agent live. Monitoring dashboard: /agents/ap-invoice</div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-gray-950 text-gray-500 py-10 text-center mt-auto">
+    <p><span class="text-xl mr-1">🍋</span> <span class="font-bold text-gray-300">Yuzu.solutions</span></p>
+    <p class="text-sm mt-2">© 2026 Yuzu.solutions</p>
+</footer>
+<script src="../js/site.js"></script>
+</body>
+</html>
