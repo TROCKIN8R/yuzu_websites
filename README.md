@@ -19,7 +19,7 @@ The website lives in [`yuzu_github_page/`](yuzu_github_page/index.html).
 2. **Pages branch** — Choose branch `gh-pages`, folder `/ (root)`.
 3. **Workflow permissions** — In **Settings → Actions → General → Workflow permissions**, select **Read and write permissions**.
 
-Production deploys use the GitHub Actions Pages workflow; PR previews are pushed to the `gh-pages` branch by [rossjrw/pr-preview-action](https://github.com/rossjrw/pr-preview-action).
+Both production and PR preview deploys publish to the `gh-pages` branch (production at the root, previews under `pr-preview/pr-<number>/`).
 
 ## Local preview
 
