@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVP Builds | Yuzu.solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/site.css">
+</head>
+<body class="min-h-screen flex flex-col">
+<div class="float-layer" aria-hidden="true" id="floatLayer"></div>
+
+<nav class="sticky top-4 z-50 w-[94%] max-w-5xl mx-auto mt-4">
+    <div class="flex justify-between items-center pl-6 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
+        <a href="../index.html" class="text-2xl font-extrabold tracking-tighter">Yuzu<span class="text-yellow-500">.</span>solutions</a>
+        <div class="flex items-center gap-4 font-semibold text-sm sm:text-base">
+            <a href="../index.html#services" class="hidden sm:inline hover:text-yellow-600 transition-colors">Services</a>
+            <a href="../index.html#founder" class="hidden sm:inline hover:text-yellow-600 transition-colors">Founder</a>
+            <a href="../index.html" class="px-5 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 shadow-sm transition">Get Started</a>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-7xl mx-auto px-6 py-12 w-full">
+    <a href="../index.html#services" class="text-yellow-700 font-semibold text-sm hover:underline">← Back to Services</a>
+
+    <header class="mt-6 mb-14">
+        <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🚀 The First Press</span>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mt-2">MVP Builds</h1>
+        <p class="mt-4 text-lg text-stone-600 max-w-3xl leading-relaxed">
+            Need a new internal tool, pricing engine, or customer portal? We ship fast, clean, and maintainable applications designed to last long after the demo. Built for the future, not just the pitch deck.
+        </p>
+    </header>
+
+    <section class="grid md:grid-cols-2 gap-8 mb-16">
+        <div class="yuzu-card p-8 rounded-2xl">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">What we ship</h2>
+            <ul class="space-y-3 text-stone-600">
+                <li class="flex gap-2"><span>⚡</span> Internal pricing &amp; quoting tools</li>
+                <li class="flex gap-2"><span>⚡</span> Inventory &amp; allocation dashboards</li>
+                <li class="flex gap-2"><span>⚡</span> Customer self-service portals</li>
+                <li class="flex gap-2"><span>⚡</span> Proof-of-concept ML classifiers</li>
+                <li class="flex gap-2"><span>⚡</span> API-first micro-apps with auth</li>
+            </ul>
+        </div>
+        <div class="yuzu-card p-8 rounded-2xl">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Typical timeline</h2>
+            <div class="space-y-3 text-sm">
+                <div class="flex justify-between border-b border-yellow-100 pb-2"><span class="font-semibold">Week 1–2</span><span class="text-stone-600">Discovery + wireframes</span></div>
+                <div class="flex justify-between border-b border-yellow-100 pb-2"><span class="font-semibold">Week 3–5</span><span class="text-stone-600">Core build + API integration</span></div>
+                <div class="flex justify-between border-b border-yellow-100 pb-2"><span class="font-semibold">Week 6</span><span class="text-stone-600">UAT with pilot users</span></div>
+                <div class="flex justify-between"><span class="font-semibold">Week 7–8</span><span class="text-stone-600">Production deploy + handoff docs</span></div>
+            </div>
+        </div>
+    </section>
+
+    <h2 class="text-2xl font-extrabold text-gray-900 mb-6">Example deliverables</h2>
+
+    <!-- Mockup 1: Pricing tool UI -->
+    <div class="mb-10">
+        <p class="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-3">Packaging Price Optimizer — Internal Tool</p>
+        <div class="mock-frame">
+            <div class="mock-titlebar">
+                <span class="mock-dot bg-red-400"></span><span class="mock-dot bg-yellow-400"></span><span class="mock-dot bg-green-400"></span>
+                <span class="text-gray-400 text-xs ml-2">priceoptimizer.internal · SKU Pricing</span>
+            </div>
+            <div class="mock-body" style="background:#fafafa">
+                <div class="bg-white rounded-lg border border-gray-200 p-4 mb-3">
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="font-bold text-gray-800 text-sm">SKU-44821 · Corrugated Box 18×12×10</h4>
+                        <span class="status-pill ok">Model v3.2</span>
+                    </div>
+                    <div class="grid grid-cols-4 gap-3 mb-4">
+                        <div class="bg-gray-50 rounded p-2"><div class="text-[9px] text-gray-500 uppercase">Current price</div><div class="text-lg font-bold">$2.14</div></div>
+                        <div class="bg-yellow-50 rounded p-2 border border-yellow-200"><div class="text-[9px] text-gray-500 uppercase">Suggested</div><div class="text-lg font-bold text-yellow-700">$2.28</div></div>
+                        <div class="bg-gray-50 rounded p-2"><div class="text-[9px] text-gray-500 uppercase">Margin impact</div><div class="text-lg font-bold text-green-600">+4.2%</div></div>
+                        <div class="bg-gray-50 rounded p-2"><div class="text-[9px] text-gray-500 uppercase">Confidence</div><div class="text-lg font-bold">87%</div></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 text-[10px]">
+                        <div><label class="text-gray-500">Material cost</label><input type="text" value="$0.94" class="w-full border rounded px-2 py-1 mt-1 bg-white" readonly></div>
+                        <div><label class="text-gray-500">Labor / unit</label><input type="text" value="$0.38" class="w-full border rounded px-2 py-1 mt-1 bg-white" readonly></div>
+                        <div><label class="text-gray-500">Competitor avg</label><input type="text" value="$2.31" class="w-full border rounded px-2 py-1 mt-1 bg-white" readonly></div>
+                    </div>
+                    <div class="flex gap-2 mt-3">
+                        <button class="px-4 py-1.5 bg-yellow-500 text-white text-xs font-bold rounded">Apply price</button>
+                        <button class="px-4 py-1.5 bg-gray-200 text-gray-700 text-xs font-bold rounded">Simulate volume</button>
+                        <button class="px-4 py-1.5 border border-gray-300 text-gray-600 text-xs font-bold rounded">Export to ERP</button>
+                    </div>
+                </div>
+                <table class="pbi-table" style="background:white;border-radius:6px">
+                    <tr><th>SKU</th><th>Category</th><th>Current</th><th>Suggested</th><th>Δ Margin</th></tr>
+                    <tr><td>SKU-44821</td><td>Corrugated</td><td>$2.14</td><td>$2.28</td><td style="color:#16a34a">+4.2%</td></tr>
+                    <tr><td>SKU-33102</td><td>Folding carton</td><td>$1.87</td><td>$1.92</td><td style="color:#16a34a">+1.8%</td></tr>
+                    <tr><td>SKU-55219</td><td>Labels</td><td>$0.44</td><td>$0.41</td><td style="color:#dc2626">-2.1%</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mockup 2: Sprint board -->
+    <div class="mb-10">
+        <p class="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-3">Delivery Sprint Board</p>
+        <div class="mock-frame">
+            <div class="mock-titlebar">
+                <span class="mock-dot bg-red-400"></span><span class="mock-dot bg-yellow-400"></span><span class="mock-dot bg-green-400"></span>
+                <span class="text-gray-400 text-xs ml-2">Sprint 3 · Price Optimizer MVP · Jun 2026</span>
+            </div>
+            <div class="mock-body" style="background:#f0f0f0">
+                <div class="grid grid-cols-4 gap-3 text-xs">
+                    <div><h5 class="font-bold text-gray-600 mb-2 uppercase text-[10px]">Backlog</h5>
+                        <div class="bg-white rounded p-2 mb-2 border-l-4 border-gray-300 shadow-sm">ERP price sync API</div>
+                        <div class="bg-white rounded p-2 mb-2 border-l-4 border-gray-300 shadow-sm">Bulk upload CSV</div>
+                    </div>
+                    <div><h5 class="font-bold text-blue-600 mb-2 uppercase text-[10px]">In Progress</h5>
+                        <div class="bg-white rounded p-2 mb-2 border-l-4 border-blue-400 shadow-sm">ML model retrain pipeline</div>
+                        <div class="bg-white rounded p-2 mb-2 border-l-4 border-blue-400 shadow-sm">Role-based access (RLS)</div>
+                    </div>
+                    <div><h5 class="font-bold text-yellow-600 mb-2 uppercase text-[10px]">Review</h5>
+                        <div class="bg-white rounded p-2 mb-2 border-l-4 border-yellow-400 shadow-sm">Pricing simulation UI</div>
+                    </div>
+                    <div><h5 class="font-bold text-green-600 mb-2 uppercase text-[10px]">Done ✓</h5>
+                        <div class="bg-white rounded p-2 mb-2 border-l-4 border-green-400 shadow-sm opacity-70">Auth + SSO (Azure AD)</div>
+                        <div class="bg-white rounded p-2 mb-2 border-l-4 border-green-400 shadow-sm opacity-70">SKU lookup &amp; detail view</div>
+                        <div class="bg-white rounded p-2 mb-2 border-l-4 border-green-400 shadow-sm opacity-70">CI/CD to Azure App Service</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mockup 3: Architecture -->
+    <div class="mb-10">
+        <p class="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-3">Solution Architecture</p>
+        <div class="mock-frame">
+            <div class="mock-titlebar">
+                <span class="mock-dot bg-red-400"></span><span class="mock-dot bg-yellow-400"></span><span class="mock-dot bg-green-400"></span>
+                <span class="text-gray-400 text-xs ml-2">Architecture diagram · v1.0</span>
+            </div>
+            <div class="mock-body">
+                <div class="workflow">
+                    <div class="wf-node"><div class="icon">🖥️</div><div class="name">React SPA</div><div class="sub">Azure Static Web</div></div>
+                    <span class="wf-arrow">→</span>
+                    <div class="wf-node active"><div class="icon">⚡</div><div class="name">FastAPI</div><div class="sub">App Service</div></div>
+                    <span class="wf-arrow">→</span>
+                    <div class="wf-node"><div class="icon">🧠</div><div class="name">ML Model</div><div class="sub">scikit-learn</div></div>
+                </div>
+                <div class="workflow mt-4">
+                    <div class="wf-node"><div class="icon">🏭</div><div class="name">SAP ERP</div><div class="sub">Price master</div></div>
+                    <span class="wf-arrow">↔</span>
+                    <div class="wf-node"><div class="icon">❄️</div><div class="name">Fabric Lakehouse</div><div class="sub">Training data</div></div>
+                    <span class="wf-arrow">↔</span>
+                    <div class="wf-node"><div class="icon">🔐</div><div class="name">Azure AD</div><div class="sub">SSO + RBAC</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-gray-950 text-gray-500 py-10 text-center mt-auto">
+    <p><span class="text-xl mr-1">🍋</span> <span class="font-bold text-gray-300">Yuzu.solutions</span></p>
+    <p class="text-sm mt-2">© 2026 Yuzu.solutions</p>
+</footer>
+<script src="../js/site.js"></script>
+</body>
+</html>
