@@ -5,22 +5,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yuzu.solutions | If life gives you Yuzu, make a dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #FEFCE8; color: #1C1917; }
+        body { font-family: 'Outfit', sans-serif; background-color: #FEFCE8; color: #1C1917; overflow-x: hidden; }
         .yuzu-gradient { background: linear-gradient(135deg, #EAB308 0%, #F59E0B 100%); }
         .lime-text { color: #65A30D; }
         .yuzu-card { background: #FFFFFF; border: 2px solid #FEF3C7; transition: 0.3s; }
         .yuzu-card:hover { border-color: #EAB308; transform: translateY(-5px); }
+        .yuzu-bg { background-color: #FEF08A; }
+        .yuzu-bg-hover:hover { background-color: #FDE047; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 400px;
+        }
+        @media (max-width: 768px) {
+            .chart-container { height: 300px; max-height: 300px; }
+        }
+        .service-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .service-card.active {
+            background-color: #FEF08A;
+            border-left: 4px solid #D97706;
+            transform: translateX(5px);
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Floating lemons & juice */
+        .float-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .float-layer span, .float-layer .juice-drop {
+            position: absolute;
+            opacity: 0.35;
+        }
+        .float-lemon {
+            font-size: 1.4rem;
+            animation: driftLemon linear infinite;
+        }
+        .juice-drop {
+            width: 10px;
+            height: 14px;
+            background: radial-gradient(ellipse at 40% 30%, #FDE047, #EAB308);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: dripJuice ease-in-out infinite;
+        }
+        .binary-bit {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #A8A29E;
+            font-weight: 700;
+            animation: floatBinary linear infinite;
+        }
+        @keyframes driftLemon {
+            0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            8%   { opacity: 0.4; }
+            92%  { opacity: 0.35; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+        @keyframes dripJuice {
+            0%   { transform: translateY(-20px) scale(0.6); opacity: 0; }
+            15%  { opacity: 0.5; }
+            85%  { opacity: 0.4; }
+            100% { transform: translateY(110vh) scale(1); opacity: 0; }
+        }
+        @keyframes floatBinary {
+            0%   { transform: translate(0, 110vh); opacity: 0; }
+            10%  { opacity: 0.25; }
+            90%  { opacity: 0.2; }
+            100% { transform: translate(30px, -10vh); opacity: 0; }
+        }
+
+        /* Hero juicer illustration */
+        .hero-visual {
+            position: relative;
+            background: linear-gradient(160deg, #FFFFFF 0%, #FEF9C3 100%);
+            border: 2px solid #FEF3C7;
+            border-radius: 2rem;
+            overflow: hidden;
+        }
+        .hero-visual svg { width: 100%; height: auto; display: block; }
+
+        /* Service custom visuals */
+        .service-visual {
+            width: 100%;
+            height: 12rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #FFFBEB 0%, #FEF9C3 100%);
+            border-radius: 1rem;
+            border: 1px solid #FEF3C7;
+            overflow: hidden;
+        }
+        .service-visual svg { width: 90%; height: 90%; }
+        .svc-pulse { animation: svcPulse 2.5s ease-in-out infinite; }
+        .svc-flow  { stroke-dasharray: 8 4; animation: svcFlow 1.5s linear infinite; }
+        .svc-grow  { animation: svcGrow 2s ease-in-out infinite alternate; }
+        @keyframes svcPulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50%      { opacity: 1; transform: scale(1.05); }
+        }
+        @keyframes svcFlow {
+            to { stroke-dashoffset: -24; }
+        }
+        @keyframes svcGrow {
+            from { transform: scaleY(0.7); transform-origin: bottom; }
+            to   { transform: scaleY(1); transform-origin: bottom; }
+        }
+
+        body > *:not(.float-layer):not(nav) { position: relative; z-index: 1; }
+        nav { position: sticky; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-<nav class="p-6 flex justify-between items-center max-w-7xl mx-auto w-full">
-    <div class="text-3xl font-extrabold tracking-tighter">Yuzu<span class="text-yellow-500">.</span>solutions</div>
-    <div class="space-x-8 font-semibold">
-        <a href="#about" class="hover:text-yellow-600">Philosophy</a>
-        <a href="#" class="px-6 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 transition">Get Started</a>
+<!-- Floating lemons, juice drops & binary bits -->
+<div class="float-layer" aria-hidden="true" id="floatLayer"></div>
+
+<nav class="sticky top-4 z-50 w-[94%] max-w-5xl mx-auto mt-4">
+    <div class="flex justify-between items-center pl-6 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
+        <div class="text-2xl font-extrabold tracking-tighter">Yuzu<span class="text-yellow-500">.</span>solutions</div>
+        <div class="flex items-center gap-6 font-semibold">
+            <a href="#impact" class="hidden sm:inline hover:text-yellow-600 transition-colors">Philosophy</a>
+            <a href="#services" class="hidden sm:inline hover:text-yellow-600 transition-colors">Services</a>
+            <a href="#" class="px-5 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 shadow-sm transition">Get Started</a>
+        </div>
     </div>
 </nav>
 
@@ -36,34 +163,518 @@
                 <a href="#" class="px-8 py-4 bg-lime-600 text-white font-bold rounded-2xl hover:bg-lime-700 transition">Contact Us</a>
             </div>
         </div>
-        <div class="yuzu-card p-8 rounded-[3rem] shadow-2xl shadow-yellow-100">
-            <div class="h-64 bg-stone-100 rounded-3xl flex flex-col items-center justify-center text-stone-400 border-2 border-dashed border-stone-200 p-6 text-center">
-                <span class="font-bold text-stone-600">Your Intelligent Insights Dashboard</span>
-                <p id="ai-response-area" class="mt-4 text-sm text-stone-500 italic">"Waiting for your raw data to squeeze..."</p>
-            </div>
+        <div class="hero-visual p-6 shadow-2xl shadow-yellow-100">
+            <svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Yuzu data juicer turning lemons into dashboards and data">
+                <defs>
+                    <linearGradient id="lemonGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#FEF08A"/>
+                        <stop offset="100%" stop-color="#EAB308"/>
+                    </linearGradient>
+                    <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#FFFFFF"/>
+                        <stop offset="100%" stop-color="#E7E5E4"/>
+                    </linearGradient>
+                    <linearGradient id="glassGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.85"/>
+                        <stop offset="100%" stop-color="#FEF9C3" stop-opacity="0.6"/>
+                    </linearGradient>
+                    <linearGradient id="panelGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#FFFFFF"/>
+                        <stop offset="100%" stop-color="#FFFBEB"/>
+                    </linearGradient>
+                    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#A16207" flood-opacity="0.18"/>
+                    </filter>
+                </defs>
+
+                <!-- surface -->
+                <line x1="30" y1="330" x2="320" y2="330" stroke="#D6D3D1" stroke-width="2.5" stroke-linecap="round"/>
+
+                <!-- ===== JUICER (left) : lemons in, data out ===== -->
+                <!-- funnel -->
+                <path d="M120 110 L250 110 L222 165 L148 165 Z" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2.5" stroke-linejoin="round"/>
+                <ellipse cx="185" cy="110" rx="65" ry="13" fill="#F5F5F4" stroke="#44403C" stroke-width="2.5"/>
+
+                <!-- lemons piled in funnel -->
+                <g filter="url(#softShadow)">
+                    <circle cx="160" cy="96" r="17" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
+                    <circle cx="195" cy="90" r="16" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
+                    <circle cx="180" cy="68" r="15" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
+                    <circle cx="212" cy="70" r="14" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
+                    <circle cx="160" cy="58" r="13" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
+                </g>
+                <!-- little leaves -->
+                <path d="M180 53 q6 -9 15 -6 q-3 9 -15 6 Z" fill="#84CC16" stroke="#44403C" stroke-width="1"/>
+
+                <!-- machine body -->
+                <rect x="118" y="165" width="150" height="135" rx="18" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2.5" filter="url(#softShadow)"/>
+
+                <!-- glass press chamber -->
+                <rect x="142" y="183" width="102" height="78" rx="22" fill="url(#glassGrad)" stroke="#44403C" stroke-width="2.5"/>
+                <!-- lemon half being pressed -->
+                <path d="M163 222 a30 30 0 0 1 60 0 Z" fill="#FEF3C7" stroke="#44403C" stroke-width="2"/>
+                <path d="M193 222 m-26 0 a26 26 0 0 1 52 0" fill="none" stroke="#FACC15" stroke-width="2"/>
+                <line x1="193" y1="222" x2="193" y2="197" stroke="#EAB308" stroke-width="1.5"/>
+                <line x1="193" y1="222" x2="172" y2="208" stroke="#EAB308" stroke-width="1.5"/>
+                <line x1="193" y1="222" x2="214" y2="208" stroke="#EAB308" stroke-width="1.5"/>
+                <!-- glass shine -->
+                <path d="M150 192 q8 -6 18 -4" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+
+                <!-- control dial -->
+                <circle cx="155" cy="282" r="11" fill="#FFFFFF" stroke="#44403C" stroke-width="2"/>
+                <line x1="155" y1="282" x2="162" y2="276" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- power light -->
+                <circle cx="232" cy="282" r="6" fill="#84CC16" stroke="#44403C" stroke-width="1.5"/>
+
+                <!-- spout -->
+                <path d="M268 232 L294 232 L289 252 L273 252 Z" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2"/>
+
+                <!-- ===== DATA OUTPUT (right) : the "juice" is data ===== -->
+                <!-- binary trickling from spout -->
+                <g font-family="monospace" font-size="13" font-weight="bold" fill="#A16207">
+                    <text x="300" y="250">1</text>
+                    <text x="312" y="266">0</text>
+                    <text x="300" y="282">0</text>
+                    <text x="316" y="294">1</text>
+                </g>
+
+                <!-- dashboard card stack -->
+                <g filter="url(#softShadow)">
+                    <rect x="300" y="70" width="130" height="150" rx="16" fill="url(#panelGrad)" stroke="#44403C" stroke-width="2.5"/>
+                </g>
+                <text x="316" y="93" font-family="'Outfit',sans-serif" font-size="11" font-weight="700" fill="#44403C">INSIGHTS</text>
+                <circle cx="418" cy="88" r="4" fill="#FACC15" stroke="#44403C" stroke-width="1"/>
+
+                <!-- pie -->
+                <circle cx="332" cy="128" r="18" fill="#FEF9C3" stroke="#44403C" stroke-width="2"/>
+                <path d="M332 128 L332 110 A18 18 0 0 1 348 136 Z" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="1.5"/>
+                <path d="M332 128 L348 136 A18 18 0 0 1 320 138 Z" fill="#FDE047" stroke="#44403C" stroke-width="1.5"/>
+
+                <!-- bar chart -->
+                <line x1="364" y1="146" x2="414" y2="146" stroke="#44403C" stroke-width="1.5"/>
+                <rect x="368" y="128" width="8" height="18" fill="#FDE047" stroke="#44403C" stroke-width="1.2"/>
+                <rect x="380" y="118" width="8" height="28" fill="#FACC15" stroke="#44403C" stroke-width="1.2"/>
+                <rect x="392" y="124" width="8" height="22" fill="#EAB308" stroke="#44403C" stroke-width="1.2"/>
+                <rect x="404" y="110" width="8" height="36" fill="#FACC15" stroke="#44403C" stroke-width="1.2"/>
+
+                <!-- trend line -->
+                <rect x="316" y="166" width="98" height="42" rx="8" fill="#FFFFFF" stroke="#44403C" stroke-width="1.5"/>
+                <polyline points="324,198 344,184 360,190 378,172 406,176" fill="none" stroke="#D97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <polyline points="378,172 406,176" fill="none" stroke="#D97706" stroke-width="2.5"/>
+                <path d="M400 170 L408 174 L402 180" fill="none" stroke="#D97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+                <!-- foreground lemon + slice on surface -->
+                <g filter="url(#softShadow)">
+                    <circle cx="92" cy="312" r="18" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
+                    <path d="M92 300 q5 -7 12 -5 q-2 7 -12 5 Z" fill="#84CC16" stroke="#44403C" stroke-width="0.8"/>
+                </g>
+                <circle cx="60" cy="320" r="14" fill="#FEF3C7" stroke="#44403C" stroke-width="2"/>
+                <circle cx="60" cy="320" r="11" fill="none" stroke="#FACC15" stroke-width="1.5"/>
+                <line x1="60" y1="320" x2="60" y2="309" stroke="#EAB308" stroke-width="1.2"/>
+                <line x1="60" y1="320" x2="71" y2="320" stroke="#EAB308" stroke-width="1.2"/>
+                <line x1="60" y1="320" x2="52" y2="328" stroke="#EAB308" stroke-width="1.2"/>
+            </svg>
         </div>
     </div>
 </header>
 
-<section id="about" class="max-w-7xl mx-auto px-6 py-20">
-    <div class="grid md:grid-cols-3 gap-8">
-        <div class="yuzu-card p-10 rounded-3xl">
-            <div class="text-5xl mb-6">🍋</div>
-            <h3 class="text-2xl font-bold">The Raw Data</h3>
-            <p class="mt-4 text-stone-600">Data often comes in sour, unorganized forms. We treat it as the "Yuzu"—a powerful, concentrated asset.</p>
+<section id="impact" class="py-16 bg-white border-y border-gray-100">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 text-center">
+            <h2 class="text-3xl font-bold text-gray-900">The Execution Dashboard</h2>
+            <p class="mt-4 text-lg text-stone-600 max-w-3xl mx-auto">
+                This section visualizes our core philosophy. While traditional firms spend your budget on endless roadmap meetings, Yuzu.solutions flips the model. Interact with the chart below to see how we reallocate project time towards building, automating, and delivering actual software.
+            </p>
         </div>
-        <div class="yuzu-card p-10 rounded-3xl">
-            <div class="text-5xl mb-6">⚙️</div>
-            <h3 class="text-2xl font-bold">The Squeeze</h3>
-            <p class="mt-4 text-stone-600">Our automation pipelines strip away the bitterness, leaving only the pure, high-potency intelligence behind.</p>
+
+        <div class="flex justify-center gap-4 mb-8">
+            <button id="btnTrad" class="px-6 py-2 rounded-full font-semibold border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-gray-100">Traditional Consulting</button>
+            <button id="btnYuzu" class="px-6 py-2 rounded-full font-semibold border-none yuzu-bg yuzu-bg-hover text-yellow-900 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500">Yuzu Execution</button>
         </div>
-        <div class="yuzu-card p-10 rounded-3xl">
-            <div class="text-5xl mb-6">🍹</div>
-            <h3 class="text-2xl font-bold">The Dashboard</h3>
-            <p class="mt-4 text-stone-600">Served cold and crisp. Beautiful visualizations that provide immediate strategic clarity for your business.</p>
+
+        <div class="chart-container bg-[#FEFCE8] p-4 rounded-xl border border-gray-200 shadow-inner">
+            <canvas id="comparisonChart"></canvas>
+        </div>
+
+        <div class="mt-8 text-center text-stone-600" id="impactInsight">
+            <p class="text-lg"><strong>The Yuzu Squeeze:</strong> 80% of our engagement time is spent engineering solutions, writing code, and deploying agents. Strategy is the byproduct of building.</p>
         </div>
     </div>
 </section>
+
+<section id="services" class="py-20 px-6 max-w-7xl mx-auto">
+    <div class="mb-12">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">What We Do <span class="text-gray-400 font-normal text-3xl">(The Pulp & The Juice)</span></h2>
+        <p class="text-lg text-stone-600">
+            Explore our core engineering capabilities below. Select a technical pillar on the left to unpack how we replace manual labor with scalable systems. This interactive module details the exact technical outputs you receive when working with us.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div class="md:col-span-5 flex flex-col gap-3">
+            <div class="service-card active p-5 rounded-xl border border-gray-200 bg-white shadow-sm" data-service="ai">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">🤖</span>
+                    <h3 class="text-xl font-bold text-gray-900">AI & Automation <span class="text-sm font-normal text-yellow-600 uppercase tracking-wider ml-1">The Zest</span></h3>
+                </div>
+            </div>
+            <div class="service-card p-5 rounded-xl border border-gray-200 bg-white shadow-sm hover:bg-gray-50" data-service="infra">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">🏗️</span>
+                    <h3 class="text-xl font-bold text-gray-900">Infrastructure & Data <span class="text-sm font-normal text-yellow-600 uppercase tracking-wider ml-1">The Core</span></h3>
+                </div>
+            </div>
+            <div class="service-card p-5 rounded-xl border border-gray-200 bg-white shadow-sm hover:bg-gray-50" data-service="debt">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">🛠️</span>
+                    <h3 class="text-xl font-bold text-gray-900">Technical Debt & Rescue <span class="text-sm font-normal text-yellow-600 uppercase tracking-wider ml-1">The Detox</span></h3>
+                </div>
+            </div>
+            <div class="service-card p-5 rounded-xl border border-gray-200 bg-white shadow-sm hover:bg-gray-50" data-service="mvp">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">🚀</span>
+                    <h3 class="text-xl font-bold text-gray-900">MVP Builds <span class="text-sm font-normal text-yellow-600 uppercase tracking-wider ml-1">The First Press</span></h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:col-span-7 bg-white p-8 rounded-2xl shadow-md border border-yellow-100 min-h-[400px] flex flex-col" id="serviceDetailView">
+            <div class="mb-6">
+                <h4 class="text-3xl font-bold text-gray-900 mb-4" id="detailTitle">AI & Automation</h4>
+                <p class="text-lg text-stone-600 leading-relaxed" id="detailDesc">
+                    Your manual workflows are low-hanging fruit. I build and deploy agents to handle the heavy lifting, connecting your apps and databases with glue code that actually sticks.
+                </p>
+            </div>
+
+            <div class="mt-auto grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+                <div>
+                    <h5 class="font-bold text-gray-900 mb-2 uppercase tracking-wide text-sm">Key Deliverables</h5>
+                    <ul class="space-y-2 text-stone-600" id="detailList">
+                        <li class="flex items-center gap-2"><span>⚡</span> Autonomous Agents</li>
+                        <li class="flex items-center gap-2"><span>⚡</span> API Integration Glue Code</li>
+                        <li class="flex items-center gap-2"><span>⚡</span> Custom LLM Wrappers</li>
+                    </ul>
+                </div>
+                <div class="service-visual" id="serviceVisual">
+                    <!-- default: AI visual injected by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="process" class="py-20 bg-gray-900 text-white mt-12">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold mb-4 text-white">How We Work <span class="text-gray-400 font-normal text-3xl">(The Squeeze)</span></h2>
+            <p class="text-xl text-gray-300 max-w-2xl mx-auto">No account managers. No bloated timelines. Just direct technical partnership focused on clean execution.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-yellow-500 transition-colors">
+                <div class="w-14 h-14 rounded-full bg-gray-700 flex items-center justify-center text-2xl mb-6 text-yellow-500">1</div>
+                <h3 class="text-2xl font-bold mb-4">Direct</h3>
+                <p class="text-gray-400 leading-relaxed">
+                    You deal with me, not a middleman with a fancy suit. Direct communication with the engineer building your systems ensures requirements are never lost in translation.
+                </p>
+            </div>
+
+            <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-yellow-500 transition-colors">
+                <div class="w-14 h-14 rounded-full bg-gray-700 flex items-center justify-center text-2xl mb-6 text-yellow-500">2</div>
+                <h3 class="text-2xl font-bold mb-4">Clean</h3>
+                <p class="text-gray-400 leading-relaxed">
+                    I provide documented, maintainable code with standard CI/CD. I build systems that run themselves, so you don't have to babysit them after deployment.
+                </p>
+            </div>
+
+            <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-yellow-500 transition-colors relative overflow-hidden">
+                <div class="absolute -right-6 -top-6 text-8xl opacity-5">🍋</div>
+                <div class="w-14 h-14 rounded-full bg-yellow-500/20 text-yellow-500 flex items-center justify-center text-2xl mb-6">3</div>
+                <h3 class="text-2xl font-bold mb-4 text-yellow-400">Integrated</h3>
+                <p class="text-gray-300 leading-relaxed">
+                    When I propose a solution, the roadmap comes for free. You aren't paying for a plan; you're paying for the juice. Strategy is the natural byproduct of technical mastery.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="bg-gray-950 text-gray-500 py-12 text-center">
+    <p class="mb-4">
+        <span class="text-2xl mr-2">🍋</span> <span class="font-bold text-gray-300 tracking-wider">Yuzu.solutions</span>
+    </p>
+    <p>© 2026 Yuzu.solutions. Extracting answers. Automating the grind.</p>
+</footer>
+
+<script>
+    const svcDefs = `<defs>
+        <linearGradient id="svcLemon" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#FEF08A"/><stop offset="100%" stop-color="#EAB308"/>
+        </linearGradient>
+        <linearGradient id="svcSteel" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#E7E5E4"/>
+        </linearGradient>
+        <filter id="svcShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#A16207" flood-opacity="0.18"/>
+        </filter>
+    </defs>`;
+
+    const serviceVisuals = {
+        ai: `<svg viewBox="0 0 220 170" fill="none" xmlns="http://www.w3.org/2000/svg">${svcDefs}
+            <!-- neural mesh -->
+            <g stroke="#D97706" stroke-width="1.5" opacity="0.5">
+                <line x1="58" y1="62" x2="110" y2="42" class="svc-flow"/>
+                <line x1="110" y1="42" x2="162" y2="62" class="svc-flow"/>
+                <line x1="58" y1="62" x2="84" y2="118" class="svc-flow"/>
+                <line x1="162" y1="62" x2="136" y2="118" class="svc-flow"/>
+                <line x1="84" y1="118" x2="136" y2="118" class="svc-flow"/>
+                <line x1="110" y1="42" x2="84" y2="118" class="svc-flow"/>
+                <line x1="110" y1="42" x2="136" y2="118" class="svc-flow"/>
+            </g>
+            <!-- central AI core (lemon brain) -->
+            <circle cx="110" cy="42" r="20" fill="url(#svcLemon)" stroke="#44403C" stroke-width="2" filter="url(#svcShadow)"/>
+            <circle cx="103" cy="39" r="2.5" fill="#44403C"/><circle cx="117" cy="39" r="2.5" fill="#44403C"/>
+            <path d="M103 49 Q110 54 117 49" stroke="#44403C" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <rect x="106" y="18" width="8" height="6" rx="2" fill="#44403C"/>
+            <!-- satellite agent nodes -->
+            <circle cx="58" cy="62" r="13" fill="url(#svcLemon)" stroke="#44403C" stroke-width="2" class="svc-pulse"/>
+            <circle cx="162" cy="62" r="13" fill="url(#svcLemon)" stroke="#44403C" stroke-width="2" class="svc-pulse" style="animation-delay:.4s"/>
+            <circle cx="84" cy="118" r="12" fill="#FDE047" stroke="#44403C" stroke-width="2" class="svc-pulse" style="animation-delay:.8s"/>
+            <circle cx="136" cy="118" r="12" fill="#FDE047" stroke="#44403C" stroke-width="2" class="svc-pulse" style="animation-delay:1.2s"/>
+            <text x="110" y="158" text-anchor="middle" font-size="10" fill="#A16207" font-family="monospace" font-weight="700">AUTONOMOUS</text>
+        </svg>`,
+        infra: `<svg viewBox="0 0 220 170" fill="none" xmlns="http://www.w3.org/2000/svg">${svcDefs}
+            <!-- inbound pipe -->
+            <path d="M14 85 Q40 50 64 60" stroke="#FACC15" stroke-width="3" fill="none" class="svc-flow"/>
+            <circle cx="14" cy="85" r="6" fill="url(#svcLemon)" stroke="#44403C" stroke-width="1.5"/>
+            <!-- server stack -->
+            <g filter="url(#svcShadow)">
+                <rect x="68" y="40" width="84" height="26" rx="6" fill="url(#svcSteel)" stroke="#44403C" stroke-width="2"/>
+                <rect x="68" y="72" width="84" height="26" rx="6" fill="url(#svcSteel)" stroke="#44403C" stroke-width="2"/>
+                <rect x="68" y="104" width="84" height="26" rx="6" fill="url(#svcSteel)" stroke="#44403C" stroke-width="2"/>
+            </g>
+            <circle cx="80" cy="53" r="3.5" fill="#84CC16" stroke="#44403C" stroke-width="0.8" class="svc-pulse"/>
+            <circle cx="80" cy="85" r="3.5" fill="#84CC16" stroke="#44403C" stroke-width="0.8" class="svc-pulse" style="animation-delay:.5s"/>
+            <circle cx="80" cy="117" r="3.5" fill="#84CC16" stroke="#44403C" stroke-width="0.8" class="svc-pulse" style="animation-delay:1s"/>
+            <g stroke="#D6D3D1" stroke-width="2.5" stroke-linecap="round">
+                <line x1="94" y1="53" x2="140" y2="53"/>
+                <line x1="94" y1="85" x2="140" y2="85"/>
+                <line x1="94" y1="117" x2="140" y2="117"/>
+            </g>
+            <!-- outbound pipes to clean data -->
+            <path d="M152 53 Q180 40 204 50" stroke="#FACC15" stroke-width="3" fill="none" class="svc-flow"/>
+            <path d="M152 117 Q180 130 204 122" stroke="#FDE047" stroke-width="3" fill="none" class="svc-flow"/>
+            <circle cx="204" cy="50" r="6" fill="url(#svcLemon)" stroke="#44403C" stroke-width="1.5"/>
+            <circle cx="204" cy="122" r="6" fill="url(#svcLemon)" stroke="#44403C" stroke-width="1.5"/>
+        </svg>`,
+        debt: `<svg viewBox="0 0 220 170" fill="none" xmlns="http://www.w3.org/2000/svg">${svcDefs}
+            <text x="48" y="30" text-anchor="middle" font-size="9" fill="#EF4444" font-family="monospace" font-weight="700">SOUR</text>
+            <text x="170" y="30" text-anchor="middle" font-size="9" fill="#16A34A" font-family="monospace" font-weight="700">FRESH</text>
+            <!-- tangled legacy -->
+            <path d="M24 60 Q56 92 40 122 Q30 142 60 134" stroke="#EF4444" stroke-width="2.5" fill="none" opacity="0.65" stroke-linecap="round"/>
+            <path d="M32 78 Q66 62 60 104 Q56 130 78 120" stroke="#F87171" stroke-width="2" fill="none" opacity="0.6" stroke-linecap="round"/>
+            <path d="M48 52 Q34 86 54 112" stroke="#FCA5A5" stroke-width="2" fill="none" opacity="0.6" stroke-linecap="round"/>
+            <!-- center wrench badge -->
+            <circle cx="110" cy="92" r="22" fill="url(#svcLemon)" stroke="#44403C" stroke-width="2" filter="url(#svcShadow)"/>
+            <path d="M118 80 a9 9 0 1 0 4 10 l8 8 4 -4 -8 -8 a9 9 0 0 0 -8 -6 Z" fill="#FFFFFF" stroke="#44403C" stroke-width="1.6" stroke-linejoin="round"/>
+            <!-- refactored clean bars -->
+            <g class="svc-grow" stroke="#16A34A" stroke-width="3" stroke-linecap="round">
+                <line x1="150" y1="58" x2="196" y2="58"/>
+            </g>
+            <g class="svc-grow" style="animation-delay:.3s" stroke="#16A34A" stroke-width="3" stroke-linecap="round">
+                <line x1="150" y1="80" x2="196" y2="80"/>
+            </g>
+            <g class="svc-grow" style="animation-delay:.6s" stroke="#16A34A" stroke-width="3" stroke-linecap="round">
+                <line x1="150" y1="102" x2="196" y2="102"/>
+            </g>
+            <g class="svc-grow" style="animation-delay:.9s" stroke="#16A34A" stroke-width="3" stroke-linecap="round">
+                <line x1="150" y1="124" x2="196" y2="124"/>
+            </g>
+        </svg>`,
+        mvp: `<svg viewBox="0 0 220 170" fill="none" xmlns="http://www.w3.org/2000/svg">${svcDefs}
+            <!-- launch arc -->
+            <path d="M34 140 Q90 40 150 70" stroke="#FACC15" stroke-width="2" stroke-dasharray="5 6" fill="none" opacity="0.6"/>
+            <!-- rocket -->
+            <g filter="url(#svcShadow)">
+                <path d="M58 128 L58 74 Q58 40 76 28 Q94 40 94 74 L94 128 Z" fill="url(#svcSteel)" stroke="#44403C" stroke-width="2"/>
+            </g>
+            <circle cx="76" cy="66" r="9" fill="url(#svcLemon)" stroke="#44403C" stroke-width="1.6"/>
+            <path d="M58 92 L42 110 L58 104 Z" fill="#FACC15" stroke="#44403C" stroke-width="1.5"/>
+            <path d="M94 92 L110 110 L94 104 Z" fill="#FACC15" stroke="#44403C" stroke-width="1.5"/>
+            <path d="M66 128 L76 146 L86 128 Z" fill="#FDE047" stroke="#44403C" stroke-width="1.2"/>
+            <ellipse cx="76" cy="150" rx="8" ry="6" fill="#F97316" class="svc-pulse"/>
+            <ellipse cx="76" cy="156" rx="5" ry="4" fill="#FACC15" class="svc-pulse" style="animation-delay:.4s"/>
+            <!-- growth dashboard -->
+            <g filter="url(#svcShadow)">
+                <rect x="126" y="46" width="74" height="92" rx="8" fill="#FFFFFF" stroke="#44403C" stroke-width="2"/>
+            </g>
+            <rect x="134" y="110" width="11" height="18" fill="#FDE047" stroke="#44403C" stroke-width="1" class="svc-grow"/>
+            <rect x="150" y="96" width="11" height="32" fill="#FACC15" stroke="#44403C" stroke-width="1" class="svc-grow" style="animation-delay:.2s"/>
+            <rect x="166" y="80" width="11" height="48" fill="#EAB308" stroke="#44403C" stroke-width="1" class="svc-grow" style="animation-delay:.4s"/>
+            <polyline points="134,104 152,90 168,94 192,64" fill="none" stroke="#D97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M186 62 L194 62 L194 70" fill="none" stroke="#D97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>`
+    };
+
+    const serviceData = {
+        ai: {
+            title: "AI & Automation",
+            desc: "Your manual workflows are low-hanging fruit. I build and deploy agents to handle the heavy lifting, connecting your apps and databases with glue code that actually sticks.",
+            list: ["Autonomous Agents", "API Integration Glue Code", "Custom LLM Wrappers"]
+        },
+        infra: {
+            title: "Infrastructure & Data",
+            desc: "I build the backbone. From IaC that doesn't break to data pipelines that deliver clean results, I ensure your foundation is rock solid and scales effortlessly.",
+            list: ["Terraform/IaC Deployments", "Resilient ETL Pipelines", "Secure API Gateways"]
+        },
+        debt: {
+            title: "Technical Debt & Rescue",
+            desc: "Got legacy code that's gone sour? I find the root cause, refactor the mess, and get your production environment back to peak freshness without bringing the system down.",
+            list: ["Legacy Code Refactoring", "Latency Bottleneck Fixes", "Production Hotfixes"]
+        },
+        mvp: {
+            title: "MVP Builds",
+            desc: "Need a new tool? I ship fast, clean, and maintainable applications designed to last long after the initial rollout. We build for the future, not just the demo.",
+            list: ["Custom Internal Tools", "Modern Stack Architecture", "Rapid Prototyping"]
+        }
+    };
+
+    // Floating particles — negative delays so they're already on screen on load
+    (function initFloatLayer() {
+        const layer = document.getElementById('floatLayer');
+        for (let i = 0; i < 14; i++) {
+            const el = document.createElement('span');
+            el.className = 'float-lemon';
+            el.textContent = '🍋';
+            const dur = 18 + Math.random() * 22;
+            el.style.left = `${Math.random() * 100}%`;
+            el.style.fontSize = `${1 + Math.random() * 1.1}rem`;
+            el.style.animationDuration = `${dur}s`;
+            el.style.animationDelay = `-${Math.random() * dur}s`;
+            layer.appendChild(el);
+        }
+        for (let i = 0; i < 10; i++) {
+            const drop = document.createElement('div');
+            drop.className = 'juice-drop';
+            const dur = 12 + Math.random() * 16;
+            drop.style.left = `${5 + Math.random() * 90}%`;
+            drop.style.animationDuration = `${dur}s`;
+            drop.style.animationDelay = `-${Math.random() * dur}s`;
+            layer.appendChild(drop);
+        }
+        for (let i = 0; i < 8; i++) {
+            const bit = document.createElement('span');
+            bit.className = 'binary-bit';
+            bit.textContent = Math.random() > 0.5 ? '1' : '0';
+            const dur = 20 + Math.random() * 18;
+            bit.style.left = `${Math.random() * 100}%`;
+            bit.style.animationDuration = `${dur}s`;
+            bit.style.animationDelay = `-${Math.random() * dur}s`;
+            layer.appendChild(bit);
+        }
+    })();
+
+    const serviceVisualEl = document.getElementById('serviceVisual');
+    serviceVisualEl.innerHTML = serviceVisuals.ai;
+
+    const ctxComp = document.getElementById('comparisonChart').getContext('2d');
+    const tradData = {
+        labels: ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4'],
+        datasets: [
+            { label: 'Meetings/Strategy', data: [80, 60, 40, 30], backgroundColor: '#9CA3AF' },
+            { label: 'PowerPoint/Docs', data: [20, 30, 40, 20], backgroundColor: '#D1D5DB' },
+            { label: 'Actual Engineering', data: [0, 10, 20, 50], backgroundColor: '#374151' }
+        ]
+    };
+    const yuzuData = {
+        labels: ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4'],
+        datasets: [
+            { label: 'Discovery/Diagnosis', data: [20, 5, 0, 0], backgroundColor: '#FDE047' },
+            { label: 'Architecture Prep', data: [30, 10, 5, 0], backgroundColor: '#FACC15' },
+            { label: 'Hands-on Engineering', data: [50, 85, 95, 100], backgroundColor: '#D97706' }
+        ]
+    };
+
+    let compChart = new Chart(ctxComp, {
+        type: 'bar',
+        data: yuzuData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: { mode: 'index', intersect: false }
+            },
+            scales: {
+                x: { stacked: true, grid: { display: false } },
+                y: { stacked: true, beginAtZero: true, max: 100, title: { display: true, text: '% of Engagement Time' } }
+            }
+        }
+    });
+
+    const btnTrad = document.getElementById('btnTrad');
+    const btnYuzu = document.getElementById('btnYuzu');
+    const insightText = document.getElementById('impactInsight');
+
+    btnTrad.addEventListener('click', () => {
+        compChart.data = tradData;
+        compChart.update();
+        btnTrad.classList.remove('bg-gray-100', 'text-gray-600');
+        btnTrad.classList.add('bg-gray-500', 'text-white');
+        btnYuzu.classList.remove('yuzu-bg', 'text-yellow-900');
+        btnYuzu.classList.add('bg-gray-100', 'text-gray-600');
+        insightText.innerHTML = '<p class="text-lg"><strong>Traditional Approach:</strong> You pay for overhead. Most of the engagement is spent planning to build, rather than actually building.</p>';
+    });
+
+    btnYuzu.addEventListener('click', () => {
+        compChart.data = yuzuData;
+        compChart.update();
+        btnYuzu.classList.remove('bg-gray-100', 'text-gray-600');
+        btnYuzu.classList.add('yuzu-bg', 'text-yellow-900');
+        btnTrad.classList.remove('bg-gray-500', 'text-white');
+        btnTrad.classList.add('bg-gray-100', 'text-gray-600');
+        insightText.innerHTML = '<p class="text-lg"><strong>The Yuzu Squeeze:</strong> 80% of our engagement time is spent engineering solutions, writing code, and deploying agents. Strategy is the byproduct of building.</p>';
+    });
+
+    const serviceCards = document.querySelectorAll('.service-card');
+    const detailTitle = document.getElementById('detailTitle');
+    const detailDesc = document.getElementById('detailDesc');
+    const detailList = document.getElementById('detailList');
+    const detailView = document.getElementById('serviceDetailView');
+
+    serviceCards.forEach(card => {
+        card.addEventListener('click', () => {
+            serviceCards.forEach(c => {
+                c.classList.remove('active', 'border-l-4', 'border-[#D97706]');
+                c.style.backgroundColor = '#ffffff';
+            });
+
+            card.classList.add('active');
+            card.style.backgroundColor = '#FEF08A';
+            card.style.borderLeft = '4px solid #D97706';
+
+            const key = card.getAttribute('data-service');
+            const data = serviceData[key];
+
+            detailView.classList.remove('fade-in');
+            void detailView.offsetWidth;
+            detailView.classList.add('fade-in');
+
+            detailTitle.textContent = data.title;
+            detailDesc.textContent = data.desc;
+
+            detailList.innerHTML = '';
+            data.list.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'flex items-center gap-2';
+                li.innerHTML = `<span>⚡</span> ${item}`;
+                detailList.appendChild(li);
+            });
+
+            serviceVisualEl.innerHTML = serviceVisuals[key];
+        });
+    });
+</script>
 
 </body>
 </html>
