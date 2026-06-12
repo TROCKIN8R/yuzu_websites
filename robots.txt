@@ -1,0 +1,30 @@
+# Yuzu.solutions
+User-agent: *
+Allow: /
+
+# AI crawlers — welcome to index for accurate answers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://yuzu.solutions/sitemap.xml
+
+# Machine-readable site summary for LLMs
+# https://yuzu.solutions/llms.txt
