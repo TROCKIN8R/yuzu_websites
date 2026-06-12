@@ -20,6 +20,89 @@
     <meta name="twitter:image" content="https://yuzu.solutions/assets/og-image.png">
     <link rel="icon" href="assets/lemon-emoji.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/og-image.png">
+    <link rel="canonical" href="https://yuzu.solutions/">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="author" content="Adrien Yvin">
+    <meta name="theme-color" content="#FEFCE8">
+    <link rel="alternate" type="text/plain" href="https://yuzu.solutions/llms.txt" title="LLM-readable site summary">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://yuzu.solutions/#website",
+          "url": "https://yuzu.solutions/",
+          "name": "Yuzu.solutions",
+          "description": "Execution-first data consulting. Microsoft Fabric, Power BI, AI automation, and BI leadership.",
+          "inLanguage": "en",
+          "publisher": { "@id": "https://yuzu.solutions/#organization" }
+        },
+        {
+          "@type": "ProfessionalService",
+          "@id": "https://yuzu.solutions/#organization",
+          "name": "Yuzu.solutions",
+          "url": "https://yuzu.solutions/",
+          "logo": "https://yuzu.solutions/assets/og-image.png",
+          "image": "https://yuzu.solutions/assets/og-image.png",
+          "description": "Boutique data and BI consultancy specializing in Microsoft Fabric, Power BI, AI automation, and hands-on engineering execution.",
+          "slogan": "If life gives you Yuzu, make a dashboard.",
+          "founder": { "@id": "https://yuzu.solutions/#founder" },
+          "areaServed": ["CA", "US"],
+          "knowsAbout": ["Microsoft Fabric", "Power BI", "Business Intelligence", "Data Engineering", "AI Automation", "ETL", "DAX", "Python", "Snowflake", "BigQuery"],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Data & BI Services",
+            "itemListElement": [
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI & Automation", "url": "https://yuzu.solutions/services/ai-automation.html" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Infrastructure & Data", "url": "https://yuzu.solutions/services/infrastructure-data.html" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Technical Debt & Rescue", "url": "https://yuzu.solutions/services/technical-debt.html" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "MVP Builds", "url": "https://yuzu.solutions/services/mvp-builds.html" } }
+            ]
+          }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://yuzu.solutions/#founder",
+          "name": "Adrien Yvin",
+          "jobTitle": "Data Platform Architect & BI Leader",
+          "url": "https://www.linkedin.com/in/adrienyvin/",
+          "image": "https://yuzu.solutions/assets/adrien-yvin.jpg",
+          "worksFor": { "@id": "https://yuzu.solutions/#organization" },
+          "alumniOf": { "@type": "CollegeOrUniversity", "name": "HEC Montréal" },
+          "knowsLanguage": ["en", "fr", "es"],
+          "knowsAbout": ["Microsoft Fabric", "Power BI", "Data Engineering", "Machine Learning"]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://yuzu.solutions/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What makes Yuzu.solutions different from traditional consultants?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Yuzu.solutions spends roughly 80% of engagement time on hands-on engineering — building pipelines, writing code, and deploying agents — rather than meetings and slide decks. Strategy emerges from execution." }
+            },
+            {
+              "@type": "Question",
+              "name": "What services does Yuzu.solutions offer?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Four core services: AI & Automation, Infrastructure & Data, Technical Debt & Rescue, and MVP Builds." }
+            },
+            {
+              "@type": "Question",
+              "name": "What technologies does Yuzu.solutions specialize in?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Microsoft Fabric, Power BI, SQL, DAX, Python, scikit-learn, BigQuery, Snowflake, Tableau, ETL/ELT, Terraform/IaC, and AI agent development." }
+            },
+            {
+              "@type": "Question",
+              "name": "Who does Yuzu.solutions work with?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Growing SMBs graduating from Excel, enterprises consolidating siloed data systems, and post-merger teams needing a unified reporting stack." }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -362,6 +445,7 @@
     </div>
 </nav>
 
+<main id="main-content">
 <header class="flex-grow flex items-center max-w-7xl mx-auto px-6 py-12">
     <div class="grid md:grid-cols-2 gap-12 items-center">
         <div>
@@ -773,7 +857,7 @@
             <!-- Founder identity card -->
             <div class="lg:col-span-5 yuzu-card p-8 rounded-3xl shadow-xl shadow-yellow-100 flex flex-col">
                 <div class="flex items-center gap-5">
-                    <img src="assets/adrien-yvin.jpg" alt="Adrien Yvin" class="w-20 h-20 rounded-2xl object-cover border-2 border-yellow-300 shadow-md shrink-0">
+                    <img src="assets/adrien-yvin.jpg" alt="Adrien Yvin — Data Platform Architect and founder of Yuzu.solutions" width="80" height="80" class="w-20 h-20 rounded-2xl object-cover border-2 border-yellow-300 shadow-md shrink-0">
                     <div>
                         <h3 class="text-2xl font-extrabold text-gray-900">Adrien Yvin</h3>
                         <p class="text-yellow-700 font-semibold">Data Platform Architect &amp; BI Leader</p>
@@ -876,11 +960,42 @@
     </div>
 </section>
 
+<section id="faq" class="py-16 px-6 max-w-3xl mx-auto" aria-labelledby="faq-heading">
+    <h2 id="faq-heading" class="text-3xl font-extrabold text-gray-900 text-center mb-10">Common Questions</h2>
+    <div class="space-y-4">
+        <details class="yuzu-card rounded-2xl p-6 group">
+            <summary class="font-bold text-gray-900 cursor-pointer list-none flex justify-between items-center">What makes Yuzu.solutions different from traditional consultants?<span class="text-yellow-600 group-open:rotate-180 transition-transform">▾</span></summary>
+            <p class="mt-4 text-stone-600 leading-relaxed">We spend roughly 80% of engagement time on hands-on engineering — building pipelines, writing code, and deploying agents — rather than meetings and slide decks. Strategy emerges from execution, not the other way around.</p>
+        </details>
+        <details class="yuzu-card rounded-2xl p-6 group">
+            <summary class="font-bold text-gray-900 cursor-pointer list-none flex justify-between items-center">What services do you offer?<span class="text-yellow-600 group-open:rotate-180 transition-transform">▾</span></summary>
+            <p class="mt-4 text-stone-600 leading-relaxed">Four core pillars: <a href="services/ai-automation.html" class="text-yellow-700 font-semibold hover:underline">AI &amp; Automation</a>, <a href="services/infrastructure-data.html" class="text-yellow-700 font-semibold hover:underline">Infrastructure &amp; Data</a>, <a href="services/technical-debt.html" class="text-yellow-700 font-semibold hover:underline">Technical Debt &amp; Rescue</a>, and <a href="services/mvp-builds.html" class="text-yellow-700 font-semibold hover:underline">MVP Builds</a>.</p>
+        </details>
+        <details class="yuzu-card rounded-2xl p-6 group">
+            <summary class="font-bold text-gray-900 cursor-pointer list-none flex justify-between items-center">What technologies do you specialize in?<span class="text-yellow-600 group-open:rotate-180 transition-transform">▾</span></summary>
+            <p class="mt-4 text-stone-600 leading-relaxed">Microsoft Fabric, Power BI, SQL, DAX, Python, scikit-learn, BigQuery, Snowflake, Tableau, ETL/ELT, Terraform/IaC, and AI agent development with Cursor and Copilot.</p>
+        </details>
+        <details class="yuzu-card rounded-2xl p-6 group">
+            <summary class="font-bold text-gray-900 cursor-pointer list-none flex justify-between items-center">Who do you work with?<span class="text-yellow-600 group-open:rotate-180 transition-transform">▾</span></summary>
+            <p class="mt-4 text-stone-600 leading-relaxed">Growing SMBs graduating from Excel, enterprises consolidating siloed data systems, and post-merger teams needing one stack, one source of truth, and one reporting culture.</p>
+        </details>
+    </div>
+</section>
+
+</main>
+
 <footer class="bg-gray-950 text-gray-500 py-12 text-center">
     <p class="mb-4">
         <span class="text-2xl mr-2">🍋</span> <span class="font-bold text-gray-300 tracking-wider">Yuzu.solutions</span>
     </p>
     <p>© 2026 Yuzu.solutions. Extracting answers. Automating the grind.</p>
+    <p class="mt-4 text-sm">
+        <a href="#faq" class="hover:text-yellow-500 transition-colors">FAQ</a>
+        <span class="mx-2">·</span>
+        <a href="/sitemap.xml" class="hover:text-yellow-500 transition-colors">Sitemap</a>
+        <span class="mx-2">·</span>
+        <a href="/llms.txt" class="hover:text-yellow-500 transition-colors">llms.txt</a>
+    </p>
 </footer>
 
 <script>
