@@ -16,15 +16,12 @@
         btn.setAttribute('aria-expanded', 'false');
         menu.classList.remove('open');
     }
-    function toggle() {
-        menu.classList.contains('open') ? close() : open();
-    }
 
-    btn.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
     wrap.addEventListener('mouseenter', open);
     wrap.addEventListener('mouseleave', close);
-    document.addEventListener('click', (e) => {
-        if (!wrap.contains(e.target)) close();
+    wrap.addEventListener('focusin', open);
+    wrap.addEventListener('focusout', (e) => {
+        if (!wrap.contains(e.relatedTarget)) close();
     });
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') close();
