@@ -998,6 +998,7 @@
     </p>
 </footer>
 
+<script src="js/nav.js"></script>
 <script>
     const svcDefs = `<defs>
         <linearGradient id="svcLemon" x1="0" y1="0" x2="1" y2="1">
@@ -1135,38 +1136,7 @@
         }
     };
 
-    // Services mega-menu
-    (function initMegaMenu() {
-        const group = document.getElementById('navPillGroup');
-        const wrap = document.getElementById('servicesNavWrap');
-        const btn = document.getElementById('servicesNavBtn');
-        const menu = document.getElementById('servicesMegaMenu');
-        if (!group || !wrap || !btn || !menu) return;
-
-        function open() {
-            btn.classList.add('active');
-            btn.setAttribute('aria-expanded', 'true');
-            menu.classList.add('open');
-        }
-        function close() {
-            btn.classList.remove('active');
-            btn.setAttribute('aria-expanded', 'false');
-            menu.classList.remove('open');
-        }
-        function toggle() {
-            menu.classList.contains('open') ? close() : open();
-        }
-
-        btn.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
-        wrap.addEventListener('mouseenter', open);
-        wrap.addEventListener('mouseleave', close);
-        document.addEventListener('click', (e) => {
-            if (!wrap.contains(e.target)) close();
-        });
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') close();
-        });
-    })();
+    // Services mega-menu — see js/nav.js
 
     // Floating particles — negative delays so they're already on screen on load
     (function initFloatLayer() {
