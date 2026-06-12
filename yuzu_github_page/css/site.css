@@ -212,3 +212,27 @@ nav { position: sticky; }
     align-items: center;
     gap: 12px;
 }
+
+/* Language switcher */
+.lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: #F5F5F4;
+    border-radius: 9999px;
+    padding: 3px;
+}
+.lang-switch-btn {
+    padding: 6px 12px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #57534E;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.lang-switch-btn:hover { color: #1C1917; }
+.lang-switch-btn.active {
+    background: #1C1917;
+    color: #FFFFFF;
+}
