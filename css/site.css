@@ -147,6 +147,7 @@ nav { position: sticky; }
     cursor: pointer;
     transition: all 0.2s ease;
     font-family: inherit;
+    text-decoration: none;
 }
 .nav-pill-btn:hover { color: #1C1917; }
 .nav-pill-btn.active {
