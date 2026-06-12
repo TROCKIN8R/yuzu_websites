@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zest.solutions | If life gives you Yuzu, make a dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&display=swap');
+        body { font-family: 'Outfit', sans-serif; background-color: #FEFCE8; color: #1C1917; }
+        .yuzu-gradient { background: linear-gradient(135deg, #EAB308 0%, #F59E0B 100%); }
+        .lime-text { color: #65A30D; }
+        .yuzu-card { background: #FFFFFF; border: 2px solid #FEF3C7; transition: 0.3s; }
+        .yuzu-card:hover { border-color: #EAB308; transform: translateY(-5px); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+<nav class="p-6 flex justify-between items-center max-w-7xl mx-auto w-full">
+    <div class="text-3xl font-extrabold tracking-tighter">zest<span class="text-yellow-500">.</span>solutions</div>
+    <div class="space-x-8 font-semibold">
+        <a href="#about" class="hover:text-yellow-600">Philosophy</a>
+        <a href="#" class="px-6 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 transition">Get Started</a>
+    </div>
+</nav>
+
+<header class="flex-grow flex items-center max-w-7xl mx-auto px-6 py-12">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+            <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">Welcome to the future of BI</span>
+            <h1 class="text-6xl md:text-8xl font-extrabold mt-4 leading-[0.9]">
+                If life gives you <span class="text-yellow-500">Yuzu</span>, make a dashboard.
+            </h1>
+            <p class="text-lg mt-8 text-stone-500 max-w-md">We turn raw, complex data into refreshing, automated insights.</p>
+            <div class="mt-10 flex gap-4">
+                <a href="#" class="px-8 py-4 bg-lime-600 text-white font-bold rounded-2xl hover:bg-lime-700 transition">Contact Us</a>
+            </div>
+        </div>
+        <div class="yuzu-card p-8 rounded-[3rem] shadow-2xl shadow-yellow-100">
+            <div class="h-64 bg-stone-100 rounded-3xl flex flex-col items-center justify-center text-stone-400 border-2 border-dashed border-stone-200 p-6 text-center">
+                <span class="font-bold text-stone-600">Your Intelligent Insights Dashboard</span>
+                <p id="ai-response-area" class="mt-4 text-sm text-stone-500 italic">"Waiting for your raw data to squeeze..."</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section id="about" class="max-w-7xl mx-auto px-6 py-20">
+    <div class="grid md:grid-cols-3 gap-8">
+        <div class="yuzu-card p-10 rounded-3xl">
+            <div class="text-5xl mb-6">🍋</div>
+            <h3 class="text-2xl font-bold">The Raw Data</h3>
+            <p class="mt-4 text-stone-600">Data often comes in sour, unorganized forms. We treat it as the "Yuzu"—a powerful, concentrated asset.</p>
+        </div>
+        <div class="yuzu-card p-10 rounded-3xl">
+            <div class="text-5xl mb-6">⚙️</div>
+            <h3 class="text-2xl font-bold">The Squeeze</h3>
+            <p class="mt-4 text-stone-600">Our automation pipelines strip away the bitterness, leaving only the pure, high-potency intelligence behind.</p>
+        </div>
+        <div class="yuzu-card p-10 rounded-3xl">
+            <div class="text-5xl mb-6">🍹</div>
+            <h3 class="text-2xl font-bold">The Dashboard</h3>
+            <p class="mt-4 text-stone-600">Served cold and crisp. Beautiful visualizations that provide immediate strategic clarity for your business.</p>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
