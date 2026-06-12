@@ -1,6 +1,6 @@
 # yuzu_websites
 
-yuzu.solutions GitHub website — static site for [zest.solutions](https://zest.solutions), hosted on GitHub Pages.
+GitHub website for [Yuzu.solutions](https://yuzu.solutions) — *If life gives you Yuzu, make a dashboard.*
 
 ## Site location
 
