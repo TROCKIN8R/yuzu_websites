@@ -1,13 +1,13 @@
 # Yuzu.solutions
 
-> If life gives you Yuzu, make a dashboard. Execution-first data consulting — we build the press, not PowerPoints.
+> Si la vida te da yuzu, exprímelo en dashboard. Consultoría de datos centrada en la ejecución — construimos la prensa, no PowerPoints.
 
-Yuzu.solutions is a boutique data & BI consultancy founded by Adrien Yvin, a Data Platform Architect and BI Leader based in Montreal, Canada. We help growing companies, enterprises, and post-merger teams turn raw data into governed warehouses, automated workflows, and boardroom-ready dashboards.
+Yuzu.solutions es una consultoría boutique en datos y BI fundada por Adrien Yvin, a Data Platform Architect and BI Leader based in Montreal, Canada. We help growing companies, enterprises, and post-merger teams turn raw data into governed warehouses, automated workflows, and boardroom-ready dashboards.
 
-## Core positioning
+## Posicionamiento
 
-- **Philosophy:** 80% engineering execution, 20% discovery — strategy is the byproduct of building.
-- **Model:** Direct partnership with a senior specialist. No account managers, no bloated timelines.
+- **Filosofía:** 80 % ejecución técnica, 20 % descubrimiento — la estrategia es subproducto de construir.
+- **Modelo:** Asociación directa con un especialista senior. Sin gestores de cuenta, sin plazos inflados.
 - **Stack:** Microsoft Fabric, Power BI, SQL, DAX, Python, BigQuery, Snowflake, Azure, AI agents, Cursor.
 
 ## Services
@@ -17,13 +17,13 @@ Yuzu.solutions is a boutique data & BI consultancy founded by Adrien Yvin, a Dat
 - [Technical Debt & Rescue](https://yuzu.solutions/services/technical-debt.html): Legacy report recovery, DAX/model refactoring, refresh optimization (e.g. 42min → 4min), production hotfixes, post-migration reconciliation.
 - [MVP Builds](https://yuzu.solutions/services/mvp-builds.html): Internal tools, pricing engines, customer portals, ML classifiers. Typical timeline: 6–8 weeks from discovery to production.
 
-## Who we work with
+## Con quién trabajamos
 
-- **Growing companies:** SMBs outgrowing Excel, ready for their first warehouse and governed reporting.
+- **Empresas en crecimiento:** PYMEs que superan Excel, listas para su primer almacén y reporting gobernado.
 - **Enterprise consolidation:** Orgs unifying siloed systems, conflicting KPIs, and years of accumulated data.
 - **Post-merger integration:** Teams needing one stack, one source of truth, and one reporting culture.
 
-## Founder — Adrien Yvin
+## Fundador — Adrien Yvin
 
 - **Role:** Data Platform Architect & BI Leader
 - **Experience:** 7+ years in data — ETL at Énergir (energy utility), BI at Keurig Dr Pepper Canada ($4B+ CPG), Squad Leader at Cascades (packaging/manufacturing).
@@ -31,7 +31,7 @@ Yuzu.solutions is a boutique data & BI consultancy founded by Adrien Yvin, a Dat
 - **Languages:** French, English, Spanish
 - **LinkedIn:** https://www.linkedin.com/in/adrienyvin/
 
-## Frequently asked questions
+## Preguntas frecuentes
 
 **What makes Yuzu.solutions different from traditional consultants?**
 Traditional firms spend most engagement time on meetings and slide decks. Yuzu reallocates ~80% of time to hands-on engineering — writing code, building pipelines, and deploying agents.
@@ -45,21 +45,15 @@ Both. Common engagements include first-time data warehouses for growing SMBs, en
 **Where are you based?**
 Montreal, Quebec, Canada. Remote-friendly across North America.
 
-## Key pages
+## Páginas clave
 
-- Homepage: https://yuzu.solutions/
+- Inicio : https://yuzu.solutions/es/
 - Services overview: https://yuzu.solutions/#services
 - About the founder: https://yuzu.solutions/#founder
 - FAQ: https://yuzu.solutions/#faq
 - Sitemap: https://yuzu.solutions/sitemap.xml
-- LLM summary: https://yuzu.solutions/llms.txt
+- Resumen LLM : https://yuzu.solutions/llms-es.txt
 
-## Contact
+## Contacto
 
-Get started via the website: https://yuzu.solutions/#founder
-## Languages / Langues / Idiomas
-
-- English: https://yuzu.solutions/llms.txt
-- Français (Canada): https://yuzu.solutions/llms-fr.txt
-- Español: https://yuzu.solutions/llms-es.txt
-
+Empezar vía el sitio : https://yuzu.solutions/es/#founder
