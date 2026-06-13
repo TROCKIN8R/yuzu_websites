@@ -123,22 +123,6 @@
 
         /* Offset in-page anchors so the sticky nav never covers section content. */
         html { scroll-padding-top: calc(var(--nav-h, 96px) + 1.5rem); }
-        .service-card {
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .service-card.active {
-            background-color: var(--yuzu-300);
-            border-left: 4px solid var(--kumquat-700);
-            transform: translateX(5px);
-        }
-        .fade-in {
-            animation: fadeIn 0.4s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
 
         /* Hero fills exactly one viewport (minus the floating nav) on every device.
            --nav-h is kept in sync by js/nav.js; dvh adapts to mobile browser chrome. */
@@ -161,30 +145,25 @@
             header .hero-title { font-size: clamp(1.75rem, calc(5.46875vw - 14px), 3.5rem); }
         }
 
-        /* Hero juicer illustration */
+        /* Hero lemon emoji */
         .hero-visual {
             position: relative;
             background: linear-gradient(160deg, var(--paper-100) 0%, var(--yuzu-100) 100%);
             border: 2px solid var(--yuzu-100);
             border-radius: var(--radius-xl);
             overflow: hidden;
-        }
-        .hero-visual svg { width: 100%; height: auto; display: block; }
-
-        /* Service custom visuals */
-        .service-visual {
-            width: 100%;
-            height: 12rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--yuzu-50) 0%, var(--yuzu-100) 100%);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--yuzu-100);
-            overflow: hidden;
+            min-height: 16rem;
         }
-        .service-visual svg { width: 90%; height: 90%; }
-        .svc-pulse { animation: svcPulse 2.5s ease-in-out infinite; }
+        .hero-emoji {
+            font-size: clamp(8rem, 28vw, 16rem);
+            line-height: 1;
+            user-select: none;
+        }
+
+.svc-pulse { animation: svcPulse 2.5s ease-in-out infinite; }
         .svc-flow  { stroke-dasharray: 8 4; animation: svcFlow 1.5s linear infinite; }
         .svc-grow  { animation: svcGrow 2s ease-in-out infinite alternate; }
         @keyframes svcPulse {
@@ -199,24 +178,7 @@
             to   { transform: scaleY(1); transform-origin: bottom; }
         }
 
-        /* Service detail CTA (homepage) */
-        .detail-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 16px;
-            padding: 10px 20px;
-            background: var(--carbon-500);
-            color: var(--paper-100);
-            font-size: 0.875rem;
-            font-weight: 700;
-            border-radius: var(--radius-full);
-            transition: background 0.2s;
-            text-decoration: none;
-        }
-        .detail-cta:hover { background: var(--carbon-400); }
-
-        /* Vision — Extracting Value (ETL = lemonade) */
+/* Vision — Extracting Value (ETL = lemonade) */
         .vision-step { transition: transform 0.3s ease, border-color 0.3s ease; }
         .vision-step:hover { transform: translateY(-5px); }
         .vision-letter {
@@ -432,270 +394,13 @@
             </div>
         </div>
         <div class="hero-visual p-6 shadow-2xl shadow-yellow-100">
-            <svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Presse-yuzu de données transformant les citrons en tableaux de bord">
-                <defs>
-                    <radialGradient id="lemonGrad" cx="35%" cy="30%" r="75%">
-                        <stop offset="0%" stop-color="#FEF9C3"/>
-                        <stop offset="45%" stop-color="#FDE047"/>
-                        <stop offset="100%" stop-color="#CA8A04"/>
-                    </radialGradient>
-                    <linearGradient id="bodyGrad" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#FFFFFF"/>
-                        <stop offset="55%" stop-color="#F1EFEC"/>
-                        <stop offset="100%" stop-color="#D6D3D1"/>
-                    </linearGradient>
-                    <linearGradient id="bodyDark" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#E7E5E4"/>
-                        <stop offset="100%" stop-color="#A8A29E"/>
-                    </linearGradient>
-                    <linearGradient id="glassGrad" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
-                        <stop offset="55%" stop-color="#FEF9C3" stop-opacity="0.55"/>
-                        <stop offset="100%" stop-color="#FDE68A" stop-opacity="0.5"/>
-                    </linearGradient>
-                    <linearGradient id="juiceGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#FDE047"/>
-                        <stop offset="100%" stop-color="#F59E0B"/>
-                    </linearGradient>
-                    <linearGradient id="panelGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#FFFFFF"/>
-                        <stop offset="100%" stop-color="#FFFBEB"/>
-                    </linearGradient>
-                    <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#FACC15" stop-opacity="0.55"/>
-                        <stop offset="100%" stop-color="#FACC15" stop-opacity="0.05"/>
-                    </linearGradient>
-                    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
-                        <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#A16207" flood-opacity="0.18"/>
-                    </filter>
-                </defs>
-
-                <!-- ground shadow + surface -->
-                <ellipse cx="196" cy="334" rx="120" ry="12" fill="#A16207" opacity="0.12"/>
-                <line x1="26" y1="332" x2="330" y2="332" stroke="#D6D3D1" stroke-width="2.5" stroke-linecap="round"/>
-
-                <!-- ===== JUICER (left) : lemons in, data out ===== -->
-                <!-- funnel -->
-                <path d="M118 112 L252 112 L224 166 L146 166 Z" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2.5" stroke-linejoin="round"/>
-                <ellipse cx="185" cy="112" rx="67" ry="14" fill="#F5F5F4" stroke="#44403C" stroke-width="2.5"/>
-                <ellipse cx="185" cy="112" rx="55" ry="9" fill="#E7E5E4" stroke="#78716C" stroke-width="1"/>
-
-                <!-- lemons piled in funnel (textured) -->
-                <g filter="url(#softShadow)">
-                    <g>
-                        <circle cx="158" cy="96" r="17" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                        <ellipse cx="152" cy="89" rx="6" ry="4" fill="#FFFFFF" opacity="0.55"/>
-                        <path d="M174 92 l5 -2" stroke="#A16207" stroke-width="1.4" stroke-linecap="round"/>
-                    </g>
-                    <g>
-                        <circle cx="196" cy="90" r="16" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                        <ellipse cx="190" cy="84" rx="5" ry="3.5" fill="#FFFFFF" opacity="0.55"/>
-                    </g>
-                    <g>
-                        <circle cx="178" cy="67" r="15" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                        <ellipse cx="172" cy="61" rx="5" ry="3.5" fill="#FFFFFF" opacity="0.55"/>
-                        <circle cx="178" cy="52" r="2" fill="#CA8A04"/>
-                    </g>
-                    <g>
-                        <circle cx="212" cy="69" r="13" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                        <ellipse cx="207" cy="64" rx="4" ry="3" fill="#FFFFFF" opacity="0.55"/>
-                    </g>
-                    <g>
-                        <circle cx="156" cy="57" r="12" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                        <ellipse cx="151" cy="52" rx="4" ry="3" fill="#FFFFFF" opacity="0.55"/>
-                    </g>
-                </g>
-                <!-- leaf + stem -->
-                <path d="M178 50 q8 -12 19 -8 q-4 12 -19 8 Z" fill="#84CC16" stroke="#44403C" stroke-width="1.2"/>
-                <line x1="187" y1="46" x2="183" y2="51" stroke="#3F6212" stroke-width="1"/>
-
-                <!-- machine body -->
-                <rect x="114" y="166" width="158" height="132" rx="20" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2.5" filter="url(#softShadow)"/>
-                <!-- side seam + rivets -->
-                <line x1="114" y1="232" x2="272" y2="232" stroke="#D6D3D1" stroke-width="1.5"/>
-                <circle cx="124" cy="176" r="2" fill="#A8A29E"/>
-                <circle cx="262" cy="176" r="2" fill="#A8A29E"/>
-                <circle cx="124" cy="288" r="2" fill="#A8A29E"/>
-                <circle cx="262" cy="288" r="2" fill="#A8A29E"/>
-                <!-- ventilation slots -->
-                <g stroke="#A8A29E" stroke-width="2" stroke-linecap="round">
-                    <line x1="250" y1="244" x2="262" y2="244"/>
-                    <line x1="250" y1="251" x2="262" y2="251"/>
-                    <line x1="250" y1="258" x2="262" y2="258"/>
-                </g>
-
-                <!-- glass press chamber -->
-                <rect x="138" y="184" width="108" height="80" rx="24" fill="url(#glassGrad)" stroke="#44403C" stroke-width="2.5"/>
-                <!-- auger / press screw -->
-                <line x1="192" y1="192" x2="192" y2="252" stroke="#A8A29E" stroke-width="6" stroke-linecap="round"/>
-                <path d="M180 200 q12 6 24 0 M180 214 q12 6 24 0 M180 228 q12 6 24 0 M180 242 q12 6 24 0" stroke="#CA8A04" stroke-width="2" fill="none"/>
-                <!-- lemon half being pressed -->
-                <path d="M165 232 a27 27 0 0 1 54 0 Z" fill="#FEF3C7" stroke="#44403C" stroke-width="2"/>
-                <path d="M192 232 m-23 0 a23 23 0 0 1 46 0" fill="none" stroke="#FACC15" stroke-width="2"/>
-                <g stroke="#EAB308" stroke-width="1.4">
-                    <line x1="192" y1="232" x2="192" y2="210"/>
-                    <line x1="192" y1="232" x2="174" y2="219"/>
-                    <line x1="192" y1="232" x2="210" y2="219"/>
-                    <line x1="192" y1="232" x2="180" y2="214"/>
-                    <line x1="192" y1="232" x2="204" y2="214"/>
-                </g>
-                <!-- juice pooling at chamber base -->
-                <path d="M142 256 q50 12 100 0 v4 a24 24 0 0 1 -24 4 h-52 a24 24 0 0 1 -24 -4 Z" fill="url(#juiceGrad)" opacity="0.85"/>
-                <!-- glass reflections -->
-                <path d="M148 194 q8 -7 18 -5" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
-                <line x1="234" y1="198" x2="234" y2="244" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.45"/>
-
-                <!-- control panel -->
-                <rect x="126" y="272" width="134" height="20" rx="6" fill="url(#bodyDark)" stroke="#44403C" stroke-width="1.5"/>
-                <!-- dial with ticks -->
-                <circle cx="146" cy="282" r="9" fill="#FFFFFF" stroke="#44403C" stroke-width="1.8"/>
-                <line x1="146" y1="282" x2="152" y2="277" stroke="#D97706" stroke-width="2.2" stroke-linecap="round"/>
-                <g stroke="#78716C" stroke-width="1">
-                    <line x1="146" y1="271" x2="146" y2="273"/>
-                    <line x1="157" y1="282" x2="155" y2="282"/>
-                    <line x1="146" y1="293" x2="146" y2="291"/>
-                    <line x1="135" y1="282" x2="137" y2="282"/>
-                </g>
-                <!-- mini gauge -->
-                <circle cx="172" cy="282" r="8" fill="#FEFCE8" stroke="#44403C" stroke-width="1.5"/>
-                <path d="M166 285 a6 6 0 0 1 12 0" fill="none" stroke="#84CC16" stroke-width="2"/>
-                <line x1="172" y1="282" x2="176" y2="279" stroke="#44403C" stroke-width="1.2" stroke-linecap="round"/>
-                <!-- buttons -->
-                <rect x="186" y="277" width="12" height="10" rx="2" fill="#FACC15" stroke="#44403C" stroke-width="1.2"/>
-                <rect x="202" y="277" width="12" height="10" rx="2" fill="#E7E5E4" stroke="#44403C" stroke-width="1.2"/>
-                <!-- power LED -->
-                <circle cx="236" cy="282" r="5" fill="#84CC16" stroke="#44403C" stroke-width="1.4"/>
-                <circle cx="234" cy="280" r="1.5" fill="#FFFFFF" opacity="0.8"/>
-
-                <!-- brand plate -->
-                <rect x="150" y="174" width="86" height="4" rx="2" fill="#FDE68A"/>
-
-                <!-- feet -->
-                <rect x="128" y="296" width="16" height="8" rx="3" fill="#78716C"/>
-                <rect x="242" y="296" width="16" height="8" rx="3" fill="#78716C"/>
-
-                <!-- spout + dripping juice -->
-                <path d="M270 230 L298 230 L292 252 L276 252 Z" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2"/>
-                <path d="M284 252 q-3 8 0 14 q3 -6 0 -14 Z" fill="url(#juiceGrad)"/>
-                <circle cx="284" cy="272" r="3" fill="#FACC15"/>
-
-                <!-- ===== DATA OUTPUT (right) : the "juice" is data ===== -->
-                <!-- juice-to-binary transition -->
-                <g font-family="monospace" font-size="12" font-weight="bold">
-                    <text x="298" y="248" fill="#D97706">1</text>
-                    <text x="290" y="266" fill="#CA8A04">0</text>
-                    <text x="302" y="282" fill="#A16207">1</text>
-                    <text x="288" y="298" fill="#A16207" opacity="0.7">0</text>
-                    <text x="304" y="312" fill="#A16207" opacity="0.5">1</text>
-                </g>
-
-                <!-- dashboard card -->
-                <g filter="url(#softShadow)">
-                    <rect x="296" y="56" width="150" height="178" rx="16" fill="url(#panelGrad)" stroke="#44403C" stroke-width="2.5"/>
-                </g>
-                <!-- title bar -->
-                <path d="M296 72 a16 16 0 0 1 16 -16 h118 a16 16 0 0 1 16 16 v6 H296 Z" fill="#FEF3C7"/>
-                <circle cx="308" cy="66" r="3" fill="#F87171" stroke="#44403C" stroke-width="0.6"/>
-                <circle cx="318" cy="66" r="3" fill="#FBBF24" stroke="#44403C" stroke-width="0.6"/>
-                <circle cx="328" cy="66" r="3" fill="#84CC16" stroke="#44403C" stroke-width="0.6"/>
-                <text x="434" y="70" text-anchor="end" font-family="'Inter',sans-serif" font-size="10" font-weight="800" fill="#44403C">INSIGHTS</text>
-                <line x1="296" y1="78" x2="446" y2="78" stroke="#44403C" stroke-width="1.5"/>
-
-                <!-- donut chart (segmented) -->
-                <g transform="rotate(-90 332 116)">
-                    <circle cx="332" cy="116" r="17" fill="none" stroke="#FEF3C7" stroke-width="11"/>
-                    <circle cx="332" cy="116" r="17" fill="none" stroke="#FACC15" stroke-width="11" stroke-dasharray="46 107" stroke-dashoffset="0"/>
-                    <circle cx="332" cy="116" r="17" fill="none" stroke="#EAB308" stroke-width="11" stroke-dasharray="32 107" stroke-dashoffset="-46"/>
-                    <circle cx="332" cy="116" r="17" fill="none" stroke="#D97706" stroke-width="11" stroke-dasharray="29 107" stroke-dashoffset="-78"/>
-                </g>
-                <text x="332" y="120" text-anchor="middle" font-family="'Inter',sans-serif" font-size="11" font-weight="800" fill="#44403C">78%</text>
-
-                <!-- bar chart with axis + gridlines -->
-                <g stroke="#E7E5E4" stroke-width="1">
-                    <line x1="368" y1="98" x2="436" y2="98"/>
-                    <line x1="368" y1="112" x2="436" y2="112"/>
-                    <line x1="368" y1="126" x2="436" y2="126"/>
-                </g>
-                <line x1="368" y1="138" x2="436" y2="138" stroke="#44403C" stroke-width="1.5"/>
-                <rect x="372" y="120" width="9" height="18" fill="#FDE047" stroke="#44403C" stroke-width="1"/>
-                <rect x="386" y="108" width="9" height="30" fill="#FACC15" stroke="#44403C" stroke-width="1"/>
-                <rect x="400" y="116" width="9" height="22" fill="#EAB308" stroke="#44403C" stroke-width="1"/>
-                <rect x="414" y="100" width="9" height="38" fill="#D97706" stroke="#44403C" stroke-width="1"/>
-
-                <!-- area/line chart panel -->
-                <rect x="308" y="150" width="126" height="46" rx="8" fill="#FFFFFF" stroke="#44403C" stroke-width="1.5"/>
-                <path d="M315 188 L315 180 L335 168 L352 174 L372 156 L400 160 L426 152 L426 188 Z" fill="url(#areaFill)"/>
-                <polyline points="315,180 335,168 352,174 372,156 400,160 426,152" fill="none" stroke="#D97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                <g fill="#FFFFFF" stroke="#D97706" stroke-width="1.5">
-                    <circle cx="335" cy="168" r="2.2"/>
-                    <circle cx="372" cy="156" r="2.2"/>
-                    <circle cx="426" cy="152" r="2.2"/>
-                </g>
-
-                <!-- KPI row -->
-                <text x="308" y="218" font-family="'Inter',sans-serif" font-size="15" font-weight="800" fill="#44403C">2.4x</text>
-                <path d="M340 216 l5 -7 l5 7 Z" fill="#84CC16" stroke="#3F6212" stroke-width="0.6"/>
-                <text x="356" y="218" font-family="'Inter',sans-serif" font-size="9" font-weight="600" fill="#16A34A">ROI</text>
-                <rect x="392" y="208" width="42" height="14" rx="7" fill="#ECFCCB" stroke="#84CC16" stroke-width="1"/>
-                <text x="413" y="218" text-anchor="middle" font-family="'Inter',sans-serif" font-size="8" font-weight="700" fill="#3F6212">LIVE</text>
-
-                <!-- floating data bits between machine and dashboard -->
-                <g font-family="monospace" font-size="10" font-weight="bold" fill="#CA8A04" opacity="0.6">
-                    <text x="276" y="190">0</text>
-                    <text x="282" y="170">1</text>
-                    <text x="272" y="150">1</text>
-                </g>
-
-                <!-- foreground lemon + detailed slice -->
-                <g filter="url(#softShadow)">
-                    <circle cx="92" cy="312" r="19" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                    <ellipse cx="85" cy="304" rx="6" ry="4" fill="#FFFFFF" opacity="0.55"/>
-                    <path d="M92 298 q6 -9 15 -6 q-3 9 -15 6 Z" fill="#84CC16" stroke="#44403C" stroke-width="1"/>
-                </g>
-                <!-- halved lemon with segments -->
-                <circle cx="56" cy="320" r="15" fill="#FEF9C3" stroke="#44403C" stroke-width="2"/>
-                <circle cx="56" cy="320" r="11.5" fill="#FEFCE8" stroke="#FACC15" stroke-width="1.6"/>
-                <g stroke="#FACC15" stroke-width="1.3">
-                    <line x1="56" y1="320" x2="56" y2="309"/>
-                    <line x1="56" y1="320" x2="66" y2="314"/>
-                    <line x1="56" y1="320" x2="67" y2="323"/>
-                    <line x1="56" y1="320" x2="60" y2="331"/>
-                    <line x1="56" y1="320" x2="50" y2="331"/>
-                    <line x1="56" y1="320" x2="45" y2="323"/>
-                    <line x1="56" y1="320" x2="46" y2="314"/>
-                </g>
-                <circle cx="56" cy="320" r="2" fill="#EAB308"/>
-            </svg>
+            <div class="hero-emoji" role="img" aria-label="Lemon">🍋</div>
         </div>
     </div>
 </header>
 
-<section id="brand" class="py-20 px-6 bg-gray-950">
-    <div class="max-w-5xl mx-auto text-center mb-12">
-        <span class="text-yellow-500 font-bold uppercase tracking-widest text-sm">✦ Logo System</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-white mt-3">Three lockups, one mark</h2>
-        <p class="mt-3 text-stone-400 max-w-2xl mx-auto">Mark, horizontal, and stacked SVG lockups — geometry fixed, palette via CSS tokens.</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-        <div class="rounded-2xl bg-[#0F1213] p-8 flex flex-col items-center justify-center gap-4 min-h-[220px]">
-            <span class="font-mono text-xs uppercase tracking-widest text-stone-500">01 · Mark</span>
-            <div class="yuzu-logo--mark-on-dark">
-                <object type="image/svg+xml" data="../assets/yuzu-mark.svg" class="yuzu-logo__media max-h-24 w-auto" aria-label="Yuzu Solutions mark"></object>
-            </div>
-        </div>
-        <div class="rounded-2xl bg-[#0F1213] p-8 flex flex-col items-center justify-center gap-4 min-h-[220px]">
-            <span class="font-mono text-xs uppercase tracking-widest text-stone-500">02 · Horizontal</span>
-            <object type="image/svg+xml" data="../assets/yuzu-horizontal.svg" class="yuzu-logo__media max-h-16 w-auto" aria-label="Yuzu Solutions horizontal lockup"></object>
-        </div>
-        <div class="rounded-2xl bg-[#0F1213] p-8 flex flex-col items-center justify-center gap-4 min-h-[220px]">
-            <span class="font-mono text-xs uppercase tracking-widest text-stone-500">03 · Stacked</span>
-            <span class="yuzu-logo yuzu-logo--stacked yuzu-logo--on-dark">
-                <object type="image/svg+xml" data="../assets/yuzu-stacked.svg" class="yuzu-logo__media" aria-label="Yuzu Solutions stacked lockup"></object>
-            </span>
-        </div>
-    </div>
-</section>
-<section id="vision" class="py-20 px-6 max-w-7xl mx-auto">
+<section id="vision" class="vision-section py-20 px-6">
+    <div class="max-w-7xl mx-auto">
     <div class="text-center mb-14">
         <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🍋 Notre vision</span>
         <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-3">Extraire la <span class="text-yellow-500">valeur</span></h2>
@@ -908,6 +613,7 @@
             </div>
         </div>
     </div>
+    </div>
 </section>
 
 <section id="clients" class="py-16 px-6 max-w-7xl mx-auto">
@@ -936,100 +642,104 @@
     </div>
 </section>
 
-<section id="services" class="py-20 px-6 max-w-7xl mx-auto">
-    <div class="mb-12">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4">Ce qu'on fait <span class="text-gray-400 font-normal text-3xl">(La pulpe et le jus)</span></h2>
-        <p class="text-lg text-stone-600">
-            Explorez nos capacités d'ingénierie ci-dessous. Sélectionnez un pilier technique à gauche pour voir comment on remplace le travail manuel par des systèmes évolutifs. Ce module interactif détaille les livrables techniques exacts que vous recevez en travaillant avec nous.
-        </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-        <div class="md:col-span-5 flex flex-col gap-3">
-            <div class="service-card active p-5 rounded-xl border border-gray-200 bg-white shadow-sm" data-service="ai">
-                <div class="flex items-center gap-3">
-                    <span class="text-2xl">🤖</span>
-                    <h3 class="text-xl font-bold text-gray-900">AI & Automation <span class="text-sm font-normal text-yellow-600 uppercase tracking-wider ml-1">The Zest</span></h3>
-                </div>
-            </div>
-            <div class="service-card p-5 rounded-xl border border-gray-200 bg-white shadow-sm hover:bg-gray-50" data-service="infra">
-                <div class="flex items-center gap-3">
-                    <span class="text-2xl">🏗️</span>
-                    <h3 class="text-xl font-bold text-gray-900">Infrastructure & Data <span class="text-sm font-normal text-yellow-600 uppercase tracking-wider ml-1">The Core</span></h3>
-                </div>
-            </div>
-            <div class="service-card p-5 rounded-xl border border-gray-200 bg-white shadow-sm hover:bg-gray-50" data-service="debt">
-                <div class="flex items-center gap-3">
-                    <span class="text-2xl">🛠️</span>
-                    <h3 class="text-xl font-bold text-gray-900">Technical Debt & Rescue <span class="text-sm font-normal text-yellow-600 uppercase tracking-wider ml-1">The Detox</span></h3>
-                </div>
-            </div>
-            <div class="service-card p-5 rounded-xl border border-gray-200 bg-white shadow-sm hover:bg-gray-50" data-service="mvp">
-                <div class="flex items-center gap-3">
-                    <span class="text-2xl">🚀</span>
-                    <h3 class="text-xl font-bold text-gray-900">Constructions MVP <span class="text-sm font-normal text-yellow-600 uppercase tracking-wider ml-1">La première pressée</span></h3>
-                </div>
-            </div>
+<section id="services" class="services-section py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="services-header text-center mb-14">
+            <span class="services-eyebrow">🍋 Nos recettes</span>
+            <h2 class="services-title">Ce qu'on <span class="services-accent">fait</span></h2>
+            <p class="services-lead">Sélectionnez un pilier technique pour voir comment on remplace le travail manuel par des systèmes évolutifs — et les livrables exacts que vous recevez.</p>
         </div>
 
-        <div class="md:col-span-7 bg-white p-8 rounded-2xl shadow-md border border-yellow-100 min-h-[400px] flex flex-col" id="serviceDetailView">
-            <div class="mb-6">
-                <h4 class="text-3xl font-bold text-gray-900 mb-4" id="detailTitle">IA et automatisation</h4>
-                <p class="text-lg text-stone-600 leading-relaxed" id="detailDesc">
-                    Vos flux manuels sont des fruits à portée de main. Je construis et déploie des agents pour le gros œuvre, connectant vos apps et bases de données avec du code glue qui tient vraiment.
-                </p>
-                <a href="services/ai-automation.html" id="detailLink" class="detail-cta">Voir tableaux de bord et flux →</a>
+        <div class="services-studio">
+            <div class="services-menu" role="tablist" aria-label="Catégories de services">
+            <button type="button" class="service-card active" data-service="ai" role="tab" aria-selected="true">
+                <span class="service-card-icon" aria-hidden="true">🤖</span>
+                <span class="service-card-body">
+                    <span class="service-card-title">IA et automatisation</span>
+                    <span class="service-card-tag">Le zeste</span>
+                </span>
+            </button>
+            <button type="button" class="service-card" data-service="infra" role="tab" aria-selected="false">
+                <span class="service-card-icon" aria-hidden="true">🏗️</span>
+                <span class="service-card-body">
+                    <span class="service-card-title">Infrastructure et données</span>
+                    <span class="service-card-tag">Le cœur</span>
+                </span>
+            </button>
+            <button type="button" class="service-card" data-service="debt" role="tab" aria-selected="false">
+                <span class="service-card-icon" aria-hidden="true">🛠️</span>
+                <span class="service-card-body">
+                    <span class="service-card-title">Dette technique et sauvetage</span>
+                    <span class="service-card-tag">Le détox</span>
+                </span>
+            </button>
+            <button type="button" class="service-card" data-service="mvp" role="tab" aria-selected="false">
+                <span class="service-card-icon" aria-hidden="true">🚀</span>
+                <span class="service-card-body">
+                    <span class="service-card-title">Constructions MVP</span>
+                    <span class="service-card-tag">La première pressée</span>
+                </span>
+            </button>
             </div>
 
-            <div class="mt-auto grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
-                <div>
-                    <h5 class="font-bold text-gray-900 mb-2 uppercase tracking-wide text-sm">Livrables clés</h5>
-                    <ul class="space-y-2 text-stone-600" id="detailList">
-                        <li class="flex items-center gap-2"><span>⚡</span> Autonomous Agents</li>
-                        <li class="flex items-center gap-2"><span>⚡</span> API Integration Glue Code</li>
-                        <li class="flex items-center gap-2"><span>⚡</span> Custom LLM Wrappers</li>
-                    </ul>
+            <div class="service-detail-panel" id="serviceDetailView" data-active="ai" role="tabpanel">
+                <div class="service-detail-copy">
+                    <h3 class="service-detail-title" id="detailTitle">IA et automatisation</h3>
+                    <p class="service-detail-desc" id="detailDesc">Vos flux manuels sont des fruits à portée de main. Je construis et déploie des agents pour le travail lourd, en connectant vos apps et bases de données avec du glue code qui tient vraiment.</p>
+                    <a href="services/ai-automation.html" id="detailLink" class="detail-cta">Voir tableaux de bord et flux →</a>
                 </div>
-                <div class="service-visual" id="serviceVisual">
-                    <!-- default: AI visual injected by JS -->
+                <div class="service-detail-body">
+                    <div class="service-deliverables">
+                        <h4 class="service-deliverables-label">Livrables clés</h4>
+                        <ul id="detailList">
+                        <li class="service-deliverable">Agents autonomes</li>
+                        <li class="service-deliverable">Glue code d'intégration API</li>
+                        <li class="service-deliverable">Wrappers LLM sur mesure</li>
+                        </ul>
+                    </div>
+                    <div class="service-visual" id="serviceVisual"></div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section id="process" class="py-20 bg-gray-900 text-white mt-12">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold mb-4 text-white">Comment on travaille <span class="text-gray-400 font-normal text-3xl">(La pressée)</span></h2>
-            <p class="text-xl text-gray-300 max-w-2xl mx-auto">Pas de gestionnaires de compte. Pas de délais gonflés. Juste un partenariat technique direct axé sur une exécution propre.</p>
+<section id="process" class="squeeze-section py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-14">
+            <span class="squeeze-eyebrow">🍋 Du citron à la limonade</span>
+            <h2 class="squeeze-title">Comment on <span class="squeeze-accent">travaille</span></h2>
+            <p class="squeeze-lead">Pas de gestionnaires de compte. Pas de délais gonflés. Juste un partenariat technique direct axé sur une exécution propre.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-yellow-500 transition-colors">
-                <div class="w-14 h-14 rounded-full bg-gray-700 flex items-center justify-center text-2xl mb-6 text-yellow-500">1</div>
-                <h3 class="text-2xl font-bold mb-4">Direct</h3>
-                <p class="text-gray-400 leading-relaxed">
-                    Vous traitez avec moi, pas avec un intermédiaire en costume. Une communication directe avec l'ingénieur qui construit vos systèmes garantit que les exigences ne se perdent jamais en traduction.
-                </p>
-            </div>
-
-            <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-yellow-500 transition-colors">
-                <div class="w-14 h-14 rounded-full bg-gray-700 flex items-center justify-center text-2xl mb-6 text-yellow-500">2</div>
-                <h3 class="text-2xl font-bold mb-4">Propre</h3>
-                <p class="text-gray-400 leading-relaxed">
-                    Je livre du code documenté et maintenable avec un CI/CD standard. Je construis des systèmes qui tournent tout seuls, pour que vous n'ayez pas à les surveiller après le déploiement.
-                </p>
-            </div>
-
-            <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-yellow-500 transition-colors relative overflow-hidden">
-                <div class="absolute -right-6 -top-6 text-8xl opacity-5">🍋</div>
-                <div class="w-14 h-14 rounded-full bg-yellow-500/20 text-yellow-500 flex items-center justify-center text-2xl mb-6">3</div>
-                <h3 class="text-2xl font-bold mb-4 text-yellow-400">Intégré</h3>
-                <p class="text-gray-300 leading-relaxed">
-                    Quand je propose une solution, la feuille de route est incluse. Vous ne payez pas pour un plan ; vous payez pour le jus. La stratégie est le sous-produit naturel de la maîtrise technique.
-                </p>
-            </div>
+        <div class="squeeze-grid">
+            <article class="squeeze-pillar">
+                <div class="squeeze-pillar-top">
+                    <span class="squeeze-step">1</span>
+                    <span class="squeeze-badge">Direct</span>
+                </div>
+                <div class="squeeze-icon" aria-hidden="true">🎯</div>
+                <h3>Direct</h3>
+                <p>Vous traitez avec moi, pas avec un intermédiaire en costume. Une communication directe avec l'ingénieur qui construit vos systèmes garantit que les exigences ne se perdent jamais en traduction.</p>
+            </article>
+            <article class="squeeze-pillar">
+                <div class="squeeze-pillar-top">
+                    <span class="squeeze-step">2</span>
+                    <span class="squeeze-badge">Propre</span>
+                </div>
+                <div class="squeeze-icon" aria-hidden="true">⚡</div>
+                <h3>Propre</h3>
+                <p>Je livre du code documenté et maintenable avec un CI/CD standard. Je construis des systèmes qui tournent tout seuls, pour que vous n'ayez pas à les surveiller après le déploiement.</p>
+            </article>
+            <article class="squeeze-pillar squeeze-pillar--featured">
+                <div class="squeeze-pillar-top">
+                    <span class="squeeze-step">3</span>
+                    <span class="squeeze-badge">Intégré</span>
+                </div>
+                <div class="squeeze-icon" aria-hidden="true">🍋</div>
+                <h3>Intégré</h3>
+                <p>Quand je propose une solution, la feuille de route est incluse. Vous ne payez pas pour un plan ; vous payez pour le jus. La stratégie est le sous-produit naturel de la maîtrise technique.</p>
+            </article>
         </div>
     </div>
 </section>
@@ -1378,11 +1088,11 @@
         card.addEventListener('click', () => {
             serviceCards.forEach(c => {
                 c.classList.remove('active');
-                c.style.backgroundColor = '';
-                c.style.borderLeft = '';
+                c.setAttribute('aria-selected', 'false');
             });
 
             card.classList.add('active');
+            card.setAttribute('aria-selected', 'true');
 
             const key = card.getAttribute('data-service');
             const data = serviceData[key];
@@ -1390,6 +1100,7 @@
             detailView.classList.remove('fade-in');
             void detailView.offsetWidth;
             detailView.classList.add('fade-in');
+            detailView.setAttribute('data-active', key);
 
             detailTitle.textContent = data.title;
             detailDesc.textContent = data.desc;
@@ -1398,8 +1109,8 @@
             detailList.innerHTML = '';
             data.list.forEach(item => {
                 const li = document.createElement('li');
-                li.className = 'flex items-center gap-2';
-                li.innerHTML = `<span>⚡</span> ${item}`;
+                li.className = 'service-deliverable';
+                li.textContent = item;
                 detailList.appendChild(li);
             });
 

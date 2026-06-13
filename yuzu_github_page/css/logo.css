@@ -65,7 +65,10 @@
 .yuzu-logo--nav .yuzu-logo__media,
 .yuzu-logo--nav img,
 .yuzu-logo--nav object {
+  height: 2.25rem;
+  width: auto;
   max-height: 2.25rem;
+  max-width: min(100%, 11rem);
 }
 
 /* ── 3 · Stacked ── */

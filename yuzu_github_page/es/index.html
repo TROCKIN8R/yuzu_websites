@@ -123,160 +123,7 @@
 
         /* Offset in-page anchors so the sticky nav never covers section content. */
         html { scroll-padding-top: var(--nav-h-sticky, var(--nav-h, 96px)); }
-        /* Services — interactive pillar picker */
-        .services-section {
-            background: linear-gradient(180deg, transparent 0%, var(--yuzu-25) 40%, var(--zest-25) 100%);
-        }
-        .service-card {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            width: 100%;
-            text-align: left;
-            cursor: pointer;
-            font-family: inherit;
-            color: inherit;
-            appearance: none;
-            -webkit-appearance: none;
-            background: var(--paper-100);
-            border: 2px solid var(--yuzu-100);
-            border-radius: var(--radius-xl);
-            padding: 1.125rem 1.25rem;
-            transition: border-color var(--duration-normal) var(--ease-default),
-                        box-shadow var(--duration-normal) var(--ease-default),
-                        transform var(--duration-normal) var(--ease-default);
-            overflow: hidden;
-        }
-        .service-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            transition: opacity var(--duration-normal) var(--ease-default);
-            pointer-events: none;
-        }
-        .service-card[data-service="ai"]::before {
-            background: linear-gradient(135deg, var(--yuzu-50) 0%, var(--yuzu-100) 100%);
-        }
-        .service-card[data-service="infra"]::before {
-            background: linear-gradient(135deg, var(--zest-50) 0%, var(--zest-100) 100%);
-        }
-        .service-card[data-service="debt"]::before {
-            background: linear-gradient(135deg, var(--kumquat-50) 0%, var(--kumquat-100) 100%);
-        }
-        .service-card[data-service="mvp"]::before {
-            background: linear-gradient(135deg, var(--yuzu-50) 0%, var(--kumquat-100) 100%);
-        }
-        .service-card:hover {
-            border-color: var(--yuzu-400);
-            transform: translateX(5px);
-            box-shadow: var(--shadow-md);
-        }
-        .service-card:hover::before { opacity: 0.85; }
-        .service-card.active {
-            border-color: var(--yuzu-500);
-            transform: translateX(8px);
-            box-shadow: var(--shadow-lg), 0 0 0 1px color-mix(in srgb, var(--yuzu-400) 35%, transparent);
-        }
-        .service-card.active::before { opacity: 1; }
-        .service-card[data-service="infra"].active { border-color: var(--zest-500); }
-        .service-card[data-service="debt"].active { border-color: var(--kumquat-500); }
-        .service-card[data-service="mvp"].active {
-            border-color: var(--kumquat-500);
-            box-shadow: var(--shadow-lg), 0 0 0 1px color-mix(in srgb, var(--kumquat-400) 35%, transparent);
-        }
-        .service-card-icon {
-            position: relative;
-            z-index: 1;
-            width: 3rem;
-            height: 3rem;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.375rem;
-            border-radius: var(--radius-md);
-            background: var(--carbon-500);
-            transition: transform var(--duration-normal) var(--ease-default),
-                        background var(--duration-normal) var(--ease-default);
-        }
-        .service-card:hover .service-card-icon,
-        .service-card.active .service-card-icon { transform: scale(1.06); }
-        .service-card.active .service-card-icon { background: var(--gradient-yuzu); }
-        .service-card[data-service="infra"].active .service-card-icon {
-            background: linear-gradient(135deg, var(--zest-500) 0%, var(--zest-600) 100%);
-        }
-        .service-card[data-service="debt"].active .service-card-icon {
-            background: linear-gradient(135deg, var(--kumquat-500) 0%, var(--kumquat-600) 100%);
-        }
-        .service-card[data-service="mvp"].active .service-card-icon {
-            background: linear-gradient(135deg, var(--yuzu-500) 0%, var(--kumquat-500) 100%);
-        }
-        .service-card-body { position: relative; z-index: 1; min-width: 0; }
-        .service-card-tag {
-            display: inline-block;
-            margin-top: 0.25rem;
-            font-size: var(--text-xs);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: var(--tracking-widest);
-            color: var(--kumquat-700);
-        }
-        .service-card.active .service-card-tag { color: var(--kumquat-800); }
-
-        .service-detail-panel {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            min-height: 24rem;
-            background: var(--paper-100);
-            border: 2px solid var(--yuzu-100);
-            border-radius: var(--radius-2xl);
-            padding: 2rem;
-            overflow: hidden;
-            transition: border-color var(--duration-normal) var(--ease-default),
-                        box-shadow var(--duration-normal) var(--ease-default);
-        }
-        .service-detail-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-yuzu);
-            transition: background var(--duration-normal) var(--ease-default);
-        }
-        .service-detail-panel[data-active="infra"]::before {
-            background: linear-gradient(90deg, var(--zest-500), var(--zest-300));
-        }
-        .service-detail-panel[data-active="debt"]::before {
-            background: linear-gradient(90deg, var(--kumquat-500), var(--kumquat-300));
-        }
-        .service-detail-panel[data-active="mvp"]::before {
-            background: linear-gradient(90deg, var(--yuzu-500), var(--kumquat-500));
-        }
-        .service-detail-panel:hover {
-            border-color: var(--yuzu-300);
-            box-shadow: var(--shadow-lg);
-        }
-        .service-deliverable {
-            display: flex;
-            align-items: center;
-            gap: 0.625rem;
-            color: var(--carbon-400);
-        }
-        .service-deliverable::before {
-            content: '';
-            width: 0.5rem;
-            height: 0.5rem;
-            flex-shrink: 0;
-            border-radius: var(--radius-full);
-            background: var(--zest-500);
-            box-shadow: 0 0 0 3px var(--zest-100);
-        }
-        .fade-in {
+.fade-in {
             animation: fadeIn 0.4s ease-in;
         }
         @keyframes fadeIn {
@@ -305,30 +152,25 @@
             header .hero-title { font-size: clamp(1.75rem, calc(5.46875vw - 14px), 3.5rem); }
         }
 
-        /* Hero juicer illustration */
+        /* Hero lemon emoji */
         .hero-visual {
             position: relative;
             background: linear-gradient(160deg, var(--paper-100) 0%, var(--yuzu-100) 100%);
             border: 2px solid var(--yuzu-100);
             border-radius: var(--radius-xl);
             overflow: hidden;
-        }
-        .hero-visual svg { width: 100%; height: auto; display: block; }
-
-        /* Service custom visuals */
-        .service-visual {
-            width: 100%;
-            height: 12rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--yuzu-50) 0%, var(--yuzu-100) 100%);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--yuzu-100);
-            overflow: hidden;
+            min-height: 16rem;
         }
-        .service-visual svg { width: 90%; height: 90%; }
-        .svc-pulse { animation: svcPulse 2.5s ease-in-out infinite; }
+        .hero-emoji {
+            font-size: clamp(8rem, 28vw, 16rem);
+            line-height: 1;
+            user-select: none;
+        }
+
+.svc-pulse { animation: svcPulse 2.5s ease-in-out infinite; }
         .svc-flow  { stroke-dasharray: 8 4; animation: svcFlow 1.5s linear infinite; }
         .svc-grow  { animation: svcGrow 2s ease-in-out infinite alternate; }
         @keyframes svcPulse {
@@ -343,27 +185,7 @@
             to   { transform: scaleY(1); transform-origin: bottom; }
         }
 
-        /* Service detail CTA (homepage) */
-        .detail-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 16px;
-            padding: 10px 20px;
-            background: var(--carbon-500);
-            color: var(--paper-100);
-            font-size: 0.875rem;
-            font-weight: 700;
-            border-radius: var(--radius-full);
-            transition: background 0.2s;
-            text-decoration: none;
-        }
-        .detail-cta:hover {
-            background: var(--yuzu-600);
-            box-shadow: 0 4px 14px color-mix(in srgb, var(--yuzu-500) 40%, transparent);
-        }
-
-        /* Vision — Extracting Value (ETL = lemonade) */
+/* Vision — Extracting Value (ETL = lemonade) */
         .vision-step { transition: transform 0.3s ease, border-color 0.3s ease; }
         .vision-step:hover { transform: translateY(-5px); }
         .vision-letter {
@@ -450,7 +272,7 @@
 <!-- Floating lemons, juice drops & binary bits -->
 <div class="float-layer" aria-hidden="true" id="floatLayer"></div>
 
-<nav class="sticky z-50 w-[94%] max-w-6xl mx-auto" id="mainNav">
+<nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
     <div class="nav-bar-inner pl-5 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
                                         <div class="shrink-0">
             <a href="index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--nav" aria-label="Yuzu Solutions">
@@ -579,274 +401,15 @@
             </div>
         </div>
         <div class="hero-visual p-6 shadow-2xl shadow-yellow-100">
-            <svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Exprimidor de datos yuzu que convierte limones en dashboards">
-                <defs>
-                    <radialGradient id="lemonGrad" cx="35%" cy="30%" r="75%">
-                        <stop offset="0%" stop-color="#FEF9C3"/>
-                        <stop offset="45%" stop-color="#FDE047"/>
-                        <stop offset="100%" stop-color="#CA8A04"/>
-                    </radialGradient>
-                    <linearGradient id="bodyGrad" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#FFFFFF"/>
-                        <stop offset="55%" stop-color="#F1EFEC"/>
-                        <stop offset="100%" stop-color="#D6D3D1"/>
-                    </linearGradient>
-                    <linearGradient id="bodyDark" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#E7E5E4"/>
-                        <stop offset="100%" stop-color="#A8A29E"/>
-                    </linearGradient>
-                    <linearGradient id="glassGrad" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
-                        <stop offset="55%" stop-color="#FEF9C3" stop-opacity="0.55"/>
-                        <stop offset="100%" stop-color="#FDE68A" stop-opacity="0.5"/>
-                    </linearGradient>
-                    <linearGradient id="juiceGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#FDE047"/>
-                        <stop offset="100%" stop-color="#F59E0B"/>
-                    </linearGradient>
-                    <linearGradient id="panelGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#FFFFFF"/>
-                        <stop offset="100%" stop-color="#FFFBEB"/>
-                    </linearGradient>
-                    <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#FACC15" stop-opacity="0.55"/>
-                        <stop offset="100%" stop-color="#FACC15" stop-opacity="0.05"/>
-                    </linearGradient>
-                    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
-                        <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#A16207" flood-opacity="0.18"/>
-                    </filter>
-                </defs>
-
-                <!-- ground shadow + surface -->
-                <ellipse cx="196" cy="334" rx="120" ry="12" fill="#A16207" opacity="0.12"/>
-                <line x1="26" y1="332" x2="330" y2="332" stroke="#D6D3D1" stroke-width="2.5" stroke-linecap="round"/>
-
-                <!-- ===== JUICER (left) : lemons in, data out ===== -->
-                <!-- funnel -->
-                <path d="M118 112 L252 112 L224 166 L146 166 Z" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2.5" stroke-linejoin="round"/>
-                <ellipse cx="185" cy="112" rx="67" ry="14" fill="#F5F5F4" stroke="#44403C" stroke-width="2.5"/>
-                <ellipse cx="185" cy="112" rx="55" ry="9" fill="#E7E5E4" stroke="#78716C" stroke-width="1"/>
-
-                <!-- lemons piled in funnel (textured) -->
-                <g filter="url(#softShadow)">
-                    <g>
-                        <circle cx="158" cy="96" r="17" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                        <ellipse cx="152" cy="89" rx="6" ry="4" fill="#FFFFFF" opacity="0.55"/>
-                        <path d="M174 92 l5 -2" stroke="#A16207" stroke-width="1.4" stroke-linecap="round"/>
-                    </g>
-                    <g>
-                        <circle cx="196" cy="90" r="16" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                        <ellipse cx="190" cy="84" rx="5" ry="3.5" fill="#FFFFFF" opacity="0.55"/>
-                    </g>
-                    <g>
-                        <circle cx="178" cy="67" r="15" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                        <ellipse cx="172" cy="61" rx="5" ry="3.5" fill="#FFFFFF" opacity="0.55"/>
-                        <circle cx="178" cy="52" r="2" fill="#CA8A04"/>
-                    </g>
-                    <g>
-                        <circle cx="212" cy="69" r="13" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                        <ellipse cx="207" cy="64" rx="4" ry="3" fill="#FFFFFF" opacity="0.55"/>
-                    </g>
-                    <g>
-                        <circle cx="156" cy="57" r="12" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                        <ellipse cx="151" cy="52" rx="4" ry="3" fill="#FFFFFF" opacity="0.55"/>
-                    </g>
-                </g>
-                <!-- leaf + stem -->
-                <path d="M178 50 q8 -12 19 -8 q-4 12 -19 8 Z" fill="#84CC16" stroke="#44403C" stroke-width="1.2"/>
-                <line x1="187" y1="46" x2="183" y2="51" stroke="#3F6212" stroke-width="1"/>
-
-                <!-- machine body -->
-                <rect x="114" y="166" width="158" height="132" rx="20" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2.5" filter="url(#softShadow)"/>
-                <!-- side seam + rivets -->
-                <line x1="114" y1="232" x2="272" y2="232" stroke="#D6D3D1" stroke-width="1.5"/>
-                <circle cx="124" cy="176" r="2" fill="#A8A29E"/>
-                <circle cx="262" cy="176" r="2" fill="#A8A29E"/>
-                <circle cx="124" cy="288" r="2" fill="#A8A29E"/>
-                <circle cx="262" cy="288" r="2" fill="#A8A29E"/>
-                <!-- ventilation slots -->
-                <g stroke="#A8A29E" stroke-width="2" stroke-linecap="round">
-                    <line x1="250" y1="244" x2="262" y2="244"/>
-                    <line x1="250" y1="251" x2="262" y2="251"/>
-                    <line x1="250" y1="258" x2="262" y2="258"/>
-                </g>
-
-                <!-- glass press chamber -->
-                <rect x="138" y="184" width="108" height="80" rx="24" fill="url(#glassGrad)" stroke="#44403C" stroke-width="2.5"/>
-                <!-- auger / press screw -->
-                <line x1="192" y1="192" x2="192" y2="252" stroke="#A8A29E" stroke-width="6" stroke-linecap="round"/>
-                <path d="M180 200 q12 6 24 0 M180 214 q12 6 24 0 M180 228 q12 6 24 0 M180 242 q12 6 24 0" stroke="#CA8A04" stroke-width="2" fill="none"/>
-                <!-- lemon half being pressed -->
-                <path d="M165 232 a27 27 0 0 1 54 0 Z" fill="#FEF3C7" stroke="#44403C" stroke-width="2"/>
-                <path d="M192 232 m-23 0 a23 23 0 0 1 46 0" fill="none" stroke="#FACC15" stroke-width="2"/>
-                <g stroke="#EAB308" stroke-width="1.4">
-                    <line x1="192" y1="232" x2="192" y2="210"/>
-                    <line x1="192" y1="232" x2="174" y2="219"/>
-                    <line x1="192" y1="232" x2="210" y2="219"/>
-                    <line x1="192" y1="232" x2="180" y2="214"/>
-                    <line x1="192" y1="232" x2="204" y2="214"/>
-                </g>
-                <!-- juice pooling at chamber base -->
-                <path d="M142 256 q50 12 100 0 v4 a24 24 0 0 1 -24 4 h-52 a24 24 0 0 1 -24 -4 Z" fill="url(#juiceGrad)" opacity="0.85"/>
-                <!-- glass reflections -->
-                <path d="M148 194 q8 -7 18 -5" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
-                <line x1="234" y1="198" x2="234" y2="244" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.45"/>
-
-                <!-- control panel -->
-                <rect x="126" y="272" width="134" height="20" rx="6" fill="url(#bodyDark)" stroke="#44403C" stroke-width="1.5"/>
-                <!-- dial with ticks -->
-                <circle cx="146" cy="282" r="9" fill="#FFFFFF" stroke="#44403C" stroke-width="1.8"/>
-                <line x1="146" y1="282" x2="152" y2="277" stroke="#D97706" stroke-width="2.2" stroke-linecap="round"/>
-                <g stroke="#78716C" stroke-width="1">
-                    <line x1="146" y1="271" x2="146" y2="273"/>
-                    <line x1="157" y1="282" x2="155" y2="282"/>
-                    <line x1="146" y1="293" x2="146" y2="291"/>
-                    <line x1="135" y1="282" x2="137" y2="282"/>
-                </g>
-                <!-- mini gauge -->
-                <circle cx="172" cy="282" r="8" fill="#FEFCE8" stroke="#44403C" stroke-width="1.5"/>
-                <path d="M166 285 a6 6 0 0 1 12 0" fill="none" stroke="#84CC16" stroke-width="2"/>
-                <line x1="172" y1="282" x2="176" y2="279" stroke="#44403C" stroke-width="1.2" stroke-linecap="round"/>
-                <!-- buttons -->
-                <rect x="186" y="277" width="12" height="10" rx="2" fill="#FACC15" stroke="#44403C" stroke-width="1.2"/>
-                <rect x="202" y="277" width="12" height="10" rx="2" fill="#E7E5E4" stroke="#44403C" stroke-width="1.2"/>
-                <!-- power LED -->
-                <circle cx="236" cy="282" r="5" fill="#84CC16" stroke="#44403C" stroke-width="1.4"/>
-                <circle cx="234" cy="280" r="1.5" fill="#FFFFFF" opacity="0.8"/>
-
-                <!-- brand plate -->
-                <rect x="150" y="174" width="86" height="4" rx="2" fill="#FDE68A"/>
-
-                <!-- feet -->
-                <rect x="128" y="296" width="16" height="8" rx="3" fill="#78716C"/>
-                <rect x="242" y="296" width="16" height="8" rx="3" fill="#78716C"/>
-
-                <!-- spout + dripping juice -->
-                <path d="M270 230 L298 230 L292 252 L276 252 Z" fill="url(#bodyGrad)" stroke="#44403C" stroke-width="2"/>
-                <path d="M284 252 q-3 8 0 14 q3 -6 0 -14 Z" fill="url(#juiceGrad)"/>
-                <circle cx="284" cy="272" r="3" fill="#FACC15"/>
-
-                <!-- ===== DATA OUTPUT (right) : the "juice" is data ===== -->
-                <!-- juice-to-binary transition -->
-                <g font-family="monospace" font-size="12" font-weight="bold">
-                    <text x="298" y="248" fill="#D97706">1</text>
-                    <text x="290" y="266" fill="#CA8A04">0</text>
-                    <text x="302" y="282" fill="#A16207">1</text>
-                    <text x="288" y="298" fill="#A16207" opacity="0.7">0</text>
-                    <text x="304" y="312" fill="#A16207" opacity="0.5">1</text>
-                </g>
-
-                <!-- dashboard card -->
-                <g filter="url(#softShadow)">
-                    <rect x="296" y="56" width="150" height="178" rx="16" fill="url(#panelGrad)" stroke="#44403C" stroke-width="2.5"/>
-                </g>
-                <!-- title bar -->
-                <path d="M296 72 a16 16 0 0 1 16 -16 h118 a16 16 0 0 1 16 16 v6 H296 Z" fill="#FEF3C7"/>
-                <circle cx="308" cy="66" r="3" fill="#F87171" stroke="#44403C" stroke-width="0.6"/>
-                <circle cx="318" cy="66" r="3" fill="#FBBF24" stroke="#44403C" stroke-width="0.6"/>
-                <circle cx="328" cy="66" r="3" fill="#84CC16" stroke="#44403C" stroke-width="0.6"/>
-                <text x="434" y="70" text-anchor="end" font-family="'Inter',sans-serif" font-size="10" font-weight="800" fill="#44403C">INSIGHTS</text>
-                <line x1="296" y1="78" x2="446" y2="78" stroke="#44403C" stroke-width="1.5"/>
-
-                <!-- donut chart (segmented) -->
-                <g transform="rotate(-90 332 116)">
-                    <circle cx="332" cy="116" r="17" fill="none" stroke="#FEF3C7" stroke-width="11"/>
-                    <circle cx="332" cy="116" r="17" fill="none" stroke="#FACC15" stroke-width="11" stroke-dasharray="46 107" stroke-dashoffset="0"/>
-                    <circle cx="332" cy="116" r="17" fill="none" stroke="#EAB308" stroke-width="11" stroke-dasharray="32 107" stroke-dashoffset="-46"/>
-                    <circle cx="332" cy="116" r="17" fill="none" stroke="#D97706" stroke-width="11" stroke-dasharray="29 107" stroke-dashoffset="-78"/>
-                </g>
-                <text x="332" y="120" text-anchor="middle" font-family="'Inter',sans-serif" font-size="11" font-weight="800" fill="#44403C">78%</text>
-
-                <!-- bar chart with axis + gridlines -->
-                <g stroke="#E7E5E4" stroke-width="1">
-                    <line x1="368" y1="98" x2="436" y2="98"/>
-                    <line x1="368" y1="112" x2="436" y2="112"/>
-                    <line x1="368" y1="126" x2="436" y2="126"/>
-                </g>
-                <line x1="368" y1="138" x2="436" y2="138" stroke="#44403C" stroke-width="1.5"/>
-                <rect x="372" y="120" width="9" height="18" fill="#FDE047" stroke="#44403C" stroke-width="1"/>
-                <rect x="386" y="108" width="9" height="30" fill="#FACC15" stroke="#44403C" stroke-width="1"/>
-                <rect x="400" y="116" width="9" height="22" fill="#EAB308" stroke="#44403C" stroke-width="1"/>
-                <rect x="414" y="100" width="9" height="38" fill="#D97706" stroke="#44403C" stroke-width="1"/>
-
-                <!-- area/line chart panel -->
-                <rect x="308" y="150" width="126" height="46" rx="8" fill="#FFFFFF" stroke="#44403C" stroke-width="1.5"/>
-                <path d="M315 188 L315 180 L335 168 L352 174 L372 156 L400 160 L426 152 L426 188 Z" fill="url(#areaFill)"/>
-                <polyline points="315,180 335,168 352,174 372,156 400,160 426,152" fill="none" stroke="#D97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                <g fill="#FFFFFF" stroke="#D97706" stroke-width="1.5">
-                    <circle cx="335" cy="168" r="2.2"/>
-                    <circle cx="372" cy="156" r="2.2"/>
-                    <circle cx="426" cy="152" r="2.2"/>
-                </g>
-
-                <!-- KPI row -->
-                <text x="308" y="218" font-family="'Inter',sans-serif" font-size="15" font-weight="800" fill="#44403C">2.4x</text>
-                <path d="M340 216 l5 -7 l5 7 Z" fill="#84CC16" stroke="#3F6212" stroke-width="0.6"/>
-                <text x="356" y="218" font-family="'Inter',sans-serif" font-size="9" font-weight="600" fill="#16A34A">ROI</text>
-                <rect x="392" y="208" width="42" height="14" rx="7" fill="#ECFCCB" stroke="#84CC16" stroke-width="1"/>
-                <text x="413" y="218" text-anchor="middle" font-family="'Inter',sans-serif" font-size="8" font-weight="700" fill="#3F6212">LIVE</text>
-
-                <!-- floating data bits between machine and dashboard -->
-                <g font-family="monospace" font-size="10" font-weight="bold" fill="#CA8A04" opacity="0.6">
-                    <text x="276" y="190">0</text>
-                    <text x="282" y="170">1</text>
-                    <text x="272" y="150">1</text>
-                </g>
-
-                <!-- foreground lemon + detailed slice -->
-                <g filter="url(#softShadow)">
-                    <circle cx="92" cy="312" r="19" fill="url(#lemonGrad)" stroke="#44403C" stroke-width="2"/>
-                    <ellipse cx="85" cy="304" rx="6" ry="4" fill="#FFFFFF" opacity="0.55"/>
-                    <path d="M92 298 q6 -9 15 -6 q-3 9 -15 6 Z" fill="#84CC16" stroke="#44403C" stroke-width="1"/>
-                </g>
-                <!-- halved lemon with segments -->
-                <circle cx="56" cy="320" r="15" fill="#FEF9C3" stroke="#44403C" stroke-width="2"/>
-                <circle cx="56" cy="320" r="11.5" fill="#FEFCE8" stroke="#FACC15" stroke-width="1.6"/>
-                <g stroke="#FACC15" stroke-width="1.3">
-                    <line x1="56" y1="320" x2="56" y2="309"/>
-                    <line x1="56" y1="320" x2="66" y2="314"/>
-                    <line x1="56" y1="320" x2="67" y2="323"/>
-                    <line x1="56" y1="320" x2="60" y2="331"/>
-                    <line x1="56" y1="320" x2="50" y2="331"/>
-                    <line x1="56" y1="320" x2="45" y2="323"/>
-                    <line x1="56" y1="320" x2="46" y2="314"/>
-                </g>
-                <circle cx="56" cy="320" r="2" fill="#EAB308"/>
-            </svg>
+            <div class="hero-emoji" role="img" aria-label="Lemon">🍋</div>
         </div>
     </div>
 </header>
 
 
 
-<section id="brand" class="py-20 px-6 bg-gray-950">
-    <div class="max-w-5xl mx-auto text-center mb-12">
-        <span class="text-yellow-500 font-bold uppercase tracking-widest text-sm">✦ Logo System</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-white mt-3">Three lockups, one mark</h2>
-        <p class="mt-3 text-stone-400 max-w-2xl mx-auto">Mark, horizontal, and stacked SVG lockups — geometry fixed, palette via CSS tokens.</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-        <div class="rounded-2xl bg-[#0F1213] p-8 flex flex-col items-center justify-center gap-4 min-h-[220px]">
-            <span class="font-mono text-xs uppercase tracking-widest text-stone-500">01 · Mark</span>
-            <div class="yuzu-logo--mark-on-dark">
-                <object type="image/svg+xml" data="../assets/yuzu-mark.svg" class="yuzu-logo__media max-h-24 w-auto" aria-label="Yuzu Solutions mark"></object>
-            </div>
-        </div>
-        <div class="rounded-2xl bg-[#0F1213] p-8 flex flex-col items-center justify-center gap-4 min-h-[220px]">
-            <span class="font-mono text-xs uppercase tracking-widest text-stone-500">02 · Horizontal</span>
-            <object type="image/svg+xml" data="../assets/yuzu-horizontal.svg" class="yuzu-logo__media max-h-16 w-auto" aria-label="Yuzu Solutions horizontal lockup"></object>
-        </div>
-        <div class="rounded-2xl bg-[#0F1213] p-8 flex flex-col items-center justify-center gap-4 min-h-[220px]">
-            <span class="font-mono text-xs uppercase tracking-widest text-stone-500">03 · Stacked</span>
-            <span class="yuzu-logo yuzu-logo--stacked yuzu-logo--on-dark">
-                <object type="image/svg+xml" data="../assets/yuzu-stacked.svg" class="yuzu-logo__media" aria-label="Yuzu Solutions stacked lockup"></object>
-            </span>
-        </div>
-    </div>
-</section>
-
-
-<section id="vision" class="py-20 px-6 max-w-7xl mx-auto">
+<section id="vision" class="vision-section py-20 px-6">
+    <div class="max-w-7xl mx-auto">
     <div class="text-center mb-14">
         <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🍋 Nuestra visión</span>
         <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-3">Extraer <span class="text-yellow-500">valor</span></h2>
@@ -1068,6 +631,7 @@
             </div>
         </div>
     </div>
+    </div>
 </section>
 
 <section id="clients" class="py-16 px-6 max-w-7xl mx-auto">
@@ -1096,105 +660,104 @@
     </div>
 </section>
 
-<section id="services" class="services-section py-20 px-6 max-w-7xl mx-auto">
-    <div class="text-center mb-14">
-        <span class="text-yuzu-700 font-bold uppercase tracking-widest text-sm">🍋 Qué hacemos</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-carbon-500 mt-3">La pulpa &amp; <span class="text-yuzu-500">el jugo</span></h2>
-        <p class="mt-3 text-lg text-carbon-300 max-w-2xl mx-auto">
-            Selecciona un pilar técnico para ver cómo reemplazamos el trabajo manual con sistemas escalables — y los entregables exactos que recibes al trabajar con nosotros.
-        </p>
-    </div>
+<section id="services" class="services-section py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="services-header text-center mb-14">
+            <span class="services-eyebrow">🍋 Nuestras recetas</span>
+            <h2 class="services-title">Qué <span class="services-accent">hacemos</span></h2>
+            <p class="services-lead">Selecciona un pilar técnico para ver cómo reemplazamos el trabajo manual con sistemas escalables — y los entregables exactos que recibes al trabajar con nosotros.</p>
+        </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8">
-        <div class="md:col-span-5 flex flex-col gap-3" role="tablist" aria-label="Categorías de servicios">
+        <div class="services-studio">
+            <div class="services-menu" role="tablist" aria-label="Categorías de servicios">
             <button type="button" class="service-card active" data-service="ai" role="tab" aria-selected="true">
                 <span class="service-card-icon" aria-hidden="true">🤖</span>
                 <span class="service-card-body">
-                    <span class="block text-lg font-bold text-carbon-500">AI &amp; Automation</span>
-                    <span class="service-card-tag">The Zest</span>
+                    <span class="service-card-title">IA y automatización</span>
+                    <span class="service-card-tag">El toque cítrico</span>
                 </span>
             </button>
             <button type="button" class="service-card" data-service="infra" role="tab" aria-selected="false">
                 <span class="service-card-icon" aria-hidden="true">🏗️</span>
                 <span class="service-card-body">
-                    <span class="block text-lg font-bold text-carbon-500">Infrastructure &amp; Data</span>
-                    <span class="service-card-tag">The Core</span>
+                    <span class="service-card-title">Infraestructura y datos</span>
+                    <span class="service-card-tag">El núcleo</span>
                 </span>
             </button>
             <button type="button" class="service-card" data-service="debt" role="tab" aria-selected="false">
                 <span class="service-card-icon" aria-hidden="true">🛠️</span>
                 <span class="service-card-body">
-                    <span class="block text-lg font-bold text-carbon-500">Technical Debt &amp; Rescue</span>
-                    <span class="service-card-tag">The Detox</span>
+                    <span class="service-card-title">Deuda técnica y rescate</span>
+                    <span class="service-card-tag">El detox</span>
                 </span>
             </button>
             <button type="button" class="service-card" data-service="mvp" role="tab" aria-selected="false">
                 <span class="service-card-icon" aria-hidden="true">🚀</span>
                 <span class="service-card-body">
-                    <span class="block text-lg font-bold text-carbon-500">Desarrollos MVP</span>
+                    <span class="service-card-title">Desarrollos MVP</span>
                     <span class="service-card-tag">El primer exprimido</span>
                 </span>
             </button>
-        </div>
-
-        <div class="md:col-span-7 service-detail-panel" id="serviceDetailView" data-active="ai" role="tabpanel">
-            <div class="mb-6">
-                <h3 class="text-2xl md:text-3xl font-extrabold text-carbon-500 mb-4" id="detailTitle">IA y automatización</h3>
-                <p class="text-lg text-carbon-300 leading-relaxed" id="detailDesc">
-                    Tus flujos manuales son fruta al alcance. Construyo y despliego agentes para el trabajo pesado, conectando tus apps y bases de datos con código glue que realmente pega.
-                </p>
-                <a href="services/ai-automation.html" id="detailLink" class="detail-cta">Ver dashboards y flujos →</a>
             </div>
 
-            <div class="mt-auto grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
-                <div>
-                    <h4 class="font-bold text-carbon-500 mb-3 uppercase tracking-widest text-xs">Entregables clave</h4>
-                    <ul class="space-y-3" id="detailList">
-                        <li class="service-deliverable">Autonomous Agents</li>
-                        <li class="service-deliverable">API Integration Glue Code</li>
-                        <li class="service-deliverable">Custom LLM Wrappers</li>
-                    </ul>
+            <div class="service-detail-panel" id="serviceDetailView" data-active="ai" role="tabpanel">
+                <div class="service-detail-copy">
+                    <h3 class="service-detail-title" id="detailTitle">IA y automatización</h3>
+                    <p class="service-detail-desc" id="detailDesc">Tus flujos manuales son fruta al alcance. Construyo y despliego agentes para el trabajo pesado, conectando tus apps y bases de datos con código glue que realmente pega.</p>
+                    <a href="services/ai-automation.html" id="detailLink" class="detail-cta">Ver dashboards y flujos →</a>
                 </div>
-                <div class="service-visual" id="serviceVisual">
-                    <!-- default: AI visual injected by JS -->
+                <div class="service-detail-body">
+                    <div class="service-deliverables">
+                        <h4 class="service-deliverables-label">Entregables clave</h4>
+                        <ul id="detailList">
+                        <li class="service-deliverable">Agentes autónomos</li>
+                        <li class="service-deliverable">Glue code de integración API</li>
+                        <li class="service-deliverable">Wrappers LLM personalizados</li>
+                        </ul>
+                    </div>
+                    <div class="service-visual" id="serviceVisual"></div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section id="process" class="py-20 bg-gray-900 text-white mt-12">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold mb-4 text-white">Cómo trabajamos <span class="text-gray-400 font-normal text-3xl">(El exprimido)</span></h2>
-            <p class="text-xl text-gray-300 max-w-2xl mx-auto">Sin gestores de cuenta. Sin plazos inflados. Solo asociación técnica directa centrada en una ejecución limpia.</p>
+<section id="process" class="squeeze-section py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-14">
+            <span class="squeeze-eyebrow">🍋 Del limón a la limonada</span>
+            <h2 class="squeeze-title">Cómo <span class="squeeze-accent">trabajamos</span></h2>
+            <p class="squeeze-lead">Sin gestores de cuenta. Sin plazos inflados. Solo asociación técnica directa centrada en una ejecución limpia.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-yellow-500 transition-colors">
-                <div class="w-14 h-14 rounded-full bg-gray-700 flex items-center justify-center text-2xl mb-6 text-yellow-500">1</div>
-                <h3 class="text-2xl font-bold mb-4">Direct</h3>
-                <p class="text-gray-400 leading-relaxed">
-                    Tratas conmigo, no con un intermediario con traje. La comunicación directa con el ingeniero que construye tus sistemas garantiza que los requisitos nunca se pierdan en la traducción.
-                </p>
-            </div>
-
-            <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-yellow-500 transition-colors">
-                <div class="w-14 h-14 rounded-full bg-gray-700 flex items-center justify-center text-2xl mb-6 text-yellow-500">2</div>
-                <h3 class="text-2xl font-bold mb-4">Clean</h3>
-                <p class="text-gray-400 leading-relaxed">
-                    Entrego código documentado y mantenible con CI/CD estándar. Construyo sistemas que se ejecutan solos, para que no tengas que vigilarlos después del despliegue.
-                </p>
-            </div>
-
-            <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-yellow-500 transition-colors relative overflow-hidden">
-                <div class="absolute -right-6 -top-6 text-8xl opacity-5">🍋</div>
-                <div class="w-14 h-14 rounded-full bg-yellow-500/20 text-yellow-500 flex items-center justify-center text-2xl mb-6">3</div>
-                <h3 class="text-2xl font-bold mb-4 text-yellow-400">Integrated</h3>
-                <p class="text-gray-300 leading-relaxed">
-                    Cuando propongo una solución, la hoja de ruta viene incluida. No pagas por un plan; pagas por el jugo. La estrategia es el subproducto natural de la maestría técnica.
-                </p>
-            </div>
+        <div class="squeeze-grid">
+            <article class="squeeze-pillar">
+                <div class="squeeze-pillar-top">
+                    <span class="squeeze-step">1</span>
+                    <span class="squeeze-badge">Directo</span>
+                </div>
+                <div class="squeeze-icon" aria-hidden="true">🎯</div>
+                <h3>Directo</h3>
+                <p>Tratas conmigo, no con un intermediario con traje. La comunicación directa con el ingeniero que construye tus sistemas garantiza que los requisitos nunca se pierdan en la traducción.</p>
+            </article>
+            <article class="squeeze-pillar">
+                <div class="squeeze-pillar-top">
+                    <span class="squeeze-step">2</span>
+                    <span class="squeeze-badge">Limpio</span>
+                </div>
+                <div class="squeeze-icon" aria-hidden="true">⚡</div>
+                <h3>Limpio</h3>
+                <p>Entrego código documentado y mantenible con CI/CD estándar. Construyo sistemas que se ejecutan solos, para que no tengas que vigilarlos después del despliegue.</p>
+            </article>
+            <article class="squeeze-pillar squeeze-pillar--featured">
+                <div class="squeeze-pillar-top">
+                    <span class="squeeze-step">3</span>
+                    <span class="squeeze-badge">Integrado</span>
+                </div>
+                <div class="squeeze-icon" aria-hidden="true">🍋</div>
+                <h3>Integrado</h3>
+                <p>Cuando propongo una solución, la hoja de ruta viene incluida. No pagas por un plan; pagas por el jugo. La estrategia es el subproducto natural de la maestría técnica.</p>
+            </article>
         </div>
     </div>
 </section>
