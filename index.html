@@ -18,7 +18,7 @@
     <meta name="twitter:title" content="Yuzu.solutions | If life gives you Yuzu, make a dashboard">
     <meta name="twitter:description" content="We turn raw, complex data into refreshing, automated insights.">
     <meta name="twitter:image" content="https://yuzu.solutions/assets/og-image.png">
-    <link rel="icon" href="assets/yuzu-mark.svg" type="image/svg+xml">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/og-image.png">
     <link rel="canonical" href="https://yuzu.solutions/">
     <link rel="alternate" hreflang="en" href="https://yuzu.solutions/">
@@ -124,43 +124,9 @@
         /* Offset in-page anchors so the sticky nav never covers section content. */
         html { scroll-padding-top: calc(var(--nav-h, 96px) + 1.5rem); }
 
-        /* Hero fills exactly one viewport (minus the floating nav) on every device.
-           --nav-h is kept in sync by js/nav.js; dvh adapts to mobile browser chrome. */
-        .hero-fullscreen {
-            min-height: calc(100vh - var(--nav-h, 96px));
-            min-height: calc(100svh - var(--nav-h, 96px));
-            min-height: calc(100dvh - var(--nav-h, 96px));
-        }
-        /* On phones the two columns stack; compact the type/illustration so the
-           whole hero still fits one viewport, centered vertically. */
-        @media (max-width: 767px) {
-            .hero-fullscreen { flex-direction: column; align-items: stretch; justify-content: center; padding-top: 0.75rem; padding-bottom: 0.75rem; }
-            .hero-fullscreen > div { display: flex; flex-direction: column; gap: 0.75rem; }
-            .hero-fullscreen .hero-title { font-size: clamp(1.875rem, 7.6vw, 2.75rem); }
-            .hero-fullscreen .hero-visual { max-width: 74%; margin-left: auto; margin-right: auto; }
-        }
-
         /* Hero headline — fluid size that holds the sentence to two lines on desktop */
         @media (min-width: 768px) {
             header .hero-title { font-size: clamp(1.75rem, calc(5.46875vw - 14px), 3.5rem); }
-        }
-
-        /* Hero lemon emoji */
-        .hero-visual {
-            position: relative;
-            background: linear-gradient(160deg, var(--paper-100) 0%, var(--yuzu-100) 100%);
-            border: 2px solid var(--yuzu-100);
-            border-radius: var(--radius-xl);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 16rem;
-        }
-        .hero-emoji {
-            font-size: clamp(8rem, 28vw, 16rem);
-            line-height: 1;
-            user-select: none;
         }
 
 .svc-pulse { animation: svcPulse 2.5s ease-in-out infinite; }
@@ -652,6 +618,7 @@
 
         <div class="services-studio">
             <div class="services-menu" role="tablist" aria-label="Service categories">
+            <div class="service-picker" data-service="ai">
             <button type="button" class="service-card active" data-service="ai" role="tab" aria-selected="true">
                 <span class="service-card-icon" aria-hidden="true">🤖</span>
                 <span class="service-card-body">
@@ -659,6 +626,9 @@
                     <span class="service-card-tag">The Zest</span>
                 </span>
             </button>
+                <div class="service-detail-anchor" data-service="ai" hidden aria-hidden="true"></div>
+            </div>
+            <div class="service-picker" data-service="infra">
             <button type="button" class="service-card" data-service="infra" role="tab" aria-selected="false">
                 <span class="service-card-icon" aria-hidden="true">🏗️</span>
                 <span class="service-card-body">
@@ -666,6 +636,9 @@
                     <span class="service-card-tag">The Core</span>
                 </span>
             </button>
+                <div class="service-detail-anchor" data-service="infra" hidden aria-hidden="true"></div>
+            </div>
+            <div class="service-picker" data-service="debt">
             <button type="button" class="service-card" data-service="debt" role="tab" aria-selected="false">
                 <span class="service-card-icon" aria-hidden="true">🛠️</span>
                 <span class="service-card-body">
@@ -673,6 +646,9 @@
                     <span class="service-card-tag">The Detox</span>
                 </span>
             </button>
+                <div class="service-detail-anchor" data-service="debt" hidden aria-hidden="true"></div>
+            </div>
+            <div class="service-picker" data-service="mvp">
             <button type="button" class="service-card" data-service="mvp" role="tab" aria-selected="false">
                 <span class="service-card-icon" aria-hidden="true">🚀</span>
                 <span class="service-card-body">
@@ -680,6 +656,8 @@
                     <span class="service-card-tag">The First Press</span>
                 </span>
             </button>
+                <div class="service-detail-anchor" data-service="mvp" hidden aria-hidden="true"></div>
+            </div>
             </div>
 
             <div class="service-detail-panel" id="serviceDetailView" data-active="ai" role="tabpanel">
@@ -901,6 +879,7 @@
     </p>
 </footer>
 
+<script src="js/services-picker.js"></script>
 <script src="js/nav.js"></script>
 <script>
     const svcDefs = `<defs>
@@ -1088,15 +1067,23 @@
 
     serviceCards.forEach(card => {
         card.addEventListener('click', () => {
-            serviceCards.forEach(c => {
-                c.classList.remove('active');
-                c.setAttribute('aria-selected', 'false');
-            });
-
-            card.classList.add('active');
-            card.setAttribute('aria-selected', 'true');
-
             const key = card.getAttribute('data-service');
+            const isMobile = window.matchMedia('(max-width: 899px)').matches;
+
+            if (isMobile && window.closeServicePanel && card.classList.contains('active') && window.isServicePanelOpen && isServicePanelOpen()) {
+                closeServicePanel();
+                return;
+            }
+
+            if (!isMobile) {
+                serviceCards.forEach(c => {
+                    c.classList.remove('active');
+                    c.setAttribute('aria-selected', 'false');
+                });
+                card.classList.add('active');
+                card.setAttribute('aria-selected', 'true');
+            }
+
             const data = serviceData[key];
 
             detailView.classList.remove('fade-in');
@@ -1117,6 +1104,7 @@
             });
 
             serviceVisualEl.innerHTML = serviceVisuals[key];
+            if (window.placeServicePanel) placeServicePanel(key);
         });
     });
 </script>
