@@ -107,14 +107,64 @@
         </div>
 
         <div class="nav-bar-end">
-            <a href="../index.html#services" class="md:hidden text-sm font-semibold hover:text-yellow-600">Services</a>
-            <a href="../index.html#founder" class="md:hidden text-sm font-semibold hover:text-yellow-600">Fondateur</a>
-                        <div class="lang-switch" role="navigation" aria-label="Language">
+            <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
                 <a href="/services/mvp-builds.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
                 <a href="/fr/services/mvp-builds.html" class="lang-switch-btn active" hreflang="fr-CA" lang="fr-CA">FR</a>
                 <a href="/es/services/mvp-builds.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
             </div>
-            <a href="../index.html#founder" class="px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap">Commencer</a>
+            <a href="../../fr/index.html#founder" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap">Commencer</a>
+            <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNavPanel">
+                <span class="nav-hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="mobile-nav-panel" id="mobileNavPanel" aria-hidden="true">
+        <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+        <div class="mobile-nav-sheet" role="dialog" aria-label="Navigation menu">
+            <a href="../../fr/index.html#impact" class="mobile-nav-link">Vision</a>
+            <button type="button" class="mobile-nav-link" id="mobileServicesToggle" aria-expanded="true" aria-controls="mobileServicesSub">
+                Services <span class="nav-chevron">▾</span>
+            </button>
+            <div class="mobile-nav-sub open" id="mobileServicesSub">
+                <a href="ai-automation.html" class="mega-item">
+                    <div class="mega-icon">🤖</div>
+                    <div>
+                        <h4>IA et automatisation</h4>
+                        <p>Agents, flux de travail et intégrations LLM · Le zeste</p>
+                    </div>
+                </a>
+                <a href="infrastructure-data.html" class="mega-item">
+                    <div class="mega-icon">🏗️</div>
+                    <div>
+                        <h4>Infrastructure et données</h4>
+                        <p>Lakehouses Fabric, ETL et modèles sémantiques · Le cœur</p>
+                    </div>
+                </a>
+                <a href="technical-debt.html" class="mega-item">
+                    <div class="mega-icon">🛠️</div>
+                    <div>
+                        <h4>Dette technique et sauvetage</h4>
+                        <p>Correctifs legacy, performance et nettoyage de modèles · Le détox</p>
+                    </div>
+                </a>
+                <a href="mvp-builds.html" class="mega-item" aria-current="page">
+                    <div class="mega-icon">🚀</div>
+                    <div>
+                        <h4>Constructions MVP</h4>
+                        <p>Outils internes, portails et prototypes rapides · La première pressée</p>
+                    </div>
+                </a>
+            </div>
+            <a href="../../fr/index.html#founder" class="mobile-nav-link">Fondateur</a>
+            <div class="mobile-nav-footer">
+                <div class="lang-switch sm:hidden" role="navigation" aria-label="Language">
+                    <a href="/services/mvp-builds.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
+                    <a href="/fr/services/mvp-builds.html" class="lang-switch-btn active" hreflang="fr-CA" lang="fr-CA">FR</a>
+                    <a href="/es/services/mvp-builds.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+                </div>
+                <a href="../../fr/index.html#founder" class="mobile-nav-cta">Commencer</a>
+            </div>
         </div>
     </div>
 </nav>

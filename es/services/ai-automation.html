@@ -107,14 +107,64 @@
         </div>
 
         <div class="nav-bar-end">
-            <a href="../index.html#services" class="md:hidden text-sm font-semibold hover:text-yellow-600">Services</a>
-            <a href="../index.html#founder" class="md:hidden text-sm font-semibold hover:text-yellow-600">Fundador</a>
-                        <div class="lang-switch" role="navigation" aria-label="Language">
+            <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
                 <a href="/services/ai-automation.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
                 <a href="/fr/services/ai-automation.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
                 <a href="/es/services/ai-automation.html" class="lang-switch-btn active" hreflang="es" lang="es">ES</a>
             </div>
-            <a href="../index.html#founder" class="px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap">Empezar</a>
+            <a href="../../es/index.html#founder" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap">Empezar</a>
+            <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNavPanel">
+                <span class="nav-hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="mobile-nav-panel" id="mobileNavPanel" aria-hidden="true">
+        <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+        <div class="mobile-nav-sheet" role="dialog" aria-label="Navigation menu">
+            <a href="../../es/index.html#impact" class="mobile-nav-link">Vision</a>
+            <button type="button" class="mobile-nav-link" id="mobileServicesToggle" aria-expanded="true" aria-controls="mobileServicesSub">
+                Services <span class="nav-chevron">▾</span>
+            </button>
+            <div class="mobile-nav-sub open" id="mobileServicesSub">
+                <a href="ai-automation.html" class="mega-item" aria-current="page">
+                    <div class="mega-icon">🤖</div>
+                    <div>
+                        <h4>IA y automatización</h4>
+                        <p>Agentes, flujos de trabajo e integraciones LLM · El zest</p>
+                    </div>
+                </a>
+                <a href="infrastructure-data.html" class="mega-item">
+                    <div class="mega-icon">🏗️</div>
+                    <div>
+                        <h4>Infraestructura y datos</h4>
+                        <p>Lakehouses Fabric, ETL y modelos semánticos · El núcleo</p>
+                    </div>
+                </a>
+                <a href="technical-debt.html" class="mega-item">
+                    <div class="mega-icon">🛠️</div>
+                    <div>
+                        <h4>Deuda técnica y rescate</h4>
+                        <p>Correcciones legacy, rendimiento y limpieza de modelos · La desintoxicación</p>
+                    </div>
+                </a>
+                <a href="mvp-builds.html" class="mega-item">
+                    <div class="mega-icon">🚀</div>
+                    <div>
+                        <h4>Construcciones MVP</h4>
+                        <p>Herramientas internas, portales y prototipos rápidos · La primera prensa</p>
+                    </div>
+                </a>
+            </div>
+            <a href="../../es/index.html#founder" class="mobile-nav-link">Fundador</a>
+            <div class="mobile-nav-footer">
+                <div class="lang-switch sm:hidden" role="navigation" aria-label="Language">
+                    <a href="/services/ai-automation.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
+                    <a href="/fr/services/ai-automation.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                    <a href="/es/services/ai-automation.html" class="lang-switch-btn active" hreflang="es" lang="es">ES</a>
+                </div>
+                <a href="../../es/index.html#founder" class="mobile-nav-cta">Empezar</a>
+            </div>
         </div>
     </div>
 </nav>
