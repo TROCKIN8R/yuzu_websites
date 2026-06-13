@@ -98,9 +98,10 @@ def og_locale_block(locale: str | None) -> str:
     return '    <meta property="og:locale" content="en_US">'
 
 
-def lang_switcher(page: str, active_locale: str) -> str:
+def lang_switcher(page: str, active_locale: str, extra_class: str = "") -> str:
     urls = page_urls(page)
-    parts = ['            <div class="lang-switch" role="navigation" aria-label="Language">']
+    cls = "lang-switch" + (f" {extra_class}" if extra_class else "")
+    parts = [f'            <div class="{cls}" role="navigation" aria-label="Language">']
     for code, key in [("EN", "en"), ("FR", "fr"), ("ES", "es")]:
         active = " active" if active_locale == key else ""
         hreflang = "fr-CA" if key == "fr" else key
@@ -150,18 +151,29 @@ def inject_head(html: str, page: str, locale: str | None) -> str:
 
 
 def inject_lang_switcher(html: str, page: str, active_locale: str) -> str:
+    # Remove any existing desktop switcher (plain or "hidden sm:flex"); the
+    # mobile "sm:hidden" switcher is left in place and refreshed separately.
     html = re.sub(
-        r'\s*<div class="lang-switch"[^>]*>.*?</div>\s*',
+        r'\s*<div class="lang-switch(?: hidden sm:flex)?"[^>]*>.*?</div>\s*',
         "\n",
         html,
         flags=re.DOTALL,
     )
-    switcher = lang_switcher(page, active_locale)
+    desktop = lang_switcher(page, active_locale, "hidden sm:flex")
     html = re.sub(
         r'(<a href="[^"]*" class="[^"]*bg-yellow-500[^"]*">)',
-        switcher + "\n            \\1",
+        desktop + "\n            \\1",
         html,
         count=1,
+    )
+    # Refresh the mobile slide-out switcher with localized URLs + active state.
+    mobile = lang_switcher(page, active_locale, "sm:hidden").strip()
+    html = re.sub(
+        r'<div class="lang-switch sm:hidden"[^>]*>.*?</div>',
+        lambda _m: mobile,
+        html,
+        count=1,
+        flags=re.DOTALL,
     )
     return html
 
@@ -996,8 +1008,10 @@ LLMS_ES: list[tuple[str, str]] = [
 def pristine_html(html: str) -> str:
     """Strip prior hreflang / lang-switch injections for idempotent rebuilds."""
     html = strip_i18n_head(html)
+    # Only the desktop switcher is regenerated from scratch; the mobile
+    # "sm:hidden" switcher stays and is refreshed in place by inject_lang_switcher.
     return re.sub(
-        r'\s*<div class="lang-switch"[^>]*>.*?</div>\s*',
+        r'\s*<div class="lang-switch(?: hidden sm:flex)?"[^>]*>.*?</div>\s*',
         "\n",
         html,
         flags=re.DOTALL,

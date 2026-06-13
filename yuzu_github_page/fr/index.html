@@ -149,6 +149,27 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Hero fills exactly one viewport (minus the floating nav) on every device.
+           --nav-h is kept in sync by js/nav.js; dvh adapts to mobile browser chrome. */
+        .hero-fullscreen {
+            min-height: calc(100vh - var(--nav-h, 96px));
+            min-height: calc(100svh - var(--nav-h, 96px));
+            min-height: calc(100dvh - var(--nav-h, 96px));
+        }
+        /* On phones the two columns stack; compact the type/illustration so the
+           whole hero still fits one viewport, centered vertically. */
+        @media (max-width: 767px) {
+            .hero-fullscreen { flex-direction: column; align-items: stretch; justify-content: center; padding-top: 0.75rem; padding-bottom: 0.75rem; }
+            .hero-fullscreen > div { display: flex; flex-direction: column; gap: 0.75rem; }
+            .hero-fullscreen .hero-title { font-size: clamp(1.875rem, 7.6vw, 2.75rem); }
+            .hero-fullscreen .hero-visual { max-width: 74%; margin-left: auto; margin-right: auto; }
+        }
+
+        /* Hero headline — fluid size that holds the sentence to two lines on desktop */
+        @media (min-width: 768px) {
+            header .hero-title { font-size: clamp(1.75rem, calc(5.46875vw - 14px), 3.5rem); }
+        }
+
         /* Hero juicer illustration */
         .hero-visual {
             position: relative;
@@ -286,12 +307,8 @@
         </div>
 
         <div class="nav-bar-end">
+
             <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
-                <a href="/" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
-                <a href="/fr/" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
-                <a href="/es/" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
-            </div>
-            <div class="lang-switch" role="navigation" aria-label="Language">
                 <a href="/" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
                 <a href="/fr/" class="lang-switch-btn active" hreflang="fr-CA" lang="fr-CA">FR</a>
                 <a href="/es/" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
@@ -343,10 +360,10 @@
             <a href="#founder" class="mobile-nav-link">Founder</a>
             <div class="mobile-nav-footer">
                 <div class="lang-switch sm:hidden" role="navigation" aria-label="Language">
-                    <a href="/" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
-                    <a href="/fr/" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
-                    <a href="/es/" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
-                </div>
+                <a href="/" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
+                <a href="/fr/" class="lang-switch-btn active" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+            </div>
                 <a href="#founder" class="mobile-nav-cta">Commencer</a>
             </div>
         </div>
@@ -354,11 +371,11 @@
 </nav>
 
 <main id="main-content">
-<header class="flex-grow flex items-center max-w-7xl mx-auto px-6 py-12">
-    <div class="grid md:grid-cols-2 gap-12 items-center">
+<header class="hero-fullscreen flex items-center px-6 py-12">
+    <div class="grid md:grid-cols-2 gap-12 items-center max-w-7xl mx-auto w-full">
         <div>
             <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">Bienvenue dans le futur de la BI</span>
-            <h1 class="text-6xl md:text-8xl font-extrabold mt-4 leading-[0.9]">
+            <h1 class="hero-title text-6xl font-extrabold mt-4 leading-[0.9]">
                 Si la vie te donne du <span class="text-yellow-500">yuzu</span>, presse-le en tableau de bord.
             </h1>
             <p class="text-lg mt-8 text-stone-500 max-w-md">On transforme des données brutes et complexes en insights rafraîchissants et automatisés.</p>

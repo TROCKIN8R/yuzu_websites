@@ -9,30 +9,40 @@
     /* ── Design Tokens (single source of truth) ── */
     :root {
       /* Electric Yuzu */
-      --yuzu-100: #FFF9E0;
-      --yuzu-300: #FFE566;
-      --yuzu-500: #FFD700;
-      --yuzu-700: #CCAC00;
-      --yuzu-900: #665600;
+      --yuzu-25:  #FFFDF5;
+      --yuzu-50:  #FEFAEB;
+      --yuzu-100: #FEF6DA;
+      --yuzu-300: #FBE077;
+      --yuzu-500: #F8C607;
+      --yuzu-700: #BC9605;
+      --yuzu-900: #685303;
       /* Zest Green */
+      --zest-25:  #FAFDF8;
+      --zest-50:  #F5FBEF;
       --zest-100: #EEF8E4;
       --zest-300: #A8D97A;
       --zest-500: #86C54A;
       --zest-700: #5E8F33;
       --zest-900: #2F4719;
       /* Soft Kumquat */
+      --kumquat-25:  #FFFBF7;
+      --kumquat-50:  #FFF8F0;
       --kumquat-100: #FFF3E6;
       --kumquat-300: #FFB870;
       --kumquat-500: #FF9F43;
       --kumquat-700: #CC7F36;
       --kumquat-900: #663F1B;
       /* Carbon Slate */
+      --carbon-25:  #F7F8F8;
+      --carbon-50:  #F4F5F5;
       --carbon-100: #E8E9EA;
       --carbon-300: #8B9294;
       --carbon-500: #2D3436;
       --carbon-700: #1F2426;
       --carbon-900: #0F1213;
       /* Paper */
+      --paper-25:  #FFFFFF;
+      --paper-50:  #FFFFFF;
       --paper-100: #FFFFFF;
       --paper-300: #FCFCFC;
       --paper-500: #F9F9F9;
@@ -165,7 +175,7 @@
 
     /* Cards & grids */
     .ds-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-6); }
-    .ds-grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-3); }
+    .ds-grid-5 { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--space-3); }
     .ds-card {
       background: var(--paper-100);
       border: 1px solid var(--paper-700);
@@ -430,7 +440,7 @@
       .ds-layout { flex-direction: column; }
       .ds-sidebar { width: 100%; height: auto; position: relative; }
       .ds-main { padding: var(--space-6); }
-      .ds-grid-5 { grid-template-columns: repeat(3, 1fr); }
+      .ds-grid-5 { grid-template-columns: repeat(4, 1fr); }
     }
     @media (max-width: 500px) {
       .ds-grid-5 { grid-template-columns: repeat(2, 1fr); }
@@ -494,7 +504,7 @@
       <!-- COLORS -->
       <section id="colors">
         <h2 class="ds-section-title">Color Palette</h2>
-        <p class="ds-section-desc">Electric Yuzu palette with five tones per family. Tone <strong>500</strong> is the canonical brand value. Use lighter tones (100–300) for backgrounds and tints; darker tones (700–900) for text on light surfaces and depth.</p>
+        <p class="ds-section-desc">Electric Yuzu palette with seven tones per family. Tone <strong>500</strong> is the canonical brand value. Use the lightest tones (25–100) for backgrounds and tints, <strong>300</strong> for soft fills, and darker tones (700–900) for text on light surfaces and depth.</p>
 
         <div class="ds-color-family">
           <h3>Electric Yuzu</h3>
@@ -771,11 +781,11 @@
   </div>
   <script>
     const PALETTES = {
-      yuzu:    { name: 'yuzu',    colors: { 100:'#FFF9E0', 300:'#FFE566', 500:'#FFD700', 700:'#CCAC00', 900:'#665600' } },
-      zest:    { name: 'zest',    colors: { 100:'#EEF8E4', 300:'#A8D97A', 500:'#86C54A', 700:'#5E8F33', 900:'#2F4719' } },
-      kumquat: { name: 'kumquat', colors: { 100:'#FFF3E6', 300:'#FFB870', 500:'#FF9F43', 700:'#CC7F36', 900:'#663F1B' } },
-      carbon:  { name: 'carbon',  colors: { 100:'#E8E9EA', 300:'#8B9294', 500:'#2D3436', 700:'#1F2426', 900:'#0F1213' } },
-      paper:   { name: 'paper',   colors: { 100:'#FFFFFF', 300:'#FCFCFC', 500:'#F9F9F9', 700:'#E5E5E5', 900:'#B3B3B3' } }
+      yuzu:    { name: 'yuzu',    colors: { 25:'#FFFDF5', 50:'#FEFAEB', 100:'#FEF6DA', 300:'#FBE077', 500:'#F8C607', 700:'#BC9605', 900:'#685303' } },
+      zest:    { name: 'zest',    colors: { 25:'#FAFDF8', 50:'#F5FBEF', 100:'#EEF8E4', 300:'#A8D97A', 500:'#86C54A', 700:'#5E8F33', 900:'#2F4719' } },
+      kumquat: { name: 'kumquat', colors: { 25:'#FFFBF7', 50:'#FFF8F0', 100:'#FFF3E6', 300:'#FFB870', 500:'#FF9F43', 700:'#CC7F36', 900:'#663F1B' } },
+      carbon:  { name: 'carbon',  colors: { 25:'#F7F8F8', 50:'#F4F5F5', 100:'#E8E9EA', 300:'#8B9294', 500:'#2D3436', 700:'#1F2426', 900:'#0F1213' } },
+      paper:   { name: 'paper',   colors: { 25:'#FFFFFF', 50:'#FFFFFF', 100:'#FFFFFF', 300:'#FCFCFC', 500:'#F9F9F9', 700:'#E5E5E5', 900:'#B3B3B3' } }
     };
 
     function isLight(hex) {
@@ -821,20 +831,20 @@
 
     document.getElementById('token-export').textContent = `:root {
   /* Electric Yuzu */
-  --yuzu-100: #FFF9E0;  --yuzu-300: #FFE566;  --yuzu-500: #FFD700;
-  --yuzu-700: #CCAC00;  --yuzu-900: #665600;
+  --yuzu-25: #FFFDF5;  --yuzu-50: #FEFAEB;  --yuzu-100: #FEF6DA;  --yuzu-300: #FBE077;
+  --yuzu-500: #F8C607;  --yuzu-700: #BC9605;  --yuzu-900: #685303;
   /* Zest Green */
-  --zest-100: #EEF8E4;  --zest-300: #A8D97A;  --zest-500: #86C54A;
-  --zest-700: #5E8F33;  --zest-900: #2F4719;
+  --zest-25: #FAFDF8;  --zest-50: #F5FBEF;  --zest-100: #EEF8E4;  --zest-300: #A8D97A;
+  --zest-500: #86C54A;  --zest-700: #5E8F33;  --zest-900: #2F4719;
   /* Soft Kumquat */
-  --kumquat-100: #FFF3E6;  --kumquat-300: #FFB870;  --kumquat-500: #FF9F43;
-  --kumquat-700: #CC7F36;  --kumquat-900: #663F1B;
+  --kumquat-25: #FFFBF7;  --kumquat-50: #FFF8F0;  --kumquat-100: #FFF3E6;  --kumquat-300: #FFB870;
+  --kumquat-500: #FF9F43;  --kumquat-700: #CC7F36;  --kumquat-900: #663F1B;
   /* Carbon Slate */
-  --carbon-100: #E8E9EA;  --carbon-300: #8B9294;  --carbon-500: #2D3436;
-  --carbon-700: #1F2426;  --carbon-900: #0F1213;
+  --carbon-25: #F7F8F8;  --carbon-50: #F4F5F5;  --carbon-100: #E8E9EA;  --carbon-300: #8B9294;
+  --carbon-500: #2D3436;  --carbon-700: #1F2426;  --carbon-900: #0F1213;
   /* Paper */
-  --paper-100: #FFFFFF;  --paper-300: #FCFCFC;  --paper-500: #F9F9F9;
-  --paper-700: #E5E5E5;  --paper-900: #B3B3B3;
+  --paper-25: #FFFFFF;  --paper-50: #FFFFFF;  --paper-100: #FFFFFF;  --paper-300: #FCFCFC;
+  --paper-500: #F9F9F9;  --paper-700: #E5E5E5;  --paper-900: #B3B3B3;
   /* Semantic */
   --success: #86C54A;  --warning: #FF9F43;  --error: #E74C3C;  --info: #3498DB;
   /* Typography */

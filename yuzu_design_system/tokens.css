@@ -9,13 +9,17 @@
 
 :root {
   /* ── Electric Yuzu ── */
-  --yuzu-100: #FFF9E0;
-  --yuzu-300: #FFE566;
-  --yuzu-500: #FFD700; /* ★ Base */
-  --yuzu-700: #CCAC00;
-  --yuzu-900: #665600;
+  --yuzu-25:  #FFFDF5;
+  --yuzu-50:  #FEFAEB;
+  --yuzu-100: #FEF6DA;
+  --yuzu-300: #FBE077;
+  --yuzu-500: #F8C607; /* ★ Base */
+  --yuzu-700: #BC9605;
+  --yuzu-900: #685303;
 
   /* ── Zest Green ── */
+  --zest-25:  #FAFDF8;
+  --zest-50:  #F5FBEF;
   --zest-100: #EEF8E4;
   --zest-300: #A8D97A;
   --zest-500: #86C54A; /* ★ Base */
@@ -23,6 +27,8 @@
   --zest-900: #2F4719;
 
   /* ── Soft Kumquat ── */
+  --kumquat-25:  #FFFBF7;
+  --kumquat-50:  #FFF8F0;
   --kumquat-100: #FFF3E6;
   --kumquat-300: #FFB870;
   --kumquat-500: #FF9F43; /* ★ Base */
@@ -30,6 +36,8 @@
   --kumquat-900: #663F1B;
 
   /* ── Carbon Slate ── */
+  --carbon-25:  #F7F8F8;
+  --carbon-50:  #F4F5F5;
   --carbon-100: #E8E9EA;
   --carbon-300: #8B9294;
   --carbon-500: #2D3436; /* ★ Base */
@@ -37,6 +45,8 @@
   --carbon-900: #0F1213;
 
   /* ── Paper White ── */
+  --paper-25:  #FFFFFF;
+  --paper-50:  #FFFFFF;
   --paper-100: #FFFFFF;
   --paper-300: #FCFCFC;
   --paper-500: #F9F9F9; /* ★ Base */
