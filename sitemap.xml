@@ -3,7 +3,7 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://yuzu.solutions/</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/"/>
@@ -13,7 +13,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/fr/</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/"/>
@@ -23,7 +23,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/es/</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/"/>
@@ -33,7 +33,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/services/ai-automation.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/ai-automation.html"/>
@@ -43,7 +43,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/fr/services/ai-automation.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/ai-automation.html"/>
@@ -53,7 +53,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/es/services/ai-automation.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/ai-automation.html"/>
@@ -63,7 +63,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/services/infrastructure-data.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/infrastructure-data.html"/>
@@ -73,7 +73,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/fr/services/infrastructure-data.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/infrastructure-data.html"/>
@@ -83,7 +83,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/es/services/infrastructure-data.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/infrastructure-data.html"/>
@@ -93,7 +93,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/services/technical-debt.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/technical-debt.html"/>
@@ -103,7 +103,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/fr/services/technical-debt.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/technical-debt.html"/>
@@ -113,7 +113,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/es/services/technical-debt.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/technical-debt.html"/>
@@ -123,7 +123,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/services/mvp-builds.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/mvp-builds.html"/>
@@ -133,7 +133,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/fr/services/mvp-builds.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/mvp-builds.html"/>
@@ -143,7 +143,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/es/services/mvp-builds.html</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/mvp-builds.html"/>

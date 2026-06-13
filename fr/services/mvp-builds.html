@@ -23,9 +23,9 @@
     <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/services/mvp-builds.html">
     <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/services/mvp-builds.html">
     <meta property="og:locale" content="fr_CA">
-    <meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Adrien Yvin">
-    <meta name="theme-color" content="#FEFCE8">
+    <meta name="theme-color" content="#F9F9F9">
     <link rel="alternate" type="text/plain" href="https://yuzu.solutions/llms-fr.txt" title="Résumé du site lisible par LLM">
     <script type="application/ld+json">
     {
@@ -50,7 +50,12 @@
       ]
     }
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/design-tokens.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../../js/tailwind-config.js"></script>
     <link rel="stylesheet" href="../../css/site.css">
 </head>
 <body class="min-h-screen flex flex-col nav-on-services">
@@ -108,11 +113,16 @@
 
         <div class="nav-bar-end">
             <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
+                <a href="/services/mvp-builds.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
+                <a href="/fr/services/mvp-builds.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/services/mvp-builds.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+            </div>
+            <div class="lang-switch" role="navigation" aria-label="Language">
                 <a href="/services/mvp-builds.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
                 <a href="/fr/services/mvp-builds.html" class="lang-switch-btn active" hreflang="fr-CA" lang="fr-CA">FR</a>
                 <a href="/es/services/mvp-builds.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
             </div>
-            <a href="../../fr/index.html#founder" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap">Commencer</a>
+            <a href="../index.html#founder" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap">Commencer</a>
             <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNavPanel">
                 <span class="nav-hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span>
             </button>
@@ -122,7 +132,7 @@
     <div class="mobile-nav-panel" id="mobileNavPanel" aria-hidden="true">
         <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
         <div class="mobile-nav-sheet" role="dialog" aria-label="Navigation menu">
-            <a href="../../fr/index.html#impact" class="mobile-nav-link">Vision</a>
+            <a href="../index.html#impact" class="mobile-nav-link">Vision</a>
             <button type="button" class="mobile-nav-link" id="mobileServicesToggle" aria-expanded="true" aria-controls="mobileServicesSub">
                 Services <span class="nav-chevron">▾</span>
             </button>
@@ -156,14 +166,14 @@
                     </div>
                 </a>
             </div>
-            <a href="../../fr/index.html#founder" class="mobile-nav-link">Fondateur</a>
+            <a href="../index.html#founder" class="mobile-nav-link">Founder</a>
             <div class="mobile-nav-footer">
                 <div class="lang-switch sm:hidden" role="navigation" aria-label="Language">
-                    <a href="/services/mvp-builds.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
-                    <a href="/fr/services/mvp-builds.html" class="lang-switch-btn active" hreflang="fr-CA" lang="fr-CA">FR</a>
+                    <a href="/services/mvp-builds.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
+                    <a href="/fr/services/mvp-builds.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
                     <a href="/es/services/mvp-builds.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
                 </div>
-                <a href="../../fr/index.html#founder" class="mobile-nav-cta">Commencer</a>
+                <a href="../index.html#founder" class="mobile-nav-cta">Commencer</a>
             </div>
         </div>
     </div>
@@ -212,7 +222,7 @@
                 <span class="mock-dot bg-red-400"></span><span class="mock-dot bg-yellow-400"></span><span class="mock-dot bg-green-400"></span>
                 <span class="text-gray-400 text-xs ml-2">priceoptimizer.internal · SKU Pricing</span>
             </div>
-            <div class="mock-body" style="background:#fafafa">
+            <div class="mock-body" style="background:var(--paper-300)">
                 <div class="bg-white rounded-lg border border-gray-200 p-4 mb-3">
                     <div class="flex justify-between items-center mb-3">
                         <h4 class="font-bold text-gray-800 text-sm">SKU-44821 · Corrugated Box 18×12×10</h4>
@@ -237,9 +247,9 @@
                 </div>
                 <table class="pbi-table" style="background:white;border-radius:6px">
                     <tr><th>SKU</th><th>Category</th><th>Current</th><th>Suggested</th><th>Δ Margin</th></tr>
-                    <tr><td>SKU-44821</td><td>Corrugated</td><td>$2.14</td><td>$2.28</td><td style="color:#16a34a">+4.2%</td></tr>
-                    <tr><td>SKU-33102</td><td>Folding carton</td><td>$1.87</td><td>$1.92</td><td style="color:#16a34a">+1.8%</td></tr>
-                    <tr><td>SKU-55219</td><td>Labels</td><td>$0.44</td><td>$0.41</td><td style="color:#dc2626">-2.1%</td></tr>
+                    <tr><td>SKU-44821</td><td>Corrugated</td><td>$2.14</td><td>$2.28</td><td style="color:var(--zest-600)">+4.2%</td></tr>
+                    <tr><td>SKU-33102</td><td>Folding carton</td><td>$1.87</td><td>$1.92</td><td style="color:var(--zest-600)">+1.8%</td></tr>
+                    <tr><td>SKU-55219</td><td>Labels</td><td>$0.44</td><td>$0.41</td><td style="color:var(--error-600)">-2.1%</td></tr>
                 </table>
             </div>
         </div>
@@ -253,7 +263,7 @@
                 <span class="mock-dot bg-red-400"></span><span class="mock-dot bg-yellow-400"></span><span class="mock-dot bg-green-400"></span>
                 <span class="text-gray-400 text-xs ml-2">Sprint 3 · Price Optimizer MVP · Jun 2026</span>
             </div>
-            <div class="mock-body" style="background:#f0f0f0">
+            <div class="mock-body" style="background:var(--paper-600)">
                 <div class="grid grid-cols-4 gap-3 text-xs">
                     <div><h5 class="font-bold text-gray-600 mb-2 uppercase text-[10px]">Backlog</h5>
                         <div class="bg-white rounded p-2 mb-2 border-l-4 border-gray-300 shadow-sm">ERP price sync API</div>

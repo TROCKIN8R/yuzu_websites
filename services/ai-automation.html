@@ -23,9 +23,9 @@
     <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/services/ai-automation.html">
     <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/services/ai-automation.html">
     <meta property="og:locale" content="en_US">
-    <meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Adrien Yvin">
-    <meta name="theme-color" content="#FEFCE8">
+    <meta name="theme-color" content="#F9F9F9">
     <link rel="alternate" type="text/plain" href="https://yuzu.solutions/llms.txt" title="LLM-readable site summary">
     <script type="application/ld+json">
     {
@@ -50,7 +50,12 @@
       ]
     }
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/design-tokens.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
     <link rel="stylesheet" href="../css/site.css">
 </head>
 <body class="min-h-screen flex flex-col nav-on-services">
@@ -108,6 +113,11 @@
 
         <div class="nav-bar-end">
             <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
+                <a href="/services/ai-automation.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
+                <a href="/fr/services/ai-automation.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/services/ai-automation.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+            </div>
+            <div class="lang-switch" role="navigation" aria-label="Language">
                 <a href="/services/ai-automation.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
                 <a href="/fr/services/ai-automation.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
                 <a href="/es/services/ai-automation.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
@@ -222,9 +232,9 @@
                 </div>
                 <div class="pbi-kpi-row">
                     <div class="pbi-kpi"><div class="label">Invoices processed</div><div class="value">847</div><div class="delta up">▲ 12% vs last week</div></div>
-                    <div class="pbi-kpi" style="border-color:#22c55e"><div class="label">Straight-through rate</div><div class="value">94.2%</div><div class="delta up">▲ 3.1 pts</div></div>
-                    <div class="pbi-kpi" style="border-color:#3b82f6"><div class="label">Avg. processing time</div><div class="value">18s</div><div class="delta up">▼ 42s vs manual</div></div>
-                    <div class="pbi-kpi" style="border-color:#ef4444"><div class="label">Exceptions queued</div><div class="value">12</div><div class="delta down">4 need review</div></div>
+                    <div class="pbi-kpi" style="border-color:var(--success)"><div class="label">Straight-through rate</div><div class="value">94.2%</div><div class="delta up">▲ 3.1 pts</div></div>
+                    <div class="pbi-kpi" style="border-color:var(--info)"><div class="label">Avg. processing time</div><div class="value">18s</div><div class="delta up">▼ 42s vs manual</div></div>
+                    <div class="pbi-kpi" style="border-color:var(--error)"><div class="label">Exceptions queued</div><div class="value">12</div><div class="delta down">4 need review</div></div>
                 </div>
                 <div class="pbi-charts">
                     <div class="pbi-chart">
@@ -288,7 +298,7 @@
                 <div class="out">Connecting SAP BAPI ZFI_POST_INVOICE… OK</div>
                 <div class="out">Registering webhook shared-ap@co.com… OK</div>
                 <div class="out">Smoke test: 3 sample invoices → 3/3 posted</div>
-                <div class="out" style="color:#4ade80">✓ Agent live. Monitoring dashboard: /agents/ap-invoice</div>
+                <div class="out" style="color:var(--zest-400)">✓ Agent live. Monitoring dashboard: /agents/ap-invoice</div>
             </div>
         </div>
     </div>

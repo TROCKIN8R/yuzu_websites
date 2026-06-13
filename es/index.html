@@ -26,10 +26,10 @@
     <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/">
     <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/">
     <meta property="og:locale" content="es_ES">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="googlebot" content="index, follow">
     <meta name="author" content="Adrien Yvin">
-    <meta name="theme-color" content="#FEFCE8">
+    <meta name="theme-color" content="#F9F9F9">
     <link rel="alternate" type="text/plain" href="https://yuzu.solutions/llms-es.txt" title="LLM-readable site summary">
     <script type="application/ld+json">
     {
@@ -108,17 +108,18 @@
       ]
     }
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/design-tokens.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../css/site.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #FEFCE8; color: #1C1917; overflow-x: hidden; }
-        .yuzu-gradient { background: linear-gradient(135deg, #EAB308 0%, #F59E0B 100%); }
-        .lime-text { color: #65A30D; }
-        .yuzu-card { background: #FFFFFF; border: 2px solid #FEF3C7; transition: 0.3s; }
-        .yuzu-card:hover { border-color: #EAB308; transform: translateY(-5px); }
-        .yuzu-bg { background-color: #FEF08A; }
-        .yuzu-bg-hover:hover { background-color: #FDE047; }
+        /* Page-specific components — all values resolve to design tokens. */
+        .lime-text { color: var(--zest-600); }
+        .yuzu-card:hover { transform: translateY(-5px); }
         .chart-container {
             position: relative;
             width: 100%;
@@ -136,8 +137,8 @@
             cursor: pointer;
         }
         .service-card.active {
-            background-color: #FEF08A;
-            border-left: 4px solid #D97706;
+            background-color: var(--yuzu-300);
+            border-left: 4px solid var(--kumquat-700);
             transform: translateX(5px);
         }
         .fade-in {
@@ -148,61 +149,12 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Floating lemons & juice */
-        .float-layer {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-        .float-layer span, .float-layer .juice-drop {
-            position: absolute;
-            opacity: 0.35;
-        }
-        .float-lemon {
-            font-size: 1.4rem;
-            animation: driftLemon linear infinite;
-        }
-        .juice-drop {
-            width: 10px;
-            height: 14px;
-            background: radial-gradient(ellipse at 40% 30%, #FDE047, #EAB308);
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            animation: dripJuice ease-in-out infinite;
-        }
-        .binary-bit {
-            font-family: monospace;
-            font-size: 0.75rem;
-            color: #A8A29E;
-            font-weight: 700;
-            animation: floatBinary linear infinite;
-        }
-        @keyframes driftLemon {
-            0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-            8%   { opacity: 0.4; }
-            92%  { opacity: 0.35; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
-        @keyframes dripJuice {
-            0%   { transform: translateY(-20px) scale(0.6); opacity: 0; }
-            15%  { opacity: 0.5; }
-            85%  { opacity: 0.4; }
-            100% { transform: translateY(110vh) scale(1); opacity: 0; }
-        }
-        @keyframes floatBinary {
-            0%   { transform: translate(0, 110vh); opacity: 0; }
-            10%  { opacity: 0.25; }
-            90%  { opacity: 0.2; }
-            100% { transform: translate(30px, -10vh); opacity: 0; }
-        }
-
         /* Hero juicer illustration */
         .hero-visual {
             position: relative;
-            background: linear-gradient(160deg, #FFFFFF 0%, #FEF9C3 100%);
-            border: 2px solid #FEF3C7;
-            border-radius: 2rem;
+            background: linear-gradient(160deg, var(--paper-100) 0%, var(--yuzu-100) 100%);
+            border: 2px solid var(--yuzu-100);
+            border-radius: var(--radius-xl);
             overflow: hidden;
         }
         .hero-visual svg { width: 100%; height: auto; display: block; }
@@ -214,9 +166,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #FFFBEB 0%, #FEF9C3 100%);
-            border-radius: 1rem;
-            border: 1px solid #FEF3C7;
+            background: linear-gradient(135deg, var(--yuzu-50) 0%, var(--yuzu-100) 100%);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--yuzu-100);
             overflow: hidden;
         }
         .service-visual svg { width: 90%; height: 90%; }
@@ -235,157 +187,22 @@
             to   { transform: scaleY(1); transform-origin: bottom; }
         }
 
-        body > *:not(.float-layer):not(nav) { position: relative; z-index: 1; }
-        nav { position: sticky; }
-
-        /* Nav mega-menu */
-        .nav-pill-group {
-            display: none;
-            align-items: center;
-            gap: 2px;
-            background: #F5F5F4;
-            border-radius: 9999px;
-            padding: 4px;
-            position: relative;
-        }
-        @media (min-width: 768px) { .nav-pill-group { display: flex; } }
-        .nav-pill-item {
-            padding: 8px 18px;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #57534E;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-        .nav-pill-item:hover { color: #1C1917; }
-        .nav-pill-item.active {
-            background: #1C1917;
-            color: #FFFFFF;
-        }
-        .nav-services-wrap { position: static; }
-
-        .mega-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            left: 50%;
-            transform: translateX(-50%) translateY(8px);
-            width: min(640px, 92vw);
-            background: #FFFFFF;
-            border-radius: 20px;
-            border: 1px solid #F5F5F4;
-            box-shadow: 0 24px 60px rgba(0,0,0,0.12), 0 4px 16px rgba(161,98,7,0.08);
-            padding: 20px;
-            padding-top: 12px;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
-            z-index: 60;
-        }
-        .mega-menu::before {
-            content: '';
-            position: absolute;
-            top: -12px;
-            left: 0;
-            right: 0;
-            height: 12px;
-        }
-        .nav-pill-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 18px;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #57534E;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: inherit;
-            text-decoration: none;
-        }
-        .nav-pill-btn:hover { color: #1C1917; }
-        .nav-pill-btn.active {
-            background: #1C1917;
-            color: #FFFFFF;
-        }
-        .nav-chevron { font-size: 10px; transition: transform 0.2s; }
-        .nav-pill-btn.active .nav-chevron { transform: rotate(180deg); }
-
-        .mega-menu.open {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-            transform: translateX(-50%) translateY(0);
-        }
-        .mega-menu-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-        @media (max-width: 520px) { .mega-menu-grid { grid-template-columns: 1fr; } }
-        .mega-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            padding: 14px;
-            border-radius: 14px;
-            transition: background 0.15s;
-            text-decoration: none;
-            color: inherit;
-        }
-        .mega-item:hover { background: #FFFBEB; }
-        .mega-icon {
-            width: 48px;
-            height: 48px;
-            flex-shrink: 0;
-            background: #1C1917;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-        }
-        .mega-item h4 { font-weight: 800; font-size: 0.95rem; color: #1C1917; line-height: 1.2; }
-        .mega-item p { font-size: 0.75rem; color: #B45309; margin-top: 4px; line-height: 1.4; font-weight: 500; }
-
-        .nav-bar-inner {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            align-items: center;
-            gap: 12px;
-            position: relative;
-            overflow: visible;
-        }
-        .nav-bar-center {
-            display: flex;
-            justify-content: center;
-        }
-        .nav-bar-end {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 12px;
-        }
-
+        /* Service detail CTA (homepage) */
         .detail-cta {
             display: inline-flex;
             align-items: center;
             gap: 6px;
             margin-top: 16px;
             padding: 10px 20px;
-            background: #1C1917;
-            color: #FFFFFF;
+            background: var(--carbon-500);
+            color: var(--paper-100);
             font-size: 0.875rem;
             font-weight: 700;
-            border-radius: 9999px;
+            border-radius: var(--radius-full);
             transition: background 0.2s;
             text-decoration: none;
         }
-        .detail-cta:hover { background: #44403C; }
+        .detail-cta:hover { background: var(--carbon-400); }
     
 /* Language switcher */
 .lang-switch {
@@ -410,143 +227,6 @@
     background: #1C1917;
     color: #FFFFFF;
 }
-
-        /* Mobile hamburger menu */
-        .nav-hamburger {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            padding: 0;
-            border: none;
-            background: #F5F5F4;
-            border-radius: 9999px;
-            cursor: pointer;
-            flex-shrink: 0;
-            transition: background 0.2s ease;
-        }
-        .nav-hamburger:hover { background: #E7E5E4; }
-        @media (min-width: 768px) { .nav-hamburger { display: none; } }
-
-        .nav-hamburger-box {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 5px;
-            width: 18px;
-        }
-        .nav-hamburger-box span {
-            display: block;
-            height: 2px;
-            width: 100%;
-            background: #1C1917;
-            border-radius: 2px;
-            transition: transform 0.25s ease, opacity 0.2s ease;
-            transform-origin: center;
-        }
-        .nav-hamburger.open .nav-hamburger-box span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .nav-hamburger.open .nav-hamburger-box span:nth-child(2) { opacity: 0; }
-        .nav-hamburger.open .nav-hamburger-box span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-        @media (max-width: 767px) {
-            .nav-bar-inner { grid-template-columns: 1fr auto; }
-            .nav-bar-center { display: none; }
-            .nav-bar-end .nav-cta-desktop { display: none; }
-        }
-
-        .mobile-nav-panel {
-            position: fixed;
-            inset: 0;
-            z-index: 200;
-            pointer-events: none;
-            visibility: hidden;
-        }
-        .mobile-nav-panel.open {
-            pointer-events: auto;
-            visibility: visible;
-        }
-        .mobile-nav-backdrop {
-            position: absolute;
-            inset: 0;
-            background: rgba(28, 25, 23, 0.45);
-            opacity: 0;
-            transition: opacity 0.25s ease;
-        }
-        .mobile-nav-panel.open .mobile-nav-backdrop { opacity: 1; }
-
-        .mobile-nav-sheet {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: min(320px, 88vw);
-            height: 100%;
-            background: #FFFFFF;
-            padding: 88px 20px 32px;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            overflow-y: auto;
-            box-shadow: -12px 0 48px rgba(0, 0, 0, 0.12);
-        }
-        .mobile-nav-panel.open .mobile-nav-sheet { transform: translateX(0); }
-
-        .mobile-nav-link {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            padding: 14px 4px;
-            font-size: 1rem;
-            font-weight: 700;
-            color: #1C1917;
-            text-decoration: none;
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-family: inherit;
-            border-bottom: 1px solid #F5F5F4;
-            text-align: left;
-        }
-        .mobile-nav-link:hover { color: #CA8A04; }
-
-        .mobile-nav-sub {
-            display: none;
-            padding: 4px 0 12px;
-        }
-        .mobile-nav-sub.open { display: block; }
-
-        .mobile-nav-sub .mega-item {
-            padding: 12px;
-            border-radius: 12px;
-        }
-        .mobile-nav-sub .mega-icon {
-            width: 40px;
-            height: 40px;
-            font-size: 18px;
-            border-radius: 10px;
-        }
-
-        .mobile-nav-footer {
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px solid #F5F5F4;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .mobile-nav-cta {
-            display: block;
-            text-align: center;
-            padding: 14px 20px;
-            background: #EAB308;
-            color: #FFFFFF;
-            font-size: 0.95rem;
-            font-weight: 700;
-            border-radius: 9999px;
-            text-decoration: none;
-            transition: background 0.2s ease;
-        }
-        .mobile-nav-cta:hover { background: #CA8A04; }
 
     </style>
 </head>
@@ -607,6 +287,11 @@
 
         <div class="nav-bar-end">
             <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
+                <a href="/" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
+                <a href="/fr/" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+            </div>
+            <div class="lang-switch" role="navigation" aria-label="Language">
                 <a href="/" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
                 <a href="/fr/" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
                 <a href="/es/" class="lang-switch-btn active" hreflang="es" lang="es">ES</a>
@@ -655,12 +340,12 @@
                     </div>
                 </a>
             </div>
-            <a href="#founder" class="mobile-nav-link">Fundador</a>
+            <a href="#founder" class="mobile-nav-link">Founder</a>
             <div class="mobile-nav-footer">
                 <div class="lang-switch sm:hidden" role="navigation" aria-label="Language">
-                    <a href="/" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
+                    <a href="/" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
                     <a href="/fr/" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
-                    <a href="/es/" class="lang-switch-btn active" hreflang="es" lang="es">ES</a>
+                    <a href="/es/" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
                 </div>
                 <a href="#founder" class="mobile-nav-cta">Empezar</a>
             </div>
@@ -848,7 +533,7 @@
                 <circle cx="308" cy="66" r="3" fill="#F87171" stroke="#44403C" stroke-width="0.6"/>
                 <circle cx="318" cy="66" r="3" fill="#FBBF24" stroke="#44403C" stroke-width="0.6"/>
                 <circle cx="328" cy="66" r="3" fill="#84CC16" stroke="#44403C" stroke-width="0.6"/>
-                <text x="434" y="70" text-anchor="end" font-family="'Outfit',sans-serif" font-size="10" font-weight="800" fill="#44403C">INSIGHTS</text>
+                <text x="434" y="70" text-anchor="end" font-family="'Inter',sans-serif" font-size="10" font-weight="800" fill="#44403C">INSIGHTS</text>
                 <line x1="296" y1="78" x2="446" y2="78" stroke="#44403C" stroke-width="1.5"/>
 
                 <!-- donut chart (segmented) -->
@@ -858,7 +543,7 @@
                     <circle cx="332" cy="116" r="17" fill="none" stroke="#EAB308" stroke-width="11" stroke-dasharray="32 107" stroke-dashoffset="-46"/>
                     <circle cx="332" cy="116" r="17" fill="none" stroke="#D97706" stroke-width="11" stroke-dasharray="29 107" stroke-dashoffset="-78"/>
                 </g>
-                <text x="332" y="120" text-anchor="middle" font-family="'Outfit',sans-serif" font-size="11" font-weight="800" fill="#44403C">78%</text>
+                <text x="332" y="120" text-anchor="middle" font-family="'Inter',sans-serif" font-size="11" font-weight="800" fill="#44403C">78%</text>
 
                 <!-- bar chart with axis + gridlines -->
                 <g stroke="#E7E5E4" stroke-width="1">
@@ -883,11 +568,11 @@
                 </g>
 
                 <!-- KPI row -->
-                <text x="308" y="218" font-family="'Outfit',sans-serif" font-size="15" font-weight="800" fill="#44403C">2.4x</text>
+                <text x="308" y="218" font-family="'Inter',sans-serif" font-size="15" font-weight="800" fill="#44403C">2.4x</text>
                 <path d="M340 216 l5 -7 l5 7 Z" fill="#84CC16" stroke="#3F6212" stroke-width="0.6"/>
-                <text x="356" y="218" font-family="'Outfit',sans-serif" font-size="9" font-weight="600" fill="#16A34A">ROI</text>
+                <text x="356" y="218" font-family="'Inter',sans-serif" font-size="9" font-weight="600" fill="#16A34A">ROI</text>
                 <rect x="392" y="208" width="42" height="14" rx="7" fill="#ECFCCB" stroke="#84CC16" stroke-width="1"/>
-                <text x="413" y="218" text-anchor="middle" font-family="'Outfit',sans-serif" font-size="8" font-weight="700" fill="#3F6212">LIVE</text>
+                <text x="413" y="218" text-anchor="middle" font-family="'Inter',sans-serif" font-size="8" font-weight="700" fill="#3F6212">LIVE</text>
 
                 <!-- floating data bits between machine and dashboard -->
                 <g font-family="monospace" font-size="10" font-weight="bold" fill="#CA8A04" opacity="0.6">
@@ -934,7 +619,7 @@
             <button id="btnYuzu" class="px-6 py-2 rounded-full font-semibold border-none yuzu-bg yuzu-bg-hover text-yellow-900 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500">Ejecución Yuzu</button>
         </div>
 
-        <div class="chart-container bg-[#FEFCE8] p-4 rounded-xl border border-gray-200 shadow-inner">
+        <div class="chart-container bg-paper-500 p-4 rounded-xl border border-gray-200 shadow-inner">
             <canvas id="comparisonChart"></canvas>
         </div>
 
@@ -1068,7 +753,7 @@
     </div>
 </section>
 
-<section id="founder" class="py-20 px-6 bg-[#FEFCE8] border-t border-yellow-100">
+<section id="founder" class="py-20 px-6 bg-paper-500 border-t border-yellow-100">
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-14">
             <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🍋 El maestro exprimidor</span>
@@ -1399,21 +1084,32 @@
     const serviceVisualEl = document.getElementById('serviceVisual');
     serviceVisualEl.innerHTML = serviceVisuals.ai;
 
+    // Resolve design tokens for chart colors so the palette stays single-sourced.
+    const token = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const chartColors = {
+        carbonLight: token('--carbon-200'),
+        carbonMid: token('--carbon-300'),
+        carbonDark: token('--carbon-600'),
+        yuzuLight: token('--yuzu-300'),
+        yuzu: token('--yuzu-500'),
+        kumquat: token('--kumquat-600'),
+    };
+
     const ctxComp = document.getElementById('comparisonChart').getContext('2d');
     const tradData = {
         labels: ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4'],
         datasets: [
-            { label: 'Reuniones/Estrategia', data: [80, 60, 40, 30], backgroundColor: '#9CA3AF' },
-            { label: 'PowerPoint/Docs', data: [20, 30, 40, 20], backgroundColor: '#D1D5DB' },
-            { label: 'Ingeniería real', data: [0, 10, 20, 50], backgroundColor: '#374151' }
+            { label: 'Reuniones/Estrategia', data: [80, 60, 40, 30], backgroundColor: chartColors.carbonMid },
+            { label: 'PowerPoint/Docs', data: [20, 30, 40, 20], backgroundColor: chartColors.carbonLight },
+            { label: 'Ingeniería real', data: [0, 10, 20, 50], backgroundColor: chartColors.carbonDark }
         ]
     };
     const yuzuData = {
         labels: ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4'],
         datasets: [
-            { label: 'Descubrimiento/Diagnóstico', data: [20, 5, 0, 0], backgroundColor: '#FDE047' },
-            { label: 'Preparación de arquitectura', data: [30, 10, 5, 0], backgroundColor: '#FACC15' },
-            { label: 'Ingeniería práctica', data: [50, 85, 95, 100], backgroundColor: '#D97706' }
+            { label: 'Descubrimiento/Diagnóstico', data: [20, 5, 0, 0], backgroundColor: chartColors.yuzuLight },
+            { label: 'Preparación de arquitectura', data: [30, 10, 5, 0], backgroundColor: chartColors.yuzu },
+            { label: 'Ingeniería práctica', data: [50, 85, 95, 100], backgroundColor: chartColors.kumquat }
         ]
     };
 
@@ -1468,13 +1164,12 @@
     serviceCards.forEach(card => {
         card.addEventListener('click', () => {
             serviceCards.forEach(c => {
-                c.classList.remove('active', 'border-l-4', 'border-[#D97706]');
-                c.style.backgroundColor = '#ffffff';
+                c.classList.remove('active');
+                c.style.backgroundColor = '';
+                c.style.borderLeft = '';
             });
 
             card.classList.add('active');
-            card.style.backgroundColor = '#FEF08A';
-            card.style.borderLeft = '4px solid #D97706';
 
             const key = card.getAttribute('data-service');
             const data = serviceData[key];
