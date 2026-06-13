@@ -42,13 +42,7 @@
         root.style.setProperty('--nav-h', Math.round(height + marginTop) + 'px');
     };
 
-    const onScroll = () => {
-        nav.classList.toggle('is-scrolled', window.scrollY > 4);
-        update();
-    };
-
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
+    update();
     window.addEventListener('load', update);
     window.addEventListener('resize', update);
     window.addEventListener('orientationchange', update);
