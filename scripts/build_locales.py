@@ -269,7 +269,7 @@ INDEX_FR: list[tuple[str, str]] = [
      "<p>Outils internes, portails et prototypes rapides · La première pressée</p>"),
     # Hero
     (">Let's find the answers that you need</span>", ">Trouvons les réponses dont vous avez besoin</span>"),
-    ("If life gives you <span class=\"text-yellow-500\">Yuzu</span>,<br>\n                Extract, transform and load it!",
+    ("If life gives you <span class=\"text-yellow-500\">Yuzu</span>,<br>\n                extract, transform and load it!",
      "Si la vie te donne du <span class=\"text-yellow-500\">yuzu</span>,<br>\n                extrais-le, transforme-le et charge-le !"),
     (">We turn raw, complex data into refreshing, automated insights.</p>",
      ">On transforme des données brutes et complexes en insights rafraîchissants et automatisés.</p>"),
@@ -513,7 +513,7 @@ INDEX_ES: list[tuple[str, str]] = [
     ("<p>Internal tools, portals &amp; rapid prototypes · The First Press</p>",
      "<p>Herramientas internas, portales y prototipos rápidos · El primer exprimido</p>"),
     (">Let's find the answers that you need</span>", ">Encontremos las respuestas que necesita</span>"),
-    ("If life gives you <span class=\"text-yellow-500\">Yuzu</span>,<br>\n                Extract, transform and load it!",
+    ("If life gives you <span class=\"text-yellow-500\">Yuzu</span>,<br>\n                extract, transform and load it!",
      "Si la vida te da <span class=\"text-yellow-500\">yuzu</span>,<br>\n                ¡extráelo, transfórmalo y cárgalo!"),
     (">We turn raw, complex data into refreshing, automated insights.</p>",
      ">Convertimos datos crudos y complejos en insights refrescantes y automatizados.</p>"),
