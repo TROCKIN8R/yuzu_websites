@@ -115,23 +115,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="js/tailwind-config.js"></script>
     <link rel="stylesheet" href="css/site.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Page-specific components — all values resolve to design tokens. */
         .lime-text { color: var(--zest-600); }
         .yuzu-card:hover { transform: translateY(-5px); }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 400px;
-            max-height: 400px;
-        }
-        @media (max-width: 768px) {
-            .chart-container { height: 300px; max-height: 300px; }
-        }
+
+        /* Offset in-page anchors so the sticky nav never covers section content. */
+        html { scroll-padding-top: calc(var(--nav-h, 96px) + 1.5rem); }
         .service-card {
             transition: all 0.3s ease;
             cursor: pointer;
@@ -224,7 +214,63 @@
             text-decoration: none;
         }
         .detail-cta:hover { background: var(--carbon-400); }
-    
+
+        /* Vision — Extracting Value (ETL = lemonade) */
+        .vision-step { transition: transform 0.3s ease, border-color 0.3s ease; }
+        .vision-step:hover { transform: translateY(-5px); }
+        .vision-letter {
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-full);
+            background: var(--carbon-500);
+            color: var(--paper-100);
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+        .vision-visual {
+            width: 100%;
+            height: 11rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--yuzu-50) 0%, var(--yuzu-100) 100%);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--yuzu-100);
+            overflow: hidden;
+        }
+        .vision-visual svg { width: 88%; height: 88%; }
+        .vision-auto-visual { width: 180px; max-width: 100%; }
+        .vision-auto-visual svg { width: 100%; height: auto; display: block; }
+        .vision-arrow { display: none; }
+        @media (min-width: 768px) {
+            .vision-arrow {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                right: -1.6rem;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 5;
+                width: 2rem;
+                height: 2rem;
+                border-radius: var(--radius-full);
+                background: var(--paper-100);
+                color: var(--kumquat-700);
+                font-weight: 800;
+                box-shadow: var(--shadow-md);
+                border: 2px solid var(--yuzu-100);
+            }
+        }
+        .vision-spin { animation: visionSpin 9s linear infinite; }
+        @keyframes visionSpin { to { transform: rotate(360deg); } }
+        @media (prefers-reduced-motion: reduce) {
+            .vision-spin { animation: none; }
+        }
+
 /* Language switcher */
 .lang-switch {
     display: flex;
@@ -264,7 +310,7 @@
 
         <div class="nav-bar-center">
             <div class="nav-pill-group" id="navPillGroup">
-                <a href="#impact" class="nav-pill-item">Vision</a>
+                <a href="#vision" class="nav-pill-item">Vision</a>
                 <div class="nav-services-wrap" id="servicesNavWrap">
                     <a href="#services" class="nav-pill-btn" id="servicesNavBtn" aria-haspopup="true" aria-expanded="false">
                         Services <span class="nav-chevron">▾</span>
@@ -307,7 +353,6 @@
         </div>
 
         <div class="nav-bar-end">
-
             <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
                 <a href="/" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
                 <a href="/fr/" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
@@ -323,7 +368,7 @@
     <div class="mobile-nav-panel" id="mobileNavPanel" aria-hidden="true">
         <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
         <div class="mobile-nav-sheet" role="dialog" aria-label="Navigation menu">
-            <a href="#impact" class="mobile-nav-link">Vision</a>
+            <a href="#vision" class="mobile-nav-link">Vision</a>
             <button type="button" class="mobile-nav-link" id="mobileServicesToggle" aria-expanded="false" aria-controls="mobileServicesSub">
                 Services <span class="nav-chevron">▾</span>
             </button>
@@ -622,26 +667,217 @@
     </div>
 </header>
 
-<section id="impact" class="py-16 bg-white border-y border-gray-100">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="mb-12 text-center">
-            <h2 class="text-3xl font-bold text-gray-900">The Execution Dashboard</h2>
-            <p class="mt-4 text-lg text-stone-600 max-w-3xl mx-auto">
-                This section visualizes our core philosophy. While traditional firms spend your budget on endless roadmap meetings, Yuzu.solutions flips the model. Interact with the chart below to see how we reallocate project time towards building, automating, and delivering actual software.
-            </p>
+<section id="vision" class="py-20 px-6 max-w-7xl mx-auto">
+    <div class="text-center mb-14">
+        <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🍋 Our Vision</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-3">Extracting <span class="text-yellow-500">Value</span></h2>
+        <p class="mt-3 text-lg text-stone-500 max-w-2xl mx-auto">Raw data is just a crate of lemons. Our vision is simple — extract what matters, refine it until it's clear, and serve it in a glass you actually want to drink. That's ETL, the Yuzu way.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Extract -->
+        <div class="vision-step yuzu-card p-7 rounded-3xl relative flex flex-col">
+            <div class="flex items-center justify-between mb-5">
+                <span class="vision-letter">E</span>
+                <span class="text-xs font-bold uppercase tracking-widest text-yellow-700 bg-yellow-50 px-3 py-1 rounded-full">Extract</span>
+            </div>
+            <div class="vision-visual mb-5">
+                <svg viewBox="0 0 220 170" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Squeezing a lemon half on a reamer, juice dripping into a beaker">
+                    <defs>
+                        <linearGradient id="vznExLemon" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FEF08A"/><stop offset="100%" stop-color="#EAB308"/></linearGradient>
+                        <linearGradient id="vznExJuice" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FDE047"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
+                        <linearGradient id="vznExGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.92"/><stop offset="100%" stop-color="#FEF3C7" stop-opacity="0.5"/></linearGradient>
+                        <linearGradient id="vznExSteel" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#D6D3D1"/></linearGradient>
+                        <filter id="vznExShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#A16207" flood-opacity="0.18"/></filter>
+                    </defs>
+                    <!-- juice rays from squeezed lemon -->
+                    <g stroke="#EAB308" stroke-width="1.6" stroke-linecap="round" opacity="0.8">
+                        <line x1="110" y1="40" x2="84" y2="34"/>
+                        <line x1="110" y1="40" x2="98" y2="24"/>
+                        <line x1="110" y1="40" x2="122" y2="24"/>
+                        <line x1="110" y1="40" x2="136" y2="34"/>
+                    </g>
+                    <!-- lemon half being pressed -->
+                    <g filter="url(#vznExShadow)">
+                        <path d="M68 42 a42 24 0 0 1 84 0 Z" fill="url(#vznExLemon)" stroke="#44403C" stroke-width="2.5"/>
+                    </g>
+                    <path d="M78 42 a32 16 0 0 1 64 0" fill="#FEF9C3" stroke="#FACC15" stroke-width="2"/>
+                    <g stroke="#FACC15" stroke-width="1.4">
+                        <line x1="110" y1="42" x2="110" y2="28"/>
+                        <line x1="110" y1="42" x2="90" y2="34"/>
+                        <line x1="110" y1="42" x2="130" y2="34"/>
+                    </g>
+                    <!-- reamer cone -->
+                    <path d="M96 48 L124 48 L117 74 L103 74 Z" fill="url(#vznExSteel)" stroke="#44403C" stroke-width="2" stroke-linejoin="round"/>
+                    <ellipse cx="110" cy="48" rx="14" ry="4" fill="#E7E5E4" stroke="#44403C" stroke-width="1.5"/>
+                    <!-- animated juice stream -->
+                    <line x1="110" y1="76" x2="110" y2="104" stroke="url(#vznExJuice)" stroke-width="4" stroke-linecap="round" class="svc-flow"/>
+                    <circle cx="110" cy="100" r="2.6" fill="#FACC15" class="svc-pulse"/>
+                    <!-- beaker -->
+                    <g filter="url(#vznExShadow)">
+                        <path d="M82 104 L138 104 L132 150 a8 8 0 0 1 -8 7 H96 a8 8 0 0 1 -8 -7 Z" fill="url(#vznExGlass)" stroke="#44403C" stroke-width="2.5"/>
+                    </g>
+                    <!-- juice fill -->
+                    <path d="M88 128 q22 6 44 0 L130 150 a8 8 0 0 1 -8 7 H96 a8 8 0 0 1 -8 -7 Z" fill="url(#vznExJuice)" opacity="0.9"/>
+                    <!-- measurement ticks -->
+                    <g stroke="#A16207" stroke-width="1.4" stroke-linecap="round" opacity="0.7">
+                        <line x1="124" y1="118" x2="132" y2="118"/>
+                        <line x1="126" y1="132" x2="132" y2="132"/>
+                        <line x1="124" y1="146" x2="132" y2="146"/>
+                    </g>
+                    <line x1="92" y1="110" x2="98" y2="146" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.55"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900">Squeeze the lemons</h3>
+            <p class="mt-2 text-stone-600 leading-relaxed">We pull raw data from every source — databases, APIs, spreadsheets, that one crusty legacy system. Every lemon goes into the press. Nothing useful left behind.</p>
+            <span class="vision-arrow" aria-hidden="true">→</span>
         </div>
 
-        <div class="flex justify-center gap-4 mb-8">
-            <button id="btnTrad" class="px-6 py-2 rounded-full font-semibold border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-gray-100">Traditional Consulting</button>
-            <button id="btnYuzu" class="px-6 py-2 rounded-full font-semibold border-none yuzu-bg yuzu-bg-hover text-yellow-900 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500">Yuzu Execution</button>
+        <!-- Transform -->
+        <div class="vision-step yuzu-card p-7 rounded-3xl relative flex flex-col">
+            <div class="flex items-center justify-between mb-5">
+                <span class="vision-letter">T</span>
+                <span class="text-xs font-bold uppercase tracking-widest text-yellow-700 bg-yellow-50 px-3 py-1 rounded-full">Transform</span>
+            </div>
+            <div class="vision-visual mb-5">
+                <svg viewBox="0 0 220 170" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Raw juice and ingredients filtered through a funnel into clean lemonade">
+                    <defs>
+                        <linearGradient id="vznTrLemon" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FEF08A"/><stop offset="100%" stop-color="#EAB308"/></linearGradient>
+                        <linearGradient id="vznTrJuice" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FDE047"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
+                        <linearGradient id="vznTrSteel" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#D6D3D1"/></linearGradient>
+                        <filter id="vznTrShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#A16207" flood-opacity="0.18"/></filter>
+                    </defs>
+                    <!-- ingredients dropping in -->
+                    <g class="svc-pulse">
+                        <rect x="60" y="26" width="13" height="13" rx="2.5" fill="#FFFFFF" stroke="#44403C" stroke-width="1.6"/>
+                        <line x1="60" y1="32" x2="73" y2="32" stroke="#D6D3D1" stroke-width="1"/>
+                    </g>
+                    <g class="svc-pulse" style="animation-delay:.5s">
+                        <path d="M150 30 q9 -10 17 -4 q-3 11 -17 4 Z" fill="#84CC16" stroke="#44403C" stroke-width="1.4"/>
+                    </g>
+                    <circle cx="110" cy="30" r="6" fill="#7DD3FC" stroke="#44403C" stroke-width="1.4" class="svc-pulse" style="animation-delay:1s"/>
+                    <!-- funnel -->
+                    <g filter="url(#vznTrShadow)">
+                        <path d="M52 52 L168 52 L126 100 L126 124 L94 124 L94 100 Z" fill="url(#vznTrSteel)" stroke="#44403C" stroke-width="2.5" stroke-linejoin="round"/>
+                    </g>
+                    <ellipse cx="110" cy="52" rx="58" ry="8" fill="#F5F5F4" stroke="#44403C" stroke-width="2.5"/>
+                    <!-- filter mesh line -->
+                    <line x1="74" y1="74" x2="146" y2="74" stroke="#A8A29E" stroke-width="2" stroke-dasharray="4 4"/>
+                    <!-- raw pulp caught on filter -->
+                    <circle cx="92" cy="68" r="3" fill="#CA8A04" opacity="0.7"/>
+                    <circle cx="112" cy="69" r="2.4" fill="#CA8A04" opacity="0.6"/>
+                    <circle cx="128" cy="67" r="2.8" fill="#CA8A04" opacity="0.7"/>
+                    <!-- raw juice swirl above filter -->
+                    <path d="M82 60 q28 -10 56 0" fill="none" stroke="url(#vznTrJuice)" stroke-width="3" stroke-linecap="round" class="svc-flow"/>
+                    <!-- clean stream out the spout -->
+                    <line x1="110" y1="124" x2="110" y2="150" stroke="url(#vznTrJuice)" stroke-width="4" stroke-linecap="round" class="svc-flow"/>
+                    <circle cx="110" cy="150" r="3.4" fill="#FACC15" class="svc-pulse"/>
+                    <!-- droplets of clean juice -->
+                    <circle cx="98" cy="140" r="2" fill="#FDE047" class="svc-pulse" style="animation-delay:.3s"/>
+                    <circle cx="122" cy="144" r="2" fill="#FDE047" class="svc-pulse" style="animation-delay:.7s"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900">Filter, blend &amp; sweeten</h3>
+            <p class="mt-2 text-stone-600 leading-relaxed">Pulp out, sugar in. We clean, filter, join and reshape the raw juice — fixing types, killing duplicates, and adding the business logic that makes it actually taste good.</p>
+            <span class="vision-arrow" aria-hidden="true">→</span>
         </div>
 
-        <div class="chart-container bg-paper-500 p-4 rounded-xl border border-gray-200 shadow-inner">
-            <canvas id="comparisonChart"></canvas>
+        <!-- Load -->
+        <div class="vision-step yuzu-card p-7 rounded-3xl relative flex flex-col">
+            <div class="flex items-center justify-between mb-5">
+                <span class="vision-letter">L</span>
+                <span class="text-xs font-bold uppercase tracking-widest text-yellow-700 bg-yellow-50 px-3 py-1 rounded-full">Load</span>
+            </div>
+            <div class="vision-visual mb-5">
+                <svg viewBox="0 0 220 170" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="A tall glass of fresh lemonade served next to a small dashboard chart">
+                    <defs>
+                        <linearGradient id="vznLdLemon" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FEF08A"/><stop offset="100%" stop-color="#EAB308"/></linearGradient>
+                        <linearGradient id="vznLdJuice" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FDE047"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
+                        <linearGradient id="vznLdGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.92"/><stop offset="100%" stop-color="#FEF3C7" stop-opacity="0.45"/></linearGradient>
+                        <filter id="vznLdShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#A16207" flood-opacity="0.18"/></filter>
+                    </defs>
+                    <!-- straw -->
+                    <line x1="92" y1="30" x2="104" y2="64" stroke="#FB7185" stroke-width="4" stroke-linecap="round"/>
+                    <!-- glass body -->
+                    <g filter="url(#vznLdShadow)">
+                        <path d="M66 50 L122 50 L115 146 a7 7 0 0 1 -7 6 H80 a7 7 0 0 1 -7 -6 Z" fill="url(#vznLdGlass)" stroke="#44403C" stroke-width="2.5"/>
+                    </g>
+                    <!-- lemonade fill -->
+                    <path d="M71 78 q23 7 46 0 L115 146 a7 7 0 0 1 -7 6 H80 a7 7 0 0 1 -7 -6 Z" fill="url(#vznLdJuice)" opacity="0.9"/>
+                    <!-- ice cubes -->
+                    <rect x="80" y="90" width="15" height="15" rx="3" fill="#FFFFFF" opacity="0.55" stroke="#FFFFFF" stroke-width="1" transform="rotate(12 87 97)"/>
+                    <rect x="96" y="108" width="13" height="13" rx="3" fill="#FFFFFF" opacity="0.5" stroke="#FFFFFF" stroke-width="1" transform="rotate(-10 102 114)"/>
+                    <!-- bubbles -->
+                    <circle cx="84" cy="120" r="2" fill="#FFFFFF" opacity="0.6" class="svc-pulse"/>
+                    <circle cx="104" cy="132" r="1.6" fill="#FFFFFF" opacity="0.6" class="svc-pulse" style="animation-delay:.6s"/>
+                    <!-- glass highlight -->
+                    <line x1="76" y1="58" x2="84" y2="142" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+                    <!-- lemon slice on rim -->
+                    <g filter="url(#vznLdShadow)">
+                        <circle cx="120" cy="52" r="15" fill="#FEF9C3" stroke="#44403C" stroke-width="2"/>
+                        <circle cx="120" cy="52" r="11" fill="#FEFCE8" stroke="#FACC15" stroke-width="1.6"/>
+                    </g>
+                    <g stroke="#FACC15" stroke-width="1.3">
+                        <line x1="120" y1="52" x2="120" y2="41"/><line x1="120" y1="52" x2="130" y2="46"/>
+                        <line x1="120" y1="52" x2="131" y2="55"/><line x1="120" y1="52" x2="124" y2="63"/>
+                        <line x1="120" y1="52" x2="116" y2="63"/><line x1="120" y1="52" x2="109" y2="55"/>
+                        <line x1="120" y1="52" x2="110" y2="46"/>
+                    </g>
+                    <!-- mini dashboard: the "served" insight -->
+                    <g filter="url(#vznLdShadow)">
+                        <rect x="142" y="86" width="56" height="60" rx="8" fill="#FFFFFF" stroke="#44403C" stroke-width="2"/>
+                    </g>
+                    <line x1="142" y1="138" x2="198" y2="138" stroke="#E7E5E4" stroke-width="1.5"/>
+                    <rect x="150" y="120" width="8" height="18" fill="#FDE047" stroke="#44403C" stroke-width="1" class="svc-grow"/>
+                    <rect x="162" y="110" width="8" height="28" fill="#FACC15" stroke="#44403C" stroke-width="1" class="svc-grow" style="animation-delay:.25s"/>
+                    <rect x="174" y="100" width="8" height="38" fill="#EAB308" stroke="#44403C" stroke-width="1" class="svc-grow" style="animation-delay:.5s"/>
+                    <polyline points="150,116 166,104 178,98 192,92" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="192" cy="92" r="2.4" fill="#84CC16" stroke="#3F6212" stroke-width="0.8" class="svc-pulse"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900">Serve it in the perfect glass</h3>
+            <p class="mt-2 text-stone-600 leading-relaxed">The finished juice is poured into a polished glass — a governed warehouse and dashboards your team can drink from. Clear, fresh, and ready for decisions.</p>
         </div>
+    </div>
 
-        <div class="mt-8 text-center text-stone-600" id="impactInsight">
-            <p class="text-lg"><strong>The Yuzu Squeeze:</strong> 80% of our engagement time is spent engineering solutions, writing code, and deploying agents. Strategy is the byproduct of building.</p>
+    <!-- Automation closer -->
+    <div class="vision-auto mt-12 relative overflow-hidden rounded-3xl bg-gray-900 text-white p-8 md:p-10">
+        <div class="absolute -right-8 -top-10 text-[10rem] leading-none opacity-5 select-none" aria-hidden="true">🍋</div>
+        <div class="md:flex md:items-center md:gap-10">
+            <div class="vision-auto-visual shrink-0 mx-auto md:mx-0 mb-6 md:mb-0">
+                <svg viewBox="0 0 180 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="An automated dispenser refilling a glass on a scheduled loop">
+                    <defs>
+                        <linearGradient id="vznAuJuice" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FDE047"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient>
+                        <linearGradient id="vznAuLemon" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FEF08A"/><stop offset="100%" stop-color="#EAB308"/></linearGradient>
+                    </defs>
+                    <!-- recurring loop arrows -->
+                    <g class="vision-spin" style="transform-origin:90px 80px">
+                        <path d="M90 18 a62 62 0 0 1 56 35" fill="none" stroke="#84CC16" stroke-width="5" stroke-linecap="round"/>
+                        <path d="M146 53 l2 -16 l-15 6 Z" fill="#84CC16"/>
+                        <path d="M90 142 a62 62 0 0 1 -56 -35" fill="none" stroke="#FACC15" stroke-width="5" stroke-linecap="round"/>
+                        <path d="M34 107 l-2 16 l15 -6 Z" fill="#FACC15"/>
+                    </g>
+                    <!-- dispenser tank -->
+                    <rect x="62" y="40" width="56" height="34" rx="9" fill="url(#vznAuLemon)" stroke="#44403C" stroke-width="2.5"/>
+                    <circle cx="76" cy="51" r="3" fill="#FFFFFF" opacity="0.7"/>
+                    <!-- nozzle -->
+                    <rect x="84" y="74" width="12" height="9" rx="2" fill="#78716C" stroke="#44403C" stroke-width="1.5"/>
+                    <!-- pouring stream -->
+                    <line x1="90" y1="83" x2="90" y2="104" stroke="url(#vznAuJuice)" stroke-width="4" stroke-linecap="round" class="svc-flow"/>
+                    <!-- glass -->
+                    <path d="M74 104 L106 104 L102 134 a5 5 0 0 1 -5 5 H83 a5 5 0 0 1 -5 -5 Z" fill="#FFFFFF" fill-opacity="0.15" stroke="#FFFFFF" stroke-width="2.5"/>
+                    <path d="M77 118 q13 4 26 0 L102 134 a5 5 0 0 1 -5 5 H83 a5 5 0 0 1 -5 -5 Z" fill="url(#vznAuJuice)" opacity="0.9"/>
+                    <!-- clock = on schedule -->
+                    <circle cx="138" cy="118" r="15" fill="#1F2937" stroke="#84CC16" stroke-width="2.5"/>
+                    <line x1="138" y1="118" x2="138" y2="109" stroke="#84CC16" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="138" y1="118" x2="145" y2="121" stroke="#84CC16" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div>
+                <span class="text-zest-300 font-bold uppercase tracking-widest text-sm">♻️ Always Fresh</span>
+                <h3 class="text-2xl md:text-3xl font-bold mt-2 leading-snug">ETL is refreshing. Automated, it's a fountain that never runs dry.</h3>
+                <p class="mt-3 text-gray-300 leading-relaxed max-w-2xl">Squeezing by hand is fine once. But the real magic is a machine that does it for you — pipelines that refresh themselves on schedule, every morning, while you sleep. No manual squeezing. Just value on tap.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -1100,76 +1336,6 @@
 
     const serviceVisualEl = document.getElementById('serviceVisual');
     serviceVisualEl.innerHTML = serviceVisuals.ai;
-
-    // Resolve design tokens for chart colors so the palette stays single-sourced.
-    const token = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-    const chartColors = {
-        carbonLight: token('--carbon-200'),
-        carbonMid: token('--carbon-300'),
-        carbonDark: token('--carbon-600'),
-        yuzuLight: token('--yuzu-300'),
-        yuzu: token('--yuzu-500'),
-        kumquat: token('--kumquat-600'),
-    };
-
-    const ctxComp = document.getElementById('comparisonChart').getContext('2d');
-    const tradData = {
-        labels: ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4'],
-        datasets: [
-            { label: 'Meetings/Strategy', data: [80, 60, 40, 30], backgroundColor: chartColors.carbonMid },
-            { label: 'PowerPoint/Docs', data: [20, 30, 40, 20], backgroundColor: chartColors.carbonLight },
-            { label: 'Actual Engineering', data: [0, 10, 20, 50], backgroundColor: chartColors.carbonDark }
-        ]
-    };
-    const yuzuData = {
-        labels: ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4'],
-        datasets: [
-            { label: 'Discovery/Diagnosis', data: [20, 5, 0, 0], backgroundColor: chartColors.yuzuLight },
-            { label: 'Architecture Prep', data: [30, 10, 5, 0], backgroundColor: chartColors.yuzu },
-            { label: 'Hands-on Engineering', data: [50, 85, 95, 100], backgroundColor: chartColors.kumquat }
-        ]
-    };
-
-    let compChart = new Chart(ctxComp, {
-        type: 'bar',
-        data: yuzuData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'bottom' },
-                tooltip: { mode: 'index', intersect: false }
-            },
-            scales: {
-                x: { stacked: true, grid: { display: false } },
-                y: { stacked: true, beginAtZero: true, max: 100, title: { display: true, text: '% of Engagement Time' } }
-            }
-        }
-    });
-
-    const btnTrad = document.getElementById('btnTrad');
-    const btnYuzu = document.getElementById('btnYuzu');
-    const insightText = document.getElementById('impactInsight');
-
-    btnTrad.addEventListener('click', () => {
-        compChart.data = tradData;
-        compChart.update();
-        btnTrad.classList.remove('bg-gray-100', 'text-gray-600');
-        btnTrad.classList.add('bg-gray-500', 'text-white');
-        btnYuzu.classList.remove('yuzu-bg', 'text-yellow-900');
-        btnYuzu.classList.add('bg-gray-100', 'text-gray-600');
-        insightText.innerHTML = '<p class="text-lg"><strong>Traditional Approach:</strong> You pay for overhead. Most of the engagement is spent planning to build, rather than actually building.</p>';
-    });
-
-    btnYuzu.addEventListener('click', () => {
-        compChart.data = yuzuData;
-        compChart.update();
-        btnYuzu.classList.remove('bg-gray-100', 'text-gray-600');
-        btnYuzu.classList.add('yuzu-bg', 'text-yellow-900');
-        btnTrad.classList.remove('bg-gray-500', 'text-white');
-        btnTrad.classList.add('bg-gray-100', 'text-gray-600');
-        insightText.innerHTML = '<p class="text-lg"><strong>The Yuzu Squeeze:</strong> 80% of our engagement time is spent engineering solutions, writing code, and deploying agents. Strategy is the byproduct of building.</p>';
-    });
 
     const serviceCards = document.querySelectorAll('.service-card');
     const detailTitle = document.getElementById('detailTitle');
