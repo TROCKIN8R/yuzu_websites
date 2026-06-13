@@ -15,6 +15,7 @@
 
   var ramp = function (base) {
     return {
+      25:  v(base + '-25'),
       50:  v(base + '-50'),
       100: v(base + '-100'),
       200: v(base + '-200'),
@@ -35,10 +36,10 @@
   var carbon  = ramp('carbon');
   var error   = ramp('error');
   var paper   = {
-    50:  v('paper-50'),  100: v('paper-100'), 200: v('paper-200'),
-    300: v('paper-300'), 400: v('paper-400'), 500: v('paper-500'),
-    600: v('paper-600'), 700: v('paper-700'), 800: v('paper-800'),
-    900: v('paper-900'),
+    25:  v('paper-25'),  50:  v('paper-50'),  100: v('paper-100'),
+    200: v('paper-200'), 300: v('paper-300'), 400: v('paper-400'),
+    500: v('paper-500'), 600: v('paper-600'), 700: v('paper-700'),
+    800: v('paper-800'), 900: v('paper-900'),
   };
 
   tailwind.config = {
@@ -56,8 +57,9 @@
           warning: kumquat,
           error: error,
           info: {
-            50: v('info-50'), 100: v('info-100'), 300: v('info-300'),
-            500: v('info-500'), 700: v('info-700'), 900: v('info-900'),
+            25: v('info-25'), 50: v('info-50'), 100: v('info-100'),
+            300: v('info-300'), 500: v('info-500'), 700: v('info-700'),
+            900: v('info-900'),
           },
 
           /* Legacy Tailwind names aliased to the brand palette */

@@ -28,6 +28,20 @@
     });
 })();
 
+(function syncNavHeight() {
+    const nav = document.getElementById('mainNav');
+    if (!nav) return;
+    const setVar = () => {
+        const marginTop = parseFloat(getComputedStyle(nav).marginTop) || 0;
+        document.documentElement.style.setProperty('--nav-h', Math.round(nav.offsetHeight + marginTop) + 'px');
+    };
+    setVar();
+    window.addEventListener('load', setVar);
+    window.addEventListener('resize', setVar);
+    window.addEventListener('orientationchange', setVar);
+    if (window.ResizeObserver) new ResizeObserver(setVar).observe(nav);
+})();
+
 (function initMobileNav() {
     const hamburger = document.getElementById('navHamburger');
     const panel = document.getElementById('mobileNavPanel');

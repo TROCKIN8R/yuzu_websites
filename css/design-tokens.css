@@ -6,31 +6,34 @@
  * spacing and shadow used on the site resolves to one of these variables.
  *
  * Canonical brand tones (★ = base / 500):
- *   Electric Yuzu  100 #FFF9E0 · 300 #FFE566 · 500 #FFD700 · 700 #CCAC00 · 900 #665600
+ *   Electric Yuzu  100 #FEF6DA · 300 #FBE077 · 500 #F8C607 · 700 #BC9605 · 900 #685303
  *   Zest Green     100 #EEF8E4 · 300 #A8D97A · 500 #86C54A · 700 #5E8F33 · 900 #2F4719
  *   Soft Kumquat   100 #FFF3E6 · 300 #FFB870 · 500 #FF9F43 · 700 #CC7F36 · 900 #663F1B
  *   Carbon Slate   100 #E8E9EA · 300 #8B9294 · 500 #2D3436 · 700 #1F2426 · 900 #0F1213
  *   Paper White    100 #FFFFFF · 300 #FCFCFC · 500 #F9F9F9 · 700 #E5E5E5 · 900 #B3B3B3
  *
- * Intermediate steps (50/200/400/600/800/950) are interpolated so Tailwind's
- * full numeric scale can be mapped onto the brand palette (see tailwind-config.js).
+ * Tints 25/50 sit above 100 for the lightest backgrounds; intermediate steps
+ * (200/400/600/800/950) are interpolated so Tailwind's full numeric scale can
+ * be mapped onto the brand palette (see tailwind-config.js).
  */
 
 :root {
   /* ── Electric Yuzu ── */
-  --yuzu-50:  #FFFCF0;
-  --yuzu-100: #FFF9E0;
-  --yuzu-200: #FFF0B3;
-  --yuzu-300: #FFE566;
-  --yuzu-400: #FFDF40;
-  --yuzu-500: #FFD700; /* ★ base */
-  --yuzu-600: #E6C200;
-  --yuzu-700: #CCAC00;
-  --yuzu-800: #998100;
-  --yuzu-900: #665600;
-  --yuzu-950: #443900;
+  --yuzu-25:  #FFFDF5;
+  --yuzu-50:  #FEFAEB;
+  --yuzu-100: #FEF6DA;
+  --yuzu-200: #FDEBA8;
+  --yuzu-300: #FBE077;
+  --yuzu-400: #F9D034;
+  --yuzu-500: #F8C607; /* ★ base */
+  --yuzu-600: #DAAE06;
+  --yuzu-700: #BC9605;
+  --yuzu-800: #907304;
+  --yuzu-900: #685303;
+  --yuzu-950: #453702;
 
   /* ── Zest Green ── */
+  --zest-25:  #FAFDF8;
   --zest-50:  #F5FBEF;
   --zest-100: #EEF8E4;
   --zest-200: #CDE9B0;
@@ -44,6 +47,7 @@
   --zest-950: #1C2B0F;
 
   /* ── Soft Kumquat ── */
+  --kumquat-25:  #FFFBF7;
   --kumquat-50:  #FFF8F0;
   --kumquat-100: #FFF3E6;
   --kumquat-200: #FFD9B3;
@@ -57,6 +61,7 @@
   --kumquat-950: #402810;
 
   /* ── Carbon Slate ── */
+  --carbon-25:  #F7F8F8;
   --carbon-50:  #F4F5F5;
   --carbon-100: #E8E9EA;
   --carbon-200: #C8CBCC;
@@ -70,6 +75,7 @@
   --carbon-950: #080A0A;
 
   /* ── Paper White ── */
+  --paper-25:  #FFFFFF;
   --paper-50:  #FFFFFF;
   --paper-100: #FFFFFF;
   --paper-200: #FCFCFC;
@@ -82,6 +88,7 @@
   --paper-900: #B3B3B3;
 
   /* ── Error (semantic red ramp) ── */
+  --error-25:  #FEF8F7;
   --error-50:  #FDECEA;
   --error-100: #FADBD8;
   --error-200: #F5B7B1;
@@ -95,6 +102,7 @@
   --error-950: #5A1E17;
 
   /* ── Info (semantic blue ramp) ── */
+  --info-25:  #F7FBFE;
   --info-50:  #EBF5FB;
   --info-100: #D6EAF8;
   --info-300: #85C1E9;
@@ -103,7 +111,7 @@
   --info-900: #1A5276;
 
   /* ── Semantic aliases ── */
-  --color-bg: var(--paper-500);
+  --color-bg: var(--zest-25);
   --color-surface: var(--paper-100);
   --color-text: var(--carbon-500);
   --color-text-muted: var(--carbon-300);
