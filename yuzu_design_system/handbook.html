@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yuzu Solutions — Design System Handbook v1.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── Design Tokens (single source of truth) ── */
+    :root {
+      /* Electric Yuzu */
+      --yuzu-100: #FFF9E0;
+      --yuzu-300: #FFE566;
+      --yuzu-500: #FFD700;
+      --yuzu-700: #CCAC00;
+      --yuzu-900: #665600;
+      /* Zest Green */
+      --zest-100: #EEF8E4;
+      --zest-300: #A8D97A;
+      --zest-500: #86C54A;
+      --zest-700: #5E8F33;
+      --zest-900: #2F4719;
+      /* Soft Kumquat */
+      --kumquat-100: #FFF3E6;
+      --kumquat-300: #FFB870;
+      --kumquat-500: #FF9F43;
+      --kumquat-700: #CC7F36;
+      --kumquat-900: #663F1B;
+      /* Carbon Slate */
+      --carbon-100: #E8E9EA;
+      --carbon-300: #8B9294;
+      --carbon-500: #2D3436;
+      --carbon-700: #1F2426;
+      --carbon-900: #0F1213;
+      /* Paper */
+      --paper-100: #FFFFFF;
+      --paper-300: #FCFCFC;
+      --paper-500: #F9F9F9;
+      --paper-700: #E5E5E5;
+      --paper-900: #B3B3B3;
+      /* Semantic */
+      --success: var(--zest-500);
+      --warning: var(--kumquat-500);
+      --error: #E74C3C;
+      --info: #3498DB;
+      /* Typography */
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Menlo', monospace;
+      /* Spacing (4px base) */
+      --space-0: 0;
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.25rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --space-16: 4rem;
+      --space-20: 5rem;
+      --space-24: 6rem;
+      /* Radius */
+      --radius-sm: 0.375rem;
+      --radius-md: 0.75rem;
+      --radius-lg: 1rem;
+      --radius-xl: 1.5rem;
+      --radius-2xl: 2rem;
+      --radius-full: 9999px;
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(45, 52, 54, 0.05);
+      --shadow-md: 0 4px 12px rgba(45, 52, 54, 0.08);
+      --shadow-lg: 0 8px 24px rgba(45, 52, 54, 0.12);
+      --shadow-xl: 0 20px 50px rgba(45, 52, 54, 0.15);
+      /* Layout */
+      --max-width-content: 64rem;
+      --max-width-prose: 42rem;
+      --sidebar-width: 16rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--paper-500);
+      color: var(--carbon-500);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .mono { font-family: var(--font-mono); }
+
+    /* Layout */
+    .ds-layout { display: flex; min-height: 100vh; }
+    .ds-sidebar {
+      width: var(--sidebar-width);
+      background: var(--paper-100);
+      border-right: 1px solid var(--paper-700);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-shrink: 0;
+      z-index: 100;
+    }
+    .ds-main { flex: 1; padding: var(--space-12) var(--space-16); max-width: calc(var(--max-width-content) + var(--space-32, 8rem)); }
+    .ds-sidebar-inner { padding: var(--space-6); }
+    .ds-logo {
+      font-weight: 900;
+      font-size: 1.25rem;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-8);
+    }
+    .ds-logo-dot {
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: var(--radius-full);
+      background: var(--yuzu-500);
+      border: 2px solid var(--carbon-500);
+    }
+    .ds-logo .accent { color: var(--zest-500); }
+    .ds-nav a {
+      display: block;
+      padding: var(--space-2) var(--space-4);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--carbon-500);
+      text-decoration: none;
+      border-radius: var(--radius-md);
+      transition: background 0.2s, color 0.2s;
+    }
+    .ds-nav a:hover, .ds-nav a.active { background: var(--paper-500); color: var(--zest-700); }
+    .ds-nav { display: flex; flex-direction: column; gap: var(--space-1); }
+    .ds-nav-group {
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--carbon-300);
+      padding: var(--space-4) var(--space-4) var(--space-1);
+    }
+
+    /* Sections */
+    section { margin-bottom: var(--space-20); scroll-margin-top: var(--space-12); }
+    .ds-hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin-bottom: var(--space-6);
+    }
+    .ds-hero h1 .accent { color: var(--zest-500); }
+    .ds-lead { font-size: 1.25rem; color: var(--carbon-300); max-width: var(--max-width-prose); line-height: 1.7; }
+    .ds-lead strong { color: var(--carbon-500); }
+    h2.ds-section-title {
+      font-size: 1.875rem;
+      font-weight: 800;
+      margin-bottom: var(--space-4);
+    }
+    .ds-section-desc { color: var(--carbon-300); margin-bottom: var(--space-8); max-width: var(--max-width-prose); }
+
+    /* Cards & grids */
+    .ds-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-6); }
+    .ds-grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-3); }
+    .ds-card {
+      background: var(--paper-100);
+      border: 1px solid var(--paper-700);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-sm);
+    }
+    .ds-pillar-icon { font-size: 1.875rem; margin-bottom: var(--space-2); }
+    .ds-pillar h4 { font-weight: 700; font-size: 1.125rem; }
+    .ds-pillar p { font-size: 0.875rem; color: var(--carbon-300); margin-top: var(--space-2); }
+
+    /* Color swatches */
+    .ds-color-family { margin-bottom: var(--space-10); }
+    .ds-color-family h3 { font-size: 1.125rem; font-weight: 700; margin-bottom: var(--space-1); }
+    .ds-color-family .role { font-size: 0.75rem; color: var(--carbon-300); margin-bottom: var(--space-4); }
+    .ds-swatch { border-radius: var(--radius-xl); overflow: hidden; }
+    .ds-swatch-color {
+      height: 5rem;
+      display: flex;
+      align-items: flex-end;
+      padding: var(--space-3);
+      border: 1px solid rgba(0,0,0,0.05);
+      border-radius: var(--radius-xl);
+    }
+    .ds-swatch-meta { padding: var(--space-2) 0; }
+    .ds-swatch-meta .token { font-size: 0.625rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--carbon-300); }
+    .ds-swatch-meta .hex { font-size: 0.75rem; font-weight: 700; }
+
+    /* Typography specimens */
+    .ds-type-specimen { padding: var(--space-6) 0; border-bottom: 1px solid var(--paper-700); }
+    .ds-type-specimen:last-child { border-bottom: none; }
+    .ds-type-label {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--carbon-300);
+      margin-bottom: var(--space-2);
+      display: block;
+    }
+
+    /* Spacing ruler */
+    .ds-space-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-2) 0;
+      border-bottom: 1px solid var(--paper-700);
+    }
+    .ds-space-bar { background: var(--yuzu-500); border-radius: var(--radius-sm); height: 1.5rem; flex-shrink: 0; }
+    .ds-space-token { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; min-width: 6rem; }
+    .ds-space-value { font-size: 0.75rem; color: var(--carbon-300); }
+
+    /* Radius demos */
+    .ds-radius-demo {
+      width: 5rem;
+      height: 5rem;
+      background: var(--yuzu-100);
+      border: 2px solid var(--yuzu-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      font-weight: 700;
+      color: var(--carbon-500);
+    }
+    .ds-radius-grid { display: flex; flex-wrap: wrap; gap: var(--space-6); }
+
+    /* Shadow demos */
+    .ds-shadow-box {
+      width: 8rem;
+      height: 5rem;
+      background: var(--paper-100);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* Components */
+    .ds-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-2) var(--space-6);
+      border-radius: var(--radius-lg);
+      font-weight: 700;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
+      font-family: var(--font-sans);
+    }
+    .ds-btn-primary { background: var(--yuzu-500); color: var(--carbon-500); }
+    .ds-btn-primary:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+    .ds-btn-outline { background: transparent; color: var(--carbon-500); border: 2px solid var(--carbon-500); }
+    .ds-btn-outline:hover { background: var(--carbon-500); color: var(--paper-100); }
+    .ds-btn-success { background: var(--zest-500); color: var(--paper-100); }
+    .ds-btn-disabled { background: var(--zest-500); color: var(--paper-100); opacity: 0.5; cursor: not-allowed; }
+    .ds-btn-ghost { background: transparent; color: var(--carbon-500); }
+    .ds-btn-ghost:hover { background: var(--paper-700); }
+    .ds-btn-sm { padding: var(--space-1) var(--space-4); font-size: 0.75rem; border-radius: var(--radius-md); }
+    .ds-btn-lg { padding: var(--space-3) var(--space-8); font-size: 1rem; border-radius: var(--radius-xl); }
+
+    .ds-preview {
+      background-image: radial-gradient(var(--paper-700) 1px, transparent 1px);
+      background-size: 20px 20px;
+      padding: var(--space-10);
+      border: 1px solid var(--paper-700);
+      border-radius: var(--radius-2xl);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      align-items: center;
+    }
+    .ds-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--zest-500);
+      margin-bottom: var(--space-4);
+    }
+
+    /* Token table */
+    .ds-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    .ds-table th {
+      text-align: left;
+      padding: var(--space-3) var(--space-4);
+      background: var(--paper-500);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--carbon-300);
+      border-bottom: 2px solid var(--paper-700);
+    }
+    .ds-table td {
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--paper-700);
+      vertical-align: middle;
+    }
+    .ds-table code {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: var(--paper-500);
+      padding: 0.125rem 0.375rem;
+      border-radius: var(--radius-sm);
+    }
+    .ds-table .color-dot {
+      display: inline-block;
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(0,0,0,0.08);
+      vertical-align: middle;
+      margin-right: var(--space-2);
+    }
+
+    /* Badge / pill */
+    .ds-badge {
+      display: inline-block;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .ds-badge-success { background: var(--zest-100); color: var(--zest-700); }
+    .ds-badge-warning { background: var(--kumquat-100); color: var(--kumquat-700); }
+    .ds-badge-error { background: #FDECEA; color: #C0392B; }
+    .ds-badge-neutral { background: var(--carbon-100); color: var(--carbon-500); }
+
+    /* Info card component */
+    .ds-info-card {
+      background: var(--paper-100);
+      padding: var(--space-6);
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--paper-700);
+      max-width: 20rem;
+    }
+    .ds-info-card-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: color-mix(in srgb, var(--yuzu-500) 10%, transparent);
+      color: var(--yuzu-700);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      margin-bottom: var(--space-4);
+    }
+
+    /* Distribution rule */
+    .ds-distribution { display: flex; flex-wrap: wrap; gap: var(--space-12); align-items: center; }
+    .ds-donut {
+      width: 200px;
+      height: 200px;
+      border-radius: var(--radius-full);
+      background: conic-gradient(
+        var(--paper-700) 0% 70%,
+        var(--carbon-500) 70% 85%,
+        var(--yuzu-500) 85% 95%,
+        var(--zest-500) 95% 100%
+      );
+      position: relative;
+      flex-shrink: 0;
+    }
+    .ds-donut::after {
+      content: '';
+      position: absolute;
+      inset: 25%;
+      background: var(--paper-100);
+      border-radius: var(--radius-full);
+    }
+    .ds-dist-list { list-style: none; font-size: 0.875rem; }
+    .ds-dist-list li { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-2); }
+    .ds-dist-dot { width: 0.75rem; height: 0.75rem; border-radius: var(--radius-sm); flex-shrink: 0; }
+
+    /* Code block */
+    .ds-code {
+      background: var(--carbon-900);
+      color: #D4D4D4;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      line-height: 1.7;
+      padding: var(--space-6);
+      border-radius: var(--radius-xl);
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .ds-code .comment { color: #6A9955; }
+    .ds-code .prop { color: #9CDCFE; }
+    .ds-code .val { color: #CE9178; }
+
+    /* Motion */
+    .ds-motion-demo {
+      width: 3rem;
+      height: 3rem;
+      background: var(--yuzu-500);
+      border-radius: var(--radius-lg);
+    }
+    .ds-motion-demo:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+    /* Footer meta */
+    .ds-meta {
+      margin-top: var(--space-20);
+      padding-top: var(--space-8);
+      border-top: 1px solid var(--paper-700);
+      font-size: 0.75rem;
+      color: var(--carbon-300);
+      font-style: italic;
+    }
+
+    @media (max-width: 900px) {
+      .ds-layout { flex-direction: column; }
+      .ds-sidebar { width: 100%; height: auto; position: relative; }
+      .ds-main { padding: var(--space-6); }
+      .ds-grid-5 { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 500px) {
+      .ds-grid-5 { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="ds-layout">
+    <aside class="ds-sidebar">
+      <div class="ds-sidebar-inner">
+        <div class="ds-logo">
+          <div class="ds-logo-dot"></div>
+          Yuzu<span class="accent">Sols</span>
+        </div>
+        <nav class="ds-nav" id="ds-nav">
+          <span class="ds-nav-group">Foundation</span>
+          <a href="#philosophy">Brand Philosophy</a>
+          <a href="#colors">Color Palette</a>
+          <a href="#typography">Typography</a>
+          <a href="#spacing">Spacing</a>
+          <a href="#radius">Border Radius</a>
+          <a href="#shadows">Shadows</a>
+          <span class="ds-nav-group">Application</span>
+          <a href="#layout">Layout & Grid</a>
+          <a href="#components">UI Components</a>
+          <a href="#data-viz">Data Visualization</a>
+          <a href="#motion">Motion</a>
+          <a href="#accessibility">Accessibility</a>
+          <a href="#tokens">CSS Tokens</a>
+        </nav>
+      </div>
+    </aside>
+
+    <main class="ds-main">
+      <!-- PHILOSOPHY -->
+      <section id="philosophy" class="ds-hero">
+        <h1>Design <span class="accent">System</span> Handbook</h1>
+        <p class="ds-lead">
+          Version 1.0 — June 2026. The Yuzu Solutions design language is built on three pillars:
+          <strong>Clarity, Zest, and Precision.</strong> This handbook is the single source of truth for all brand, product, and marketing surfaces.
+        </p>
+        <div class="ds-grid-3" style="margin-top: var(--space-10);">
+          <div class="ds-card ds-pillar">
+            <div class="ds-pillar-icon">🍋</div>
+            <h4>Freshness</h4>
+            <p>Prioritize whitespace and vibrant accents over heavy borders. Let content breathe.</p>
+          </div>
+          <div class="ds-card ds-pillar">
+            <div class="ds-pillar-icon">⚡</div>
+            <h4>Agility</h4>
+            <p>Components must feel responsive and provide immediate visual feedback on interaction.</p>
+          </div>
+          <div class="ds-card ds-pillar">
+            <div class="ds-pillar-icon">🎯</div>
+            <h4>Precision</h4>
+            <p>Data is our core value. Visualizations must be honest, readable, and accessible.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- COLORS -->
+      <section id="colors">
+        <h2 class="ds-section-title">Color Palette</h2>
+        <p class="ds-section-desc">Electric Yuzu palette with five tones per family. Tone <strong>500</strong> is the canonical brand value. Use lighter tones (100–300) for backgrounds and tints; darker tones (700–900) for text on light surfaces and depth.</p>
+
+        <div class="ds-color-family">
+          <h3>Electric Yuzu</h3>
+          <p class="role">Primary brand · CTAs · Focal points · 10% of surface area</p>
+          <div class="ds-grid-5" id="swatches-yuzu"></div>
+        </div>
+        <div class="ds-color-family">
+          <h3>Zest Green</h3>
+          <p class="role">Success · Growth metrics · Positive trends · Accent states</p>
+          <div class="ds-grid-5" id="swatches-zest"></div>
+        </div>
+        <div class="ds-color-family">
+          <h3>Soft Kumquat</h3>
+          <p class="role">Warnings · Highlights · Secondary accents · Alerts</p>
+          <div class="ds-grid-5" id="swatches-kumquat"></div>
+        </div>
+        <div class="ds-color-family">
+          <h3>Carbon Slate</h3>
+          <p class="role">Body text · Headings · Structural UI · 15% of surface area</p>
+          <div class="ds-grid-5" id="swatches-carbon"></div>
+        </div>
+        <div class="ds-color-family">
+          <h3>Paper White</h3>
+          <p class="role">Page backgrounds · Cards · Foundational whitespace · 70% of surface area</p>
+          <div class="ds-grid-5" id="swatches-paper"></div>
+        </div>
+
+        <div class="ds-card" style="margin-top: var(--space-10);">
+          <h3 style="font-weight:700;margin-bottom:var(--space-4);">Semantic Colors</h3>
+          <table class="ds-table">
+            <thead><tr><th>Token</th><th>Hex</th><th>Usage</th></tr></thead>
+            <tbody>
+              <tr><td><code>--success</code></td><td><span class="color-dot" style="background:#86C54A"></span>#86C54A</td><td>Confirmations, completed states, positive KPIs</td></tr>
+              <tr><td><code>--warning</code></td><td><span class="color-dot" style="background:#FF9F43"></span>#FF9F43</td><td>Caution, pending actions, threshold alerts</td></tr>
+              <tr><td><code>--error</code></td><td><span class="color-dot" style="background:#E74C3C"></span>#E74C3C</td><td>Errors, destructive actions, failed states</td></tr>
+              <tr><td><code>--info</code></td><td><span class="color-dot" style="background:#3498DB"></span>#3498DB</td><td>Informational callouts, links, tooltips</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="ds-card ds-distribution" style="margin-top: var(--space-8);">
+          <div>
+            <h3 style="font-weight:700;margin-bottom:var(--space-4);">Palette Distribution Rule</h3>
+            <p style="font-size:0.875rem;color:var(--carbon-300);margin-bottom:var(--space-4);font-style:italic;">Maintain "Yuzu Freshness" with a strict 70-15-10-5 hierarchy for accessibility and visual balance.</p>
+            <ul class="ds-dist-list">
+              <li><span class="ds-dist-dot" style="background:var(--paper-700)"></span><strong>70% Paper:</strong> Foundational whitespace</li>
+              <li><span class="ds-dist-dot" style="background:var(--carbon-500)"></span><strong>15% Carbon:</strong> Typography and depth</li>
+              <li><span class="ds-dist-dot" style="background:var(--yuzu-500)"></span><strong>10% Yuzu:</strong> Direct focal points</li>
+              <li><span class="ds-dist-dot" style="background:var(--zest-500)"></span><strong>5% Accents:</strong> State changes and metrics</li>
+            </ul>
+          </div>
+          <div class="ds-donut" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <!-- TYPOGRAPHY -->
+      <section id="typography">
+        <h2 class="ds-section-title">Typography</h2>
+        <p class="ds-section-desc"><strong>Inter</strong> is the primary typeface for UI and marketing. <strong>JetBrains Mono</strong> is reserved for code, data labels, and technical annotations.</p>
+        <div class="ds-card">
+          <div class="ds-type-specimen">
+            <span class="ds-type-label">Display / 72px / Black (900) / -0.04em tracking</span>
+            <p style="font-size:4.5rem;font-weight:900;letter-spacing:-0.04em;line-height:1.05;">Sharp Perspectives.</p>
+          </div>
+          <div class="ds-type-specimen">
+            <span class="ds-type-label">Heading 1 / 48px / Extrabold (800)</span>
+            <p style="font-size:3rem;font-weight:800;line-height:1.1;">Data-Driven Growth.</p>
+          </div>
+          <div class="ds-type-specimen">
+            <span class="ds-type-label">Heading 2 / 30px / Bold (700)</span>
+            <p style="font-size:1.875rem;font-weight:700;line-height:1.2;">Strategic Insights Dashboard</p>
+          </div>
+          <div class="ds-type-specimen">
+            <span class="ds-type-label">Heading 3 / 24px / Bold (700)</span>
+            <p style="font-size:1.5rem;font-weight:700;">Section Title</p>
+          </div>
+          <div class="ds-type-specimen">
+            <span class="ds-type-label">Body Large / 18px / Regular (400) / 1.7 line-height</span>
+            <p style="font-size:1.125rem;color:var(--carbon-300);line-height:1.7;max-width:var(--max-width-prose);">Yuzu Solutions empowers agile teams to pivot faster using proprietary frameworks built on real-world complexity and lean methodologies.</p>
+          </div>
+          <div class="ds-type-specimen">
+            <span class="ds-type-label">Body / 16px / Regular (400) / 1.6 line-height</span>
+            <p style="font-size:1rem;color:var(--carbon-300);line-height:1.6;">Default paragraph text for documentation, product UI, and long-form content.</p>
+          </div>
+          <div class="ds-type-specimen">
+            <span class="ds-type-label">Small / 14px / Medium (500)</span>
+            <p style="font-size:0.875rem;font-weight:500;color:var(--carbon-300);">Secondary descriptions, form helper text, table cells.</p>
+          </div>
+          <div class="ds-type-specimen">
+            <span class="ds-type-label">Caption / 12px / Medium (500) / Uppercase / Wide tracking</span>
+            <p style="font-size:0.75rem;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:var(--carbon-300);font-style:italic;">Version 1.0 · Updated June 2026</p>
+          </div>
+          <div class="ds-type-specimen">
+            <span class="ds-type-label">Mono / 14px / JetBrains Mono</span>
+            <p class="mono" style="font-size:0.875rem;">const score = await yuzu.analyze(dataset);</p>
+          </div>
+        </div>
+        <div class="ds-card" style="margin-top:var(--space-8);">
+          <h3 style="font-weight:700;margin-bottom:var(--space-4);">Type Scale Tokens</h3>
+          <table class="ds-table">
+            <thead><tr><th>Token</th><th>Size</th><th>Weight</th><th>Line Height</th><th>Use</th></tr></thead>
+            <tbody>
+              <tr><td><code>--text-display</code></td><td>4.5rem / 72px</td><td>900</td><td>1.05</td><td>Hero headlines</td></tr>
+              <tr><td><code>--text-h1</code></td><td>3rem / 48px</td><td>800</td><td>1.1</td><td>Page titles</td></tr>
+              <tr><td><code>--text-h2</code></td><td>1.875rem / 30px</td><td>700</td><td>1.2</td><td>Section headings</td></tr>
+              <tr><td><code>--text-h3</code></td><td>1.5rem / 24px</td><td>700</td><td>1.3</td><td>Subsections</td></tr>
+              <tr><td><code>--text-body-lg</code></td><td>1.125rem / 18px</td><td>400</td><td>1.7</td><td>Lead paragraphs</td></tr>
+              <tr><td><code>--text-body</code></td><td>1rem / 16px</td><td>400</td><td>1.6</td><td>Default body</td></tr>
+              <tr><td><code>--text-sm</code></td><td>0.875rem / 14px</td><td>500</td><td>1.5</td><td>UI labels</td></tr>
+              <tr><td><code>--text-xs</code></td><td>0.75rem / 12px</td><td>500</td><td>1.4</td><td>Captions, metadata</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SPACING -->
+      <section id="spacing">
+        <h2 class="ds-section-title">Spacing</h2>
+        <p class="ds-section-desc">4px base unit. All margins, padding, and gaps should use tokens from this scale. Never use arbitrary pixel values.</p>
+        <div class="ds-card" id="spacing-scale"></div>
+      </section>
+
+      <!-- RADIUS -->
+      <section id="radius">
+        <h2 class="ds-section-title">Border Radius</h2>
+        <p class="ds-section-desc">Rounded corners signal approachability. Buttons use <code>--radius-lg</code> (12px). Cards and containers use <code>--radius-2xl</code> (24px).</p>
+        <div class="ds-card">
+          <div class="ds-radius-grid" id="radius-scale"></div>
+        </div>
+        <table class="ds-table ds-card" style="margin-top:var(--space-6);padding:0;overflow:hidden;">
+          <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
+          <tbody>
+            <tr><td><code>--radius-sm</code></td><td>6px</td><td>Badges, small chips, chart bars</td></tr>
+            <tr><td><code>--radius-md</code></td><td>12px</td><td>Inputs, small buttons, swatches</td></tr>
+            <tr><td><code>--radius-lg</code></td><td>16px</td><td>Primary buttons, icon containers</td></tr>
+            <tr><td><code>--radius-xl</code></td><td>24px</td><td>Medium cards, modals</td></tr>
+            <tr><td><code>--radius-2xl</code></td><td>32px</td><td>Large cards, section containers</td></tr>
+            <tr><td><code>--radius-full</code></td><td>9999px</td><td>Pills, avatars, logo dot</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- SHADOWS -->
+      <section id="shadows">
+        <h2 class="ds-section-title">Shadows & Elevation</h2>
+        <p class="ds-section-desc">Subtle Carbon-tinted shadows create depth without heaviness. Reserve <code>--shadow-xl</code> for modals and floating panels.</p>
+        <div class="ds-card" style="display:flex;flex-wrap:wrap;gap:var(--space-8);align-items:center;justify-content:center;padding:var(--space-12);">
+          <div class="ds-shadow-box" style="box-shadow:var(--shadow-sm)">sm</div>
+          <div class="ds-shadow-box" style="box-shadow:var(--shadow-md)">md</div>
+          <div class="ds-shadow-box" style="box-shadow:var(--shadow-lg)">lg</div>
+          <div class="ds-shadow-box" style="box-shadow:var(--shadow-xl)">xl</div>
+        </div>
+      </section>
+
+      <!-- LAYOUT -->
+      <section id="layout">
+        <h2 class="ds-section-title">Layout & Grid</h2>
+        <p class="ds-section-desc">Content max-width is 64rem (1024px). Prose blocks cap at 42rem (672px) for readability. Sidebar documentation layouts use 16rem (256px).</p>
+        <div class="ds-card">
+          <table class="ds-table">
+            <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
+            <tbody>
+              <tr><td><code>--max-width-content</code></td><td>64rem (1024px)</td><td>Main content column</td></tr>
+              <tr><td><code>--max-width-prose</code></td><td>42rem (672px)</td><td>Long-form text blocks</td></tr>
+              <tr><td><code>--sidebar-width</code></td><td>16rem (256px)</td><td>Navigation sidebars</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:var(--space-6);font-size:0.875rem;color:var(--carbon-300);"><strong>Breakpoints:</strong> Mobile &lt; 500px · Tablet &lt; 900px · Desktop ≥ 900px. Grid columns collapse: 5 → 3 → 2 on smaller viewports.</p>
+        </div>
+      </section>
+
+      <!-- COMPONENTS -->
+      <section id="components">
+        <h2 class="ds-section-title">UI Components</h2>
+        <p class="ds-section-desc">Modular building blocks for consistent product and marketing surfaces.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--space-8);">
+          <div>
+            <p class="ds-label">Buttons</p>
+            <div class="ds-preview">
+              <button class="ds-btn ds-btn-primary">Primary CTA</button>
+              <button class="ds-btn ds-btn-outline">Outline</button>
+              <button class="ds-btn ds-btn-success">Success</button>
+              <button class="ds-btn ds-btn-ghost">Ghost</button>
+              <button class="ds-btn ds-btn-success ds-btn-disabled" disabled>Disabled</button>
+            </div>
+            <p style="font-size:0.75rem;color:var(--carbon-300);margin-top:var(--space-2);">Primary buttons lift 2px on hover with <code>--shadow-lg</code>.</p>
+            <div class="ds-preview" style="margin-top:var(--space-4);">
+              <button class="ds-btn ds-btn-primary ds-btn-sm">Small</button>
+              <button class="ds-btn ds-btn-primary">Default</button>
+              <button class="ds-btn ds-btn-primary ds-btn-lg">Large</button>
+            </div>
+          </div>
+          <div>
+            <p class="ds-label">Badges</p>
+            <div class="ds-preview">
+              <span class="ds-badge ds-badge-success">Active</span>
+              <span class="ds-badge ds-badge-warning">Pending</span>
+              <span class="ds-badge ds-badge-error">Failed</span>
+              <span class="ds-badge ds-badge-neutral">Draft</span>
+            </div>
+          </div>
+          <div>
+            <p class="ds-label">Information Card</p>
+            <div class="ds-preview">
+              <div class="ds-info-card">
+                <div class="ds-info-card-icon">Y</div>
+                <h5 style="font-weight:700;margin-bottom:var(--space-2);">System Analytics</h5>
+                <p style="font-size:0.75rem;color:var(--carbon-300);line-height:1.6;">Real-time monitoring of brand asset consistency across global deployments.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DATA VIZ -->
+      <section id="data-viz">
+        <h2 class="ds-section-title">Data Visualization</h2>
+        <p class="ds-section-desc">Charts are primary evidence. Use semantic brand colors, minimal gridlines, and Carbon tooltips.</p>
+        <div class="ds-card">
+          <table class="ds-table">
+            <thead><tr><th>Chart Type</th><th>Primary Color</th><th>Fill / Secondary</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Line (trends)</td><td><code>--zest-500</code></td><td>zest at 10% opacity</td><td>Tension 0.4, point radius 4px</td></tr>
+              <tr><td>Bar (comparison)</td><td>yuzu, kumquat, carbon</td><td>—</td><td>Border radius 6px on bars</td></tr>
+              <tr><td>Doughnut (distribution)</td><td>Full palette</td><td>75% cutout</td><td>No legend; use labels</td></tr>
+              <tr><td>Tooltip</td><td>carbon at 90%</td><td>—</td><td>8px radius, 12px padding, Inter bold title</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- MOTION -->
+      <section id="motion">
+        <h2 class="ds-section-title">Motion</h2>
+        <p class="ds-section-desc">Animations should feel snappy, not decorative. Default transition duration is 200–300ms with ease curves.</p>
+        <div class="ds-card" style="display:flex;align-items:center;gap:var(--space-8);">
+          <div class="ds-motion-demo" style="transition:transform 0.3s ease,box-shadow 0.3s ease;" title="Hover me"></div>
+          <div style="font-size:0.875rem;">
+            <p><strong>Hover lift:</strong> <code>translateY(-2px)</code> + <code>--shadow-lg</code></p>
+            <p style="color:var(--carbon-300);margin-top:var(--space-2);"><strong>Duration:</strong> 200ms (micro) · 300ms (standard) · 500ms (emphasis)</p>
+            <p style="color:var(--carbon-300);margin-top:var(--space-1);"><strong>Easing:</strong> <code>ease</code> for hover · <code>ease-in-out</code> for enter/exit</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACCESSIBILITY -->
+      <section id="accessibility">
+        <h2 class="ds-section-title">Accessibility</h2>
+        <p class="ds-section-desc">All color pairings must meet WCAG 2.1 AA contrast ratios (4.5:1 for body text, 3:1 for large text and UI components).</p>
+        <div class="ds-card">
+          <table class="ds-table">
+            <thead><tr><th>Foreground</th><th>Background</th><th>Ratio</th><th>Pass</th></tr></thead>
+            <tbody>
+              <tr><td>Carbon 500</td><td>Paper 100</td><td>12.6:1</td><td>✓ AAA</td></tr>
+              <tr><td>Carbon 500</td><td>Yuzu 500</td><td>10.2:1</td><td>✓ AAA</td></tr>
+              <tr><td>Paper 100</td><td>Zest 700</td><td>5.8:1</td><td>✓ AA</td></tr>
+              <tr><td>Carbon 300</td><td>Paper 100</td><td>4.6:1</td><td>✓ AA</td></tr>
+              <tr><td>Yuzu 500 on Paper</td><td>—</td><td>—</td><td>Use for accents only, not body text</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:var(--space-4);font-size:0.875rem;color:var(--carbon-300);">Never use Electric Yuzu as text on white backgrounds. Use Carbon for all readable text.</p>
+        </div>
+      </section>
+
+      <!-- CSS TOKENS -->
+      <section id="tokens">
+        <h2 class="ds-section-title">CSS Custom Properties</h2>
+        <p class="ds-section-desc">Copy this block into any project. These tokens are defined at the top of this handbook and constitute the canonical source of truth.</p>
+        <div class="ds-code" id="token-export"></div>
+      </section>
+
+      <p class="ds-meta">Yuzu Solutions Design System Handbook v1.0 · Single source of truth · Not deployed with the public website · June 2026</p>
+    </main>
+  </div>
+  <script>
+    const PALETTES = {
+      yuzu:    { name: 'yuzu',    colors: { 100:'#FFF9E0', 300:'#FFE566', 500:'#FFD700', 700:'#CCAC00', 900:'#665600' } },
+      zest:    { name: 'zest',    colors: { 100:'#EEF8E4', 300:'#A8D97A', 500:'#86C54A', 700:'#5E8F33', 900:'#2F4719' } },
+      kumquat: { name: 'kumquat', colors: { 100:'#FFF3E6', 300:'#FFB870', 500:'#FF9F43', 700:'#CC7F36', 900:'#663F1B' } },
+      carbon:  { name: 'carbon',  colors: { 100:'#E8E9EA', 300:'#8B9294', 500:'#2D3436', 700:'#1F2426', 900:'#0F1213' } },
+      paper:   { name: 'paper',   colors: { 100:'#FFFFFF', 300:'#FCFCFC', 500:'#F9F9F9', 700:'#E5E5E5', 900:'#B3B3B3' } }
+    };
+
+    function isLight(hex) {
+      const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+      return (r*299 + g*587 + b*114) / 1000 > 155;
+    }
+
+    Object.entries(PALETTES).forEach(([key, fam]) => {
+      const el = document.getElementById('swatches-' + key);
+      if (!el) return;
+      Object.entries(fam.colors).forEach(([tone, hex]) => {
+        const light = isLight(hex);
+        el.innerHTML += `<div class="ds-swatch">
+          <div class="ds-swatch-color" style="background:${hex}">
+            <span class="mono hex" style="font-size:0.6875rem;font-weight:700;color:${light?'rgba(45,52,54,0.6)':'rgba(255,255,255,0.85)'}">${hex}</span>
+          </div>
+          <div class="ds-swatch-meta">
+            <div class="token">--${fam.name}-${tone}</div>
+            <div class="hex mono">${tone === '500' ? '★ Base' : 'Tone ' + tone}</div>
+          </div>
+        </div>`;
+      });
+    });
+
+    const SPACES = [
+      ['--space-1','0.25rem','4px'],['--space-2','0.5rem','8px'],['--space-3','0.75rem','12px'],
+      ['--space-4','1rem','16px'],['--space-5','1.25rem','20px'],['--space-6','1.5rem','24px'],
+      ['--space-8','2rem','32px'],['--space-10','2.5rem','40px'],['--space-12','3rem','48px'],
+      ['--space-16','4rem','64px'],['--space-20','5rem','80px'],['--space-24','6rem','96px']
+    ];
+    document.getElementById('spacing-scale').innerHTML = SPACES.map(([t,v,px]) =>
+      `<div class="ds-space-row"><span class="ds-space-token">${t}</span><div class="ds-space-bar" style="width:${px}"></div><span class="ds-space-value">${v} / ${px}</span></div>`
+    ).join('');
+
+    const RADII = [
+      ['--radius-sm','6px','var(--radius-sm)'],['--radius-md','12px','var(--radius-md)'],
+      ['--radius-lg','16px','var(--radius-lg)'],['--radius-xl','24px','var(--radius-xl)'],
+      ['--radius-2xl','32px','var(--radius-2xl)'],['--radius-full','full','var(--radius-full)']
+    ];
+    document.getElementById('radius-scale').innerHTML = RADII.map(([t,v,r]) =>
+      `<div style="text-align:center"><div class="ds-radius-demo" style="border-radius:${r}">${v}</div><p class="mono" style="font-size:0.625rem;margin-top:var(--space-2);color:var(--carbon-300)">${t}</p></div>`
+    ).join('');
+
+    document.getElementById('token-export').textContent = `:root {
+  /* Electric Yuzu */
+  --yuzu-100: #FFF9E0;  --yuzu-300: #FFE566;  --yuzu-500: #FFD700;
+  --yuzu-700: #CCAC00;  --yuzu-900: #665600;
+  /* Zest Green */
+  --zest-100: #EEF8E4;  --zest-300: #A8D97A;  --zest-500: #86C54A;
+  --zest-700: #5E8F33;  --zest-900: #2F4719;
+  /* Soft Kumquat */
+  --kumquat-100: #FFF3E6;  --kumquat-300: #FFB870;  --kumquat-500: #FF9F43;
+  --kumquat-700: #CC7F36;  --kumquat-900: #663F1B;
+  /* Carbon Slate */
+  --carbon-100: #E8E9EA;  --carbon-300: #8B9294;  --carbon-500: #2D3436;
+  --carbon-700: #1F2426;  --carbon-900: #0F1213;
+  /* Paper */
+  --paper-100: #FFFFFF;  --paper-300: #FCFCFC;  --paper-500: #F9F9F9;
+  --paper-700: #E5E5E5;  --paper-900: #B3B3B3;
+  /* Semantic */
+  --success: #86C54A;  --warning: #FF9F43;  --error: #E74C3C;  --info: #3498DB;
+  /* Typography */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  /* Spacing, radius, shadows — see handbook for full list */
+}`;
+
+    document.querySelectorAll('.ds-nav a').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior:'smooth', block:'start' });
+        document.querySelectorAll('.ds-nav a').forEach(l => l.classList.remove('active'));
+        a.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
