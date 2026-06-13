@@ -57,3 +57,8 @@ Montreal, Quebec, Canada. Remote-friendly across North America.
 ## Contact
 
 Commencer via le site : https://yuzu.solutions/fr/#founder
+## Languages / Langues / Idiomas
+
+- English: https://yuzu.solutions/llms.txt
+- Français (Canada): https://yuzu.solutions/llms-fr.txt
+- Español: https://yuzu.solutions/llms-es.txt

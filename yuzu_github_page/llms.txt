@@ -62,4 +62,3 @@ Get started via the website: https://yuzu.solutions/#founder
 - English: https://yuzu.solutions/llms.txt
 - Français (Canada): https://yuzu.solutions/llms-fr.txt
 - Español: https://yuzu.solutions/llms-es.txt
-

@@ -23,9 +23,9 @@
     <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/services/technical-debt.html">
     <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/services/technical-debt.html">
     <meta property="og:locale" content="fr_CA">
-    <meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Adrien Yvin">
-    <meta name="theme-color" content="#FEFCE8">
+    <meta name="theme-color" content="#F9F9F9">
     <link rel="alternate" type="text/plain" href="https://yuzu.solutions/llms-fr.txt" title="Résumé du site lisible par LLM">
     <script type="application/ld+json">
     {
@@ -50,7 +50,12 @@
       ]
     }
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/design-tokens.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../../js/tailwind-config.js"></script>
     <link rel="stylesheet" href="../../css/site.css">
 </head>
 <body class="min-h-screen flex flex-col nav-on-services">
@@ -108,11 +113,16 @@
 
         <div class="nav-bar-end">
             <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
+                <a href="/services/technical-debt.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
+                <a href="/fr/services/technical-debt.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/services/technical-debt.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+            </div>
+            <div class="lang-switch" role="navigation" aria-label="Language">
                 <a href="/services/technical-debt.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
                 <a href="/fr/services/technical-debt.html" class="lang-switch-btn active" hreflang="fr-CA" lang="fr-CA">FR</a>
                 <a href="/es/services/technical-debt.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
             </div>
-            <a href="../../fr/index.html#founder" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap">Commencer</a>
+            <a href="../index.html#founder" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap">Commencer</a>
             <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNavPanel">
                 <span class="nav-hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span>
             </button>
@@ -122,7 +132,7 @@
     <div class="mobile-nav-panel" id="mobileNavPanel" aria-hidden="true">
         <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
         <div class="mobile-nav-sheet" role="dialog" aria-label="Navigation menu">
-            <a href="../../fr/index.html#impact" class="mobile-nav-link">Vision</a>
+            <a href="../index.html#impact" class="mobile-nav-link">Vision</a>
             <button type="button" class="mobile-nav-link" id="mobileServicesToggle" aria-expanded="true" aria-controls="mobileServicesSub">
                 Services <span class="nav-chevron">▾</span>
             </button>
@@ -156,14 +166,14 @@
                     </div>
                 </a>
             </div>
-            <a href="../../fr/index.html#founder" class="mobile-nav-link">Fondateur</a>
+            <a href="../index.html#founder" class="mobile-nav-link">Founder</a>
             <div class="mobile-nav-footer">
                 <div class="lang-switch sm:hidden" role="navigation" aria-label="Language">
-                    <a href="/services/technical-debt.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
-                    <a href="/fr/services/technical-debt.html" class="lang-switch-btn active" hreflang="fr-CA" lang="fr-CA">FR</a>
+                    <a href="/services/technical-debt.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
+                    <a href="/fr/services/technical-debt.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
                     <a href="/es/services/technical-debt.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
                 </div>
-                <a href="../../fr/index.html#founder" class="mobile-nav-cta">Commencer</a>
+                <a href="../index.html#founder" class="mobile-nav-cta">Commencer</a>
             </div>
         </div>
     </div>

@@ -23,9 +23,9 @@
     <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/services/technical-debt.html">
     <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/services/technical-debt.html">
     <meta property="og:locale" content="en_US">
-    <meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Adrien Yvin">
-    <meta name="theme-color" content="#FEFCE8">
+    <meta name="theme-color" content="#F9F9F9">
     <link rel="alternate" type="text/plain" href="https://yuzu.solutions/llms.txt" title="LLM-readable site summary">
     <script type="application/ld+json">
     {
@@ -50,7 +50,12 @@
       ]
     }
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/design-tokens.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
     <link rel="stylesheet" href="../css/site.css">
 </head>
 <body class="min-h-screen flex flex-col nav-on-services">
@@ -108,6 +113,11 @@
 
         <div class="nav-bar-end">
             <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
+                <a href="/services/technical-debt.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
+                <a href="/fr/services/technical-debt.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/services/technical-debt.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+            </div>
+            <div class="lang-switch" role="navigation" aria-label="Language">
                 <a href="/services/technical-debt.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
                 <a href="/fr/services/technical-debt.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
                 <a href="/es/services/technical-debt.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>

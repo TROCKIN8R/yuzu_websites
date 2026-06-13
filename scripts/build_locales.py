@@ -182,6 +182,7 @@ def fix_paths_for_locale(html: str, depth: int) -> str:
     if depth == 1:
         html = html.replace('href="assets/', 'href="../assets/')
         html = html.replace('src="assets/', 'src="../assets/')
+        html = html.replace('href="css/', 'href="../css/')
         html = html.replace('href="js/', 'href="../js/')
         html = html.replace('src="js/', 'src="../js/')
         html = html.replace(
