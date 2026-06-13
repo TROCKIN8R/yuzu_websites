@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yuzu Solutions — Logo Declinations</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  :root {
+    --yuzu-500:#F8C607; --zest-500:#86C54A; --kumquat-500:#FF9F43;
+    --carbon-300:#8B9294; --carbon-500:#2D3436;
+    --paper-500:#F9F9F9; --paper-700:#E5E5E5;
+    --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+    --font-mono:'JetBrains Mono','Menlo',monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--carbon-500);
+    background: var(--paper-500);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header {
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    background:
+      radial-gradient(1200px 400px at 50% -10%, #FEFAEB, transparent 70%),
+      var(--paper-500);
+    border-bottom: 1px solid var(--paper-700);
+  }
+  header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #BC9605;
+    margin-bottom: .75rem;
+  }
+  header h1 {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  header p {
+    max-width: 44rem;
+    margin: 1rem auto 0;
+    color: var(--carbon-300);
+    font-size: 1.05rem;
+  }
+
+  .palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: center;
+    margin: 2rem auto 0;
+  }
+  .swatch {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .4rem .7rem .4rem .5rem;
+    background: #fff;
+    border: 1px solid var(--paper-700);
+    border-radius: 9999px;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    color: var(--carbon-300);
+  }
+  .swatch i {
+    width: 16px; height: 16px; border-radius: 9999px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+  }
+
+  .section-break {
+    border-top: 1px solid var(--paper-700);
+    background: var(--paper-500);
+  }
+  .section-header {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 0;
+    text-align: center;
+  }
+  .section-header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #BC9605;
+    margin-bottom: .75rem;
+  }
+  .section-header h2 {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .section-header p {
+    max-width: 40rem;
+    margin: .85rem auto 0;
+    color: var(--carbon-300);
+    font-size: .98rem;
+  }
+
+  .gallery {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--paper-700);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(45,52,54,.05);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 34px rgba(45,52,54,.12);
+  }
+
+  .stage {
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.75rem;
+  }
+
+  .stage img.mark {
+    width: auto; height: auto;
+    max-width: 58%; max-height: 72%;
+    object-fit: contain;
+  }
+
+  /* Wordmark — always Carbon 500 */
+  .brand-name {
+    font-weight: 800;
+    font-size: 2rem;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    color: var(--carbon-500);
+  }
+  .brand-sub {
+    font-weight: 500;
+    font-size: .78rem;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    margin-top: .35rem;
+    color: var(--carbon-500);
+  }
+
+  .stacked-lockup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .85rem;
+  }
+  .stacked-lockup img.mark { max-width: 108px; max-height: none; }
+
+  .horizontal-lockup {
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+  }
+  .horizontal-lockup img.mark { max-height: 64px; max-width: none; width: auto; }
+  .horizontal-lockup .brand-name { font-size: 1.65rem; }
+  .horizontal-lockup .brand-sub { font-size: .68rem; }
+
+  .meta {
+    padding: 1.1rem 1.25rem 1.25rem;
+    border-top: 1px solid var(--paper-700);
+  }
+  .meta .num {
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    color: #5E8F33;
+    letter-spacing: .1em;
+  }
+  .meta h3 { font-size: 1.05rem; font-weight: 700; margin: .15rem 0 .35rem; }
+  .meta p { font-size: .85rem; color: var(--carbon-300); }
+  .tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .7rem; }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: .65rem;
+    padding: .2rem .5rem;
+    border-radius: 9999px;
+    background: #F4F5F5;
+    color: var(--carbon-300);
+  }
+
+  footer {
+    text-align: center;
+    padding: 2.5rem 2rem 4rem;
+    color: var(--carbon-300);
+    font-size: .8rem;
+    font-family: var(--font-mono);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Brand Identity · Palette Surfaces</div>
+  <h1>Yuzu Solutions — Logo Declinations</h1>
+  <p>Canonical mark and lockups tested on every ★ base color. Wordmark typography is always Inter in Carbon 500 (#2D3436).</p>
+  <div class="palette" id="palette"></div>
+</header>
+
+<section class="section-break" aria-labelledby="mark-heading">
+  <div class="section-header">
+    <div class="eyebrow">Family 01 · Chart Mark</div>
+    <h2 id="mark-heading">Icon Mark</h2>
+    <p>Mark asset on each palette base surface.</p>
+  </div>
+  <div class="gallery" id="gallery-mark"></div>
+</section>
+
+<section class="section-break" aria-labelledby="horizontal-heading">
+  <div class="section-header">
+    <div class="eyebrow">Family 02 · Horizontal Lockup</div>
+    <h2 id="horizontal-heading">Horizontal Lockup</h2>
+    <p>Mark + Carbon 500 wordmark, side by side.</p>
+  </div>
+  <div class="gallery" id="gallery-horizontal"></div>
+</section>
+
+<section class="section-break" aria-labelledby="stacked-heading">
+  <div class="section-header">
+    <div class="eyebrow">Family 03 · Stacked Lockup</div>
+    <h2 id="stacked-heading">Stacked Lockup</h2>
+    <p>Mark above Carbon 500 YUZU / SOLUTIONS.</p>
+  </div>
+  <div class="gallery" id="gallery-stacked"></div>
+</section>
+
+<footer>Yuzu Solutions Design System · Logo Declinations · June 2026</footer>
+
+<script>
+const MARK = 'assets/yuzu-mark.png';
+
+/* ★ Base palette — tokens.css */
+const BASE = [
+  { name: 'Electric Yuzu', token: 'yuzu-500',   hex: '#F8C607' },
+  { name: 'Zest Green',    token: 'zest-500',   hex: '#86C54A' },
+  { name: 'Soft Kumquat',  token: 'kumquat-500', hex: '#FF9F43' },
+  { name: 'Carbon Slate',  token: 'carbon-500', hex: '#2D3436' },
+  { name: 'Paper White',   token: 'paper-500',  hex: '#F9F9F9' },
+];
+
+document.getElementById('palette').innerHTML = BASE.map(c =>
+  `<span class="swatch"><i style="background:${c.hex}"></i>${c.name} ${c.hex}</span>`
+).join('');
+
+function card(num, title, desc, tags, bg, inner) {
+  return `
+    <article class="card">
+      <div class="stage" style="background:${bg}">${inner}</div>
+      <div class="meta">
+        <div class="num">${num}</div>
+        <h3>${title}</h3>
+        <p>${desc}</p>
+        <div class="tags">${tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+    </article>`;
+}
+
+function wordmarkBlock() {
+  return `<div>
+    <div class="brand-name">YUZU</div>
+    <div class="brand-sub">SOLUTIONS</div>
+  </div>`;
+}
+
+function stackedHTML() {
+  return `<div class="stacked-lockup">
+    <img class="mark" src="${MARK}" alt="">
+    ${wordmarkBlock()}
+  </div>`;
+}
+
+function horizontalHTML() {
+  return `<div class="horizontal-lockup">
+    <img class="mark" src="${MARK}" alt="">
+    ${wordmarkBlock()}
+  </div>`;
+}
+
+function surfaceNote(color) {
+  if (color.token === 'carbon-500') {
+    return 'Mark on Carbon 500 — pair with transparent mark for production use.';
+  }
+  if (color.token === 'paper-500') {
+    return 'Default light UI surface — export transparent mark for clean edges.';
+  }
+  return `Contrast check on ${color.name} base — use transparent mark export on tinted UI.`;
+}
+
+BASE.forEach((color, i) => {
+  const num = String(i + 1).padStart(2, '0');
+  const tags = [color.token, 'Carbon 500 type', color.hex];
+
+  document.getElementById('gallery-mark').insertAdjacentHTML('beforeend', card(
+    num,
+    `Mark · ${color.name}`,
+    surfaceNote(color),
+    tags,
+    color.hex,
+    `<img class="mark" src="${MARK}" alt="Yuzu Solutions mark">`
+  ));
+
+  document.getElementById('gallery-horizontal').insertAdjacentHTML('beforeend', card(
+    num,
+    `Horizontal · ${color.name}`,
+    `Horizontal lockup on ${color.token} with Inter wordmark in Carbon 500.`,
+    tags,
+    color.hex,
+    horizontalHTML()
+  ));
+
+  document.getElementById('gallery-stacked').insertAdjacentHTML('beforeend', card(
+    num,
+    `Stacked · ${color.name}`,
+    `Stacked lockup on ${color.token} — YUZU and SOLUTIONS in Carbon 500.`,
+    tags,
+    color.hex,
+    stackedHTML()
+  ));
+});
+</script>
+</body>
+</html>
