@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 399 425" fill="none" role="img" aria-label="Yuzu Solutions">
+<style>
+  .logo-slice { fill: var(--logo-slice, #F8C607); }
+  .logo-seed { fill: var(--logo-seeds, #FEF6DA); }
+  .logo-text { fill: var(--logo-text, #2D3436); }
+</style>
+<g id="yuzu-mark">
+<path class="logo-slice" d="M148.68 0C192.564 5.23313e-07 235.675 11.5516 273.68 33.4937C311.685 55.4357 343.244 86.9952 365.186 125C387.128 163.005 398.68 206.116 398.68 250C398.68 293.884 387.128 336.995 365.186 375L148.68 250L148.68 0Z"/>
+<ellipse class="logo-seed" cx="188.698" cy="65.0422" rx="6.5" ry="18" transform="rotate(14.1311 188.698 65.0422)"/>
+<ellipse class="logo-seed" cx="259.55" cy="95.9667" rx="6.5" ry="18" transform="rotate(36.5863 259.55 95.9667)"/>
+<ellipse class="logo-seed" cx="333.419" cy="227.769" rx="6.5" ry="18" transform="rotate(85.9044 333.419 227.769)"/>
+<ellipse class="logo-seed" cx="324.138" cy="304.248" rx="6.5" ry="18" transform="rotate(107.236 324.138 304.248)"/>
+<ellipse class="logo-seed" cx="310.037" cy="154.671" rx="6.5" ry="18" transform="rotate(61.6629 310.037 154.671)"/>
+<path class="logo-text" d="M291.3 128.265H212.749L151.243 249.998H148.686L87.1804 128.265H8.62925L115.021 322.015V419.174H184.908V322.015L291.3 128.265Z"/>
+</g>
+</svg>

@@ -8,6 +8,34 @@ Single source of truth for the Yuzu Solutions brand. **Not deployed with the pub
 |------|---------|
 | `handbook.html` | Interactive visual handbook — open in any browser |
 | `tokens.css` | Machine-readable CSS custom properties for import into projects |
+| `logo.css` | Three SVG logo lockups — mark, horizontal, stacked |
+| `assets/yuzu-mark.svg` | Icon mark (Y + seeded slice) |
+| `assets/yuzu-horizontal.svg` | Horizontal lockup |
+| `assets/yuzu-stacked.svg` | Stacked lockup |
+| `logo-declinations.html` | Palette surface tests — color overrides only |
+
+## Logo lockups
+
+| Lockup | File | Use |
+|--------|------|-----|
+| **Mark** | `assets/yuzu-mark.svg` | Favicon, avatars, compact UI |
+| **Horizontal** | `assets/yuzu-horizontal.svg` | Navigation, headers |
+| **Stacked** | `assets/yuzu-stacked.svg` | Footers, hero, print |
+
+Standard colors (override via CSS only — geometry is fixed in SVG):
+
+| Element | Token | Hex |
+|---------|-------|-----|
+| Text | `--logo-text` | Carbon 500 `#2D3436` |
+| Slice | `--logo-slice` | Yuzu 500 `#F8C607` |
+| Seeds | `--logo-seeds` | Yuzu 100 `#FEF6DA` |
+
+```html
+<link rel="stylesheet" href="path/to/yuzu_design_system/logo.css">
+<a class="yuzu-logo yuzu-logo--horizontal yuzu-logo--nav" href="/">
+  <object type="image/svg+xml" data="assets/yuzu-horizontal.svg" class="yuzu-logo__media"></object>
+</a>
+```
 
 ## Quick start
 

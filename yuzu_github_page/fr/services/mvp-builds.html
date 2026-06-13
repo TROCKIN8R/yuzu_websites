@@ -16,7 +16,7 @@
     <meta property="og:image:alt" content="🍋 Yuzu.solutions">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://yuzu.solutions/assets/og-image.png">
-    <link rel="icon" href="../../assets/lemon-emoji.png" type="image/png">
+    <link rel="icon" href="../../assets/yuzu-mark.svg" type="image/svg+xml">
     <link rel="canonical" href="https://yuzu.solutions/fr/services/mvp-builds.html">
     <link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/mvp-builds.html">
     <link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/services/mvp-builds.html">
@@ -57,14 +57,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../../js/tailwind-config.js"></script>
     <link rel="stylesheet" href="../../css/site.css">
+    <link rel="stylesheet" href="../../css/logo.css">
 </head>
 <body class="min-h-screen flex flex-col nav-on-services">
 <div class="float-layer" aria-hidden="true" id="floatLayer"></div>
 
 <nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
     <div class="nav-bar-inner pl-5 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
-        <div class="text-xl sm:text-2xl font-extrabold tracking-tighter shrink-0">
-            <a href="../index.html" class="hover:text-yellow-600 transition-colors">Yuzu<span class="text-yellow-500">.</span>solutions</a>
+                        <div class="shrink-0">
+            <a href="../index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--nav" aria-label="Yuzu Solutions">
+                <object type="image/svg+xml" data="../../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+            </a>
         </div>
 
         <div class="nav-bar-center">
@@ -310,7 +313,11 @@
 </main>
 
 <footer class="bg-gray-950 text-gray-500 py-10 text-center mt-auto">
-    <p><span class="text-xl mr-1">🍋</span> <span class="font-bold text-gray-300">Yuzu.solutions</span></p>
+            <div class="mb-4 flex justify-center">
+        <a href="../index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--footer yuzu-logo--on-dark" aria-label="Yuzu Solutions">
+            <object type="image/svg+xml" data="../../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+        </a>
+    </div>
     <p class="text-sm mt-2">© 2026 Yuzu.solutions</p>
 </footer>
 <script src="../../js/site.js"></script>

@@ -140,6 +140,11 @@
   --ease-default: ease;
   --ease-in-out: ease-in-out;
 
+  /* ── Logo ── */
+  --logo-text: var(--carbon-500);
+  --logo-slice: var(--yuzu-500);
+  --logo-seeds: var(--yuzu-100);
+
   /* ── Data Visualization ── */
   --chart-line: var(--zest-500);
   --chart-line-fill: rgba(134, 197, 74, 0.1);

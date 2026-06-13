@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yuzu Solutions — Design System Handbook v1.0</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="logo.css">
   <style>
     /* ── Design Tokens (single source of truth) ── */
     :root {
@@ -436,11 +438,37 @@
       font-style: italic;
     }
 
+    .ds-logo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-8);
+    }
+    .ds-logo-stage {
+      background: #0F1213;
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      gap: var(--space-4);
+    }
+    .ds-logo-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--carbon-300);
+    }
+
     @media (max-width: 900px) {
       .ds-layout { flex-direction: column; }
       .ds-sidebar { width: 100%; height: auto; position: relative; }
       .ds-main { padding: var(--space-6); }
       .ds-grid-5 { grid-template-columns: repeat(4, 1fr); }
+      .ds-logo-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 500px) {
       .ds-grid-5 { grid-template-columns: repeat(2, 1fr); }
@@ -458,6 +486,7 @@
         <nav class="ds-nav" id="ds-nav">
           <span class="ds-nav-group">Foundation</span>
           <a href="#philosophy">Brand Philosophy</a>
+          <a href="#logo">Logo System</a>
           <a href="#colors">Color Palette</a>
           <a href="#typography">Typography</a>
           <a href="#spacing">Spacing</a>
@@ -498,6 +527,43 @@
             <h4>Precision</h4>
             <p>Data is our core value. Visualizations must be honest, readable, and accessible.</p>
           </div>
+        </div>
+      </section>
+
+      <!-- LOGO -->
+      <section id="logo">
+        <h2 class="ds-section-title">Logo System</h2>
+        <p class="ds-section-desc">Three SVG lockups with fixed geometry. Standard colors: <strong>Carbon 500</strong> text · <strong>Yuzu 500</strong> slice · <strong>Yuzu 100</strong> seeds — override only via <code>--logo-text</code>, <code>--logo-slice</code>, <code>--logo-seeds</code>. See <a href="logo-declinations.html">logo declinations</a> for palette variations.</p>
+
+        <div class="ds-logo-grid">
+          <div class="ds-logo-stage">
+            <span class="ds-logo-label">01 · Mark</span>
+            <div class="yuzu-logo--mark-on-dark">
+              <object type="image/svg+xml" data="assets/yuzu-mark.svg" class="yuzu-logo__media" aria-label="Yuzu Solutions mark"></object>
+            </div>
+          </div>
+          <div class="ds-logo-stage">
+            <span class="ds-logo-label">02 · Horizontal</span>
+            <object type="image/svg+xml" data="assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-label="Yuzu Solutions horizontal lockup"></object>
+          </div>
+          <div class="ds-logo-stage">
+            <span class="ds-logo-label">03 · Stacked</span>
+            <span class="yuzu-logo yuzu-logo--stacked yuzu-logo--on-dark">
+              <object type="image/svg+xml" data="assets/yuzu-stacked.svg" class="yuzu-logo__media" aria-label="Yuzu Solutions stacked lockup"></object>
+            </span>
+          </div>
+        </div>
+
+        <div class="ds-card" style="margin-top: var(--space-10);">
+          <h3 style="font-weight:700;margin-bottom:var(--space-4);">Usage</h3>
+          <table class="ds-table">
+            <thead><tr><th>Lockup</th><th>Asset</th><th>When to use</th></tr></thead>
+            <tbody>
+              <tr><td>Mark</td><td><code>assets/yuzu-mark.svg</code></td><td>Favicon, avatars, compact UI</td></tr>
+              <tr><td>Horizontal</td><td><code>assets/yuzu-horizontal.svg</code></td><td>Navigation, headers, wide layouts</td></tr>
+              <tr><td>Stacked</td><td><code>assets/yuzu-stacked.svg</code></td><td>Footers, hero blocks, print</td></tr>
+            </tbody>
+          </table>
         </div>
       </section>
 

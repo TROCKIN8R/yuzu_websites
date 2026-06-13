@@ -1,0 +1,88 @@
+/**
+ * Yuzu Solutions — Logo System
+ * Three SVG lockups: mark, horizontal, stacked.
+ * Colors via CSS custom properties (geometry is fixed in SVG).
+ * Standard: --logo-text Carbon 500 · --logo-slice Yuzu 500 · --logo-seeds Yuzu 100
+ */
+
+:root {
+  --logo-text: var(--carbon-500, #2D3436);
+  --logo-slice: var(--yuzu-500, #F8C607);
+  --logo-seeds: var(--yuzu-100, #FEF6DA);
+  --logo-mark-url: url('assets/yuzu-mark.svg');
+  --logo-horizontal-url: url('assets/yuzu-horizontal.svg');
+  --logo-stacked-url: url('assets/yuzu-stacked.svg');
+}
+
+.yuzu-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  line-height: 0;
+}
+
+.yuzu-logo:focus-visible {
+  outline: 2px solid var(--yuzu-500);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm, 0.375rem);
+}
+
+.yuzu-logo__media,
+.yuzu-logo img,
+.yuzu-logo object {
+  display: block;
+  height: auto;
+  width: auto;
+  pointer-events: none;
+}
+
+/* ── 1 · Mark ── */
+.yuzu-logo--mark .yuzu-logo__media,
+.yuzu-logo--mark img,
+.yuzu-logo--mark object {
+  max-height: 5rem;
+  max-width: 100%;
+}
+
+.yuzu-logo--mark-on-dark {
+  --logo-text: var(--carbon-500, #2D3436);
+  background: var(--carbon-900, #0F1213);
+  border-radius: var(--radius-lg, 1rem);
+  padding: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 2 · Horizontal ── */
+.yuzu-logo--horizontal .yuzu-logo__media,
+.yuzu-logo--horizontal img,
+.yuzu-logo--horizontal object {
+  max-height: 2.75rem;
+}
+
+.yuzu-logo--nav .yuzu-logo__media,
+.yuzu-logo--nav img,
+.yuzu-logo--nav object {
+  max-height: 2.25rem;
+}
+
+/* ── 3 · Stacked ── */
+.yuzu-logo--stacked .yuzu-logo__media,
+.yuzu-logo--stacked img,
+.yuzu-logo--stacked object {
+  max-height: 6rem;
+}
+
+.yuzu-logo--footer .yuzu-logo__media,
+.yuzu-logo--footer img,
+.yuzu-logo--footer object {
+  max-height: 2.5rem;
+  max-width: min(100%, 18rem);
+}
+
+/* Dark surfaces — override text color only */
+.yuzu-logo--on-dark {
+  --logo-text: var(--paper-100, #FFFFFF);
+}

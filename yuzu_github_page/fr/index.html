@@ -18,7 +18,7 @@
     <meta name="twitter:title" content="Yuzu.solutions | Si la vie te donne du yuzu, presse-le en tableau de bord">
     <meta name="twitter:description" content="On transforme des données brutes et complexes en insights rafraîchissants et automatisés.">
     <meta name="twitter:image" content="https://yuzu.solutions/assets/og-image.png">
-    <link rel="icon" href="../assets/lemon-emoji.png" type="image/png">
+    <link rel="icon" href="../assets/yuzu-mark.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="../assets/og-image.png">
     <link rel="canonical" href="https://yuzu.solutions/fr/">
     <link rel="alternate" hreflang="en" href="https://yuzu.solutions/">
@@ -115,6 +115,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../js/tailwind-config.js"></script>
     <link rel="stylesheet" href="../css/site.css">
+    <link rel="stylesheet" href="../css/logo.css">
     <style>
         /* Page-specific components — all values resolve to design tokens. */
         .lime-text { color: var(--zest-600); }
@@ -304,8 +305,10 @@
 
 <nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
     <div class="nav-bar-inner pl-5 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
-        <div class="text-xl sm:text-2xl font-extrabold tracking-tighter shrink-0">
-            <a href="index.html" class="hover:text-yellow-600 transition-colors">Yuzu<span class="text-yellow-500">.</span>solutions</a>
+                        <div class="shrink-0">
+            <a href="index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--nav" aria-label="Yuzu Solutions">
+                <object type="image/svg+xml" data="../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+            </a>
         </div>
 
         <div class="nav-bar-center">
@@ -667,6 +670,31 @@
     </div>
 </header>
 
+<section id="brand" class="py-20 px-6 bg-gray-950">
+    <div class="max-w-5xl mx-auto text-center mb-12">
+        <span class="text-yellow-500 font-bold uppercase tracking-widest text-sm">✦ Logo System</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-white mt-3">Three lockups, one mark</h2>
+        <p class="mt-3 text-stone-400 max-w-2xl mx-auto">Mark, horizontal, and stacked SVG lockups — geometry fixed, palette via CSS tokens.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div class="rounded-2xl bg-[#0F1213] p-8 flex flex-col items-center justify-center gap-4 min-h-[220px]">
+            <span class="font-mono text-xs uppercase tracking-widest text-stone-500">01 · Mark</span>
+            <div class="yuzu-logo--mark-on-dark">
+                <object type="image/svg+xml" data="../assets/yuzu-mark.svg" class="yuzu-logo__media max-h-24 w-auto" aria-label="Yuzu Solutions mark"></object>
+            </div>
+        </div>
+        <div class="rounded-2xl bg-[#0F1213] p-8 flex flex-col items-center justify-center gap-4 min-h-[220px]">
+            <span class="font-mono text-xs uppercase tracking-widest text-stone-500">02 · Horizontal</span>
+            <object type="image/svg+xml" data="../assets/yuzu-horizontal.svg" class="yuzu-logo__media max-h-16 w-auto" aria-label="Yuzu Solutions horizontal lockup"></object>
+        </div>
+        <div class="rounded-2xl bg-[#0F1213] p-8 flex flex-col items-center justify-center gap-4 min-h-[220px]">
+            <span class="font-mono text-xs uppercase tracking-widest text-stone-500">03 · Stacked</span>
+            <span class="yuzu-logo yuzu-logo--stacked yuzu-logo--on-dark">
+                <object type="image/svg+xml" data="../assets/yuzu-stacked.svg" class="yuzu-logo__media" aria-label="Yuzu Solutions stacked lockup"></object>
+            </span>
+        </div>
+    </div>
+</section>
 <section id="vision" class="py-20 px-6 max-w-7xl mx-auto">
     <div class="text-center mb-14">
         <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🍋 Notre vision</span>
@@ -1146,9 +1174,11 @@
 </main>
 
 <footer class="bg-gray-950 text-gray-500 py-12 text-center">
-    <p class="mb-4">
-        <span class="text-2xl mr-2">🍋</span> <span class="font-bold text-gray-300 tracking-wider">Yuzu.solutions</span>
-    </p>
+            <div class="mb-4 flex justify-center">
+        <a href="index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--footer yuzu-logo--on-dark" aria-label="Yuzu Solutions">
+            <object type="image/svg+xml" data="../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+        </a>
+    </div>
     <p>© 2026 Yuzu.solutions. On extrait les réponses. On automatise la corvée.</p>
     <p class="mt-4 text-sm">
         <a href="#faq" class="hover:text-yellow-500 transition-colors">FAQ</a>
