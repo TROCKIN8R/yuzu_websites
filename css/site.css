@@ -20,6 +20,20 @@ body { font-family: var(--font-sans); background-color: var(--color-bg); color: 
 body > *:not(.float-layer):not(nav) { position: relative; z-index: 1; }
 nav { position: sticky; }
 
+/* Sticky nav: floats at page top, pins near the viewport edge when scrolling. */
+:root {
+    --nav-safe-offset: max(env(safe-area-inset-top, 0px), 0.5rem);
+    --nav-float-offset: 1rem;
+}
+#mainNav {
+    margin-top: var(--nav-float-offset);
+    top: var(--nav-safe-offset);
+    transition: margin-top 0.2s ease;
+}
+#mainNav.is-scrolled {
+    margin-top: var(--nav-safe-offset);
+}
+
 /* Mockup frames */
 .mock-frame { background: var(--carbon-800); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--carbon-700); box-shadow: var(--shadow-xl); }
 .mock-titlebar { background: var(--carbon-700); padding: 8px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--carbon-600); }

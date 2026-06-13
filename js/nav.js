@@ -28,18 +28,31 @@
     });
 })();
 
-(function syncNavHeight() {
+(function syncNavLayout() {
     const nav = document.getElementById('mainNav');
     if (!nav) return;
-    const setVar = () => {
-        const marginTop = parseFloat(getComputedStyle(nav).marginTop) || 0;
-        document.documentElement.style.setProperty('--nav-h', Math.round(nav.offsetHeight + marginTop) + 'px');
+    const root = document.documentElement;
+
+    const update = () => {
+        const styles = getComputedStyle(nav);
+        const stickyTop = parseFloat(styles.top) || 0;
+        const marginTop = parseFloat(styles.marginTop) || 0;
+        const height = nav.offsetHeight;
+        root.style.setProperty('--nav-h-sticky', Math.round(height + stickyTop) + 'px');
+        root.style.setProperty('--nav-h', Math.round(height + marginTop) + 'px');
     };
-    setVar();
-    window.addEventListener('load', setVar);
-    window.addEventListener('resize', setVar);
-    window.addEventListener('orientationchange', setVar);
-    if (window.ResizeObserver) new ResizeObserver(setVar).observe(nav);
+
+    const onScroll = () => {
+        nav.classList.toggle('is-scrolled', window.scrollY > 4);
+        update();
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('load', update);
+    window.addEventListener('resize', update);
+    window.addEventListener('orientationchange', update);
+    if (window.ResizeObserver) new ResizeObserver(update).observe(nav);
 })();
 
 (function initMobileNav() {
