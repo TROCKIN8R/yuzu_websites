@@ -323,40 +323,49 @@
                 <div class="pbi-charts-exec">
                     <div class="pbi-chart pbi-chart--wide">
                         <h4>Net revenue by business unit — trailing 6 months ($M)</h4>
-                        <div class="pbi-line-chart pbi-line-chart--tall" role="img" aria-label="Revenue trends by business unit over six months">
-                            <svg viewBox="0 0 400 150" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Scale: y = 148 − (value − 4) / 9 × 124 · plot x = 52 + month × 83.2 -->
+                        <div class="pbi-bu-chart" role="img" aria-label="Six-month revenue trend by business unit from four to thirteen million dollars">
+                            <svg viewBox="0 0 480 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <rect class="chart-plot-bg" x="52" y="24" width="416" height="124" rx="4"/>
                                 <g class="chart-grid">
-                                    <line x1="36" y1="125" x2="384" y2="125"/>
-                                    <line x1="36" y1="95" x2="384" y2="95" stroke-dasharray="3 4"/>
-                                    <line x1="36" y1="65" x2="384" y2="65" stroke-dasharray="3 4"/>
-                                    <line x1="36" y1="35" x2="384" y2="35" stroke-dasharray="3 4"/>
+                                    <line class="major" x1="52" y1="148" x2="468" y2="148"/>
+                                    <line x1="52" y1="134.2" x2="468" y2="134.2" stroke-dasharray="4 5"/>
+                                    <line x1="52" y1="106.7" x2="468" y2="106.7" stroke-dasharray="4 5"/>
+                                    <line x1="52" y1="79.1" x2="468" y2="79.1" stroke-dasharray="4 5"/>
+                                    <line x1="52" y1="51.6" x2="468" y2="51.6" stroke-dasharray="4 5"/>
+                                    <line x1="52" y1="24" x2="468" y2="24" stroke-dasharray="4 5"/>
                                 </g>
-                                <text class="chart-axis" x="4" y="128">$8M</text>
-                                <text class="chart-axis" x="4" y="98">$10M</text>
-                                <text class="chart-axis" x="0" y="68">$12M</text>
-                                <text class="chart-axis" x="0" y="38">$14M</text>
-                                <!-- Consumer CPG ~12M flat -->
-                                <path class="bu-line-cpg" stroke="#3498DB" d="M40,72 L104,74 L168,71 L232,73 L296,74 L360,72"/>
-                                <!-- Industrial rising -->
-                                <path class="bu-line-ind" stroke="#EAB308" d="M40,108 L104,105 L168,109 L232,98 L296,92 L360,82"/>
-                                <!-- Services growing steady -->
-                                <path class="bu-line-svc" stroke="#84CC16" d="M40,118 L104,115 L168,112 L232,108 L296,104 L360,98"/>
-                                <!-- Export volatile -->
-                                <path class="bu-line-exp" stroke="#D97706" d="M40,88 L104,82 L168,92 L232,102 L296,90 L360,78"/>
-                                <circle cx="360" cy="72" r="3" fill="#3498DB" stroke="white" stroke-width="1"/>
-                                <circle cx="360" cy="82" r="3" fill="#EAB308" stroke="white" stroke-width="1"/>
-                                <circle cx="360" cy="98" r="3" fill="#84CC16" stroke="white" stroke-width="1"/>
-                                <circle cx="360" cy="78" r="3" fill="#D97706" stroke="white" stroke-width="1"/>
+                                <text class="chart-axis" text-anchor="end" x="46" y="151">$4M</text>
+                                <text class="chart-axis" text-anchor="end" x="46" y="137">$5M</text>
+                                <text class="chart-axis" text-anchor="end" x="46" y="110">$7M</text>
+                                <text class="chart-axis" text-anchor="end" x="46" y="82">$9M</text>
+                                <text class="chart-axis" text-anchor="end" x="46" y="55">$11M</text>
+                                <text class="chart-axis" text-anchor="end" x="46" y="27">$13M</text>
+                                <!-- Consumer CPG: 12.1, 11.8, 12.4, 12.0, 11.9, 12.2 -->
+                                <polyline class="bu-line bu-line-cpg" points="52,36.4 135.2,40.1 218.4,32.8 301.6,37.7 384.8,38.9 468,35.2"/>
+                                <!-- Industrial: 8.2, 8.5, 8.1, 9.0, 9.4, 10.1 -->
+                                <polyline class="bu-line bu-line-ind" points="52,90.1 135.2,86.4 218.4,91.3 301.6,79.1 384.8,73.6 468,60.2"/>
+                                <!-- Aftermarket services: 4.2, 4.5, 4.8, 5.1, 5.3, 5.6 -->
+                                <polyline class="bu-line bu-line-svc" points="52,145.2 135.2,141.6 218.4,137.9 301.6,134.2 384.8,131.8 468,128.9"/>
+                                <!-- Export: 6.8, 7.2, 6.4, 5.9, 6.8, 7.4 -->
+                                <polyline class="bu-line bu-line-exp" points="52,109.4 135.2,104.6 218.4,113.3 301.6,118.2 384.8,109.4 468,101.1"/>
+                                <circle class="bu-dot" cx="468" cy="35.2" r="4" fill="#3498DB" stroke="#fff" stroke-width="1.5"/>
+                                <circle class="bu-dot" cx="468" cy="60.2" r="4" fill="#CA8A04" stroke="#fff" stroke-width="1.5"/>
+                                <circle class="bu-dot" cx="468" cy="128.9" r="4" fill="#65A30D" stroke="#fff" stroke-width="1.5"/>
+                                <circle class="bu-dot" cx="468" cy="101.1" r="4" fill="#D97706" stroke="#fff" stroke-width="1.5"/>
+                                <text class="chart-month" x="52" y="168">Jan</text>
+                                <text class="chart-month" x="135.2" y="168">Feb</text>
+                                <text class="chart-month" x="218.4" y="168">Mar</text>
+                                <text class="chart-month" x="301.6" y="168">Apr</text>
+                                <text class="chart-month" x="384.8" y="168">May</text>
+                                <text class="chart-month" x="468" y="168">Jun</text>
                             </svg>
-                            <div class="pbi-chart-foot">
-                                <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
-                            </div>
                         </div>
                         <div class="pbi-chart-legend">
-                            <span><i class="swatch swatch--line" style="background:#3498DB"></i> Consumer CPG · $12.2M</span>
-                            <span><i class="swatch swatch--line" style="background:#EAB308"></i> Industrial · $10.1M ▲18%</span>
-                            <span><i class="swatch swatch--line" style="background:#84CC16"></i> Aftermarket services · $5.6M</span>
-                            <span><i class="swatch swatch--rolling"></i> Export · $7.4M · Apr dip recovered</span>
+                            <span><i class="swatch swatch--line" style="background:#3498DB"></i> Consumer CPG · $12.2M Jun</span>
+                            <span><i class="swatch swatch--line" style="background:#CA8A04"></i> Industrial · $10.1M · ▲23% YTD</span>
+                            <span><i class="swatch swatch--line" style="background:#65A30D"></i> Aftermarket services · $5.6M</span>
+                            <span><i class="swatch swatch--rolling"></i> Export · $7.4M · Apr dip to $5.9M</span>
                         </div>
                     </div>
 
