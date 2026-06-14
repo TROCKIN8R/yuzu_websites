@@ -41,11 +41,40 @@ window.OpportunityData = {
         };
     },
 
-    async submitOpportunity(name, email, source) {
-        if (!this.isSupabaseConfigured()) {
-            throw new Error('Supabase not configured');
+    intakeFunctionName() {
+        const cfg = window.OPPORTUNITY_SUPABASE || {};
+        return (cfg.intakeFunction || '').trim();
+    },
+
+    async submitViaEdgeFunction(name, email, source) {
+        const cfg = window.OPPORTUNITY_SUPABASE;
+        const fn = this.intakeFunctionName();
+        if (!fn) return null;
+
+        const base = cfg.url.replace(/\/$/, '');
+        const response = await fetch(`${base}/functions/v1/${fn}`, {
+            method: 'POST',
+            headers: {
+                apikey: cfg.anonKey,
+                Authorization: `Bearer ${cfg.anonKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, email, source })
+        });
+
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            throw new Error(payload.error || `Edge function HTTP ${response.status}`);
         }
 
+        return {
+            row: payload.row || this.buildRow(name, email, source),
+            emailSent: Boolean(payload.emailSent),
+            emailError: payload.emailError || null
+        };
+    },
+
+    async submitViaRest(name, email, source) {
         const cfg = window.OPPORTUNITY_SUPABASE;
         const table = (cfg.table || 'opportunities').trim();
         const base = cfg.url.replace(/\/$/, '');
@@ -67,7 +96,27 @@ window.OpportunityData = {
             throw new Error(detail || `Supabase insert HTTP ${response.status}`);
         }
 
-        return row;
+        return { row, emailSent: false, emailError: null };
+    },
+
+    async submitOpportunity(name, email, source) {
+        if (!this.isSupabaseConfigured()) {
+            throw new Error('Supabase not configured');
+        }
+
+        if (this.intakeFunctionName()) {
+            try {
+                const result = await this.submitViaEdgeFunction(name, email, source);
+                if (result) return result;
+            } catch (error) {
+                const detail = String(error?.message || error);
+                if (!detail.includes('404') && !detail.includes('not found')) {
+                    throw error;
+                }
+            }
+        }
+
+        return this.submitViaRest(name, email, source);
     },
 
     async fetchEntries(limit) {
