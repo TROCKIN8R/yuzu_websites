@@ -60,6 +60,20 @@ function formatName(name: string) {
     .join(" ");
 }
 
+function maskNamePart(part: string) {
+  if (!part) return part;
+  if (part.length === 1) return part;
+  return part.charAt(0) + "*".repeat(part.length - 1);
+}
+
+function maskName(name: string) {
+  return formatName(name)
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => word.split("-").map(maskNamePart).join("-"))
+    .join(" ");
+}
+
 function jsonResponse(body: Record<string, unknown>, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
@@ -79,11 +93,11 @@ function companyFromDomain(domain: string) {
   return label.replace(/-/g, " ").replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-function buildRow(name: string, email: string, source: string) {
+function buildRow(displayName: string, email: string, source: string) {
   const domain = email.split("@")[1]?.trim().toLowerCase() || "";
   const isFree = FREE_DOMAINS.has(domain);
   return {
-    name: formatName(name),
+    name: displayName,
     email_masked: maskEmail(email),
     company: isFree ? "Personal inbox" : companyFromDomain(domain),
     domain,
@@ -262,7 +276,7 @@ Deno.serve(async (req) => {
   }
 
   const table = (Deno.env.get("OPPORTUNITIES_TABLE") || "opportunities").trim();
-  const row = buildRow(name, email, source);
+  const row = buildRow(maskName(rawName), email, source);
   const supabase = createClient(supabaseUrl, serviceRoleKey);
 
   const { error: insertError } = await supabase.from(table).insert(row);

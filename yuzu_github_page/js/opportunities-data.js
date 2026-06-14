@@ -16,6 +16,20 @@ window.OpportunityData = {
         return `${visible}@${domain}`;
     },
 
+    maskNamePart(part) {
+        if (!part) return part;
+        if (part.length === 1) return part;
+        return part.charAt(0) + '*'.repeat(part.length - 1);
+    },
+
+    maskName(name) {
+        return this.formatName(name)
+            .split(/\s+/)
+            .filter(Boolean)
+            .map((word) => word.split('-').map((part) => this.maskNamePart(part)).join('-'))
+            .join(' ');
+    },
+
     domainFromEmail(email) {
         return email.split('@')[1]?.trim().toLowerCase() || '';
     },
@@ -50,7 +64,7 @@ window.OpportunityData = {
         const domain = this.domainFromEmail(email);
         const isFree = this.freeDomains.has(domain);
         return {
-            name: this.formatName(name),
+            name: this.maskName(name),
             email_masked: this.maskEmail(email),
             company: isFree ? 'Personal inbox' : this.companyFromDomain(domain),
             domain,
