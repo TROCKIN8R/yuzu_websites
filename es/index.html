@@ -150,7 +150,7 @@
         }
 
 /* Vision — Extracting Value (ETL = lemonade) */
-        .vision-step { transition: transform 0.3s ease, border-color 0.3s ease; }
+        .vision-step { transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .vision-step:hover { transform: translateY(-5px); }
         .vision-letter {
             width: 2.5rem;
@@ -172,7 +172,6 @@
             justify-content: center;
             background: linear-gradient(135deg, var(--yuzu-50) 0%, var(--yuzu-100) 100%);
             border-radius: var(--radius-lg);
-            border: 1px solid var(--yuzu-100);
             overflow: hidden;
         }
         .vision-visual svg { width: 88%; height: 88%; }
@@ -196,7 +195,6 @@
                 color: var(--kumquat-700);
                 font-weight: 800;
                 box-shadow: var(--shadow-md);
-                border: 2px solid var(--yuzu-100);
             }
         }
         .vision-spin { animation: visionSpin 9s linear infinite; }
@@ -699,6 +697,51 @@
                 </div>
             </div>
         </div>
+
+        <div class="services-kpi-strip" aria-labelledby="services-kpi-heading">
+            <div class="services-kpi-header">
+                <span class="services-kpi-eyebrow">🍋 En cifras</span>
+                <h3 id="services-kpi-heading" class="services-kpi-title">Impacto en despliegues de clientes</h3>
+            </div>
+            <div class="services-kpi-grid">
+                <article class="services-kpi-card">
+                    <span class="services-kpi-icon" aria-hidden="true">👥</span>
+                    <div class="services-kpi-value">3.200+</div>
+                    <div class="services-kpi-label">Usuarios de dashboards</div>
+                    <p class="services-kpi-sub">Lectores activos de nuestros informes</p>
+                </article>
+                <article class="services-kpi-card">
+                    <span class="services-kpi-icon" aria-hidden="true">🧠</span>
+                    <div class="services-kpi-value">50+</div>
+                    <div class="services-kpi-label">Modelos semánticos</div>
+                    <p class="services-kpi-sub">Modelos Power BI gobernados entregados</p>
+                </article>
+                <article class="services-kpi-card">
+                    <span class="services-kpi-icon" aria-hidden="true">⚡</span>
+                    <div class="services-kpi-value">36</div>
+                    <div class="services-kpi-label">Automatizaciones</div>
+                    <p class="services-kpi-sub">Agentes, flujos y jobs de pipeline en prod</p>
+                </article>
+                <article class="services-kpi-card services-kpi-card--accent">
+                    <span class="services-kpi-icon" aria-hidden="true">✅</span>
+                    <div class="services-kpi-value">2,6 k</div>
+                    <div class="services-kpi-label">Contratos</div>
+                    <p class="services-kpi-sub">Enviados auto para firma electrónica para nuestros clientes</p>
+                </article>
+                <article class="services-kpi-card">
+                    <span class="services-kpi-icon" aria-hidden="true">⏱️</span>
+                    <div class="services-kpi-value services-kpi-value--range">78 min → 4 min</div>
+                    <div class="services-kpi-label">Recorte de refresco más rápido</div>
+                    <p class="services-kpi-sub">Mirroring + lago directo</p>
+                </article>
+                <article class="services-kpi-card services-kpi-card--fun">
+                    <span class="services-kpi-icon" aria-hidden="true">🌾</span>
+                    <div class="services-kpi-value services-kpi-value--quote">No suficientes</div>
+                    <div class="services-kpi-label">Hojas de cálculo retiradas</div>
+                    <p class="services-kpi-sub">Siempre quedan más en una unidad compartida</p>
+                </article>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -742,7 +785,7 @@
     </div>
 </section>
 
-<section id="founder" class="py-20 px-6 bg-paper-500 border-t border-yellow-100">
+<section id="founder" class="founder-section py-20 px-6">
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-14">
             <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🍋 El maestro exprimidor</span>

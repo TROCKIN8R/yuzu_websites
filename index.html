@@ -142,7 +142,7 @@
         }
 
 /* Vision — Extracting Value (ETL = lemonade) */
-        .vision-step { transition: transform 0.3s ease, border-color 0.3s ease; }
+        .vision-step { transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .vision-step:hover { transform: translateY(-5px); }
         .vision-letter {
             width: 2.5rem;
@@ -164,7 +164,6 @@
             justify-content: center;
             background: linear-gradient(135deg, var(--yuzu-50) 0%, var(--yuzu-100) 100%);
             border-radius: var(--radius-lg);
-            border: 1px solid var(--yuzu-100);
             overflow: hidden;
         }
         .vision-visual svg { width: 88%; height: 88%; }
@@ -188,7 +187,6 @@
                 color: var(--kumquat-700);
                 font-weight: 800;
                 box-shadow: var(--shadow-md);
-                border: 2px solid var(--yuzu-100);
             }
         }
         .vision-spin { animation: visionSpin 9s linear infinite; }
@@ -680,6 +678,51 @@
                 </div>
             </div>
         </div>
+
+        <div class="services-kpi-strip" aria-labelledby="services-kpi-heading">
+            <div class="services-kpi-header">
+                <span class="services-kpi-eyebrow">🍋 By the Numbers</span>
+                <h3 id="services-kpi-heading" class="services-kpi-title">Impact across client deployments</h3>
+            </div>
+            <div class="services-kpi-grid">
+                <article class="services-kpi-card">
+                    <span class="services-kpi-icon" aria-hidden="true">👥</span>
+                    <div class="services-kpi-value">3,200+</div>
+                    <div class="services-kpi-label">Dashboard Users</div>
+                    <p class="services-kpi-sub">Active viewers consuming our reports</p>
+                </article>
+                <article class="services-kpi-card">
+                    <span class="services-kpi-icon" aria-hidden="true">🧠</span>
+                    <div class="services-kpi-value">50+</div>
+                    <div class="services-kpi-label">Semantic Models</div>
+                    <p class="services-kpi-sub">Governed Power BI models shipped</p>
+                </article>
+                <article class="services-kpi-card">
+                    <span class="services-kpi-icon" aria-hidden="true">⚡</span>
+                    <div class="services-kpi-value">36</div>
+                    <div class="services-kpi-label">Automations</div>
+                    <p class="services-kpi-sub">Agents, flows &amp; pipeline jobs live</p>
+                </article>
+                <article class="services-kpi-card services-kpi-card--accent">
+                    <span class="services-kpi-icon" aria-hidden="true">✅</span>
+                    <div class="services-kpi-value">2.6K</div>
+                    <div class="services-kpi-label">Contracts</div>
+                    <p class="services-kpi-sub">Auto-sent for e-signature on behalf of clients</p>
+                </article>
+                <article class="services-kpi-card">
+                    <span class="services-kpi-icon" aria-hidden="true">⏱️</span>
+                    <div class="services-kpi-value services-kpi-value--range">78 min → 4 min</div>
+                    <div class="services-kpi-label">Fastest Refresh Cut</div>
+                    <p class="services-kpi-sub">Mirroring + direct lake architecture</p>
+                </article>
+                <article class="services-kpi-card services-kpi-card--fun">
+                    <span class="services-kpi-icon" aria-hidden="true">🌾</span>
+                    <div class="services-kpi-value services-kpi-value--quote">Not enough</div>
+                    <div class="services-kpi-label">Spreadsheets Retired</div>
+                    <p class="services-kpi-sub">There are always more hiding in a shared drive</p>
+                </article>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -725,7 +768,7 @@
     </div>
 </section>
 
-<section id="founder" class="py-20 px-6 bg-paper-500 border-t border-yellow-100">
+<section id="founder" class="founder-section py-20 px-6">
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-14">
             <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🍋 The Head Squeezer</span>

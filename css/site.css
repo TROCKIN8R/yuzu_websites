@@ -4,8 +4,7 @@
 
 body { font-family: var(--font-sans); background-color: var(--color-bg); color: var(--color-text); overflow-x: hidden; }
 .yuzu-gradient { background: var(--gradient-yuzu); }
-.yuzu-card { background: var(--paper-100); border: 2px solid var(--yuzu-100); transition: 0.3s; }
-.yuzu-card:hover { border-color: var(--yuzu-500); }
+.yuzu-card { background: var(--paper-100); border: 0; transition: 0.3s; }
 .yuzu-bg { background-color: var(--yuzu-300); }
 .yuzu-bg-hover:hover { background-color: var(--yuzu-400); }
 
@@ -483,15 +482,25 @@ html {
 
 /* Our Vision — growth / value extraction (Zest Green tint) */
 .vision-section {
-    background: var(--zest-50);
-    border-bottom: 1px solid var(--zest-100);
+    background: var(--zest-100);
+    border-bottom: 1px solid var(--zest-200);
+}
+.vision-section .yuzu-card {
+    background: var(--paper-100);
+    box-shadow: var(--shadow-sm);
 }
 
 /* Our Services — technical pillars (Soft Kumquat tint) */
 .services-section {
-    background: var(--kumquat-50);
-    border-top: 1px solid var(--kumquat-100);
-    border-bottom: 1px solid var(--kumquat-100);
+    background: var(--kumquat-100);
+    border-top: 1px solid var(--kumquat-200);
+    border-bottom: 1px solid var(--kumquat-200);
+}
+.services-section .service-card,
+.services-section .service-detail-panel,
+.services-section .services-kpi-card:not(.services-kpi-card--accent):not(.services-kpi-card--fun) {
+    background: var(--paper-100);
+    box-shadow: var(--shadow-sm);
 }
 
 /* What We Do — interactive services studio */
@@ -849,6 +858,100 @@ html {
     }
 }
 
+/* Services impact KPI strip */
+.services-kpi-strip {
+    margin-top: var(--space-12);
+    padding-top: var(--space-10);
+    border-top: 1px solid var(--kumquat-300);
+}
+.services-kpi-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+}
+.services-kpi-eyebrow {
+    display: inline-block;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-widest);
+    color: var(--kumquat-700);
+}
+.services-kpi-title {
+    margin-top: var(--space-2);
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    font-weight: 800;
+    color: var(--carbon-500);
+    letter-spacing: var(--tracking-tighter);
+}
+.services-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+}
+@media (max-width: 639px) {
+    .services-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.services-kpi-card {
+    background: var(--paper-100);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5) var(--space-4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+    transition: transform var(--duration-normal) var(--ease-default),
+                box-shadow var(--duration-normal) var(--ease-default);
+}
+.services-kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+.services-kpi-card--accent {
+    background: linear-gradient(160deg, var(--paper-100) 0%, var(--yuzu-50) 100%);
+}
+.services-kpi-card--fun {
+    background: linear-gradient(160deg, var(--yuzu-50) 0%, var(--kumquat-100) 100%);
+}
+.services-kpi-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+    margin-bottom: var(--space-1);
+}
+.services-kpi-value {
+    font-size: clamp(1.5rem, 2.5vw, 1.875rem);
+    font-weight: 800;
+    color: var(--yuzu-600);
+    letter-spacing: var(--tracking-tighter);
+    line-height: 1.1;
+}
+.services-kpi-value--range {
+    font-size: clamp(1.125rem, 2vw, 1.375rem);
+}
+.services-kpi-value--quote {
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    font-style: italic;
+    color: var(--kumquat-700);
+}
+.services-kpi-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--carbon-400);
+    line-height: 1.3;
+}
+.services-kpi-sub {
+    margin-top: var(--space-1);
+    font-size: 0.6875rem;
+    line-height: 1.4;
+    color: var(--carbon-400);
+}
+.services-kpi-sub strong {
+    color: var(--zest-700);
+    font-weight: 700;
+}
+
 /* Hero — single viewport on mobile */
 .hero-fullscreen {
     min-height: calc(100vh - var(--nav-h, 96px));
@@ -858,7 +961,7 @@ html {
 .hero-visual {
     position: relative;
     background: linear-gradient(160deg, var(--paper-100) 0%, var(--yuzu-100) 100%);
-    border: 2px solid var(--yuzu-100);
+    border: 0;
     border-radius: var(--radius-xl);
     overflow: hidden;
     display: flex;
@@ -945,7 +1048,7 @@ html {
 
 /* How We Work — The Squeeze (design-system pillars) */
 .squeeze-section {
-    background: var(--yuzu-25);
+    background: var(--yuzu-50);
     border-top: 1px solid var(--yuzu-100);
     border-bottom: 1px solid var(--yuzu-100);
 }
@@ -985,24 +1088,33 @@ html {
 }
 .squeeze-pillar {
     background: var(--paper-100);
-    border: 1px solid var(--paper-700);
+    border: 0;
     border-radius: var(--radius-2xl);
     padding: var(--space-8);
     box-shadow: var(--shadow-sm);
     transition: transform var(--duration-normal) var(--ease-default),
-                border-color var(--duration-normal) var(--ease-default),
                 box-shadow var(--duration-normal) var(--ease-default);
     display: flex;
     flex-direction: column;
 }
 .squeeze-pillar:hover {
     transform: translateY(-4px);
-    border-color: var(--yuzu-300);
     box-shadow: var(--shadow-md);
 }
 .squeeze-pillar--featured {
-    border-color: var(--yuzu-300);
-    background: linear-gradient(160deg, var(--paper-100) 0%, var(--yuzu-50) 100%);
+    background: linear-gradient(160deg, var(--paper-100) 0%, var(--yuzu-100) 100%);
+}
+
+/* Founder — Paper White tint */
+.founder-section {
+    background: var(--paper-700);
+    border-top: 1px solid var(--yuzu-100);
+}
+.founder-section .yuzu-card {
+    background: var(--paper-100);
+}
+.founder-section .yuzu-card:not([class*="shadow"]) {
+    box-shadow: var(--shadow-sm);
 }
 .squeeze-pillar-top {
     display: flex;

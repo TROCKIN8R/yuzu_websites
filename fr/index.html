@@ -142,7 +142,7 @@
         }
 
 /* Vision — Extracting Value (ETL = lemonade) */
-        .vision-step { transition: transform 0.3s ease, border-color 0.3s ease; }
+        .vision-step { transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .vision-step:hover { transform: translateY(-5px); }
         .vision-letter {
             width: 2.5rem;
@@ -164,7 +164,6 @@
             justify-content: center;
             background: linear-gradient(135deg, var(--yuzu-50) 0%, var(--yuzu-100) 100%);
             border-radius: var(--radius-lg);
-            border: 1px solid var(--yuzu-100);
             overflow: hidden;
         }
         .vision-visual svg { width: 88%; height: 88%; }
@@ -188,7 +187,6 @@
                 color: var(--kumquat-700);
                 font-weight: 800;
                 box-shadow: var(--shadow-md);
-                border: 2px solid var(--yuzu-100);
             }
         }
         .vision-spin { animation: visionSpin 9s linear infinite; }
@@ -680,6 +678,51 @@
                 </div>
             </div>
         </div>
+
+        <div class="services-kpi-strip" aria-labelledby="services-kpi-heading">
+            <div class="services-kpi-header">
+                <span class="services-kpi-eyebrow">🍋 En chiffres</span>
+                <h3 id="services-kpi-heading" class="services-kpi-title">Impact sur les déploiements clients</h3>
+            </div>
+            <div class="services-kpi-grid">
+                <article class="services-kpi-card">
+                    <span class="services-kpi-icon" aria-hidden="true">👥</span>
+                    <div class="services-kpi-value">3&nbsp;200+</div>
+                    <div class="services-kpi-label">Utilisateurs de tableaux de bord</div>
+                    <p class="services-kpi-sub">Lecteurs actifs de nos rapports</p>
+                </article>
+                <article class="services-kpi-card">
+                    <span class="services-kpi-icon" aria-hidden="true">🧠</span>
+                    <div class="services-kpi-value">50+</div>
+                    <div class="services-kpi-label">Modèles sémantiques</div>
+                    <p class="services-kpi-sub">Modèles Power BI gouvernés livrés</p>
+                </article>
+                <article class="services-kpi-card">
+                    <span class="services-kpi-icon" aria-hidden="true">⚡</span>
+                    <div class="services-kpi-value">36</div>
+                    <div class="services-kpi-label">Automatisations</div>
+                    <p class="services-kpi-sub">Agents, flux et jobs de pipeline en prod</p>
+                </article>
+                <article class="services-kpi-card services-kpi-card--accent">
+                    <span class="services-kpi-icon" aria-hidden="true">✅</span>
+                    <div class="services-kpi-value">2,6 k</div>
+                    <div class="services-kpi-label">Contrats</div>
+                    <p class="services-kpi-sub">Envoyés auto pour signature électronique pour nos clients</p>
+                </article>
+                <article class="services-kpi-card">
+                    <span class="services-kpi-icon" aria-hidden="true">⏱️</span>
+                    <div class="services-kpi-value services-kpi-value--range">78 min → 4 min</div>
+                    <div class="services-kpi-label">Rafraîchissement le plus rapide</div>
+                    <p class="services-kpi-sub">Mirroring + lac direct</p>
+                </article>
+                <article class="services-kpi-card services-kpi-card--fun">
+                    <span class="services-kpi-icon" aria-hidden="true">🌾</span>
+                    <div class="services-kpi-value services-kpi-value--quote">Pas assez</div>
+                    <div class="services-kpi-label">Feuilles Excel retraitées</div>
+                    <p class="services-kpi-sub">Il en reste toujours dans un lecteur partagé</p>
+                </article>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -723,7 +766,7 @@
     </div>
 </section>
 
-<section id="founder" class="py-20 px-6 bg-paper-500 border-t border-yellow-100">
+<section id="founder" class="founder-section py-20 px-6">
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-14">
             <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🍋 Le presse-chef</span>
