@@ -615,23 +615,44 @@
 
             <div class="automation-lab" id="automationLab">
                 <div class="automation-lab-tabs" role="tablist" aria-label="Automation demos">
-                    <button type="button" class="automation-lab-tab automation-lab-tab--active" role="tab" aria-selected="true" data-automation-tab="opportunity" id="automation-tab-opportunity" aria-controls="automation-panel-opportunity">
-                        <span class="automation-lab-tab-icon" aria-hidden="true">📋</span>
-                        <span class="automation-lab-tab-label">Opportunity Tracker</span>
-                        <span class="automation-lab-tab-badge">Live</span>
-                    </button>
-                    <button type="button" class="automation-lab-tab" role="tab" aria-selected="false" data-automation-tab="contracts" id="automation-tab-contracts" aria-controls="automation-panel-contracts" disabled aria-disabled="true">
-                        <span class="automation-lab-tab-icon" aria-hidden="true">✍️</span>
-                        <span class="automation-lab-tab-label">Contract Router</span>
-                        <span class="automation-lab-tab-badge automation-lab-tab-badge--soon">Soon</span>
-                    </button>
-                    <button type="button" class="automation-lab-tab" role="tab" aria-selected="false" data-automation-tab="refresh" id="automation-tab-refresh" aria-controls="automation-panel-refresh" disabled aria-disabled="true">
-                        <span class="automation-lab-tab-icon" aria-hidden="true">⏱️</span>
-                        <span class="automation-lab-tab-label">Refresh Watchdog</span>
-                        <span class="automation-lab-tab-badge automation-lab-tab-badge--soon">Soon</span>
-                    </button>
+                    <div class="automation-picker" data-automation-tab="opportunity">
+                        <button type="button" class="service-card automation-lab-tab active" role="tab" aria-selected="true" aria-expanded="false" data-automation-tab="opportunity" id="automation-tab-opportunity" aria-controls="automation-panel-opportunity">
+                            <span class="service-card-icon" aria-hidden="true">📋</span>
+                            <span class="service-card-body">
+                                <span class="service-card-title">Opportunity Tracker</span>
+                                <span class="service-card-tag automation-lab-tab-badge automation-lab-tab-badge--live">Live</span>
+                                <span class="automation-lab-cta">
+                                    <span class="automation-lab-cta-try automation-lab-cta-try--tap">Tap to try</span>
+                                    <span class="automation-lab-cta-try automation-lab-cta-try--click">Click to try</span>
+                                    <span class="automation-lab-cta-close automation-lab-cta-close--tap">Tap to close</span>
+                                </span>
+                            </span>
+                        </button>
+                        <div class="automation-detail-anchor" data-automation-tab="opportunity" hidden aria-hidden="true"></div>
+                    </div>
+                    <div class="automation-picker" data-automation-tab="contracts">
+                        <button type="button" class="service-card automation-lab-tab" role="tab" aria-selected="false" aria-expanded="false" data-automation-tab="contracts" id="automation-tab-contracts" aria-controls="automation-panel-contracts" disabled aria-disabled="true">
+                            <span class="service-card-icon" aria-hidden="true">✍️</span>
+                            <span class="service-card-body">
+                                <span class="service-card-title">Contract Router</span>
+                                <span class="service-card-tag automation-lab-tab-badge automation-lab-tab-badge--soon">Soon</span>
+                            </span>
+                        </button>
+                        <div class="automation-detail-anchor" data-automation-tab="contracts" hidden aria-hidden="true"></div>
+                    </div>
+                    <div class="automation-picker" data-automation-tab="refresh">
+                        <button type="button" class="service-card automation-lab-tab" role="tab" aria-selected="false" aria-expanded="false" data-automation-tab="refresh" id="automation-tab-refresh" aria-controls="automation-panel-refresh" disabled aria-disabled="true">
+                            <span class="service-card-icon" aria-hidden="true">⏱️</span>
+                            <span class="service-card-body">
+                                <span class="service-card-title">Refresh Watchdog</span>
+                                <span class="service-card-tag automation-lab-tab-badge automation-lab-tab-badge--soon">Soon</span>
+                            </span>
+                        </button>
+                        <div class="automation-detail-anchor" data-automation-tab="refresh" hidden aria-hidden="true"></div>
+                    </div>
                 </div>
 
+                <div class="automation-lab-panels" id="automationPanelsHost">
                 <div class="automation-lab-panel" data-automation-panel="opportunity" id="automation-panel-opportunity" role="tabpanel" aria-labelledby="automation-tab-opportunity">
                     <div class="automation-lab-panel-grid">
                         <div class="automation-lab-copy">
@@ -698,7 +719,7 @@
                     </div>
                 </div>
 
-                <div class="automation-lab-panel" data-automation-panel="contracts" id="automation-panel-contracts" role="tabpanel" aria-labelledby="automation-tab-contracts" hidden>
+                <div class="automation-lab-panel" data-automation-panel="contracts" id="automation-panel-contracts" role="tabpanel" aria-labelledby="automation-tab-contracts" hidden aria-hidden="true">
                     <div class="automation-lab-placeholder">
                         <span class="automation-lab-placeholder-icon" aria-hidden="true">✍️</span>
                         <h4 class="automation-lab-panel-title">Contract Router</h4>
@@ -706,12 +727,13 @@
                     </div>
                 </div>
 
-                <div class="automation-lab-panel" data-automation-panel="refresh" id="automation-panel-refresh" role="tabpanel" aria-labelledby="automation-tab-refresh" hidden>
+                <div class="automation-lab-panel" data-automation-panel="refresh" id="automation-panel-refresh" role="tabpanel" aria-labelledby="automation-tab-refresh" hidden aria-hidden="true">
                     <div class="automation-lab-placeholder">
                         <span class="automation-lab-placeholder-icon" aria-hidden="true">⏱️</span>
                         <h4 class="automation-lab-panel-title">Refresh Watchdog</h4>
                         <p class="automation-lab-panel-desc">Monitor pipeline runtimes and ping Slack when a refresh blows past its SLA, inspired by a 78-minute refresh we cut to 4. Demo coming soon.</p>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
@@ -930,10 +952,10 @@
 <script src="js/services-picker.js"></script>
 <script src="js/nav.js"></script>
 <script src="js/hero-rotate.js"></script>
-<script src="js/opportunities-supabase-config.js"></script>
-<script src="js/opportunities-turnstile-config.js"></script>
+<script src="js/opportunities-config.js"></script>
 <script src="js/opportunities-data.js"></script>
 <script src="js/opportunities-table.js"></script>
+<script src="js/automation-picker.js"></script>
 <script src="js/automation-demos.js"></script>
 <script>
     const svcDefs = `<defs>
