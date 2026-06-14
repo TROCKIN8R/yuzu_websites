@@ -2372,6 +2372,30 @@ html:has(.hero-fullscreen).nav-past-hero .nav-cta-desktop {
     border-color: var(--yuzu-500);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--yuzu-400) 25%, transparent);
 }
+.opp-field--consent { margin-top: 0.15rem; }
+.opp-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--carbon-400);
+    cursor: pointer;
+}
+.opp-consent input {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+    accent-color: var(--yuzu-600);
+    cursor: pointer;
+}
+.opp-turnstile {
+    min-height: 0;
+}
+.opp-turnstile:empty {
+    display: none;
+}
 .opp-submit {
     display: inline-flex;
     align-items: center;

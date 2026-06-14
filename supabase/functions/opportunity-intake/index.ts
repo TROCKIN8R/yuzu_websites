@@ -74,6 +74,40 @@ function maskName(name: string) {
     .join(" ");
 }
 
+async function verifyTurnstile(token: string, remoteIp?: string) {
+  const secret = Deno.env.get("TURNSTILE_SECRET_KEY")?.trim();
+  if (!secret) {
+    return { ok: true, skipped: true };
+  }
+
+  if (!token) {
+    return { ok: false, error: "Captcha verification is required" };
+  }
+
+  const params = new URLSearchParams({
+    secret,
+    response: token,
+  });
+  if (remoteIp) {
+    params.set("remoteip", remoteIp);
+  }
+
+  const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params,
+  });
+
+  const result = await response.json().catch(() => ({}));
+  const errorCodes = Array.isArray(result["error-codes"]) ? result["error-codes"].join(", ") : "";
+
+  return {
+    ok: Boolean(result.success),
+    error: result.success ? "" : (errorCodes || "Captcha verification failed"),
+    skipped: false,
+  };
+}
+
 function jsonResponse(body: Record<string, unknown>, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
@@ -249,7 +283,7 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: "Method not allowed" }, 405);
   }
 
-  let payload: { name?: string; email?: string; source?: string };
+  let payload: { name?: string; email?: string; source?: string; consent?: boolean; captchaToken?: string };
   try {
     payload = await req.json();
   } catch {
@@ -259,7 +293,19 @@ Deno.serve(async (req) => {
   const rawName = String(payload.name || "").trim();
   const email = String(payload.email || "").trim().toLowerCase();
   const source = String(payload.source || "yuzu.solutions").trim();
+  const consent = payload.consent === true;
+  const captchaToken = String(payload.captchaToken || "").trim();
   const name = formatName(rawName);
+  const remoteIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+
+  if (!consent) {
+    return jsonResponse({ error: "Consent is required" }, 400);
+  }
+
+  const captcha = await verifyTurnstile(captchaToken, remoteIp);
+  if (!captcha.ok) {
+    return jsonResponse({ error: captcha.error || "Captcha verification failed" }, 400);
+  }
 
   if (!rawName || rawName.length > 120) {
     return jsonResponse({ error: "Name is required (max 120 characters)" }, 400);
