@@ -1,11 +1,14 @@
 import { createClient } from "npm:@supabase/supabase-js@2.49.1";
 import nodemailer from "npm:nodemailer@6.9.16";
+import type { SupabaseClient } from "npm:@supabase/supabase-js@2.49.1";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+const ALLOWED_ORIGIN_PATTERNS = [
+  /^https:\/\/yuzu\.solutions$/,
+  /^https:\/\/www\.yuzu\.solutions$/,
+  /^https:\/\/trockin8r\.github\.io\/yuzu_websites(\/.*)?$/,
+  /^http:\/\/localhost(:\d+)?$/,
+  /^http:\/\/127\.0\.0\.1(:\d+)?$/,
+];
 
 const FREE_DOMAINS = new Set([
   "gmail.com", "googlemail.com", "yahoo.com", "hotmail.com", "outlook.com",
@@ -25,6 +28,100 @@ const BRAND = {
   border: "#E8E9EA",
   zest: "#86C54A",
 };
+
+function isAllowedOrigin(origin: string | null) {
+  if (!origin) return true;
+  return ALLOWED_ORIGIN_PATTERNS.some((pattern) => pattern.test(origin));
+}
+
+function resolveCorsOrigin(origin: string | null) {
+  if (origin && ALLOWED_ORIGIN_PATTERNS.some((pattern) => pattern.test(origin))) {
+    return origin;
+  }
+  return SITE_URL;
+}
+
+function buildCorsHeaders(origin: string | null) {
+  return {
+    "Access-Control-Allow-Origin": resolveCorsOrigin(origin),
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Vary": "Origin",
+  };
+}
+
+async function sha256(value: string) {
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(value),
+  );
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+async function countRecentHits(
+  supabase: SupabaseClient,
+  bucket: string,
+  windowMinutes: number,
+) {
+  const since = new Date(Date.now() - windowMinutes * 60_000).toISOString();
+  const { count, error } = await supabase
+    .from("intake_rate_events")
+    .select("id", { count: "exact", head: true })
+    .eq("bucket", bucket)
+    .gte("created_at", since);
+
+  if (error) {
+    console.error("Rate limit lookup failed:", error.message);
+    return 0;
+  }
+
+  return count ?? 0;
+}
+
+async function recordRateEvent(supabase: SupabaseClient, bucket: string) {
+  const { error } = await supabase.from("intake_rate_events").insert({ bucket });
+  if (error) {
+    console.error("Rate limit event insert failed:", error.message);
+  }
+}
+
+async function enforceRateLimits(
+  supabase: SupabaseClient,
+  remoteIp?: string,
+  email?: string,
+) {
+  const ipLimit = Number(Deno.env.get("INTAKE_IP_LIMIT") || "5");
+  const emailLimit = Number(Deno.env.get("INTAKE_EMAIL_LIMIT") || "2");
+  const ipWindowMinutes = Number(Deno.env.get("INTAKE_IP_WINDOW_MIN") || "60");
+  const emailWindowMinutes = Number(Deno.env.get("INTAKE_EMAIL_WINDOW_MIN") || "1440");
+
+  if (remoteIp) {
+    const ipBucket = `ip:${await sha256(remoteIp)}`;
+    const ipHits = await countRecentHits(supabase, ipBucket, ipWindowMinutes);
+    if (ipHits >= ipLimit) {
+      return { ok: false, error: "Too many submissions from this network. Try again later." };
+    }
+  }
+
+  if (email) {
+    const emailBucket = `email:${await sha256(email.toLowerCase())}`;
+    const emailHits = await countRecentHits(supabase, emailBucket, emailWindowMinutes);
+    if (emailHits >= emailLimit) {
+      return { ok: false, error: "This email was already submitted recently. Check your inbox." };
+    }
+  }
+
+  if (remoteIp) {
+    await recordRateEvent(supabase, `ip:${await sha256(remoteIp)}`);
+  }
+  if (email) {
+    await recordRateEvent(supabase, `email:${await sha256(email.toLowerCase())}`);
+  }
+
+  return { ok: true, error: "" };
+}
 
 function escapeHtml(value: string) {
   return value
@@ -108,10 +205,14 @@ async function verifyTurnstile(token: string, remoteIp?: string) {
   };
 }
 
-function jsonResponse(body: Record<string, unknown>, status = 200) {
+function jsonResponse(
+  body: Record<string, unknown>,
+  status = 200,
+  origin: string | null = null,
+) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
+    headers: { ...buildCorsHeaders(origin), "Content-Type": "application/json" },
   });
 }
 
@@ -275,69 +376,83 @@ async function sendFollowUpEmail(name: string, email: string) {
 }
 
 Deno.serve(async (req) => {
+  const origin = req.headers.get("origin");
+
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    if (!isAllowedOrigin(origin)) {
+      return new Response("Forbidden", { status: 403 });
+    }
+    return new Response("ok", { headers: buildCorsHeaders(origin) });
   }
 
   if (req.method !== "POST") {
-    return jsonResponse({ error: "Method not allowed" }, 405);
+    return jsonResponse({ error: "Method not allowed" }, 405, origin);
+  }
+
+  if (!isAllowedOrigin(origin)) {
+    return jsonResponse({ error: "Forbidden" }, 403, origin);
   }
 
   let payload: { name?: string; email?: string; source?: string; consent?: boolean; captchaToken?: string };
   try {
     payload = await req.json();
   } catch {
-    return jsonResponse({ error: "Invalid JSON body" }, 400);
+    return jsonResponse({ error: "Invalid request" }, 400, origin);
   }
 
   const rawName = String(payload.name || "").trim();
   const email = String(payload.email || "").trim().toLowerCase();
-  const source = String(payload.source || "yuzu.solutions").trim();
+  const source = String(payload.source || "yuzu.solutions").trim().slice(0, 120);
   const consent = payload.consent === true;
   const captchaToken = String(payload.captchaToken || "").trim();
   const name = formatName(rawName);
-  const remoteIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  const remoteIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+    || req.headers.get("x-real-ip")?.trim();
 
   if (!consent) {
-    return jsonResponse({ error: "Consent is required" }, 400);
+    return jsonResponse({ error: "Consent is required" }, 400, origin);
   }
 
-  // Turnstile secret is read from Supabase Edge Function secrets (TURNSTILE_SECRET_KEY).
   const captcha = await verifyTurnstile(captchaToken, remoteIp);
   if (!captcha.ok) {
-    return jsonResponse({ error: captcha.error || "Captcha verification failed" }, 400);
+    return jsonResponse({ error: captcha.error || "Captcha verification failed" }, 400, origin);
   }
 
   if (!rawName || rawName.length > 120) {
-    return jsonResponse({ error: "Name is required (max 120 characters)" }, 400);
+    return jsonResponse({ error: "Invalid name" }, 400, origin);
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return jsonResponse({ error: "Valid email is required" }, 400);
+    return jsonResponse({ error: "Invalid email" }, 400, origin);
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")?.trim();
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")?.trim();
   if (!supabaseUrl || !serviceRoleKey) {
-    return jsonResponse({ error: "Server misconfigured" }, 500);
+    return jsonResponse({ error: "Server misconfigured" }, 500, origin);
+  }
+
+  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const rateLimit = await enforceRateLimits(supabase, remoteIp, email);
+  if (!rateLimit.ok) {
+    return jsonResponse({ error: rateLimit.error }, 429, origin);
   }
 
   const table = (Deno.env.get("OPPORTUNITIES_TABLE") || "opportunities").trim();
   const row = buildRow(maskName(rawName), email, source);
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
 
   const { error: insertError } = await supabase.from(table).insert(row);
   if (insertError) {
-    return jsonResponse({ error: insertError.message }, 500);
+    console.error("Opportunity insert failed:", insertError.message);
+    return jsonResponse({ error: "Could not save submission" }, 500, origin);
   }
 
   let emailSent = false;
-  let emailError = "";
   try {
     await sendFollowUpEmail(name, email);
     emailSent = true;
   } catch (error) {
-    emailError = error instanceof Error ? error.message : String(error);
+    const emailError = error instanceof Error ? error.message : String(error);
     console.error("Follow-up email failed:", emailError);
   }
 
@@ -345,6 +460,5 @@ Deno.serve(async (req) => {
     ok: true,
     row,
     emailSent,
-    emailError: emailSent ? null : emailError,
-  });
+  }, 200, origin);
 });

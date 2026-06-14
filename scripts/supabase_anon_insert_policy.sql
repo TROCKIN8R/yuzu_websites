@@ -1,12 +1,3 @@
--- Run once in Supabase SQL Editor if the table already exists.
--- Allows the website form to insert rows using the publishable (anon) key.
-
-create policy "Anon insert opportunities"
-  on public.opportunities
-  for insert
-  to anon
-  with check (
-    char_length(trim(name)) between 1 and 120
-    and email_masked is not null
-    and status = 'pending'
-  );
+-- DEPRECATED: public anon inserts are no longer used.
+-- The form writes through the opportunity-intake Edge Function (service role).
+-- Run scripts/supabase_revoke_anon_insert.sql instead to remove an existing policy.

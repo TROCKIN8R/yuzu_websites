@@ -120,34 +120,14 @@ window.OpportunityData = {
         };
     },
 
-    async submitViaRest(name, email, source) {
-        const cfg = window.OPPORTUNITY_SUPABASE;
-        const table = (cfg.table || 'opportunities').trim();
-        const base = cfg.url.replace(/\/$/, '');
-        const row = this.buildRow(name, email, source);
-
-        const response = await fetch(`${base}/rest/v1/${table}`, {
-            method: 'POST',
-            headers: {
-                apikey: cfg.anonKey,
-                Authorization: `Bearer ${cfg.anonKey}`,
-                'Content-Type': 'application/json',
-                Prefer: 'return=minimal'
-            },
-            body: JSON.stringify(row)
-        });
-
-        if (!response.ok) {
-            const detail = await response.text().catch(() => '');
-            throw new Error(detail || `Supabase insert HTTP ${response.status}`);
-        }
-
-        return { row, emailSent: false, emailError: null };
-    },
-
     async submitOpportunity(name, email, source, options = {}) {
         if (!this.isSupabaseConfigured()) {
             throw new Error('Supabase not configured');
+        }
+
+        const fn = this.intakeFunctionName();
+        if (!fn) {
+            throw new Error('Intake function not configured');
         }
 
         const formattedName = this.formatName(name);
@@ -163,28 +143,12 @@ window.OpportunityData = {
             throw new Error('Captcha verification is required');
         }
 
-        if (this.intakeFunctionName()) {
-            try {
-                const result = await this.submitViaEdgeFunction(
-                    formattedName,
-                    normalizedEmail,
-                    source,
-                    { consent, captchaToken }
-                );
-                if (result) return result;
-            } catch (error) {
-                const detail = String(error?.message || error);
-                if (!detail.includes('404') && !detail.includes('not found')) {
-                    throw error;
-                }
-            }
-        }
-
-        if (this.isTurnstileConfigured()) {
-            throw new Error('Captcha verification is required');
-        }
-
-        return this.submitViaRest(formattedName, normalizedEmail, source);
+        return this.submitViaEdgeFunction(
+            formattedName,
+            normalizedEmail,
+            source,
+            { consent, captchaToken }
+        );
     },
 
     async fetchEntries(limit) {

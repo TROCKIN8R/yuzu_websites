@@ -92,13 +92,19 @@ With Turnstile enabled, use a real token from the form widget or Cloudflare test
 
 The form requires an explicit checkbox before submit. The Edge Function rejects requests where `consent` is not `true`.
 
-## 7. Fallback behavior
+## 7. Hardening (required for production)
 
-If the Edge Function is not deployed yet, the form falls back to a direct Supabase insert (table only, no email).
+Run these once in the Supabase SQL Editor:
 
-Once deployed with SMTP secrets, users see: *"Check your inbox for a follow-up with a Calendly link."*
+1. `scripts/supabase_revoke_anon_insert.sql` — blocks direct browser writes to `opportunities`
+2. `scripts/supabase_intake_rate_limits.sql` — enables IP/email rate limiting in the Edge Function
 
-If Turnstile is configured, direct REST fallback is disabled and all submissions must pass the Edge Function.
+The website form now submits **only** through `opportunity-intake`. There is no REST fallback.
+
+The Edge Function also:
+- Verifies Turnstile on every request
+- Allows browser calls only from `yuzu.solutions`, GitHub Pages previews, and localhost
+- Rate limits by IP (5/hour) and email (2/day) by default
 
 ## Troubleshooting
 
@@ -110,4 +116,5 @@ If Turnstile is configured, direct REST fallback is disabled and all submissions
 | SMTP auth failed | Confirm full email as username and mailbox password |
 | Insert works, email fails | Check Hostinger sending limits; try port 587 |
 | Function 404 | Run `supabase functions deploy opportunity-intake` |
-| Row not inserted | Run `scripts/supabase_anon_insert_policy.sql` if using REST fallback only |
+| Direct REST insert works | Run `scripts/supabase_revoke_anon_insert.sql` |
+| Rate limit errors | Wait for the window to expire, or tune `INTAKE_*` secrets |

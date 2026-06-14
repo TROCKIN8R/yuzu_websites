@@ -205,7 +205,11 @@
             const detail = String(error?.message || error);
             resetCaptcha();
             if (detail.includes('row-level security') || detail.includes('42501')) {
-                setFormMessage('Insert blocked, run supabase_anon_insert_policy.sql in SQL Editor.', 'error');
+                setFormMessage('Submission blocked. Try again in a moment.', 'error');
+            } else if (detail.toLowerCase().includes('forbidden')) {
+                setFormMessage('Submission not allowed from this site.', 'error');
+            } else if (detail.toLowerCase().includes('rate limit') || detail.toLowerCase().includes('too many')) {
+                setFormMessage(detail, 'error');
             } else if (detail.toLowerCase().includes('captcha') || detail.toLowerCase().includes('consent')) {
                 setFormMessage(detail, 'error');
             } else {

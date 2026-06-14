@@ -24,18 +24,8 @@ create policy "Public read opportunities"
   to anon, authenticated
   using (true);
 
--- Website form inserts (publishable key) — status must be pending
-create policy "Anon insert opportunities"
-  on public.opportunities
-  for insert
-  to anon
-  with check (
-    char_length(trim(name)) between 1 and 120
-    and email_masked is not null
-    and status = 'pending'
-  );
-
--- Zapier / server-side can still use the secret (service_role) key for enriched rows.
+-- Inserts are Edge Function only (service role). Do not add anon INSERT policies.
+-- To remove a legacy anon policy: scripts/supabase_revoke_anon_insert.sql
 
 create index if not exists opportunities_submitted_at_idx
   on public.opportunities (submitted_at desc);
