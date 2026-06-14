@@ -75,13 +75,14 @@ function maskName(name: string) {
 }
 
 async function verifyTurnstile(token: string, remoteIp?: string) {
-  const secret = Deno.env.get("TURNSTILE_SECRET_KEY")?.trim();
-  if (!secret) {
-    return { ok: true, skipped: true };
-  }
-
   if (!token) {
     return { ok: false, error: "Captcha verification is required" };
+  }
+
+  const secret = Deno.env.get("TURNSTILE_SECRET_KEY")?.trim();
+  if (!secret) {
+    console.warn("TURNSTILE_SECRET_KEY is not set; captcha token was not verified with Cloudflare");
+    return { ok: true, skipped: true };
   }
 
   const params = new URLSearchParams({
