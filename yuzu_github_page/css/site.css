@@ -2411,7 +2411,8 @@ html:has(.hero-fullscreen).nav-past-hero .nav-cta-desktop {
     transition: background 0.2s ease, transform 0.2s ease;
 }
 .opp-submit:hover:not(:disabled) { background: var(--yuzu-600); }
-.opp-submit:disabled { opacity: 0.65; cursor: wait; }
+.opp-submit:disabled { opacity: 0.65; cursor: not-allowed; }
+.opp-submit:disabled.opp-submit--locked { opacity: 0.5; }
 .opp-form-status {
     font-size: 0.9rem;
     line-height: 1.5;

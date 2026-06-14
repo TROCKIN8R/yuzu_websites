@@ -9,8 +9,12 @@
     const panels = root.querySelectorAll('[data-automation-panel]');
     const form = document.getElementById('homeOpportunityForm');
     const formStatus = document.getElementById('homeOpportunityFormStatus');
+    const submitBtn = document.getElementById('home-opp-submit');
     const turnstileMount = document.getElementById('home-opp-turnstile');
+    const captchaRequired = data.isTurnstileConfigured();
     let turnstileWidgetId = null;
+    let captchaPassed = false;
+    let submitting = false;
 
     table.init({
         id: tableId,
@@ -47,6 +51,22 @@
         formStatus.hidden = !message;
     }
 
+    function setSubmitReady(ready) {
+        captchaPassed = Boolean(ready);
+        if (!submitBtn) return;
+
+        const enabled = !submitting && (!captchaRequired || captchaPassed);
+        submitBtn.disabled = !enabled;
+        submitBtn.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+        submitBtn.classList.toggle('opp-submit--locked', captchaRequired && !captchaPassed && !submitting);
+
+        if (captchaRequired && !captchaPassed && !submitting) {
+            submitBtn.title = 'Complete the security check first';
+        } else {
+            submitBtn.removeAttribute('title');
+        }
+    }
+
     function loadTurnstileScript() {
         return new Promise((resolve, reject) => {
             if (window.turnstile) {
@@ -74,6 +94,8 @@
         const siteKey = (window.OPPORTUNITY_TURNSTILE?.siteKey || '').trim();
         if (!siteKey || !turnstileMount) return;
 
+        setSubmitReady(false);
+
         loadTurnstileScript()
             .then(() => {
                 if (!window.turnstile) return;
@@ -83,34 +105,53 @@
                 }
                 turnstileWidgetId = window.turnstile.render(turnstileMount, {
                     sitekey: siteKey,
-                    theme: 'light'
+                    theme: 'light',
+                    callback: () => setSubmitReady(true),
+                    'expired-callback': () => {
+                        setSubmitReady(false);
+                        setFormMessage('Security check expired. Please verify again.', 'warn');
+                    },
+                    'error-callback': () => {
+                        setSubmitReady(false);
+                        setFormMessage('Security check failed. Refresh and try again.', 'error');
+                    }
                 });
             })
             .catch(() => {
+                setSubmitReady(false);
                 setFormMessage('Captcha could not load. Refresh and try again.', 'error');
             });
     }
 
     function getCaptchaToken() {
-        if (!data.isTurnstileConfigured()) return '';
+        if (!captchaRequired) return '';
         if (!window.turnstile || turnstileWidgetId === null) return '';
         return window.turnstile.getResponse(turnstileWidgetId) || '';
     }
 
     function resetCaptcha() {
-        if (!window.turnstile || turnstileWidgetId === null) return;
+        if (!window.turnstile || turnstileWidgetId === null) {
+            setSubmitReady(false);
+            return;
+        }
         window.turnstile.reset(turnstileWidgetId);
+        setSubmitReady(false);
     }
 
     async function submitOpportunity(event) {
         event.preventDefault();
-        if (!form) return;
+        if (!form || !submitBtn) return;
 
-        const submitBtn = form.querySelector('[type="submit"]');
+        if (captchaRequired && !captchaPassed) {
+            setFormMessage('Please complete the security check.', 'error');
+            return;
+        }
+
         const formData = new FormData(form);
         const name = String(formData.get('name') || '').trim();
         const email = String(formData.get('email') || '').trim().toLowerCase();
         const consent = formData.get('consent') === 'yes';
+        const captchaToken = getCaptchaToken();
         const source = 'yuzu.solutions/home-automation-demo';
 
         if (!name || !email) {
@@ -128,12 +169,14 @@
             return;
         }
 
-        if (data.isTurnstileConfigured() && !getCaptchaToken()) {
+        if (captchaRequired && !captchaToken) {
+            setSubmitReady(false);
             setFormMessage('Please complete the security check.', 'error');
             return;
         }
 
-        submitBtn.disabled = true;
+        submitting = true;
+        setSubmitReady(false);
         setFormMessage('Sending…', 'info');
 
         try {
@@ -146,7 +189,7 @@
 
             const result = await data.submitOpportunity(name, email, source, {
                 consent,
-                captchaToken: getCaptchaToken()
+                captchaToken
             });
             if (result.emailSent) {
                 setFormMessage('Submitted. Check your inbox for a follow-up with a Calendly link.', 'success');
@@ -169,10 +212,18 @@
                 setFormMessage('Something went wrong. Try again or email adrienyvin@gmail.com.', 'error');
             }
         } finally {
-            submitBtn.disabled = false;
+            submitting = false;
+            setSubmitReady(captchaPassed && Boolean(getCaptchaToken()));
         }
     }
 
     form?.addEventListener('submit', submitOpportunity);
-    renderTurnstile();
+
+    if (captchaRequired) {
+        setSubmitReady(false);
+        renderTurnstile();
+    } else if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.setAttribute('aria-disabled', 'false');
+    }
 })();
