@@ -156,6 +156,45 @@
   /* ── Brand gradient ── */
   --gradient-yuzu: linear-gradient(135deg, var(--yuzu-600) 0%, var(--kumquat-500) 100%);
 
+  /* ── Service recipe colors (icon backgrounds) ── */
+  --svc-enablement: var(--info-500);
+  --svc-enablement-from: var(--info-300);
+  --svc-enablement-to: var(--info-700);
+  --svc-enablement-bg-from: var(--info-50);
+  --svc-enablement-bg-to: var(--info-100);
+
+  --svc-infra: var(--zest-500);
+  --svc-infra-from: var(--zest-300);
+  --svc-infra-to: var(--zest-700);
+  --svc-infra-bg-from: var(--zest-50);
+  --svc-infra-bg-to: var(--zest-200);
+
+  --svc-debt: var(--kumquat-500);
+  --svc-debt-from: var(--kumquat-300);
+  --svc-debt-to: var(--kumquat-700);
+  --svc-debt-bg-from: var(--kumquat-50);
+  --svc-debt-bg-to: var(--kumquat-200);
+
+  --svc-delivery: var(--yuzu-500);
+  --svc-delivery-from: var(--yuzu-300);
+  --svc-delivery-to: var(--yuzu-700);
+  --svc-delivery-bg-from: var(--yuzu-50);
+  --svc-delivery-bg-to: var(--yuzu-200);
+
+  --svc-mvp-from: var(--yuzu-500);
+  --svc-mvp-to: var(--kumquat-500);
+  --svc-mvp-hover-from: var(--yuzu-400);
+  --svc-mvp-hover-to: var(--kumquat-600);
+  --svc-mvp-bg-from: var(--yuzu-100);
+  --svc-mvp-bg-to: var(--kumquat-200);
+
+  --svc-ai-from: var(--zest-500);
+  --svc-ai-to: var(--yuzu-500);
+  --svc-ai-hover-from: var(--zest-400);
+  --svc-ai-hover-to: var(--yuzu-600);
+  --svc-ai-bg-from: var(--zest-50);
+  --svc-ai-bg-to: var(--yuzu-200);
+
   /* ── Motion ── */
   --duration-fast: 200ms;
   --duration-normal: 300ms;
