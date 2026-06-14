@@ -44,7 +44,7 @@ create index if not exists opportunities_submitted_at_idx
 insert into public.opportunities (
   name, email_masked, company, domain, company_size, industry, status, source_note, source
 ) values (
-  'A*** M******',
+  'A*** M*****',
   'a***@cascades.com',
   'Cascades',
   'cascades.com',
