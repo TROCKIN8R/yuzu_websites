@@ -15,6 +15,11 @@
     let turnstileWidgetId = null;
     let captchaPassed = false;
     let submitting = false;
+    const nameInput = document.getElementById('home-opp-name');
+    const emailInput = document.getElementById('home-opp-email');
+
+    if (nameInput) nameInput.maxLength = data.fieldLimits.name;
+    if (emailInput) emailInput.maxLength = data.fieldLimits.email;
 
     table.init({
         id: tableId,
@@ -161,6 +166,16 @@
 
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             setFormMessage('Please enter a valid email address.', 'error');
+            return;
+        }
+
+        if (name.length > data.fieldLimits.name) {
+            setFormMessage(`Name must be ${data.fieldLimits.name} characters or fewer.`, 'error');
+            return;
+        }
+
+        if (email.length > data.fieldLimits.email) {
+            setFormMessage(`Email must be ${data.fieldLimits.email} characters or fewer.`, 'error');
             return;
         }
 
