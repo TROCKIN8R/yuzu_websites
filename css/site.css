@@ -357,7 +357,18 @@ html {
 @media (max-width: 767px) {
     .nav-bar-inner { grid-template-columns: 1fr auto; }
     .nav-bar-center { display: none; }
-    .nav-bar-end .nav-cta-desktop { display: none; }
+    .nav-bar-end { gap: 8px; }
+    .nav-cta-desktop {
+        font-size: 0.75rem;
+        padding: 8px 12px !important;
+    }
+}
+
+html:has(.hero-fullscreen):not(.nav-past-hero) .nav-cta-desktop {
+    display: none;
+}
+html:has(.hero-fullscreen).nav-past-hero .nav-cta-desktop {
+    display: inline-block;
 }
 
 .mobile-nav-panel {
@@ -467,18 +478,8 @@ html {
     gap: 16px;
 }
 .mobile-nav-cta {
-    display: block;
-    text-align: center;
-    padding: 14px 20px;
-    background: var(--yuzu-600);
-    color: var(--paper-100);
-    font-size: 0.95rem;
-    font-weight: 700;
-    border-radius: var(--radius-full);
-    text-decoration: none;
-    transition: background 0.2s ease;
+    display: none;
 }
-.mobile-nav-cta:hover { background: var(--yuzu-700); }
 
 /* Our Vision — growth / value extraction (Zest Green tint) */
 .vision-section {
