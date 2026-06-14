@@ -84,7 +84,7 @@
                 setFormMessage('Submitted, your row should appear in the table below.', 'success');
             }
             form.reset();
-            table.afterSubmit(tableId, name);
+            table.afterSubmit(tableId, result.row.name);
         } catch (error) {
             const detail = String(error?.message || error);
             if (detail.includes('row-level security') || detail.includes('42501')) {
