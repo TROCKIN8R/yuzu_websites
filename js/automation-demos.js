@@ -75,8 +75,14 @@
                 return;
             }
 
-            await data.submitOpportunity(name, email, source);
-            setFormMessage('Submitted, your row should appear in the table below.', 'success');
+            const result = await data.submitOpportunity(name, email, source);
+            if (result.emailSent) {
+                setFormMessage('Submitted. Check your inbox for a follow-up with a Calendly link.', 'success');
+            } else if (data.intakeFunctionName()) {
+                setFormMessage('Submitted. Your row should appear below (confirmation email pending setup).', 'success');
+            } else {
+                setFormMessage('Submitted, your row should appear in the table below.', 'success');
+            }
             form.reset();
             table.afterSubmit(tableId, name);
         } catch (error) {
