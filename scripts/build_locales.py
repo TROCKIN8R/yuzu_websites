@@ -273,6 +273,8 @@ INDEX_FR: list[tuple[str, str]] = [
      "Si la vie te donne du <span class=\"text-yellow-500\">yuzu</span>,<br>\n                extrais-le, transforme-le et charge-le !"),
     (">We turn raw, complex data into refreshing, automated insights.</p>",
      ">On transforme des données brutes et complexes en insights rafraîchissants et automatisés.</p>"),
+    ('href="mailto:adrienyvin@gmail.com?subject=Consulting%20inquiry%20from%20Yuzu.solutions" class="px-8 py-4 bg-lime-600',
+     'href="mailto:adrienyvin@gmail.com?subject=Demande%20de%20consultation%20%E2%80%94%20Yuzu.solutions" class="px-8 py-4 bg-lime-600'),
     (">Contact Us</a>", ">Nous contacter</a>"),
     ('aria-label="Yuzu data juicer turning lemons into dashboards and data"',
      'aria-label="Presse-yuzu de données transformant les citrons en tableaux de bord"'),
@@ -520,6 +522,8 @@ INDEX_ES: list[tuple[str, str]] = [
      "Si la vida te da <span class=\"text-yellow-500\">yuzu</span>,<br>\n                ¡extráelo, transfórmalo y cárgalo!"),
     (">We turn raw, complex data into refreshing, automated insights.</p>",
      ">Convertimos datos crudos y complejos en insights refrescantes y automatizados.</p>"),
+    ('href="mailto:adrienyvin@gmail.com?subject=Consulting%20inquiry%20from%20Yuzu.solutions" class="px-8 py-4 bg-lime-600',
+     'href="mailto:adrienyvin@gmail.com?subject=Consulta%20de%20consultor%C3%ADa%20%E2%80%94%20Yuzu.solutions" class="px-8 py-4 bg-lime-600'),
     (">Contact Us</a>", ">Contáctanos</a>"),
     ('aria-label="Yuzu data juicer turning lemons into dashboards and data"',
      'aria-label="Exprimidor de datos yuzu que convierte limones en dashboards"'),
@@ -1029,8 +1033,8 @@ LLMS_FR: list[tuple[str, str]] = [
     ("## Key pages", "## Pages clés"),
     ("- Homepage: https://yuzu.solutions/", "- Accueil : https://yuzu.solutions/fr/"),
     ("## Contact", "## Contact"),
-    ("Get started via the website: https://yuzu.solutions/#founder",
-     "Commencer via le site : https://yuzu.solutions/fr/#founder"),
+    ("Book a 30-minute call: https://calendly.com/adrienyvin/30min\nEmail: adrienyvin@gmail.com",
+     "Réserver un appel de 30 min : https://calendly.com/adrienyvin/30min\nCourriel : adrienyvin@gmail.com"),
     ("- LLM summary: https://yuzu.solutions/llms.txt", "- Résumé LLM : https://yuzu.solutions/llms-fr.txt"),
 ]
 
@@ -1052,8 +1056,8 @@ LLMS_ES: list[tuple[str, str]] = [
     ("## Key pages", "## Páginas clave"),
     ("- Homepage: https://yuzu.solutions/", "- Inicio : https://yuzu.solutions/es/"),
     ("## Contact", "## Contacto"),
-    ("Get started via the website: https://yuzu.solutions/#founder",
-     "Empezar vía el sitio : https://yuzu.solutions/es/#founder"),
+    ("Book a 30-minute call: https://calendly.com/adrienyvin/30min\nEmail: adrienyvin@gmail.com",
+     "Reservar una llamada de 30 min : https://calendly.com/adrienyvin/30min\nCorreo : adrienyvin@gmail.com"),
     ("- LLM summary: https://yuzu.solutions/llms.txt", "- Resumen LLM : https://yuzu.solutions/llms-es.txt"),
 ]
 

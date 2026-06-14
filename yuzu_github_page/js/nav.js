@@ -202,3 +202,15 @@
         requestAnimationFrame(runPendingAnchorScroll);
     });
 })();
+
+(function initNavCtaReveal() {
+    const hero = document.querySelector('.hero-fullscreen');
+    const navCta = document.querySelector('.nav-cta-desktop');
+    if (!hero || !navCta) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+        document.documentElement.classList.toggle('nav-past-hero', !entry.isIntersecting);
+    }, { threshold: 0 });
+
+    observer.observe(hero);
+})();
