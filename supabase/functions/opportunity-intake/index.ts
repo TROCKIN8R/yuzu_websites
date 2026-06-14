@@ -174,13 +174,24 @@ function maskName(name: string) {
     .join(" ");
 }
 
+function getTurnstileSecret() {
+  return (
+    Deno.env.get("TURNSTILE_SECRET_KEY")?.trim()
+    || Deno.env.get("TURNSTILE_SECRET")?.trim()
+    || ""
+  );
+}
+
 async function verifyTurnstile(token: string, remoteIp?: string) {
   if (!token) {
     return { ok: false, error: "Captcha verification is required" };
   }
 
-  const secret = Deno.env.get("TURNSTILE_SECRET_KEY")?.trim();
+  const secret = getTurnstileSecret();
   if (!secret) {
+    console.error(
+      "Turnstile secret missing. Set TURNSTILE_SECRET_KEY in Supabase Edge Function secrets.",
+    );
     return { ok: false, error: "Captcha verification is not configured" };
   }
 

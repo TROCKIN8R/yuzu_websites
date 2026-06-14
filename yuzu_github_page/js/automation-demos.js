@@ -9,6 +9,7 @@
     const formStatus = document.getElementById('homeOpportunityFormStatus');
     const submitBtn = document.getElementById('home-opp-submit');
     const turnstileMount = document.getElementById('home-opp-turnstile');
+    const opportunityPanel = document.getElementById('automation-panel-opportunity');
     const nameInput = document.getElementById('home-opp-name');
     const emailInput = document.getElementById('home-opp-email');
     const limits = data.fieldLimits();
@@ -48,6 +49,20 @@
             : '';
     }
 
+    function isOpportunityPanelVisible() {
+        return Boolean(opportunityPanel && !opportunityPanel.hidden);
+    }
+
+    function destroyTurnstile() {
+        if (window.turnstile && turnstileWidgetId !== null) {
+            window.turnstile.remove(turnstileWidgetId);
+        }
+        turnstileWidgetId = null;
+        if (turnstileMount) turnstileMount.innerHTML = '';
+        captchaPassed = false;
+        setSubmitReady(false);
+    }
+
     function loadTurnstileScript() {
         return new Promise((resolve, reject) => {
             if (window.turnstile) {
@@ -75,17 +90,13 @@
 
     function renderTurnstile() {
         const siteKey = (data.config().turnstile?.siteKey || '').trim();
-        if (!siteKey || !turnstileMount) return;
+        if (!siteKey || !turnstileMount || !isOpportunityPanelVisible()) return;
 
-        setSubmitReady(false);
+        destroyTurnstile();
 
         loadTurnstileScript()
             .then(() => {
-                if (!window.turnstile) return;
-                if (turnstileWidgetId !== null) {
-                    window.turnstile.remove(turnstileWidgetId);
-                    turnstileWidgetId = null;
-                }
+                if (!window.turnstile || !isOpportunityPanelVisible()) return;
                 turnstileWidgetId = window.turnstile.render(turnstileMount, {
                     sitekey: siteKey,
                     theme: 'light',
@@ -190,6 +201,11 @@
                 setFormMessage('Submission not allowed from this site.', 'error');
             } else if (detail.toLowerCase().includes('rate limit') || detail.toLowerCase().includes('too many')) {
                 setFormMessage(detail, 'error');
+            } else if (detail.toLowerCase().includes('not configured')) {
+                setFormMessage(
+                    'Captcha passed in the browser, but the server secret is missing. Add TURNSTILE_SECRET_KEY in Supabase Edge Function secrets, then redeploy.',
+                    'error'
+                );
             } else if (detail.toLowerCase().includes('captcha') || detail.toLowerCase().includes('consent')) {
                 setFormMessage(detail, 'error');
             } else {
@@ -203,9 +219,21 @@
 
     form.addEventListener('submit', handleSubmit);
 
+    document.addEventListener('automation-panel-open', (event) => {
+        if (event.detail?.tabId === 'opportunity' && captchaRequired) {
+            window.requestAnimationFrame(() => renderTurnstile());
+        }
+    });
+
+    document.addEventListener('automation-panel-close', () => {
+        if (captchaRequired) destroyTurnstile();
+    });
+
     if (captchaRequired) {
         setSubmitReady(false);
-        renderTurnstile();
+        if (isOpportunityPanelVisible()) {
+            renderTurnstile();
+        }
     } else if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.setAttribute('aria-disabled', 'false');

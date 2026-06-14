@@ -53,6 +53,8 @@
 
         panelHost.hidden = true;
         panelHost.setAttribute('aria-hidden', 'true');
+
+        document.dispatchEvent(new CustomEvent('automation-panel-close'));
     }
 
     function showMobilePanel(tabId) {
@@ -87,6 +89,9 @@
         }
 
         tab.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        document.dispatchEvent(new CustomEvent('automation-panel-open', {
+            detail: { tabId }
+        }));
     }
 
     function showDesktopPanel(tabId) {
@@ -118,6 +123,12 @@
             panel.hidden = !isActive;
             panel.setAttribute('aria-hidden', String(!isActive));
         });
+
+        if (tabId === DEFAULT_TAB) {
+            document.dispatchEvent(new CustomEvent('automation-panel-open', {
+                detail: { tabId }
+            }));
+        }
     }
 
     function placePanel(tabId) {

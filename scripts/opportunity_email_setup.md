@@ -27,6 +27,10 @@ window.OPPORTUNITY_CONFIG = {
 TURNSTILE_SECRET_KEY=your-secret-key
 ```
 
+Also add the same value as a **GitHub repository secret** named `TURNSTILE_SECRET_KEY`. The deploy workflow syncs it to Supabase on every Edge Function deploy. Dashboard-only secrets can fail to reach the runtime; the GitHub sync is the reliable path.
+
+Use the secret key from the same Cloudflare Turnstile widget as the site key. The name must be exactly `TURNSTILE_SECRET_KEY` (value only, no `KEY=value` prefix in the value field).
+
 For local testing only, Cloudflare provides always-pass test keys:
 
 ```
@@ -112,7 +116,8 @@ The Edge Function also:
 
 | Symptom | Fix |
 | --- | --- |
-| `Captcha verification is required` | Set site + secret keys, redeploy function |
+| `Captcha verification is not configured` | Add `TURNSTILE_SECRET_KEY` as a GitHub repo secret and in Supabase Edge Function secrets, then redeploy |
+| `Captcha verification is required` | Complete the Turnstile widget; ensure site + secret keys match |
 | `Consent is required` | Checkbox must be checked; payload must send `consent: true` |
 | `emailSent: false`, `SMTP not configured` | Add all `SMTP_*` secrets and redeploy |
 | SMTP auth failed | Confirm full email as username and mailbox password |

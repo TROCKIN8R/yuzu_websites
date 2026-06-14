@@ -19,5 +19,9 @@ if [[ -z "${SUPABASE_ACCESS_TOKEN:-}" ]]; then
 fi
 
 cd "$ROOT"
+if [[ -n "${TURNSTILE_SECRET_KEY:-}" ]]; then
+  "$CLI" secrets set "TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}" --project-ref "$PROJECT_REF"
+  echo "Synced TURNSTILE_SECRET_KEY"
+fi
 "$CLI" functions deploy "$FUNCTION" --project-ref "$PROJECT_REF"
 echo "Deployed $FUNCTION to project $PROJECT_REF"
