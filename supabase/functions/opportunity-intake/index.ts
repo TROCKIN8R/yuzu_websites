@@ -13,6 +13,31 @@ const FREE_DOMAINS = new Set([
 ]);
 
 const CALENDLY_URL = "https://calendly.com/adrienyvin/30min";
+const SITE_URL = "https://yuzu.solutions";
+const LOGO_URL = `${SITE_URL}/assets/og-image.png`;
+const BRAND = {
+  yuzu: "#F8C607",
+  yuzuDark: "#BC9605",
+  yuzuLight: "#FEF6DA",
+  carbon: "#2D3436",
+  carbonMuted: "#5C6567",
+  paper: "#FFFFFF",
+  border: "#E8E9EA",
+  zest: "#86C54A",
+};
+
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function firstNameFrom(name: string) {
+  return name.trim().split(/\s+/)[0] || name.trim();
+}
 
 function jsonResponse(body: Record<string, unknown>, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -50,34 +75,104 @@ function buildRow(name: string, email: string, source: string) {
 }
 
 function buildEmailHtml(name: string) {
-  const firstName = name.trim().split(/\s+/)[0] || name.trim();
+  const firstName = escapeHtml(firstNameFrom(name));
   return `<!DOCTYPE html>
 <html lang="en">
-<body style="font-family: Inter, system-ui, sans-serif; color: #1c1917; line-height: 1.6; max-width: 560px;">
-  <p>Hi ${firstName},</p>
-  <p>Thanks for trying the Yuzu opportunity tracker demo on <a href="https://yuzu.solutions">yuzu.solutions</a>. Your submission is in the live table now.</p>
-  <p>If you would like to talk through how this kind of intake, routing, and enrichment fits your stack, book a 30-minute call:</p>
-  <p><a href="${CALENDLY_URL}" style="display:inline-block;padding:12px 20px;background:#eab308;color:#fff;font-weight:700;text-decoration:none;border-radius:12px;">Book a 30-min call</a></p>
-  <p>Or reply to this email with what you are trying to automate.</p>
-  <p>Adrien<br>Yuzu.solutions</p>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanks for trying Yuzu.solutions</title>
+</head>
+<body style="margin:0;padding:0;background-color:#F4F5F5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${BRAND.carbon};">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#F4F5F5;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;background-color:${BRAND.paper};border:1px solid ${BRAND.border};border-radius:16px;overflow:hidden;">
+          <tr>
+            <td align="center" style="padding:28px 32px 20px;background:linear-gradient(180deg, ${BRAND.yuzuLight} 0%, ${BRAND.paper} 100%);border-bottom:1px solid ${BRAND.border};">
+              <a href="${SITE_URL}" style="text-decoration:none;">
+                <img src="${LOGO_URL}" width="220" alt="Yuzu.solutions" style="display:block;border:0;outline:none;max-width:220px;height:auto;">
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:32px 32px 8px;">
+              <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:${BRAND.carbon};">Hi ${firstName},</p>
+              <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:${BRAND.carbon};">
+                Thanks for trying our <strong>opportunity tracker</strong> demo. Your submission is now in the live table on
+                <a href="${SITE_URL}" style="color:${BRAND.yuzuDark};text-decoration:none;font-weight:600;">yuzu.solutions</a>.
+              </p>
+              <p style="margin:0;font-size:16px;line-height:1.6;color:${BRAND.carbon};">
+                In production, the same hook can route leads to your CRM, SharePoint, or internal tracker, notify sales, and enrich company context automatically.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:8px 32px 24px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#FAFDF8;border:1px solid #EEF8E4;border-radius:12px;">
+                <tr>
+                  <td style="padding:20px 22px;">
+                    <p style="margin:0 0 8px;font-size:13px;line-height:1.4;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:${BRAND.zest};">Next step</p>
+                    <p style="margin:0;font-size:15px;line-height:1.6;color:${BRAND.carbon};">
+                      Book a 30-minute call to walk through how intake, routing, and enrichment could fit your stack.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding:0 32px 28px;">
+              <a href="${CALENDLY_URL}" style="display:inline-block;padding:14px 28px;background-color:${BRAND.yuzu};color:${BRAND.carbon};font-size:15px;font-weight:700;line-height:1;text-decoration:none;border-radius:999px;border:1px solid ${BRAND.yuzuDark};">
+                Book a 30-minute call
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 32px 32px;">
+              <p style="margin:0;font-size:15px;line-height:1.6;color:${BRAND.carbonMuted};">
+                Prefer email? Reply with what you are trying to automate and we will take it from there.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:22px 32px;background-color:#FAFAFA;border-top:1px solid ${BRAND.border};">
+              <p style="margin:0 0 6px;font-size:13px;line-height:1.5;color:${BRAND.carbonMuted};">
+                <strong style="color:${BRAND.carbon};">Adrien Yvin</strong> · Founder, Yuzu.solutions
+              </p>
+              <p style="margin:0;font-size:13px;line-height:1.5;color:${BRAND.carbonMuted};">
+                <a href="mailto:info@yuzu.solutions" style="color:${BRAND.yuzuDark};text-decoration:none;">info@yuzu.solutions</a>
+                · <a href="${SITE_URL}" style="color:${BRAND.yuzuDark};text-decoration:none;">yuzu.solutions</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>`;
 }
 
 function buildEmailText(name: string) {
-  const firstName = name.trim().split(/\s+/)[0] || name.trim();
+  const firstName = firstNameFrom(name);
   return [
     `Hi ${firstName},`,
     "",
-    "Thanks for trying the Yuzu opportunity tracker demo on yuzu.solutions. Your submission is in the live table now.",
+    "Thanks for trying our opportunity tracker demo on yuzu.solutions.",
+    "Your submission is now in the live table.",
     "",
-    "If you would like to talk through how this kind of intake, routing, and enrichment fits your stack, book a 30-minute call:",
+    "In production, the same hook can route leads to your CRM, SharePoint, or internal tracker, notify sales, and enrich company context automatically.",
+    "",
+    "Next step: book a 30-minute call to walk through how intake, routing, and enrichment could fit your stack.",
     CALENDLY_URL,
     "",
-    "Or reply to this email with what you are trying to automate.",
+    "Prefer email? Reply with what you are trying to automate.",
     "",
-    "Adrien",
-    "Yuzu.solutions",
+    "Adrien Yvin",
+    "Founder, Yuzu.solutions",
+    "info@yuzu.solutions",
+    SITE_URL,
   ].join("\n");
 }
 
@@ -104,7 +199,7 @@ async function sendFollowUpEmail(name: string, email: string) {
     from: `"Yuzu.solutions" <${from}>`,
     to: email,
     replyTo: from,
-    subject: "Thanks for trying the Yuzu automation demo",
+    subject: "Thanks for trying Yuzu.solutions",
     text: buildEmailText(name),
     html: buildEmailHtml(name),
   });
