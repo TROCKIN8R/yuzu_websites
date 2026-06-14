@@ -16,7 +16,11 @@ body { font-family: var(--font-sans); background-color: var(--color-bg); color: 
 @keyframes dripJuice { 0% { transform: translateY(-20px) scale(0.6); opacity: 0; } 15% { opacity: 0.5; } 85% { opacity: 0.4; } 100% { transform: translateY(110vh) scale(1); opacity: 0; } }
 @keyframes floatBinary { 0% { transform: translate(0, 110vh); opacity: 0; } 10% { opacity: 0.25; } 90% { opacity: 0.2; } 100% { transform: translate(30px, -10vh); opacity: 0; } }
 
-body > *:not(.float-layer):not(nav) { position: relative; z-index: 1; }
+/* Keep main out of an isolated stacking context so backdrop-filter can reach .float-layer */
+body > *:not(.float-layer):not(nav):not(main) { position: relative; z-index: 1; }
+main { position: relative; }
+main > section,
+main > header.hero-fullscreen { position: relative; z-index: 1; }
 nav { position: sticky; }
 
 /* Sticky nav: floats at page top, pins near the viewport edge when scrolling. */
@@ -1198,6 +1202,27 @@ html:has(.hero-fullscreen).nav-past-hero .nav-cta-desktop {
     background: linear-gradient(160deg, var(--paper-100) 0%, var(--yuzu-100) 100%);
 }
 
+/* Frosted glass — matches nav bar (bg-white/50 backdrop-blur-xl …) */
+.glass-surface,
+.founder-section > .max-w-7xl {
+    background: rgb(255 255 255 / 0.5);
+    border: 1px solid rgb(255 255 255 / 0.6);
+    box-shadow:
+        var(--shadow-lg),
+        0 0 0 1px rgb(0 0 0 / 0.05),
+        0 10px 15px -3px color-mix(in srgb, var(--yuzu-200) 40%, transparent);
+}
+.glass-surface {
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+}
+.founder-section > .max-w-7xl {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius-2xl);
+    padding: clamp(2rem, 4vw, 3rem);
+}
+
 /* Founder */
 .founder-section {
     background: transparent;
@@ -1781,11 +1806,11 @@ html:has(.hero-fullscreen).nav-past-hero .nav-cta-desktop {
     border-radius: 0;
 }
 .layout-calm .founder-section .bg-yellow-50 {
-    background: transparent !important;
-    border-left: 0 !important;
-    padding: var(--space-5) 0 0 !important;
-    border-top: 1px solid var(--paper-400);
-    border-radius: 0 !important;
+    background: color-mix(in srgb, var(--yuzu-100) 55%, transparent) !important;
+    border-left: 4px solid var(--yuzu-500) !important;
+    padding: var(--space-4) !important;
+    border-top: 0;
+    border-radius: var(--radius-xl) !important;
 }
 .layout-calm .founder-section .lg\:col-span-7 {
     gap: var(--space-12);
