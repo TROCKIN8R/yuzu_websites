@@ -43,6 +43,15 @@ window.OpportunityTable = {
             .replace(/"/g, '&quot;');
     },
 
+    normalizeStatus(value) {
+        const key = String(value || 'sent').trim().toLowerCase();
+        return key === 'pending' ? 'sent' : key;
+    },
+
+    statusLabel(key) {
+        return key.charAt(0).toUpperCase() + key.slice(1);
+    },
+
     render(instance, entries) {
         const { tbody, limit, highlightName } = instance;
         const rows = entries.slice(0, limit);
@@ -57,13 +66,14 @@ window.OpportunityTable = {
 
         tbody.innerHTML = rows.map((entry) => {
             const isNew = highlightName && entry.name === highlightName;
-            const status = this.escapeHtml(entry.status || 'pending');
+            const statusKey = this.normalizeStatus(entry.status);
+            const statusLabel = this.escapeHtml(this.statusLabel(statusKey));
             return `
                 <tr class="${isNew ? 'opp-row--new' : ''}">
                     <td data-label="When">${this.escapeHtml(this.formatDate(entry.submitted_at))}</td>
                     <td data-label="Name">${this.escapeHtml(entry.name)}</td>
                     <td data-label="Company">${this.escapeHtml(entry.company || '')}</td>
-                    <td data-label="Status"><span class="opp-status opp-status--${status}">${status}</span></td>
+                    <td data-label="Status"><span class="opp-status opp-status--${this.escapeHtml(statusKey)}">${statusLabel}</span></td>
                 </tr>`;
         }).join('');
     },

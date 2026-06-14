@@ -252,7 +252,7 @@ function buildRow(displayName: string, email: string, source: string) {
     domain,
     company_size: "Unknown",
     industry: isFree ? "Personal email" : "Unknown",
-    status: "pending",
+    status: "sent",
     source_note: "Submitted via website form",
     source: source || "yuzu.solutions",
   };

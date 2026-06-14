@@ -12,6 +12,7 @@
     const opportunityPanel = document.getElementById('automation-panel-opportunity');
     const nameInput = document.getElementById('home-opp-name');
     const emailInput = document.getElementById('home-opp-email');
+    const consentInput = document.getElementById('home-opp-consent');
     const limits = data.fieldLimits();
     const captchaRequired = data.isTurnstileConfigured();
     let turnstileWidgetId = null;
@@ -36,17 +37,37 @@
         formStatus.hidden = !message;
     }
 
-    function setSubmitReady(ready) {
-        captchaPassed = Boolean(ready);
+    function hasConsent() {
+        return Boolean(consentInput?.checked);
+    }
+
+    function updateSubmitState(captchaReady) {
+        if (typeof captchaReady === 'boolean') {
+            captchaPassed = captchaReady;
+        }
         if (!submitBtn) return;
 
-        const enabled = !submitting && (!captchaRequired || captchaPassed);
+        const captchaOk = !captchaRequired || captchaPassed;
+        const consentOk = hasConsent();
+        const enabled = !submitting && captchaOk && consentOk;
+
         submitBtn.disabled = !enabled;
         submitBtn.setAttribute('aria-disabled', enabled ? 'false' : 'true');
-        submitBtn.classList.toggle('opp-submit--locked', captchaRequired && !captchaPassed && !submitting);
-        submitBtn.title = captchaRequired && !captchaPassed && !submitting
-            ? 'Complete the security check first'
-            : '';
+
+        let locked = false;
+        let title = '';
+        if (!submitting) {
+            if (!consentOk) {
+                locked = true;
+                title = 'Agree to the follow-up email to continue';
+            } else if (captchaRequired && !captchaPassed) {
+                locked = true;
+                title = 'Complete the security check first';
+            }
+        }
+
+        submitBtn.classList.toggle('opp-submit--locked', locked);
+        submitBtn.title = title;
     }
 
     function isOpportunityPanelVisible() {
@@ -60,7 +81,7 @@
         turnstileWidgetId = null;
         if (turnstileMount) turnstileMount.innerHTML = '';
         captchaPassed = false;
-        setSubmitReady(false);
+        updateSubmitState(false);
     }
 
     function loadTurnstileScript() {
@@ -100,19 +121,19 @@
                 turnstileWidgetId = window.turnstile.render(turnstileMount, {
                     sitekey: siteKey,
                     theme: 'light',
-                    callback: () => setSubmitReady(true),
+                    callback: () => updateSubmitState(true),
                     'expired-callback': () => {
-                        setSubmitReady(false);
+                        updateSubmitState(false);
                         setFormMessage('Security check expired. Please verify again.', 'warn');
                     },
                     'error-callback': () => {
-                        setSubmitReady(false);
+                        updateSubmitState(false);
                         setFormMessage('Security check failed. Refresh and try again.', 'error');
                     }
                 });
             })
             .catch(() => {
-                setSubmitReady(false);
+                updateSubmitState(false);
                 setFormMessage('Captcha could not load. Refresh and try again.', 'error');
             });
     }
@@ -124,11 +145,11 @@
 
     function resetCaptcha() {
         if (!window.turnstile || turnstileWidgetId === null) {
-            setSubmitReady(false);
+            updateSubmitState(false);
             return;
         }
         window.turnstile.reset(turnstileWidgetId);
-        setSubmitReady(false);
+        updateSubmitState(false);
     }
 
     async function handleSubmit(event) {
@@ -173,13 +194,13 @@
         }
 
         if (captchaRequired && !captchaToken) {
-            setSubmitReady(false);
+            updateSubmitState(false);
             setFormMessage('Please complete the security check.', 'error');
             return;
         }
 
         submitting = true;
-        setSubmitReady(false);
+        updateSubmitState(false);
         setFormMessage('Sending…', 'info');
 
         try {
@@ -192,6 +213,7 @@
             );
             form.reset();
             resetCaptcha();
+            updateSubmitState(false);
             table.afterSubmit(tableId, result.row.name);
         } catch (error) {
             const detail = String(error?.message || error);
@@ -213,11 +235,12 @@
             }
         } finally {
             submitting = false;
-            setSubmitReady(captchaPassed && Boolean(getCaptchaToken()));
+            updateSubmitState(captchaPassed && Boolean(getCaptchaToken()));
         }
     }
 
     form.addEventListener('submit', handleSubmit);
+    consentInput?.addEventListener('change', () => updateSubmitState());
 
     document.addEventListener('automation-panel-open', (event) => {
         if (event.detail?.tabId === 'opportunity' && captchaRequired) {
@@ -230,12 +253,11 @@
     });
 
     if (captchaRequired) {
-        setSubmitReady(false);
+        updateSubmitState(false);
         if (isOpportunityPanelVisible()) {
             renderTurnstile();
         }
-    } else if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.setAttribute('aria-disabled', 'false');
+    } else {
+        updateSubmitState(true);
     }
 })();

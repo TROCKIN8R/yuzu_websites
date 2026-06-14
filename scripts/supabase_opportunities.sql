@@ -10,7 +10,7 @@ create table if not exists public.opportunities (
   domain text,
   company_size text,
   industry text,
-  status text not null default 'pending',
+  status text not null default 'sent',
   source_note text,
   source text
 );
