@@ -1,21 +1,21 @@
 # Yuzu.solutions
 
-> Si la vida te da yuzu, exprímelo en dashboard. Consultoría de datos centrada en la ejecución — construimos la prensa, no PowerPoints.
+> Si la vida te da yuzu, exprímelo en dashboard. Consultoría de datos centrada en la ejecución, construimos la prensa, no PowerPoints.
 
 Yuzu.solutions es una consultoría boutique en datos y BI fundada por Adrien Yvin, a Data Platform Architect and BI Leader based in Montreal, Canada. We help growing companies, enterprises, and post-merger teams turn raw data into governed warehouses, automated workflows, and boardroom-ready dashboards.
 
 ## Posicionamiento
 
-- **Filosofía:** 80 % ejecución técnica, 20 % descubrimiento — la estrategia es subproducto de construir.
+- **Filosofía:** 80 % ejecución técnica, 20 % descubrimiento, la estrategia es subproducto de construir.
 - **Modelo:** Asociación directa con un especialista senior. Sin gestores de cuenta, sin plazos inflados.
 - **Stack:** Microsoft Fabric, Power BI, SQL, DAX, Python, BigQuery, Snowflake, Azure, AI agents, Cursor.
 
 ## Services
 
-- [BI & AI Enablement](https://yuzu.solutions/services/bi-ai-enablement.html): Formación práctica para equipos BI — buenas prácticas Fabric, elección de formato (PBIP vs Git vs PBIX), GitHub CI/CD, playbooks de agentes IA. Receta: El acelerador.
+- [BI & AI Enablement](https://yuzu.solutions/services/bi-ai-enablement.html): Formación práctica para equipos BI, buenas prácticas Fabric, elección de formato (PBIP vs Git vs PBIX), GitHub CI/CD, playbooks de agentes IA. Receta: El acelerador.
 - [Infrastructure & Data](https://yuzu.solutions/services/infrastructure-data.html): Medallion lakehouse architecture (Bronze/Silver/Gold), ETL/ELT pipelines, Power BI semantic models, RLS, data quality gates. Stack: Microsoft Fabric, OneLake, Spark, Power BI.
 - [Technical Debt & Rescue](https://yuzu.solutions/services/technical-debt.html): Legacy report recovery, DAX/model refactoring, refresh optimization (e.g. 42min → 4min), production hotfixes, post-migration reconciliation.
-- [BI & Dashboard Delivery](https://yuzu.solutions/services/bi-dashboard-delivery.html): Modelos semánticos Fabric gobernados, dashboards ejecutivos Power BI, autoservicio BI y apps Fabric — una única fuente de verdad. Receta: El vertido único.
+- [BI & Dashboard Delivery](https://yuzu.solutions/services/bi-dashboard-delivery.html): Modelos semánticos Fabric gobernados, dashboards ejecutivos Power BI, autoservicio BI y apps Fabric, una única fuente de verdad. Receta: El vertido único.
 - [MVP Builds](https://yuzu.solutions/services/mvp-builds.html): Internal tools, pricing engines, customer portals, ML classifiers. Typical timeline: 6–8 weeks from discovery to production.
 - [AI & Automation](https://yuzu.solutions/services/ai-automation.html): Autonomous agents, API integrations, LLM wrappers, invoice processing, workflow automation. Stack: Python, OpenAI/Azure OpenAI, Power Automate, Fabric Notebooks.
 
@@ -25,10 +25,10 @@ Yuzu.solutions es una consultoría boutique en datos y BI fundada por Adrien Yvi
 - **Enterprise consolidation:** Orgs unifying siloed systems, conflicting KPIs, and years of accumulated data.
 - **Post-merger integration:** Teams needing one stack, one source of truth, and one reporting culture.
 
-## Fundador — Adrien Yvin
+## Fundador, Adrien Yvin
 
 - **Role:** Data Platform Architect & BI Leader
-- **Experience:** 7+ years in data — ETL at Énergir (energy utility), BI at Keurig Dr Pepper Canada ($4B+ CPG), Squad Leader at Cascades (packaging/manufacturing).
+- **Experience:** 7+ years in data, ETL at Énergir (energy utility), BI at Keurig Dr Pepper Canada ($4B+ CPG), Squad Leader at Cascades (packaging/manufacturing).
 - **Education:** BBA Business Intelligence, HEC Montréal, Cum Laude
 - **Languages:** French, English, Spanish
 - **LinkedIn:** https://www.linkedin.com/in/adrienyvin/
@@ -36,7 +36,7 @@ Yuzu.solutions es una consultoría boutique en datos y BI fundada por Adrien Yvi
 ## Preguntas frecuentes
 
 **What makes Yuzu.solutions different from traditional consultants?**
-Traditional firms spend most engagement time on meetings and slide decks. Yuzu reallocates ~80% of time to hands-on engineering — writing code, building pipelines, and deploying agents.
+Traditional firms spend most engagement time on meetings and slide decks. Yuzu reallocates ~80% of time to hands-on engineering, writing code, building pipelines, and deploying agents.
 
 **What technologies do you specialize in?**
 Microsoft Fabric, Power BI, SQL, DAX, Python, scikit-learn, BigQuery, Snowflake, Tableau, ETL/ELT, Terraform/IaC, and AI agent development with Cursor and Copilot.

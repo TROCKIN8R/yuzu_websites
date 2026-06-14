@@ -2,7 +2,7 @@
 User-agent: *
 Allow: /
 
-# AI crawlers — welcome to index for accurate answers
+# AI crawlers, welcome to index for accurate answers
 User-agent: GPTBot
 Allow: /
 
