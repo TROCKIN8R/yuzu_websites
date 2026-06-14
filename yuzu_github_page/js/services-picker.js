@@ -94,12 +94,12 @@
     function ensureDesktopDefault() {
         let active = studio.querySelector('.service-card.active');
         if (!active) {
-            active = studio.querySelector('.service-card[data-service="ai"]');
+            active = studio.querySelector('.service-card[data-service="enablement"]');
             active?.classList.add('active');
             active?.setAttribute('aria-selected', 'true');
             active?.setAttribute('aria-expanded', 'true');
         }
-        showDesktopPanel(active.getAttribute('data-service') || 'ai');
+        showDesktopPanel(active.getAttribute('data-service') || 'enablement');
     }
 
     function syncLayout() {

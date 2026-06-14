@@ -12,10 +12,12 @@ Yuzu.solutions es una consultoría boutique en datos y BI fundada por Adrien Yvi
 
 ## Services
 
-- [AI & Automation](https://yuzu.solutions/services/ai-automation.html): Autonomous agents, API integrations, LLM wrappers, invoice processing, workflow automation. Stack: Python, OpenAI/Azure OpenAI, Power Automate, Fabric Notebooks.
+- [BI & AI Enablement](https://yuzu.solutions/services/bi-ai-enablement.html): Formación práctica para equipos BI — buenas prácticas Fabric, elección de formato (PBIP vs Git vs PBIX), GitHub CI/CD, playbooks de agentes IA. Receta: El acelerador.
 - [Infrastructure & Data](https://yuzu.solutions/services/infrastructure-data.html): Medallion lakehouse architecture (Bronze/Silver/Gold), ETL/ELT pipelines, Power BI semantic models, RLS, data quality gates. Stack: Microsoft Fabric, OneLake, Spark, Power BI.
 - [Technical Debt & Rescue](https://yuzu.solutions/services/technical-debt.html): Legacy report recovery, DAX/model refactoring, refresh optimization (e.g. 42min → 4min), production hotfixes, post-migration reconciliation.
+- [BI & Dashboard Delivery](https://yuzu.solutions/services/bi-dashboard-delivery.html): Modelos semánticos Fabric gobernados, dashboards ejecutivos Power BI, autoservicio BI y apps Fabric — una única fuente de verdad. Receta: El vertido único.
 - [MVP Builds](https://yuzu.solutions/services/mvp-builds.html): Internal tools, pricing engines, customer portals, ML classifiers. Typical timeline: 6–8 weeks from discovery to production.
+- [AI & Automation](https://yuzu.solutions/services/ai-automation.html): Autonomous agents, API integrations, LLM wrappers, invoice processing, workflow automation. Stack: Python, OpenAI/Azure OpenAI, Power Automate, Fabric Notebooks.
 
 ## Con quién trabajamos
 
