@@ -120,6 +120,8 @@
         /* Page-specific components — all values resolve to design tokens. */
         .lime-text { color: var(--zest-600); }
         .yuzu-card:hover { transform: translateY(-5px); }
+        .layout-calm .yuzu-card:hover,
+        .layout-calm .vision-step:hover { transform: none; }
 
         /* Hero headline — fluid size that holds the sentence to two lines on desktop */
         @media (min-width: 768px) {
@@ -221,7 +223,7 @@
 
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col layout-calm">
 
 <!-- Floating lemons, juice drops & binary bits -->
 <div class="float-layer" aria-hidden="true" id="floatLayer"></div>
@@ -274,12 +276,17 @@
                         </div>
                     </div>
                 </div>
-                <a href="#founder" class="nav-pill-item">Founder</a>
+                <a href="#founder" class="nav-pill-item">Our Team</a>
             </div>
         </div>
 
         <div class="nav-bar-end">
-<a href="https://calendly.com/adrienyvin/30min" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap" target="_blank" rel="noopener noreferrer">Get Started</a>
+            <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
+                <a href="/" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
+                <a href="/fr/" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+            </div>
+            <a href="https://calendly.com/adrienyvin/30min" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap" target="_blank" rel="noopener noreferrer">Get Started</a>
             <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNavPanel">
                 <span class="nav-hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span>
             </button>
@@ -326,7 +333,7 @@
                     </div>
                 </a>
             </div>
-            <a href="#founder" class="mobile-nav-link">Founder</a>
+            <a href="#founder" class="mobile-nav-link">Our Team</a>
             <div class="mobile-nav-footer">
                 <div class="lang-switch sm:hidden" role="navigation" aria-label="Language">
                 <a href="/" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
@@ -343,13 +350,16 @@
 <header class="hero-fullscreen flex items-center px-6 py-12">
     <div class="grid md:grid-cols-2 gap-12 items-center max-w-7xl mx-auto w-full">
         <div>
-            <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">Let's find the answers that you need</span>
+            <span class="hero-eyebrow text-yellow-600 font-bold uppercase tracking-widest text-sm">Let's find the answers that you need</span>
             <h1 class="hero-title text-6xl font-extrabold mt-4 leading-[0.9]">
                 If life gives you <span class="text-yellow-500">Yuzu</span>,<br>
-                extract, transform and load it!
+                <span class="hero-rotate" data-phrases="extract| it!,transform| it!,load| it!,automate| it!,AI| it?">
+                    <span class="hero-rotate-slot"><span class="hero-rotate-line"><span class="hero-rotate-word text-lime-600">extract</span><span class="hero-rotate-suffix"> it!</span></span></span>
+                </span>
             </h1>
-            <p class="text-lg mt-8 text-stone-500 max-w-md">We turn raw, complex data into refreshing, automated insights.</p>
-            <div class="mt-10 flex flex-wrap gap-4">
+            <span id="hero-rotate-live" class="hero-rotate-live" aria-live="polite" aria-atomic="true">extract it!</span>
+            <p class="hero-lead text-lg mt-8 text-stone-500 max-w-md">We turn raw, complex data into refreshing, automated insights.</p>
+            <div class="hero-actions mt-10 flex flex-wrap gap-4">
                 <a href="https://calendly.com/adrienyvin/30min" class="px-8 py-4 bg-yellow-500 text-white font-bold rounded-2xl hover:bg-yellow-600 transition" target="_blank" rel="noopener noreferrer">Get Started</a>
                 <a href="mailto:adrienyvin@gmail.com?subject=Consulting%20inquiry%20from%20Yuzu.solutions" class="px-8 py-4 bg-lime-600 text-white font-bold rounded-2xl hover:bg-lime-700 transition">Contact Us</a>
             </div>
@@ -362,20 +372,17 @@
 
 <section id="vision" class="vision-section py-20 px-6">
     <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-14">
-        <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🍋 Our Vision</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-3">Extracting <span class="text-yellow-500">Value</span></h2>
-        <p class="mt-3 text-lg text-stone-500 max-w-2xl mx-auto">Raw data is just a crate of lemons. Our vision is simple — extract what matters, refine it until it's clear, and serve it in a glass you actually want to drink. That's ETL, the Yuzu way.</p>
-    </div>
+    <header class="section-intro">
+        <span class="section-eyebrow">🍋 Our Vision</span>
+        <h2 class="section-title">Extracting <span class="text-yellow-500">Value</span></h2>
+        <p class="section-lead">Raw data is just a crate of lemons. Our vision is simple — extract what matters, refine it until it's clear, and serve it in a glass you actually want to drink. That's ETL, the Yuzu way.</p>
+    </header>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
         <!-- Extract -->
-        <div class="vision-step yuzu-card p-7 rounded-3xl relative flex flex-col">
-            <div class="flex items-center justify-between mb-5">
-                <span class="vision-letter">E</span>
-                <span class="text-xs font-bold uppercase tracking-widest text-yellow-700 bg-yellow-50 px-3 py-1 rounded-full">Extract</span>
-            </div>
-            <div class="vision-visual mb-5">
+        <div class="vision-step yuzu-card relative flex flex-col">
+            <p class="step-label"><span class="vision-letter" aria-hidden="true">E</span> Extract</p>
+            <div class="vision-visual mb-6">
                 <svg viewBox="0 0 220 170" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Squeezing a lemon half on a reamer, juice dripping into a beaker">
                     <defs>
                         <linearGradient id="vznExLemon" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FEF08A"/><stop offset="100%" stop-color="#EAB308"/></linearGradient>
@@ -422,18 +429,15 @@
                     <line x1="92" y1="110" x2="98" y2="146" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.55"/>
                 </svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900">Squeeze the lemons</h3>
-            <p class="mt-2 text-stone-600 leading-relaxed">We pull raw data from every source — databases, APIs, spreadsheets, that one crusty legacy system. Every lemon goes into the press. Nothing useful left behind.</p>
+            <h3 class="block-title text-xl font-bold text-gray-900">Squeeze the lemons</h3>
+            <p class="block-body mt-3 text-stone-600 leading-relaxed">We pull raw data from every source — databases, APIs, spreadsheets, that one crusty legacy system. Every lemon goes into the press. Nothing useful left behind.</p>
             <span class="vision-arrow" aria-hidden="true">→</span>
         </div>
 
         <!-- Transform -->
-        <div class="vision-step yuzu-card p-7 rounded-3xl relative flex flex-col">
-            <div class="flex items-center justify-between mb-5">
-                <span class="vision-letter">T</span>
-                <span class="text-xs font-bold uppercase tracking-widest text-yellow-700 bg-yellow-50 px-3 py-1 rounded-full">Transform</span>
-            </div>
-            <div class="vision-visual mb-5">
+        <div class="vision-step yuzu-card relative flex flex-col">
+            <p class="step-label"><span class="vision-letter" aria-hidden="true">T</span> Transform</p>
+            <div class="vision-visual mb-6">
                 <svg viewBox="0 0 220 170" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Raw juice and ingredients filtered through a funnel into clean lemonade">
                     <defs>
                         <linearGradient id="vznTrLemon" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FEF08A"/><stop offset="100%" stop-color="#EAB308"/></linearGradient>
@@ -471,18 +475,15 @@
                     <circle cx="122" cy="144" r="2" fill="#FDE047" class="svc-pulse" style="animation-delay:.7s"/>
                 </svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900">Filter, blend &amp; sweeten</h3>
-            <p class="mt-2 text-stone-600 leading-relaxed">Pulp out, sugar in. We clean, filter, join and reshape the raw juice — fixing types, killing duplicates, and adding the business logic that makes it actually taste good.</p>
+            <h3 class="block-title text-xl font-bold text-gray-900">Filter, blend &amp; sweeten</h3>
+            <p class="block-body mt-3 text-stone-600 leading-relaxed">Pulp out, sugar in. We clean, filter, join and reshape the raw juice — fixing types, killing duplicates, and adding the business logic that makes it actually taste good.</p>
             <span class="vision-arrow" aria-hidden="true">→</span>
         </div>
 
         <!-- Load -->
-        <div class="vision-step yuzu-card p-7 rounded-3xl relative flex flex-col">
-            <div class="flex items-center justify-between mb-5">
-                <span class="vision-letter">L</span>
-                <span class="text-xs font-bold uppercase tracking-widest text-yellow-700 bg-yellow-50 px-3 py-1 rounded-full">Load</span>
-            </div>
-            <div class="vision-visual mb-5">
+        <div class="vision-step yuzu-card relative flex flex-col">
+            <p class="step-label"><span class="vision-letter" aria-hidden="true">L</span> Load</p>
+            <div class="vision-visual mb-6">
                 <svg viewBox="0 0 220 170" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="A tall glass of fresh lemonade served next to a small dashboard chart">
                     <defs>
                         <linearGradient id="vznLdLemon" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FEF08A"/><stop offset="100%" stop-color="#EAB308"/></linearGradient>
@@ -529,8 +530,8 @@
                     <circle cx="192" cy="92" r="2.4" fill="#84CC16" stroke="#3F6212" stroke-width="0.8" class="svc-pulse"/>
                 </svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-900">Serve it in the perfect glass</h3>
-            <p class="mt-2 text-stone-600 leading-relaxed">The finished juice is poured into a polished glass — a governed warehouse and dashboards your team can drink from. Clear, fresh, and ready for decisions.</p>
+            <h3 class="block-title text-xl font-bold text-gray-900">Serve it in the perfect glass</h3>
+            <p class="block-body mt-3 text-stone-600 leading-relaxed">The finished juice is poured into a polished glass — a governed warehouse and dashboards your team can drink from. Clear, fresh, and ready for decisions.</p>
         </div>
     </div>
 
@@ -578,38 +579,38 @@
 </section>
 
 <section id="clients" class="py-16 px-6 max-w-7xl mx-auto">
-    <div class="text-center mb-10">
-        <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🍋 Right Fruit, Right Press</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-3">Who We Work With</h2>
-        <p class="mt-3 text-lg text-stone-500 max-w-2xl mx-auto">Whether you're squeezing your first warehouse or wringing sense out of a decade of spreadsheets — we've got the juicer for that.</p>
-    </div>
+    <header class="section-intro">
+        <span class="section-eyebrow">🍋 Right Fruit, Right Press</span>
+        <h2 class="section-title">Who We Work With</h2>
+        <p class="section-lead">Whether you're squeezing your first warehouse or wringing sense out of a decade of spreadsheets — we've got the juicer for that.</p>
+    </header>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="yuzu-card p-8 rounded-3xl">
-            <div class="text-4xl mb-4">🌱</div>
-            <h3 class="text-xl font-bold text-gray-900">Growing Companies</h3>
-            <p class="mt-3 text-stone-600 leading-relaxed">SMBs outgrowing Excel, ready for their first warehouse and governed reporting. Time to trade the squeeze-by-hand for a real press.</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+        <div class="client-item">
+            <div class="client-icon text-3xl mb-5" aria-hidden="true">🌱</div>
+            <h3 class="block-title text-xl font-bold text-gray-900">Growing Companies</h3>
+            <p class="block-body mt-4 text-stone-600 leading-relaxed">SMBs outgrowing Excel, ready for their first warehouse and governed reporting. Time to trade the squeeze-by-hand for a real press.</p>
         </div>
-        <div class="yuzu-card p-8 rounded-3xl">
-            <div class="text-4xl mb-4">🏢</div>
-            <h3 class="text-xl font-bold text-gray-900">Enterprise Consolidation</h3>
-            <p class="mt-3 text-stone-600 leading-relaxed">Larger orgs unifying siloed systems, conflicting KPIs, and years of accumulated data. One orchard, one juice standard.</p>
+        <div class="client-item">
+            <div class="client-icon text-3xl mb-5" aria-hidden="true">🏢</div>
+            <h3 class="block-title text-xl font-bold text-gray-900">Enterprise Consolidation</h3>
+            <p class="block-body mt-4 text-stone-600 leading-relaxed">Larger orgs unifying siloed systems, conflicting KPIs, and years of accumulated data. One orchard, one juice standard.</p>
         </div>
-        <div class="yuzu-card p-8 rounded-3xl">
-            <div class="text-4xl mb-4">🤝</div>
-            <h3 class="text-xl font-bold text-gray-900">Post-Merger Integration</h3>
-            <p class="mt-3 text-stone-600 leading-relaxed">Merging teams that need one stack, one source of truth, and one reporting culture. Two groves, one blend — no pulp left behind.</p>
+        <div class="client-item">
+            <div class="client-icon text-3xl mb-5" aria-hidden="true">🤝</div>
+            <h3 class="block-title text-xl font-bold text-gray-900">Post-Merger Integration</h3>
+            <p class="block-body mt-4 text-stone-600 leading-relaxed">Merging teams that need one stack, one source of truth, and one reporting culture. Two groves, one blend — no pulp left behind.</p>
         </div>
     </div>
 </section>
 
 <section id="services" class="services-section py-20 px-6">
     <div class="max-w-7xl mx-auto">
-        <div id="our-recipes" class="services-header text-center mb-14">
-            <span class="services-eyebrow">🍋 Our Recipes</span>
-            <h2 class="services-title">What We <span class="services-accent">Do</span></h2>
-            <p class="services-lead">Explore our core engineering capabilities below. Select a technical pillar to see how we replace manual labor with scalable systems — and the exact deliverables you receive.</p>
-        </div>
+        <header id="our-recipes" class="section-intro services-header">
+            <span class="section-eyebrow services-eyebrow">🍋 Our Recipes</span>
+            <h2 class="section-title services-title">What We <span class="services-accent">Do</span></h2>
+            <p class="section-lead services-lead">Explore our core engineering capabilities below. Select a technical pillar to see how we replace manual labor with scalable systems — and the exact deliverables you receive.</p>
+        </header>
 
         <div class="services-studio">
             <div class="services-menu" role="tablist" aria-label="Service categories">
@@ -676,10 +677,10 @@
         </div>
 
         <div class="services-kpi-strip" aria-labelledby="services-kpi-heading">
-            <div class="services-kpi-header">
-                <span class="services-kpi-eyebrow">🍋 By the Numbers</span>
-                <h3 id="services-kpi-heading" class="services-kpi-title">Impact across client deployments</h3>
-            </div>
+            <header class="subsection-intro services-kpi-header">
+                <span class="subsection-eyebrow services-kpi-eyebrow">🍋 For the ones always looking for numbers</span>
+                <h3 id="services-kpi-heading" class="subsection-title services-kpi-title">Impact across client deployments</h3>
+            </header>
             <div class="services-kpi-grid">
                 <article class="services-kpi-card">
                     <span class="services-kpi-icon" aria-hidden="true">👥</span>
@@ -724,39 +725,27 @@
 
 <section id="process" class="squeeze-section py-20 px-6">
     <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-14">
-            <span class="squeeze-eyebrow">🍋 From lemon to lemonade</span>
-            <h2 class="squeeze-title">How We <span class="squeeze-accent">Work</span></h2>
-            <p class="squeeze-lead">No account managers. No bloated timelines. Just direct technical partnership focused on clean execution.</p>
-        </div>
+        <header class="section-intro">
+            <span class="section-eyebrow squeeze-eyebrow">🍋 From lemon to lemonade</span>
+            <h2 class="section-title squeeze-title">How We <span class="squeeze-accent">Work</span></h2>
+            <p class="section-lead squeeze-lead">No account managers. No bloated timelines. Just direct technical partnership focused on clean execution.</p>
+        </header>
 
         <div class="squeeze-grid">
             <article class="squeeze-pillar">
-                <div class="squeeze-pillar-top">
-                    <span class="squeeze-step">1</span>
-                    <span class="squeeze-badge">Direct</span>
-                </div>
-                <div class="squeeze-icon" aria-hidden="true">🎯</div>
+                <p class="step-label">Step 1</p>
                 <h3>Direct</h3>
                 <p>You deal with me, not a middleman with a fancy suit. Direct communication with the engineer building your systems ensures requirements are never lost in translation.</p>
             </article>
 
             <article class="squeeze-pillar">
-                <div class="squeeze-pillar-top">
-                    <span class="squeeze-step">2</span>
-                    <span class="squeeze-badge">Clean</span>
-                </div>
-                <div class="squeeze-icon" aria-hidden="true">⚡</div>
+                <p class="step-label">Step 2</p>
                 <h3>Clean</h3>
                 <p>I provide documented, maintainable code with standard CI/CD. I build systems that run themselves, so you don't have to babysit them after deployment.</p>
             </article>
 
             <article class="squeeze-pillar squeeze-pillar--featured">
-                <div class="squeeze-pillar-top">
-                    <span class="squeeze-step">3</span>
-                    <span class="squeeze-badge">Integrated</span>
-                </div>
-                <div class="squeeze-icon" aria-hidden="true">🍋</div>
+                <p class="step-label">Step 3</p>
                 <h3>Integrated</h3>
                 <p>When I propose a solution, the roadmap comes for free. You aren't paying for a plan; you're paying for the juice. Strategy is the natural byproduct of technical mastery.</p>
             </article>
@@ -766,20 +755,28 @@
 
 <section id="founder" class="founder-section py-20 px-6">
     <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-14">
-            <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🍋 The Head Squeezer</span>
-            <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-3">About the Founder</h2>
-            <p class="mt-4 text-lg text-stone-500 max-w-2xl mx-auto">One senior specialist, zero middlemen, and a serious grudge against zest-less dashboards.</p>
-        </div>
+        <header class="section-intro">
+            <span class="section-eyebrow">🍋 The Head Squeezer</span>
+            <h2 class="section-title">Our Team</h2>
+            <p class="section-lead">One senior specialist, zero middlemen, and a serious grudge against zest-less dashboards.</p>
+        </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
             <!-- Founder identity card -->
-            <div class="lg:col-span-5 yuzu-card p-8 rounded-3xl shadow-xl shadow-yellow-100 flex flex-col">
-                <div class="flex items-center gap-5">
-                    <img src="assets/adrien-yvin.jpg" alt="Adrien Yvin — Data Platform Architect and founder of Yuzu.solutions" width="80" height="80" class="w-20 h-20 rounded-2xl object-cover border-2 border-yellow-300 shadow-md shrink-0">
-                    <div>
-                        <h3 class="text-2xl font-extrabold text-gray-900">Adrien Yvin</h3>
-                        <p class="text-yellow-700 font-semibold">Data Platform Architect &amp; BI Leader</p>
+            <div class="lg:col-span-5 founder-intro flex flex-col">
+                <div class="profile-header">
+                    <img src="assets/adrien-yvin.jpg" alt="Adrien Yvin — Data Platform Architect and founder of Yuzu.solutions" width="80" height="80" class="profile-photo w-20 h-20 rounded-2xl object-cover border-2 border-yellow-300 shadow-md">
+                    <div class="profile-identity">
+                        <h3 class="profile-name text-2xl font-extrabold text-gray-900">Adrien Yvin</h3>
+                        <p class="profile-role text-yellow-700 font-semibold mt-1">Data Platform Architect &amp; BI Leader</p>
+                    </div>
+                    <div class="profile-links">
+                        <a href="https://www.linkedin.com/in/adrienyvin/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white font-semibold rounded-full hover:bg-gray-700 transition">
+                            <span>in</span> LinkedIn
+                        </a>
+                        <span class="px-3 py-1.5 rounded-full bg-white border border-yellow-200 text-sm font-bold text-yellow-700">FR</span>
+                        <span class="px-3 py-1.5 rounded-full bg-white border border-yellow-200 text-sm font-bold text-yellow-700">EN</span>
+                        <span class="px-3 py-1.5 rounded-full bg-white border border-yellow-200 text-sm font-bold text-yellow-700">ES</span>
                     </div>
                 </div>
 
@@ -794,40 +791,29 @@
                     <span class="text-xl">🎓</span>
                     <p class="text-sm text-stone-700"><strong>BBA, Business Intelligence</strong> · HEC Montréal · <em>Cum Laude</em></p>
                 </div>
-
-                <div class="mt-auto pt-6 flex flex-wrap items-center gap-3">
-                    <a href="https://www.linkedin.com/in/adrienyvin/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white font-semibold rounded-full hover:bg-gray-700 transition">
-                        <span>in</span> LinkedIn
-                    </a>
-                    <div class="flex items-center gap-2">
-                        <span class="px-3 py-1.5 rounded-full bg-white border border-yellow-200 text-sm font-bold text-yellow-700">FR</span>
-                        <span class="px-3 py-1.5 rounded-full bg-white border border-yellow-200 text-sm font-bold text-yellow-700">EN</span>
-                        <span class="px-3 py-1.5 rounded-full bg-white border border-yellow-200 text-sm font-bold text-yellow-700">ES</span>
-                    </div>
-                </div>
             </div>
 
             <!-- Stats, timeline & stack -->
             <div class="lg:col-span-7 flex flex-col gap-8">
                 <!-- Stats -->
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="yuzu-card p-6 rounded-2xl text-center">
+                <div class="founder-stats">
+                    <div class="founder-stat">
                         <div class="text-4xl font-extrabold text-yellow-500">7</div>
                         <div class="mt-1 text-sm font-semibold text-stone-500 uppercase tracking-wide">Years in Data</div>
                     </div>
-                    <div class="yuzu-card p-6 rounded-2xl text-center">
+                    <div class="founder-stat">
                         <div class="text-4xl font-extrabold text-yellow-500">4</div>
                         <div class="mt-1 text-sm font-semibold text-stone-500 uppercase tracking-wide">Companies</div>
                     </div>
-                    <div class="yuzu-card p-6 rounded-2xl text-center">
+                    <div class="founder-stat">
                         <div class="text-4xl font-extrabold text-yellow-500">3</div>
                         <div class="mt-1 text-sm font-semibold text-stone-500 uppercase tracking-wide">Languages</div>
                     </div>
                 </div>
 
                 <!-- Experience timeline -->
-                <div class="yuzu-card p-8 rounded-2xl">
-                    <h4 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2"><span>🧃</span> Experience</h4>
+                <div class="founder-panel">
+                    <h4 class="panel-title text-xl font-bold text-gray-900 mb-8 flex items-center gap-2"><span aria-hidden="true">🧃</span> Experience</h4>
                     <ol class="relative border-l-2 border-yellow-200 ml-3 space-y-6">
                         <li class="pl-6 relative">
                             <span class="absolute -left-[11px] top-1 w-5 h-5 rounded-full yuzu-gradient border-2 border-white shadow"></span>
@@ -857,8 +843,8 @@
                 </div>
 
                 <!-- Core stack -->
-                <div class="yuzu-card p-8 rounded-2xl">
-                    <h4 class="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2"><span>⚙️</span> Core Stack</h4>
+                <div class="founder-panel">
+                    <h4 class="panel-title text-xl font-bold text-gray-900 mb-6 flex items-center gap-2"><span aria-hidden="true">⚙️</span> Core Stack</h4>
                     <div class="flex flex-wrap gap-2.5">
                         <span class="px-4 py-2 rounded-full yuzu-bg text-yellow-900 font-semibold text-sm">Power BI</span>
                         <span class="px-4 py-2 rounded-full yuzu-bg text-yellow-900 font-semibold text-sm">Microsoft Fabric</span>
@@ -880,21 +866,23 @@
 </section>
 
 <section id="faq" class="py-16 px-6 max-w-3xl mx-auto" aria-labelledby="faq-heading">
-    <h2 id="faq-heading" class="text-3xl font-extrabold text-gray-900 text-center mb-10">Common Questions</h2>
-    <div class="space-y-4">
-        <details class="yuzu-card rounded-2xl p-6 group">
+    <header class="section-intro">
+        <h2 id="faq-heading" class="section-title">Common Questions</h2>
+    </header>
+    <div class="faq-list space-y-4">
+        <details class="faq-item group">
             <summary class="font-bold text-gray-900 cursor-pointer list-none flex justify-between items-center">What makes Yuzu.solutions different from traditional consultants?<span class="text-yellow-600 group-open:rotate-180 transition-transform">▾</span></summary>
             <p class="mt-4 text-stone-600 leading-relaxed">We spend roughly 80% of engagement time on hands-on engineering — building pipelines, writing code, and deploying agents — rather than meetings and slide decks. Strategy emerges from execution, not the other way around.</p>
         </details>
-        <details class="yuzu-card rounded-2xl p-6 group">
+        <details class="faq-item group">
             <summary class="font-bold text-gray-900 cursor-pointer list-none flex justify-between items-center">What services do you offer?<span class="text-yellow-600 group-open:rotate-180 transition-transform">▾</span></summary>
             <p class="mt-4 text-stone-600 leading-relaxed">Four core pillars: <a href="services/ai-automation.html" class="text-yellow-700 font-semibold hover:underline">AI &amp; Automation</a>, <a href="services/infrastructure-data.html" class="text-yellow-700 font-semibold hover:underline">Infrastructure &amp; Data</a>, <a href="services/technical-debt.html" class="text-yellow-700 font-semibold hover:underline">Technical Debt &amp; Rescue</a>, and <a href="services/mvp-builds.html" class="text-yellow-700 font-semibold hover:underline">MVP Builds</a>.</p>
         </details>
-        <details class="yuzu-card rounded-2xl p-6 group">
+        <details class="faq-item group">
             <summary class="font-bold text-gray-900 cursor-pointer list-none flex justify-between items-center">What technologies do you specialize in?<span class="text-yellow-600 group-open:rotate-180 transition-transform">▾</span></summary>
             <p class="mt-4 text-stone-600 leading-relaxed">Microsoft Fabric, Power BI, SQL, DAX, Python, scikit-learn, BigQuery, Snowflake, Tableau, ETL/ELT, Terraform/IaC, and AI agent development with Cursor and Copilot.</p>
         </details>
-        <details class="yuzu-card rounded-2xl p-6 group">
+        <details class="faq-item group">
             <summary class="font-bold text-gray-900 cursor-pointer list-none flex justify-between items-center">Who do you work with?<span class="text-yellow-600 group-open:rotate-180 transition-transform">▾</span></summary>
             <p class="mt-4 text-stone-600 leading-relaxed">Growing SMBs graduating from Excel, enterprises consolidating siloed data systems, and post-merger teams needing one stack, one source of truth, and one reporting culture.</p>
         </details>
@@ -917,7 +905,7 @@
                 <ul>
                     <li><a href="#vision">Vision</a></li>
                     <li><a href="#our-recipes">Services</a></li>
-                    <li><a href="#founder">Founder</a></li>
+                    <li><a href="#founder">Our Team</a></li>
                     <li><a href="#faq">FAQ</a></li>
                 </ul>
             </nav>
@@ -943,6 +931,7 @@
 
 <script src="js/services-picker.js"></script>
 <script src="js/nav.js"></script>
+<script src="js/hero-rotate.js"></script>
 <script>
     const svcDefs = `<defs>
         <linearGradient id="svcLemon" x1="0" y1="0" x2="1" y2="1">

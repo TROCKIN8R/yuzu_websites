@@ -49,7 +49,7 @@ Montreal, Quebec, Canada. Remote-friendly across North America.
 
 - Accueil : https://yuzu.solutions/fr/
 - Services overview: https://yuzu.solutions/#services
-- About the founder: https://yuzu.solutions/#founder
+- About our team: https://yuzu.solutions/#founder
 - FAQ: https://yuzu.solutions/#faq
 - Sitemap: https://yuzu.solutions/sitemap.xml
 - Résumé LLM : https://yuzu.solutions/llms-fr.txt
