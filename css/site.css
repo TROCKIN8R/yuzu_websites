@@ -2502,7 +2502,7 @@ html:has(.hero-fullscreen).nav-past-hero .nav-cta-desktop {
     letter-spacing: 0.05em;
 }
 .opp-status--researched { color: var(--zest-600); }
-.opp-status--pending { color: var(--carbon-400); }
+.opp-status--sent { color: var(--carbon-400); }
 @media (max-width: 767px) {
     .opp-table thead { display: none; }
     .opp-table tr {
