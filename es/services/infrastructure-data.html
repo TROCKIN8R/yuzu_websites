@@ -215,7 +215,7 @@
         <span class="text-yellow-600 font-bold uppercase tracking-widest text-sm">🏗️ El núcleo</span>
         <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mt-2">Infraestructura y datos</h1>
         <p class="mt-4 text-lg text-stone-600 max-w-3xl leading-relaxed">
-            Construimos la columna vertebral — lakehouses Microsoft Fabric, capas medallion, modelos semánticos gobernados y pipelines ETL que no fallan a fin de mes. Datos transaccionales crudos entran, KPI listos para la junta salen.
+            Construimos la columna vertebral, lakehouses Microsoft Fabric, capas medallion, modelos semánticos gobernados y pipelines ETL que no fallan a fin de mes. Datos transaccionales crudos entran, KPI listos para la junta salen.
         </p>
     </header>
 
@@ -256,17 +256,17 @@
             <div class="mock-body">
                 <div class="arch-layers max-w-xl mx-auto">
                     <div class="arch-layer gold">
-                        <div><div class="layer-name">🥇 Gold — Semantic &amp; Reports</div><div class="layer-items">dim_customer · fact_sales · rpt_executive_kpi · rpt_otif</div></div>
+                        <div><div class="layer-name">🥇 Gold, Semantic &amp; Reports</div><div class="layer-items">dim_customer · fact_sales · rpt_executive_kpi · rpt_otif</div></div>
                         <span class="text-xs font-bold text-yellow-700">12 tables</span>
                     </div>
                     <div class="text-center text-yellow-600 font-bold text-lg">↓</div>
                     <div class="arch-layer silver">
-                        <div><div class="layer-name">🥈 Silver — Cleaned &amp; Conformed</div><div class="layer-items">orders_cleansed · shipments_matched · pricing_enriched</div></div>
+                        <div><div class="layer-name">🥈 Silver, Cleaned &amp; Conformed</div><div class="layer-items">orders_cleansed · shipments_matched · pricing_enriched</div></div>
                         <span class="text-xs font-bold text-stone-500">28 tables</span>
                     </div>
                     <div class="text-center text-stone-400 font-bold text-lg">↓</div>
                     <div class="arch-layer bronze">
-                        <div><div class="layer-name">🥉 Bronze — Raw Landing</div><div class="layer-items">sap_orders · crm_accounts · wms_shipments · erp_invoices</div></div>
+                        <div><div class="layer-name">🥉 Bronze, Raw Landing</div><div class="layer-items">sap_orders · crm_accounts · wms_shipments · erp_invoices</div></div>
                         <span class="text-xs font-bold text-yellow-800">47 sources</span>
                     </div>
                 </div>
@@ -289,8 +289,8 @@
                     <tr><td>bronze_ingest_sap</td><td>Today 14:45</td><td>3m 12s</td><td>142,891</td><td>142,891</td><td><span class="status-pill ok">Succeeded</span></td></tr>
                     <tr><td>silver_orders_match</td><td>Today 14:48</td><td>1m 44s</td><td>142,891</td><td>138,204</td><td><span class="status-pill ok">Succeeded</span></td></tr>
                     <tr><td>gold_fact_sales</td><td>Today 14:50</td><td>52s</td><td>138,204</td><td>12,847</td><td><span class="status-pill ok">Succeeded</span></td></tr>
-                    <tr><td>dq_vendor_null_check</td><td>Today 14:50</td><td>8s</td><td>—</td><td>3 warnings</td><td><span class="status-pill warn">Warning</span></td></tr>
-                    <tr><td>refresh_semantic_model</td><td>Today 14:51</td><td>4m 08s</td><td>—</td><td>—</td><td><span class="status-pill ok">Succeeded</span></td></tr>
+                    <tr><td>dq_vendor_null_check</td><td>Today 14:50</td><td>8s</td><td>, </td><td>3 warnings</td><td><span class="status-pill warn">Warning</span></td></tr>
+                    <tr><td>refresh_semantic_model</td><td>Today 14:51</td><td>4m 08s</td><td>, </td><td>, </td><td><span class="status-pill ok">Succeeded</span></td></tr>
                 </table>
             </div>
         </div>
