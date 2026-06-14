@@ -1,3 +1,0 @@
--- DEPRECATED: public anon inserts are no longer used.
--- The form writes through the opportunity-intake Edge Function (service role).
--- Run scripts/supabase_revoke_anon_insert.sql instead to remove an existing policy.

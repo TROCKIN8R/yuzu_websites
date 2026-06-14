@@ -1,52 +1,31 @@
-(function initAutomationDemos() {
+(function initOpportunityDemo() {
     const root = document.getElementById('automationLab');
     const data = window.OpportunityData;
     const table = window.OpportunityTable;
     if (!root || !data || !table) return;
 
     const tableId = 'home-opportunities-preview';
-    const tabs = root.querySelectorAll('[data-automation-tab]');
-    const panels = root.querySelectorAll('[data-automation-panel]');
     const form = document.getElementById('homeOpportunityForm');
     const formStatus = document.getElementById('homeOpportunityFormStatus');
     const submitBtn = document.getElementById('home-opp-submit');
     const turnstileMount = document.getElementById('home-opp-turnstile');
+    const nameInput = document.getElementById('home-opp-name');
+    const emailInput = document.getElementById('home-opp-email');
+    const limits = data.fieldLimits();
     const captchaRequired = data.isTurnstileConfigured();
     let turnstileWidgetId = null;
     let captchaPassed = false;
     let submitting = false;
-    const nameInput = document.getElementById('home-opp-name');
-    const emailInput = document.getElementById('home-opp-email');
 
-    if (nameInput) nameInput.maxLength = data.fieldLimits.name;
-    if (emailInput) emailInput.maxLength = data.fieldLimits.email;
+    if (nameInput) nameInput.maxLength = limits.name;
+    if (emailInput) emailInput.maxLength = limits.email;
 
     table.init({
         id: tableId,
         tbodyId: 'homeOpportunityTableBody',
         statusId: 'homeOpportunityTableStatus',
         limit: 5,
-        compact: true,
         idleMs: 30000
-    });
-
-    function activateTab(tabId) {
-        tabs.forEach((tab) => {
-            const isActive = tab.dataset.automationTab === tabId;
-            tab.classList.toggle('automation-lab-tab--active', isActive);
-            tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
-        });
-        panels.forEach((panel) => {
-            const isActive = panel.dataset.automationPanel === tabId;
-            panel.hidden = !isActive;
-        });
-    }
-
-    tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-            if (tab.disabled || tab.getAttribute('aria-disabled') === 'true') return;
-            activateTab(tab.dataset.automationTab);
-        });
     });
 
     function setFormMessage(message, type) {
@@ -64,12 +43,9 @@
         submitBtn.disabled = !enabled;
         submitBtn.setAttribute('aria-disabled', enabled ? 'false' : 'true');
         submitBtn.classList.toggle('opp-submit--locked', captchaRequired && !captchaPassed && !submitting);
-
-        if (captchaRequired && !captchaPassed && !submitting) {
-            submitBtn.title = 'Complete the security check first';
-        } else {
-            submitBtn.removeAttribute('title');
-        }
+        submitBtn.title = captchaRequired && !captchaPassed && !submitting
+            ? 'Complete the security check first'
+            : '';
     }
 
     function loadTurnstileScript() {
@@ -78,12 +54,14 @@
                 resolve();
                 return;
             }
+
             const existing = document.getElementById('cf-turnstile-script');
             if (existing) {
                 existing.addEventListener('load', () => resolve(), { once: true });
                 existing.addEventListener('error', () => reject(new Error('Captcha script failed to load')), { once: true });
                 return;
             }
+
             const script = document.createElement('script');
             script.id = 'cf-turnstile-script';
             script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
@@ -96,7 +74,7 @@
     }
 
     function renderTurnstile() {
-        const siteKey = (window.OPPORTUNITY_TURNSTILE?.siteKey || '').trim();
+        const siteKey = (data.config().turnstile?.siteKey || '').trim();
         if (!siteKey || !turnstileMount) return;
 
         setSubmitReady(false);
@@ -129,8 +107,7 @@
     }
 
     function getCaptchaToken() {
-        if (!captchaRequired) return '';
-        if (!window.turnstile || turnstileWidgetId === null) return '';
+        if (!captchaRequired || !window.turnstile || turnstileWidgetId === null) return '';
         return window.turnstile.getResponse(turnstileWidgetId) || '';
     }
 
@@ -143,7 +120,7 @@
         setSubmitReady(false);
     }
 
-    async function submitOpportunity(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
         if (!form || !submitBtn) return;
 
@@ -169,13 +146,13 @@
             return;
         }
 
-        if (name.length > data.fieldLimits.name) {
-            setFormMessage(`Name must be ${data.fieldLimits.name} characters or fewer.`, 'error');
+        if (name.length > limits.name) {
+            setFormMessage(`Name must be ${limits.name} characters or fewer.`, 'error');
             return;
         }
 
-        if (email.length > data.fieldLimits.email) {
-            setFormMessage(`Email must be ${data.fieldLimits.email} characters or fewer.`, 'error');
+        if (email.length > limits.email) {
+            setFormMessage(`Email must be ${limits.email} characters or fewer.`, 'error');
             return;
         }
 
@@ -195,33 +172,21 @@
         setFormMessage('Sending…', 'info');
 
         try {
-            if (!data.isSupabaseConfigured()) {
-                setFormMessage('Supabase not configured yet.', 'warn');
-                form.reset();
-                resetCaptcha();
-                return;
-            }
-
-            const result = await data.submitOpportunity(name, email, source, {
-                consent,
-                captchaToken
-            });
-            if (result.emailSent) {
-                setFormMessage('Submitted. Check your inbox for a follow-up with a Calendly link.', 'success');
-            } else if (data.intakeFunctionName()) {
-                setFormMessage('Submitted. Your row should appear below (confirmation email pending setup).', 'success');
-            } else {
-                setFormMessage('Submitted, your row should appear in the table below.', 'success');
-            }
+            const result = await data.submit(name, email, source, { consent, captchaToken });
+            setFormMessage(
+                result.emailSent
+                    ? 'Submitted. Check your inbox for a follow-up with a Calendly link.'
+                    : 'Submitted. Your row should appear below shortly.',
+                'success'
+            );
             form.reset();
             resetCaptcha();
             table.afterSubmit(tableId, result.row.name);
         } catch (error) {
             const detail = String(error?.message || error);
             resetCaptcha();
-            if (detail.includes('row-level security') || detail.includes('42501')) {
-                setFormMessage('Submission blocked. Try again in a moment.', 'error');
-            } else if (detail.toLowerCase().includes('forbidden')) {
+
+            if (detail.toLowerCase().includes('forbidden')) {
                 setFormMessage('Submission not allowed from this site.', 'error');
             } else if (detail.toLowerCase().includes('rate limit') || detail.toLowerCase().includes('too many')) {
                 setFormMessage(detail, 'error');
@@ -236,7 +201,7 @@
         }
     }
 
-    form?.addEventListener('submit', submitOpportunity);
+    form.addEventListener('submit', handleSubmit);
 
     if (captchaRequired) {
         setSubmitReady(false);

@@ -11,11 +11,13 @@ SMTP and Turnstile secrets stay in Supabase, never in the public website.
 ## 1. Cloudflare Turnstile (captcha)
 
 1. Open [Cloudflare Turnstile](https://dash.cloudflare.com/?to=/:account/turnstile) and create a widget for `yuzu.solutions`.
-2. Copy the **site key** into `yuzu_github_page/js/opportunities-turnstile-config.js`:
+2. Copy the **site key** into `yuzu_github_page/js/opportunities-config.js`:
 
 ```javascript
-window.OPPORTUNITY_TURNSTILE = {
-  siteKey: "your-site-key"
+window.OPPORTUNITY_CONFIG = {
+  turnstile: {
+    siteKey: "your-site-key"
+  }
 };
 ```
 
