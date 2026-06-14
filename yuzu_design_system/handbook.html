@@ -180,7 +180,7 @@
     .ds-grid-5 { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--space-3); }
     .ds-card {
       background: var(--paper-100);
-      border: 1px solid var(--paper-700);
+      border: 0;
       border-radius: var(--radius-2xl);
       padding: var(--space-6);
       box-shadow: var(--shadow-sm);
@@ -361,7 +361,7 @@
       padding: var(--space-6);
       border-radius: var(--radius-2xl);
       box-shadow: var(--shadow-sm);
-      border: 1px solid var(--paper-700);
+      border: 0;
       max-width: 20rem;
     }
     .ds-info-card-icon {
@@ -716,7 +716,7 @@
       <!-- SHADOWS -->
       <section id="shadows">
         <h2 class="ds-section-title">Shadows & Elevation</h2>
-        <p class="ds-section-desc">Subtle Carbon-tinted shadows create depth without heaviness. Reserve <code>--shadow-xl</code> for modals and floating panels.</p>
+        <p class="ds-section-desc">Cards use shadow-only elevation — no strokes or borders. Subtle Carbon-tinted shadows create depth without heaviness. Reserve <code>--shadow-xl</code> for modals and floating panels.</p>
         <div class="ds-card" style="display:flex;flex-wrap:wrap;gap:var(--space-8);align-items:center;justify-content:center;padding:var(--space-12);">
           <div class="ds-shadow-box" style="box-shadow:var(--shadow-sm)">sm</div>
           <div class="ds-shadow-box" style="box-shadow:var(--shadow-md)">md</div>
