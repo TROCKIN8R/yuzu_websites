@@ -39,6 +39,27 @@ function firstNameFrom(name: string) {
   return name.trim().split(/\s+/)[0] || name.trim();
 }
 
+function titleCaseWord(word: string) {
+  return word
+    .split(/(['-])/)
+    .map((part) => {
+      if (part === "'" || part === "-") return part;
+      if (!part) return part;
+      return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+    })
+    .join("");
+}
+
+function formatName(name: string) {
+  return name
+    .trim()
+    .replace(/\s+/g, " ")
+    .split(" ")
+    .filter(Boolean)
+    .map(titleCaseWord)
+    .join(" ");
+}
+
 function jsonResponse(body: Record<string, unknown>, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
@@ -62,7 +83,7 @@ function buildRow(name: string, email: string, source: string) {
   const domain = email.split("@")[1]?.trim().toLowerCase() || "";
   const isFree = FREE_DOMAINS.has(domain);
   return {
-    name: name.trim(),
+    name: formatName(name),
     email_masked: maskEmail(email),
     company: isFree ? "Personal inbox" : companyFromDomain(domain),
     domain,
@@ -221,11 +242,12 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: "Invalid JSON body" }, 400);
   }
 
-  const name = String(payload.name || "").trim();
+  const rawName = String(payload.name || "").trim();
   const email = String(payload.email || "").trim().toLowerCase();
   const source = String(payload.source || "yuzu.solutions").trim();
+  const name = formatName(rawName);
 
-  if (!name || name.length > 120) {
+  if (!rawName || rawName.length > 120) {
     return jsonResponse({ error: "Name is required (max 120 characters)" }, 400);
   }
 
