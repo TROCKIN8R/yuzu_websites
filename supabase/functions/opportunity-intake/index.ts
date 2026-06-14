@@ -302,6 +302,7 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: "Consent is required" }, 400);
   }
 
+  // Turnstile secret is read from Supabase Edge Function secrets (TURNSTILE_SECRET_KEY).
   const captcha = await verifyTurnstile(captchaToken, remoteIp);
   if (!captcha.ok) {
     return jsonResponse({ error: captcha.error || "Captcha verification failed" }, 400);
