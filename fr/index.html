@@ -121,9 +121,6 @@
         .lime-text { color: var(--zest-600); }
         .yuzu-card:hover { transform: translateY(-5px); }
 
-        /* Offset in-page anchors so the sticky nav never covers section content. */
-        html { scroll-padding-top: calc(var(--nav-h, 96px) + 1.5rem); }
-
         /* Hero headline — fluid size that holds the sentence to two lines on desktop */
         @media (min-width: 768px) {
             header .hero-title { font-size: clamp(1.75rem, calc(5.46875vw - 14px), 3.5rem); }
@@ -243,7 +240,7 @@
             <div class="nav-pill-group" id="navPillGroup">
                 <a href="#vision" class="nav-pill-item">Vision</a>
                 <div class="nav-services-wrap" id="servicesNavWrap">
-                    <a href="#services" class="nav-pill-btn" id="servicesNavBtn" aria-haspopup="true" aria-expanded="false">
+                    <a href="#our-recipes" class="nav-pill-btn" id="servicesNavBtn" aria-haspopup="true" aria-expanded="false">
                         Services <span class="nav-chevron">▾</span>
                     </a>
                     <div class="mega-menu" id="servicesMegaMenu" role="menu">
@@ -300,9 +297,12 @@
         <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
         <div class="mobile-nav-sheet" role="dialog" aria-label="Navigation menu">
             <a href="#vision" class="mobile-nav-link">Vision</a>
-            <button type="button" class="mobile-nav-link" id="mobileServicesToggle" aria-expanded="false" aria-controls="mobileServicesSub">
-                Services <span class="nav-chevron">▾</span>
-            </button>
+            <div class="mobile-nav-services-row">
+                <a href="#our-recipes" class="mobile-nav-link">Services</a>
+                <button type="button" class="mobile-nav-chevron-btn" id="mobileServicesToggle" aria-expanded="false" aria-controls="mobileServicesSub" aria-label="Show service categories">
+                    <span class="nav-chevron" aria-hidden="true">▾</span>
+                </button>
+            </div>
             <div class="mobile-nav-sub" id="mobileServicesSub">
                 <a href="services/ai-automation.html" class="mega-item">
                     <div class="mega-icon">🤖</div>
@@ -611,7 +611,7 @@
 
 <section id="services" class="services-section py-20 px-6">
     <div class="max-w-7xl mx-auto">
-        <div class="services-header text-center mb-14">
+        <div id="our-recipes" class="services-header text-center mb-14">
             <span class="services-eyebrow">🍋 Nos recettes</span>
             <h2 class="services-title">Ce qu'on <span class="services-accent">fait</span></h2>
             <p class="services-lead">Sélectionnez un pilier technique pour voir comment on remplace le travail manuel par des systèmes évolutifs — et les livrables exacts que vous recevez.</p>
@@ -862,20 +862,42 @@
 
 </main>
 
-<footer class="bg-gray-950 text-gray-500 py-12 text-center">
-            <div class="mb-4 flex justify-center">
-        <a href="index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--footer yuzu-logo--on-dark" aria-label="Yuzu Solutions">
-            <object type="image/svg+xml" data="../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
-        </a>
+<footer class="site-footer">
+    <div class="site-footer__inner">
+        <div class="site-footer__top">
+            <div class="site-footer__brand">
+                <a href="index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--footer yuzu-logo--on-dark" aria-label="Yuzu Solutions">
+                    <object type="image/svg+xml" data="../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+                </a>
+                <p class="site-footer__quip">Propulsé par le yuzu, l'ETL et le courage de supprimer enfin ce classeur à 47 onglets.</p>
+            </div>
+            <nav class="site-footer__nav" aria-label="Sections de la page">
+                <h2 class="site-footer__nav-title">Explorer</h2>
+                <ul>
+                    <li><a href="#vision">Vision</a></li>
+                    <li><a href="#our-recipes">Services</a></li>
+                    <li><a href="#founder">Fondateur</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+            </nav>
+            <nav class="site-footer__nav" aria-label="Services">
+                <h2 class="site-footer__nav-title">Recettes</h2>
+                <ul>
+                    <li><a href="services/ai-automation.html">IA et automatisation</a></li>
+                    <li><a href="services/infrastructure-data.html">Infrastructure et données</a></li>
+                    <li><a href="services/technical-debt.html">Dette technique et sauvetage</a></li>
+                    <li><a href="services/mvp-builds.html">Constructions MVP</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="site-footer__bottom">
+            <p class="site-footer__copy">© 2026 Yuzu.solutions · On extrait les réponses. On automatise la corvée.</p>
+            <div class="site-footer__meta">
+                <a href="../sitemap.xml">Plan du site</a>
+                <a href="llms-fr.txt">llms.txt</a>
+            </div>
+        </div>
     </div>
-    <p>© 2026 Yuzu.solutions. On extrait les réponses. On automatise la corvée.</p>
-    <p class="mt-4 text-sm">
-        <a href="#faq" class="hover:text-yellow-500 transition-colors">FAQ</a>
-        <span class="mx-2">·</span>
-        <a href="../sitemap.xml" class="hover:text-yellow-500 transition-colors">Plan du site</a>
-        <span class="mx-2">·</span>
-        <a href="llms-fr.txt" class="hover:text-yellow-500 transition-colors">llms.txt</a>
-    </p>
 </footer>
 
 <script src="../js/services-picker.js"></script>
