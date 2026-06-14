@@ -25,11 +25,32 @@ window.OpportunityData = {
         return label.replace(/-/g, ' ').replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
     },
 
+    titleCaseWord(word) {
+        return word
+            .split(/(['-])/)
+            .map((part) => {
+                if (part === "'" || part === '-') return part;
+                if (!part) return part;
+                return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+            })
+            .join('');
+    },
+
+    formatName(name) {
+        return String(name || '')
+            .trim()
+            .replace(/\s+/g, ' ')
+            .split(' ')
+            .filter(Boolean)
+            .map((word) => this.titleCaseWord(word))
+            .join(' ');
+    },
+
     buildRow(name, email, source) {
         const domain = this.domainFromEmail(email);
         const isFree = this.freeDomains.has(domain);
         return {
-            name: name.trim(),
+            name: this.formatName(name),
             email_masked: this.maskEmail(email),
             company: isFree ? 'Personal inbox' : this.companyFromDomain(domain),
             domain,
@@ -104,9 +125,12 @@ window.OpportunityData = {
             throw new Error('Supabase not configured');
         }
 
+        const formattedName = this.formatName(name);
+        const normalizedEmail = String(email || '').trim().toLowerCase();
+
         if (this.intakeFunctionName()) {
             try {
-                const result = await this.submitViaEdgeFunction(name, email, source);
+                const result = await this.submitViaEdgeFunction(formattedName, normalizedEmail, source);
                 if (result) return result;
             } catch (error) {
                 const detail = String(error?.message || error);
@@ -116,7 +140,7 @@ window.OpportunityData = {
             }
         }
 
-        return this.submitViaRest(name, email, source);
+        return this.submitViaRest(formattedName, normalizedEmail, source);
     },
 
     async fetchEntries(limit) {
