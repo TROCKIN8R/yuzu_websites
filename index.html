@@ -658,6 +658,13 @@
                                     <label for="home-opp-email">Work email</label>
                                     <input id="home-opp-email" name="email" type="email" autocomplete="email" required placeholder="alex@company.com">
                                 </div>
+                                <div class="opp-field opp-field--consent">
+                                    <label class="opp-consent" for="home-opp-consent">
+                                        <input id="home-opp-consent" name="consent" type="checkbox" value="yes" required>
+                                        <span>I agree to receive one follow-up email from Yuzu.solutions with a booking link. Names and emails are masked in the public demo table.</span>
+                                    </label>
+                                </div>
+                                <div id="home-opp-turnstile" class="opp-turnstile" aria-label="Security check"></div>
                                 <button type="submit" class="opp-submit">Run automation →</button>
                                 <p id="homeOpportunityFormStatus" class="opp-form-status" hidden></p>
                             </form>
@@ -924,6 +931,7 @@
 <script src="js/nav.js"></script>
 <script src="js/hero-rotate.js"></script>
 <script src="js/opportunities-supabase-config.js"></script>
+<script src="js/opportunities-turnstile-config.js"></script>
 <script src="js/opportunities-data.js"></script>
 <script src="js/opportunities-table.js"></script>
 <script src="js/automation-demos.js"></script>

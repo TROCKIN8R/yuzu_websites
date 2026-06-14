@@ -9,6 +9,11 @@ window.OpportunityData = {
         return Boolean((cfg.url || '').trim() && (cfg.anonKey || '').trim());
     },
 
+    isTurnstileConfigured() {
+        const cfg = window.OPPORTUNITY_TURNSTILE || {};
+        return Boolean((cfg.siteKey || '').trim());
+    },
+
     maskEmail(email) {
         const [local, domain] = email.split('@');
         if (!local || !domain) return email;
@@ -81,7 +86,7 @@ window.OpportunityData = {
         return (cfg.intakeFunction || '').trim();
     },
 
-    async submitViaEdgeFunction(name, email, source) {
+    async submitViaEdgeFunction(name, email, source, options = {}) {
         const cfg = window.OPPORTUNITY_SUPABASE;
         const fn = this.intakeFunctionName();
         if (!fn) return null;
@@ -94,7 +99,13 @@ window.OpportunityData = {
                 Authorization: `Bearer ${cfg.anonKey}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name, email, source })
+            body: JSON.stringify({
+                name,
+                email,
+                source,
+                consent: Boolean(options.consent),
+                captchaToken: options.captchaToken || ''
+            })
         });
 
         const payload = await response.json().catch(() => ({}));
@@ -134,17 +145,32 @@ window.OpportunityData = {
         return { row, emailSent: false, emailError: null };
     },
 
-    async submitOpportunity(name, email, source) {
+    async submitOpportunity(name, email, source, options = {}) {
         if (!this.isSupabaseConfigured()) {
             throw new Error('Supabase not configured');
         }
 
         const formattedName = this.formatName(name);
         const normalizedEmail = String(email || '').trim().toLowerCase();
+        const consent = Boolean(options.consent);
+        const captchaToken = String(options.captchaToken || '').trim();
+
+        if (!consent) {
+            throw new Error('Consent is required');
+        }
+
+        if (this.isTurnstileConfigured() && !captchaToken) {
+            throw new Error('Captcha verification is required');
+        }
 
         if (this.intakeFunctionName()) {
             try {
-                const result = await this.submitViaEdgeFunction(formattedName, normalizedEmail, source);
+                const result = await this.submitViaEdgeFunction(
+                    formattedName,
+                    normalizedEmail,
+                    source,
+                    { consent, captchaToken }
+                );
                 if (result) return result;
             } catch (error) {
                 const detail = String(error?.message || error);
@@ -152,6 +178,10 @@ window.OpportunityData = {
                     throw error;
                 }
             }
+        }
+
+        if (this.isTurnstileConfigured()) {
+            throw new Error('Captcha verification is required');
         }
 
         return this.submitViaRest(formattedName, normalizedEmail, source);
