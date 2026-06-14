@@ -18,6 +18,9 @@ const FREE_DOMAINS = new Set([
 const CALENDLY_URL = "https://calendly.com/adrienyvin/30min";
 const SITE_URL = "https://yuzu.solutions";
 const LOGO_URL = `${SITE_URL}/assets/og-image.png`;
+const NAME_MAX_LENGTH = 120;
+const EMAIL_MAX_LENGTH = 254;
+const SOURCE_MAX_LENGTH = 120;
 const BRAND = {
   yuzu: "#F8C607",
   yuzuDark: "#BC9605",
@@ -402,7 +405,7 @@ Deno.serve(async (req) => {
 
   const rawName = String(payload.name || "").trim();
   const email = String(payload.email || "").trim().toLowerCase();
-  const source = String(payload.source || "yuzu.solutions").trim().slice(0, 120);
+  const source = String(payload.source || "yuzu.solutions").trim().slice(0, SOURCE_MAX_LENGTH);
   const consent = payload.consent === true;
   const captchaToken = String(payload.captchaToken || "").trim();
   const name = formatName(rawName);
@@ -418,11 +421,11 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: captcha.error || "Captcha verification failed" }, 400, origin);
   }
 
-  if (!rawName || rawName.length > 120) {
+  if (!rawName || rawName.length > NAME_MAX_LENGTH) {
     return jsonResponse({ error: "Invalid name" }, 400, origin);
   }
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > EMAIL_MAX_LENGTH) {
     return jsonResponse({ error: "Invalid email" }, 400, origin);
   }
 

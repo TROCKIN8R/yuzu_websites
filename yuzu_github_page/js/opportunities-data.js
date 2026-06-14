@@ -1,4 +1,9 @@
 window.OpportunityData = {
+    fieldLimits: {
+        name: 120,
+        email: 254
+    },
+
     freeDomains: new Set([
         'gmail.com', 'googlemail.com', 'yahoo.com', 'hotmail.com', 'outlook.com',
         'live.com', 'icloud.com', 'me.com', 'proton.me', 'protonmail.com', 'aol.com'
@@ -134,6 +139,14 @@ window.OpportunityData = {
         const normalizedEmail = String(email || '').trim().toLowerCase();
         const consent = Boolean(options.consent);
         const captchaToken = String(options.captchaToken || '').trim();
+
+        if (formattedName.length > this.fieldLimits.name) {
+            throw new Error(`Name must be ${this.fieldLimits.name} characters or fewer`);
+        }
+
+        if (normalizedEmail.length > this.fieldLimits.email) {
+            throw new Error(`Email must be ${this.fieldLimits.email} characters or fewer`);
+        }
 
         if (!consent) {
             throw new Error('Consent is required');
