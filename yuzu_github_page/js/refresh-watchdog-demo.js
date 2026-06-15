@@ -222,7 +222,10 @@
         setFormMessage('', 'info');
         hideProgress();
 
-        const targetSeconds = scenario === 'breach' ? 720 : 240;
+        const slaSeconds = slaMinutes * 60;
+        const targetSeconds = scenario === 'breach'
+            ? slaSeconds + 240
+            : Math.min(240, Math.max(180, slaSeconds - 90));
         const animation = animateProgress(scenario, targetSeconds);
 
         try {

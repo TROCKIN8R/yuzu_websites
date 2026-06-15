@@ -179,10 +179,19 @@ function randomInt(min: number, max: number) {
 }
 
 function buildRun(pipeline: string, scenario: string, slaMinutes: number, source: string) {
-  const durationSeconds = scenario === "breach"
-    ? randomInt(600, 900)
-    : randomInt(200, 280);
   const slaSeconds = slaMinutes * 60;
+  let durationSeconds: number;
+
+  if (scenario === "breach") {
+    // Always finish 2–8 minutes over the configured SLA
+    durationSeconds = slaSeconds + randomInt(120, 480);
+  } else {
+    // Stay under SLA (at least 1 minute buffer, capped at ~4.5 min for short SLAs)
+    const maxHealthy = Math.max(180, slaSeconds - 60);
+    const minHealthy = Math.min(200, Math.floor(maxHealthy * 0.55));
+    durationSeconds = randomInt(minHealthy, maxHealthy);
+  }
+
   const status = durationSeconds > slaSeconds ? "alert" : "ok";
   const completedAt = new Date();
   const startedAt = new Date(completedAt.getTime() - durationSeconds * 1000);
