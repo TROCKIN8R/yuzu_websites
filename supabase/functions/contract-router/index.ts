@@ -22,6 +22,7 @@ const ROUTE_DESTINATIONS = [
   "Teams / Ops notify",
 ];
 
+const SIGN_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 const CALENDLY_URL = "https://calendly.com/adrienyvin/30min";
 const SITE_URL = "https://yuzu.solutions";
 const LOGO_URL = `${SITE_URL}/assets/og-image.png`;
@@ -40,6 +41,23 @@ const BRAND = {
   zest: "#86C54A",
 };
 
+type ContractRow = {
+  name: string;
+  email_masked: string;
+  company: string;
+  domain: string;
+  destination: string;
+  status: string;
+  source: string;
+};
+
+type SignTokenPayload = {
+  id: string;
+  email: string;
+  name: string;
+  exp: number;
+};
+
 function isAllowedOrigin(origin: string | null) {
   if (!origin) return true;
   return ALLOWED_ORIGIN_PATTERNS.some((pattern) => pattern.test(origin));
@@ -56,9 +74,49 @@ function buildCorsHeaders(origin: string | null) {
   return {
     "Access-Control-Allow-Origin": resolveCorsOrigin(origin),
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Vary": "Origin",
   };
+}
+
+function base64urlEncode(bytes: Uint8Array) {
+  let binary = "";
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+}
+
+function base64urlEncodeString(value: string) {
+  return base64urlEncode(new TextEncoder().encode(value));
+}
+
+function base64urlDecodeToString(value: string) {
+  const padded = value.replace(/-/g, "+").replace(/_/g, "/")
+    + "=".repeat((4 - (value.length % 4)) % 4);
+  return atob(padded);
+}
+
+function timingSafeEqual(a: string, b: string) {
+  if (a.length !== b.length) return false;
+  let mismatch = 0;
+  for (let i = 0; i < a.length; i += 1) {
+    mismatch |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return mismatch === 0;
+}
+
+function getSigningSecret() {
+  return (
+    Deno.env.get("CONTRACT_SIGNING_SECRET")?.trim()
+    || Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")?.trim()
+    || ""
+  );
+}
+
+function getFunctionsBaseUrl() {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")?.trim() || "";
+  return `${supabaseUrl.replace(/\/$/, "")}/functions/v1/contract-router`;
 }
 
 async function sha256(value: string) {
@@ -69,6 +127,59 @@ async function sha256(value: string) {
   return Array.from(new Uint8Array(digest))
     .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("");
+}
+
+async function hmacSha256Base64url(message: string, secret: string) {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const signature = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    new TextEncoder().encode(message),
+  );
+  return base64urlEncode(new Uint8Array(signature));
+}
+
+async function createSignToken(id: string, email: string, name: string) {
+  const secret = getSigningSecret();
+  if (!secret) {
+    throw new Error("Signing secret not configured");
+  }
+
+  const payload: SignTokenPayload = {
+    id,
+    email,
+    name,
+    exp: Date.now() + SIGN_TOKEN_TTL_MS,
+  };
+  const payloadPart = base64urlEncodeString(JSON.stringify(payload));
+  const signature = await hmacSha256Base64url(payloadPart, secret);
+  return `${payloadPart}.${signature}`;
+}
+
+async function verifySignToken(token: string): Promise<SignTokenPayload | null> {
+  const secret = getSigningSecret();
+  if (!secret || !token) return null;
+
+  const [payloadPart, signature] = token.split(".");
+  if (!payloadPart || !signature) return null;
+
+  const expected = await hmacSha256Base64url(payloadPart, secret);
+  if (!timingSafeEqual(signature, expected)) return null;
+
+  try {
+    const payload = JSON.parse(base64urlDecodeToString(payloadPart)) as SignTokenPayload;
+    if (!payload?.id || !payload?.email || !payload?.name || !payload?.exp) return null;
+    if (payload.exp < Date.now()) return null;
+    return payload;
+  } catch {
+    return null;
+  }
 }
 
 async function countRecentHits(
@@ -238,6 +349,13 @@ function jsonResponse(
   });
 }
 
+function htmlResponse(html: string, status = 200) {
+  return new Response(html, {
+    status,
+    headers: { "Content-Type": "text/html; charset=utf-8" },
+  });
+}
+
 function maskEmail(email: string) {
   const [local, domain] = email.split("@");
   if (!local || !domain) return email;
@@ -256,7 +374,7 @@ function routeDestination(domain: string, isFree: boolean) {
   return ROUTE_DESTINATIONS[hash % ROUTE_DESTINATIONS.length];
 }
 
-function buildRow(displayName: string, email: string, source: string) {
+function buildRow(displayName: string, email: string, source: string): ContractRow {
   const domain = email.split("@")[1]?.trim().toLowerCase() || "";
   const isFree = FREE_DOMAINS.has(domain);
   const destination = routeDestination(domain, isFree);
@@ -266,20 +384,136 @@ function buildRow(displayName: string, email: string, source: string) {
     company: isFree ? "Personal inbox" : companyFromDomain(domain),
     domain,
     destination,
-    status: "routed",
+    status: "pending",
     source: source || "yuzu.solutions",
   };
 }
 
-function buildEmailHtml(name: string, destination: string) {
+function buildMockDocumentHtml(name: string, company: string) {
+  const signer = escapeHtml(name);
+  const org = escapeHtml(company);
+  const today = new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  return `
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#FAFAFA;border:1px solid ${BRAND.border};border-radius:12px;">
+      <tr>
+        <td style="padding:24px 28px;">
+          <p style="margin:0 0 6px;font-size:11px;line-height:1.4;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:${BRAND.carbonMuted};">Demo document</p>
+          <p style="margin:0 0 18px;font-size:20px;line-height:1.3;font-weight:800;color:${BRAND.carbon};">Services Agreement (Sample)</p>
+          <p style="margin:0 0 12px;font-size:14px;line-height:1.7;color:${BRAND.carbon};"><strong>Between</strong> Yuzu.solutions and ${org}</p>
+          <p style="margin:0 0 12px;font-size:14px;line-height:1.7;color:${BRAND.carbon};"><strong>Signer</strong> ${signer}</p>
+          <p style="margin:0 0 12px;font-size:14px;line-height:1.7;color:${BRAND.carbon};"><strong>Effective date</strong> ${escapeHtml(today)}</p>
+          <p style="margin:0 0 12px;font-size:14px;line-height:1.7;color:${BRAND.carbon};">
+            This sample agreement covers automation delivery, data handling, and support terms for a pilot engagement.
+            It is a mock document for the Contract Router demo only — no legal obligations apply.
+          </p>
+          <p style="margin:0;font-size:14px;line-height:1.7;color:${BRAND.carbon};">
+            By selecting <strong>Sign here</strong>, you simulate completing an e-signature so the router can file the agreement and update the live demo table.
+          </p>
+        </td>
+      </tr>
+    </table>`;
+}
+
+function buildSignatureRequestEmailHtml(
+  name: string,
+  company: string,
+  destination: string,
+  signUrl: string,
+) {
   const firstName = escapeHtml(firstNameFrom(name));
   const routeLabel = escapeHtml(destination);
+  const safeSignUrl = escapeHtml(signUrl);
+  const documentHtml = buildMockDocumentHtml(name, company);
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your contract was routed</title>
+  <title>Signature requested</title>
+</head>
+<body style="margin:0;padding:0;background-color:#F4F5F5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${BRAND.carbon};">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#F4F5F5;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:640px;background-color:${BRAND.paper};border:1px solid ${BRAND.border};border-radius:16px;overflow:hidden;">
+          <tr>
+            <td align="center" style="padding:28px 32px 20px;background:linear-gradient(180deg, ${BRAND.yuzuLight} 0%, ${BRAND.paper} 100%);border-bottom:1px solid ${BRAND.border};">
+              <a href="${SITE_URL}" style="text-decoration:none;">
+                <img src="${LOGO_URL}" width="220" alt="Yuzu.solutions" style="display:block;border:0;outline:none;max-width:220px;height:auto;">
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:32px 32px 16px;">
+              <p style="margin:0 0 8px;font-size:13px;line-height:1.4;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:${BRAND.zest};">Signature requested</p>
+              <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:${BRAND.carbon};">Hi ${firstName},</p>
+              <p style="margin:0 0 20px;font-size:16px;line-height:1.6;color:${BRAND.carbon};">
+                Please review and sign the sample agreement below. Once signed, the Contract Router demo will route it to
+                <strong>${routeLabel}</strong> and update the live table on
+                <a href="${SITE_URL}/#test-automations" style="color:${BRAND.yuzuDark};text-decoration:none;font-weight:600;">yuzu.solutions</a>.
+              </p>
+              ${documentHtml}
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding:8px 32px 32px;">
+              <a href="${safeSignUrl}" style="display:inline-block;padding:16px 32px;background-color:${BRAND.yuzu};color:${BRAND.carbon};font-size:16px;font-weight:800;line-height:1;text-decoration:none;border-radius:999px;border:1px solid ${BRAND.yuzuDark};">
+                Sign here
+              </a>
+              <p style="margin:16px 0 0;font-size:13px;line-height:1.5;color:${BRAND.carbonMuted};">
+                Demo only. This link expires in 7 days.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+function buildSignatureRequestEmailText(
+  name: string,
+  company: string,
+  destination: string,
+  signUrl: string,
+) {
+  const firstName = firstNameFrom(name);
+  return [
+    `Hi ${firstName},`,
+    "",
+    "Please review and sign the sample Services Agreement for the Yuzu.solutions Contract Router demo.",
+    "",
+    `Signer: ${name}`,
+    `Organization: ${company}`,
+    `Will route to: ${destination}`,
+    "",
+    "Sign here:",
+    signUrl,
+    "",
+    "Demo only. This link expires in 7 days.",
+    "",
+    `Live table: ${SITE_URL}/#test-automations`,
+  ].join("\n");
+}
+
+function buildThanksEmailHtml(name: string, destination: string) {
+  const firstName = escapeHtml(firstNameFrom(name));
+  const routeLabel = escapeHtml(destination);
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanks for signing</title>
 </head>
 <body style="margin:0;padding:0;background-color:#F4F5F5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${BRAND.carbon};">
   <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#F4F5F5;">
@@ -297,12 +531,12 @@ function buildEmailHtml(name: string, destination: string) {
             <td style="padding:32px 32px 8px;">
               <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:${BRAND.carbon};">Hi ${firstName},</p>
               <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:${BRAND.carbon};">
-                Thanks for trying our <strong>Contract Router</strong> demo. Your simulated e-signature was routed to
-                <strong>${routeLabel}</strong> and logged in the live table on
-                <a href="${SITE_URL}" style="color:${BRAND.yuzuDark};text-decoration:none;font-weight:600;">yuzu.solutions</a>.
+                Thanks for signing the sample agreement. Your demo contract is now marked <strong>Signed</strong> and routed to
+                <strong>${routeLabel}</strong>.
               </p>
               <p style="margin:0;font-size:16px;line-height:1.6;color:${BRAND.carbon};">
-                In production, the same trigger can file signed agreements to the right folder, update your CRM, and ping the right Slack or Teams channel.
+                Watch the live table update on
+                <a href="${SITE_URL}/#test-automations" style="color:${BRAND.yuzuDark};text-decoration:none;font-weight:600;">yuzu.solutions</a>.
               </p>
             </td>
           </tr>
@@ -328,20 +562,9 @@ function buildEmailHtml(name: string, destination: string) {
             </td>
           </tr>
           <tr>
-            <td style="padding:0 32px 32px;">
-              <p style="margin:0;font-size:15px;line-height:1.6;color:${BRAND.carbonMuted};">
-                Prefer email? Reply with how you route signed agreements today.
-              </p>
-            </td>
-          </tr>
-          <tr>
             <td style="padding:22px 32px;background-color:#FAFAFA;border-top:1px solid ${BRAND.border};">
               <p style="margin:0 0 6px;font-size:13px;line-height:1.5;color:${BRAND.carbonMuted};">
                 <strong style="color:${BRAND.carbon};">Adrien Yvin</strong> · Founder, Yuzu.solutions
-              </p>
-              <p style="margin:0;font-size:13px;line-height:1.5;color:${BRAND.carbonMuted};">
-                <a href="mailto:info@yuzu.solutions" style="color:${BRAND.yuzuDark};text-decoration:none;">info@yuzu.solutions</a>
-                · <a href="${SITE_URL}" style="color:${BRAND.yuzuDark};text-decoration:none;">yuzu.solutions</a>
               </p>
             </td>
           </tr>
@@ -353,26 +576,67 @@ function buildEmailHtml(name: string, destination: string) {
 </html>`;
 }
 
-function buildEmailText(name: string, destination: string) {
+function buildThanksEmailText(name: string, destination: string) {
   const firstName = firstNameFrom(name);
   return [
     `Hi ${firstName},`,
     "",
-    "Thanks for trying our Contract Router demo on yuzu.solutions.",
-    `Your simulated e-signature was routed to ${destination} and logged in the live table.`,
+    "Thanks for signing the sample agreement for the Yuzu.solutions Contract Router demo.",
+    `Your contract is now marked Signed and routed to ${destination}.`,
     "",
-    "In production, the same trigger can file signed agreements to the right folder, update your CRM, and ping the right Slack or Teams channel.",
+    `Live table: ${SITE_URL}/#test-automations`,
     "",
-    "Next step: book a 30-minute call to walk through contract routing for your stack.",
+    "Book a 30-minute call:",
     CALENDLY_URL,
-    "",
-    "Prefer email? Reply with how you route signed agreements today.",
-    "",
-    "Adrien Yvin",
-    "Founder, Yuzu.solutions",
-    "info@yuzu.solutions",
-    SITE_URL,
   ].join("\n");
+}
+
+function buildSignResultPageHtml(options: {
+  title: string;
+  headline: string;
+  body: string;
+  destination?: string;
+  status?: string;
+}) {
+  const destinationBlock = options.destination
+    ? `<p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${BRAND.carbon};"><strong>Routed to:</strong> ${escapeHtml(options.destination)}</p>`
+    : "";
+  const statusBlock = options.status
+    ? `<p style="margin:0;font-size:15px;line-height:1.6;color:${BRAND.carbon};"><strong>Status:</strong> ${escapeHtml(options.status)}</p>`
+    : "";
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(options.title)}</title>
+</head>
+<body style="margin:0;padding:0;background:#F4F5F5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${BRAND.carbon};">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>
+      <td align="center" style="padding:40px 16px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;background:${BRAND.paper};border:1px solid ${BRAND.border};border-radius:16px;">
+          <tr>
+            <td style="padding:32px;">
+              <p style="margin:0 0 8px;font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:${BRAND.zest};">Contract Router demo</p>
+              <h1 style="margin:0 0 16px;font-size:28px;line-height:1.2;color:${BRAND.carbon};">${escapeHtml(options.headline)}</h1>
+              <p style="margin:0 0 20px;font-size:16px;line-height:1.6;color:${BRAND.carbon};">${options.body}</p>
+              ${destinationBlock}
+              ${statusBlock}
+              <p style="margin:24px 0 0;">
+                <a href="${SITE_URL}/#test-automations" style="display:inline-block;padding:12px 24px;background:${BRAND.yuzu};color:${BRAND.carbon};font-size:15px;font-weight:700;text-decoration:none;border-radius:999px;border:1px solid ${BRAND.yuzuDark};">
+                  View live table
+                </a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
 }
 
 function getNotifyEmail() {
@@ -382,7 +646,7 @@ function getNotifyEmail() {
 function buildNotifyEmailHtml(
   name: string,
   email: string,
-  row: ReturnType<typeof buildRow>,
+  row: ContractRow,
   source: string,
 ) {
   return `<!DOCTYPE html>
@@ -406,7 +670,7 @@ function buildNotifyEmailHtml(
           <tr><td style="padding:8px 0;color:${BRAND.carbonMuted};">Status</td><td style="padding:8px 0;">${escapeHtml(row.status)}</td></tr>
         </table>
         <p style="margin:20px 0 0;font-size:14px;line-height:1.6;color:${BRAND.carbonMuted};">
-          Public table shows masked name <strong>${escapeHtml(row.name)}</strong> and email <strong>${escapeHtml(row.email_masked)}</strong>.
+          Signature request email sent. Public table shows masked name <strong>${escapeHtml(row.name)}</strong>.
           <a href="${SITE_URL}/#test-automations" style="color:${BRAND.yuzuDark};text-decoration:none;font-weight:600;">View live table</a>
         </p>
       </td>
@@ -419,7 +683,7 @@ function buildNotifyEmailHtml(
 function buildNotifyEmailText(
   name: string,
   email: string,
-  row: ReturnType<typeof buildRow>,
+  row: ContractRow,
   source: string,
 ) {
   return [
@@ -432,6 +696,7 @@ function buildNotifyEmailText(
     `Source: ${source}`,
     `Status: ${row.status}`,
     "",
+    "Signature request email sent.",
     `Public table (masked): ${row.name} / ${row.email_masked}`,
     `${SITE_URL}/#test-automations`,
   ].join("\n");
@@ -460,23 +725,42 @@ function createSmtpTransporter() {
   };
 }
 
-async function sendFollowUpEmail(name: string, email: string, destination: string) {
+async function sendSignatureRequestEmail(
+  name: string,
+  email: string,
+  company: string,
+  destination: string,
+  signUrl: string,
+) {
   const { from, transporter } = createSmtpTransporter();
 
   await transporter.sendMail({
     from: `"Yuzu.solutions" <${from}>`,
     to: email,
     replyTo: from,
-    subject: "Your contract was routed — Yuzu.solutions demo",
-    text: buildEmailText(name, destination),
-    html: buildEmailHtml(name, destination),
+    subject: "Signature requested — Yuzu.solutions Contract Router demo",
+    text: buildSignatureRequestEmailText(name, company, destination, signUrl),
+    html: buildSignatureRequestEmailHtml(name, company, destination, signUrl),
+  });
+}
+
+async function sendThanksEmail(name: string, email: string, destination: string) {
+  const { from, transporter } = createSmtpTransporter();
+
+  await transporter.sendMail({
+    from: `"Yuzu.solutions" <${from}>`,
+    to: email,
+    replyTo: from,
+    subject: "Thanks for signing — Yuzu.solutions demo",
+    text: buildThanksEmailText(name, destination),
+    html: buildThanksEmailHtml(name, destination),
   });
 }
 
 async function sendNotifyEmail(
   name: string,
   email: string,
-  row: ReturnType<typeof buildRow>,
+  row: ContractRow,
   source: string,
 ) {
   const { from, transporter } = createSmtpTransporter();
@@ -492,24 +776,86 @@ async function sendNotifyEmail(
   });
 }
 
-Deno.serve(async (req) => {
-  const origin = req.headers.get("origin");
-
-  if (req.method === "OPTIONS") {
-    if (!isAllowedOrigin(origin)) {
-      return new Response("Forbidden", { status: 403 });
-    }
-    return new Response("ok", { headers: buildCorsHeaders(origin) });
+async function handleSignRequest(token: string) {
+  const payload = await verifySignToken(token);
+  if (!payload) {
+    return htmlResponse(buildSignResultPageHtml({
+      title: "Invalid link",
+      headline: "This signing link is invalid or expired",
+      body: "Request a new demo from the Contract Router tab on yuzu.solutions.",
+    }), 400);
   }
 
-  if (req.method !== "POST") {
-    return jsonResponse({ error: "Method not allowed" }, 405, origin);
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")?.trim();
+  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")?.trim();
+  if (!supabaseUrl || !serviceRoleKey) {
+    return htmlResponse(buildSignResultPageHtml({
+      title: "Server error",
+      headline: "Could not complete signing",
+      body: "The demo service is misconfigured. Try again later.",
+    }), 500);
   }
 
-  if (!isAllowedOrigin(origin)) {
-    return jsonResponse({ error: "Forbidden" }, 403, origin);
+  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const table = (Deno.env.get("CONTRACT_ROUTES_TABLE") || "contract_routes").trim();
+
+  const { data: existing, error: fetchError } = await supabase
+    .from(table)
+    .select("id,name,destination,status")
+    .eq("id", payload.id)
+    .maybeSingle();
+
+  if (fetchError || !existing) {
+    return htmlResponse(buildSignResultPageHtml({
+      title: "Not found",
+      headline: "Contract not found",
+      body: "This demo contract could not be located.",
+    }), 404);
   }
 
+  if (existing.status === "signed") {
+    return htmlResponse(buildSignResultPageHtml({
+      title: "Already signed",
+      headline: "This agreement is already signed",
+      body: "No further action is needed. Check the live demo table for the Signed status.",
+      destination: existing.destination,
+      status: "Signed",
+    }));
+  }
+
+  const signedAt = new Date().toISOString();
+  const { error: updateError } = await supabase
+    .from(table)
+    .update({ status: "signed", signed_at: signedAt })
+    .eq("id", payload.id)
+    .eq("status", "pending");
+
+  if (updateError) {
+    console.error("Contract sign update failed:", updateError.message);
+    return htmlResponse(buildSignResultPageHtml({
+      title: "Server error",
+      headline: "Could not record your signature",
+      body: "Please try the Sign here link again in a moment.",
+    }), 500);
+  }
+
+  try {
+    await sendThanksEmail(payload.name, payload.email, existing.destination);
+  } catch (error) {
+    const emailError = error instanceof Error ? error.message : String(error);
+    console.error("Thanks email failed:", emailError);
+  }
+
+  return htmlResponse(buildSignResultPageHtml({
+    title: "Signed",
+    headline: "Thanks — your signature was recorded",
+    body: "A confirmation email is on its way. The live demo table will show Signed shortly.",
+    destination: existing.destination,
+    status: "Signed",
+  }));
+}
+
+async function handleIntakeRequest(req: Request, origin: string | null) {
   let payload: { name?: string; email?: string; source?: string; consent?: boolean; captchaToken?: string };
   try {
     payload = await req.json();
@@ -558,20 +904,28 @@ Deno.serve(async (req) => {
   const table = (Deno.env.get("CONTRACT_ROUTES_TABLE") || "contract_routes").trim();
   const row = buildRow(maskName(rawName), email, source);
 
-  const { error: insertError } = await supabase.from(table).insert(row);
-  if (insertError) {
-    console.error("Contract route insert failed:", insertError.message);
+  const { data: inserted, error: insertError } = await supabase
+    .from(table)
+    .insert(row)
+    .select("id")
+    .single();
+
+  if (insertError || !inserted?.id) {
+    console.error("Contract route insert failed:", insertError?.message);
     return jsonResponse({ error: "Could not save submission" }, 500, origin);
   }
 
   let emailSent = false;
   let notifySent = false;
+
   try {
-    await sendFollowUpEmail(name, email, row.destination);
+    const signToken = await createSignToken(inserted.id, email, name);
+    const signUrl = `${getFunctionsBaseUrl()}?token=${encodeURIComponent(signToken)}`;
+    await sendSignatureRequestEmail(name, email, row.company, row.destination, signUrl);
     emailSent = true;
   } catch (error) {
     const emailError = error instanceof Error ? error.message : String(error);
-    console.error("Follow-up email failed:", emailError);
+    console.error("Signature request email failed:", emailError);
   }
 
   try {
@@ -588,4 +942,30 @@ Deno.serve(async (req) => {
     emailSent,
     notifySent,
   }, 200, origin);
+}
+
+Deno.serve(async (req) => {
+  const origin = req.headers.get("origin");
+  const url = new URL(req.url);
+  const signToken = url.searchParams.get("token");
+
+  if (req.method === "GET" && signToken) {
+    return handleSignRequest(signToken);
+  }
+
+  if (req.method === "OPTIONS") {
+    if (!isAllowedOrigin(origin)) {
+      return new Response("Forbidden", { status: 403 });
+    }
+    return new Response("ok", { headers: buildCorsHeaders(origin) });
+  }
+
+  if (req.method === "POST") {
+    if (!isAllowedOrigin(origin)) {
+      return jsonResponse({ error: "Forbidden" }, 403, origin);
+    }
+    return handleIntakeRequest(req, origin);
+  }
+
+  return new Response("Not found", { status: 404 });
 });

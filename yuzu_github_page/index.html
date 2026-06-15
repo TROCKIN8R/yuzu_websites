@@ -733,14 +733,14 @@
                     <div class="automation-lab-panel-grid">
                         <div class="automation-lab-copy">
                             <h4 class="automation-lab-panel-title">Contract Router</h4>
-                            <p class="automation-lab-panel-desc">Auto-route signed agreements to the right folder, CRM, and notification channel — the same pattern behind <strong>2.6K+ client e-signatures</strong>. A minimal hook (name and work email) simulates a completed signature and kicks off routing logic.</p>
-                            <p class="automation-lab-panel-desc">In production, rules can send legal docs to <strong>SharePoint</strong>, update <strong>Salesforce</strong> or your CRM, file finance copies to <strong>Drive</strong>, and ping the right <strong>Slack or Teams</strong> channel. Here we write every route to a live Supabase table so you can see it work in the open.</p>
+                            <p class="automation-lab-panel-desc">Auto-route signed agreements to the right folder, CRM, and notification channel — the same pattern behind <strong>2.6K+ client e-signatures</strong>. Submit your name and email to receive a <strong>signature request</strong> with a sample agreement and a <strong>Sign here</strong> button.</p>
+                            <p class="automation-lab-panel-desc">When you sign, the demo marks the row <strong>Signed</strong>, routes it to SharePoint, CRM, or Drive based on domain rules, and sends a thanks email. Every step is visible in the live table below.</p>
                             <ul class="automation-lab-steps">
                                 <li><strong>Capture</strong>: name + email from a two-field form</li>
+                                <li><strong>Request</strong>: signature email with mock agreement</li>
+                                <li><strong>Sign</strong>: one-click demo signature from your inbox</li>
                                 <li><strong>Route</strong>: destination picked from domain rules</li>
-                                <li><strong>Notify</strong>: alert the right team when a contract lands</li>
-                                <li><strong>Follow up</strong>: automatic email with routing summary + Calendly link</li>
-                                <li><strong>Demo</strong>: live public table below (names and emails masked)</li>
+                                <li><strong>Demo</strong>: live public table (names and emails masked)</li>
                             </ul>
                         </div>
                         <div class="automation-lab-form-wrap opp-panel opp-panel--accent">
@@ -757,7 +757,7 @@
                                 <div class="opp-field opp-field--consent">
                                     <label class="opp-consent" for="home-contract-consent">
                                         <input id="home-contract-consent" name="consent" type="checkbox" value="yes" required>
-                                        <span>I agree to receive one follow-up email from Yuzu.solutions with a booking link. Names and emails are masked in the public demo table.</span>
+                                        <span>I agree to receive emails from Yuzu.solutions for this demo, including a signature request and confirmation. Names and emails are masked in the public demo table.</span>
                                     </label>
                                 </div>
                                 <div id="home-contract-turnstile" class="opp-turnstile" aria-label="Security check"></div>
