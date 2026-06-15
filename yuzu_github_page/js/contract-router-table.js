@@ -60,7 +60,7 @@ window.ContractRouterTable = {
         if (!rows.length) {
             tbody.innerHTML = `
                 <tr class="opp-empty-row">
-                    <td colspan="5">No entries yet. Submit the form to add the first row.</td>
+                    <td colspan="4">No entries yet. Submit the form to add the first row.</td>
                 </tr>`;
             return;
         }
@@ -74,7 +74,6 @@ window.ContractRouterTable = {
                     <td data-label="When">${this.escapeHtml(this.formatDate(entry.submitted_at))}</td>
                     <td data-label="Name">${this.escapeHtml(entry.name)}</td>
                     <td data-label="Company">${this.escapeHtml(entry.company || '')}</td>
-                    <td data-label="Routed to">${this.escapeHtml(entry.destination || '')}</td>
                     <td data-label="Status"><span class="opp-status opp-status--${this.escapeHtml(statusKey)}">${statusLabel}</span></td>
                 </tr>`;
         }).join('');

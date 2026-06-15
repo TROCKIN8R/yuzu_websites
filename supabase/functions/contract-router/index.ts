@@ -23,6 +23,7 @@ const ROUTE_DESTINATIONS = [
 ];
 
 const SIGN_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const DEMO_SIGN_DISCLAIMER = "Thanks for playing along — we don't actually need your signature.";
 const CALENDLY_URL = "https://calendly.com/adrienyvin/30min";
 const SITE_URL = "https://yuzu.solutions";
 const LOGO_URL = `${SITE_URL}/assets/og-image.png`;
@@ -597,7 +598,19 @@ function buildSignResultPageHtml(options: {
   body: string;
   destination?: string;
   status?: string;
+  showDisclaimer?: boolean;
 }) {
+  const showDisclaimer = options.showDisclaimer !== false;
+  const disclaimerBlock = showDisclaimer
+    ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 20px;background-color:${BRAND.yuzuLight};border:1px solid ${BRAND.yuzuDark};border-radius:12px;">
+        <tr>
+          <td style="padding:18px 20px;">
+            <p style="margin:0;font-size:16px;line-height:1.6;font-weight:700;color:${BRAND.carbon};">${escapeHtml(DEMO_SIGN_DISCLAIMER)}</p>
+            <p style="margin:8px 0 0;font-size:14px;line-height:1.6;color:${BRAND.carbonMuted};">This page is part of the Contract Router demo on Yuzu.solutions — no real agreement was signed.</p>
+          </td>
+        </tr>
+      </table>`
+    : "";
   const destinationBlock = options.destination
     ? `<p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${BRAND.carbon};"><strong>Routed to:</strong> ${escapeHtml(options.destination)}</p>`
     : "";
@@ -621,6 +634,7 @@ function buildSignResultPageHtml(options: {
             <td style="padding:32px;">
               <p style="margin:0 0 8px;font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:${BRAND.zest};">Contract Router demo</p>
               <h1 style="margin:0 0 16px;font-size:28px;line-height:1.2;color:${BRAND.carbon};">${escapeHtml(options.headline)}</h1>
+              ${disclaimerBlock}
               <p style="margin:0 0 20px;font-size:16px;line-height:1.6;color:${BRAND.carbon};">${options.body}</p>
               ${destinationBlock}
               ${statusBlock}
@@ -783,6 +797,7 @@ async function handleSignRequest(token: string) {
       title: "Invalid link",
       headline: "This signing link is invalid or expired",
       body: "Request a new demo from the Contract Router tab on yuzu.solutions.",
+      showDisclaimer: false,
     }), 400);
   }
 
@@ -793,6 +808,7 @@ async function handleSignRequest(token: string) {
       title: "Server error",
       headline: "Could not complete signing",
       body: "The demo service is misconfigured. Try again later.",
+      showDisclaimer: false,
     }), 500);
   }
 
@@ -810,14 +826,15 @@ async function handleSignRequest(token: string) {
       title: "Not found",
       headline: "Contract not found",
       body: "This demo contract could not be located.",
+      showDisclaimer: false,
     }), 404);
   }
 
   if (existing.status === "signed") {
     return htmlResponse(buildSignResultPageHtml({
       title: "Already signed",
-      headline: "This agreement is already signed",
-      body: "No further action is needed. Check the live demo table for the Signed status.",
+      headline: "You're all set",
+      body: "This demo step is already complete. Check the live table for the Signed status.",
       destination: existing.destination,
       status: "Signed",
     }));
@@ -834,8 +851,9 @@ async function handleSignRequest(token: string) {
     console.error("Contract sign update failed:", updateError.message);
     return htmlResponse(buildSignResultPageHtml({
       title: "Server error",
-      headline: "Could not record your signature",
+      headline: "Could not record your demo signature",
       body: "Please try the Sign here link again in a moment.",
+      showDisclaimer: false,
     }), 500);
   }
 
@@ -848,8 +866,8 @@ async function handleSignRequest(token: string) {
 
   return htmlResponse(buildSignResultPageHtml({
     title: "Signed",
-    headline: "Thanks — your signature was recorded",
-    body: "A confirmation email is on its way. The live demo table will show Signed shortly.",
+    headline: "Demo complete!",
+    body: "We've marked your row as Signed in the live table and sent a confirmation email. Nothing else is needed on your end.",
     destination: existing.destination,
     status: "Signed",
   }));
