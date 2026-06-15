@@ -115,9 +115,8 @@ function getSigningSecret() {
   );
 }
 
-function getFunctionsBaseUrl() {
-  const supabaseUrl = Deno.env.get("SUPABASE_URL")?.trim() || "";
-  return `${supabaseUrl.replace(/\/$/, "")}/functions/v1/contract-router`;
+function getSignPageUrl(token: string) {
+  return `${SITE_URL}/contract-sign.html?token=${encodeURIComponent(token)}`;
 }
 
 async function sha256(value: string) {
@@ -347,13 +346,6 @@ function jsonResponse(
   return new Response(JSON.stringify(body), {
     status,
     headers: { ...buildCorsHeaders(origin), "Content-Type": "application/json" },
-  });
-}
-
-function htmlResponse(html: string, status = 200) {
-  return new Response(html, {
-    status,
-    headers: { "Content-Type": "text/html; charset=utf-8" },
   });
 }
 
@@ -592,67 +584,6 @@ function buildThanksEmailText(name: string, destination: string) {
   ].join("\n");
 }
 
-function buildSignResultPageHtml(options: {
-  title: string;
-  headline: string;
-  body: string;
-  destination?: string;
-  status?: string;
-  showDisclaimer?: boolean;
-}) {
-  const showDisclaimer = options.showDisclaimer !== false;
-  const disclaimerBlock = showDisclaimer
-    ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 20px;background-color:${BRAND.yuzuLight};border:1px solid ${BRAND.yuzuDark};border-radius:12px;">
-        <tr>
-          <td style="padding:18px 20px;">
-            <p style="margin:0;font-size:16px;line-height:1.6;font-weight:700;color:${BRAND.carbon};">${escapeHtml(DEMO_SIGN_DISCLAIMER)}</p>
-            <p style="margin:8px 0 0;font-size:14px;line-height:1.6;color:${BRAND.carbonMuted};">This page is part of the Contract Router demo on Yuzu.solutions — no real agreement was signed.</p>
-          </td>
-        </tr>
-      </table>`
-    : "";
-  const destinationBlock = options.destination
-    ? `<p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${BRAND.carbon};"><strong>Routed to:</strong> ${escapeHtml(options.destination)}</p>`
-    : "";
-  const statusBlock = options.status
-    ? `<p style="margin:0;font-size:15px;line-height:1.6;color:${BRAND.carbon};"><strong>Status:</strong> ${escapeHtml(options.status)}</p>`
-    : "";
-
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeHtml(options.title)}</title>
-</head>
-<body style="margin:0;padding:0;background:#F4F5F5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${BRAND.carbon};">
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-    <tr>
-      <td align="center" style="padding:40px 16px;">
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;background:${BRAND.paper};border:1px solid ${BRAND.border};border-radius:16px;">
-          <tr>
-            <td style="padding:32px;">
-              <p style="margin:0 0 8px;font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:${BRAND.zest};">Contract Router demo</p>
-              <h1 style="margin:0 0 16px;font-size:28px;line-height:1.2;color:${BRAND.carbon};">${escapeHtml(options.headline)}</h1>
-              ${disclaimerBlock}
-              <p style="margin:0 0 20px;font-size:16px;line-height:1.6;color:${BRAND.carbon};">${options.body}</p>
-              ${destinationBlock}
-              ${statusBlock}
-              <p style="margin:24px 0 0;">
-                <a href="${SITE_URL}/#test-automations" style="display:inline-block;padding:12px 24px;background:${BRAND.yuzu};color:${BRAND.carbon};font-size:15px;font-weight:700;text-decoration:none;border-radius:999px;border:1px solid ${BRAND.yuzuDark};">
-                  View live table
-                </a>
-              </p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`;
-}
-
 function getNotifyEmail() {
   return (Deno.env.get("INTAKE_NOTIFY_EMAIL") || NOTIFY_EMAIL).trim();
 }
@@ -790,26 +721,42 @@ async function sendNotifyEmail(
   });
 }
 
-async function handleSignRequest(token: string) {
+type SignProcessResult = {
+  httpStatus: number;
+  ok: boolean;
+  alreadySigned?: boolean;
+  destination?: string;
+  status?: string;
+  headline: string;
+  body: string;
+  showDisclaimer: boolean;
+  error?: string;
+};
+
+async function processSign(token: string): Promise<SignProcessResult> {
   const payload = await verifySignToken(token);
   if (!payload) {
-    return htmlResponse(buildSignResultPageHtml({
-      title: "Invalid link",
+    return {
+      httpStatus: 400,
+      ok: false,
       headline: "This signing link is invalid or expired",
       body: "Request a new demo from the Contract Router tab on yuzu.solutions.",
       showDisclaimer: false,
-    }), 400);
+      error: "Invalid or expired token",
+    };
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")?.trim();
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")?.trim();
   if (!supabaseUrl || !serviceRoleKey) {
-    return htmlResponse(buildSignResultPageHtml({
-      title: "Server error",
+    return {
+      httpStatus: 500,
+      ok: false,
       headline: "Could not complete signing",
       body: "The demo service is misconfigured. Try again later.",
       showDisclaimer: false,
-    }), 500);
+      error: "Server misconfigured",
+    };
   }
 
   const supabase = createClient(supabaseUrl, serviceRoleKey);
@@ -822,22 +769,27 @@ async function handleSignRequest(token: string) {
     .maybeSingle();
 
   if (fetchError || !existing) {
-    return htmlResponse(buildSignResultPageHtml({
-      title: "Not found",
+    return {
+      httpStatus: 404,
+      ok: false,
       headline: "Contract not found",
       body: "This demo contract could not be located.",
       showDisclaimer: false,
-    }), 404);
+      error: "Contract not found",
+    };
   }
 
   if (existing.status === "signed") {
-    return htmlResponse(buildSignResultPageHtml({
-      title: "Already signed",
+    return {
+      httpStatus: 200,
+      ok: true,
+      alreadySigned: true,
+      destination: existing.destination,
+      status: "signed",
       headline: "You're all set",
       body: "This demo step is already complete. Check the live table for the Signed status.",
-      destination: existing.destination,
-      status: "Signed",
-    }));
+      showDisclaimer: true,
+    };
   }
 
   const signedAt = new Date().toISOString();
@@ -849,12 +801,14 @@ async function handleSignRequest(token: string) {
 
   if (updateError) {
     console.error("Contract sign update failed:", updateError.message);
-    return htmlResponse(buildSignResultPageHtml({
-      title: "Server error",
+    return {
+      httpStatus: 500,
+      ok: false,
       headline: "Could not record your demo signature",
       body: "Please try the Sign here link again in a moment.",
       showDisclaimer: false,
-    }), 500);
+      error: "Update failed",
+    };
   }
 
   try {
@@ -864,28 +818,51 @@ async function handleSignRequest(token: string) {
     console.error("Thanks email failed:", emailError);
   }
 
-  return htmlResponse(buildSignResultPageHtml({
-    title: "Signed",
+  return {
+    httpStatus: 200,
+    ok: true,
+    alreadySigned: false,
+    destination: existing.destination,
+    status: "signed",
     headline: "Demo complete!",
     body: "We've marked your row as Signed in the live table and sent a confirmation email. Nothing else is needed on your end.",
-    destination: existing.destination,
-    status: "Signed",
-  }));
+    showDisclaimer: true,
+  };
 }
 
-async function handleIntakeRequest(req: Request, origin: string | null) {
-  let payload: { name?: string; email?: string; source?: string; consent?: boolean; captchaToken?: string };
-  try {
-    payload = await req.json();
-  } catch {
-    return jsonResponse({ error: "Invalid request" }, 400, origin);
+function signResultToJson(result: SignProcessResult) {
+  return {
+    ok: result.ok,
+    alreadySigned: result.alreadySigned,
+    destination: result.destination,
+    status: result.status,
+    headline: result.headline,
+    body: result.body,
+    showDisclaimer: result.showDisclaimer,
+    disclaimer: DEMO_SIGN_DISCLAIMER,
+    error: result.error,
+  };
+}
+
+async function handleIntakeRequest(
+  req: Request,
+  origin: string | null,
+  payload?: { name?: string; email?: string; source?: string; consent?: boolean; captchaToken?: string },
+) {
+  let body = payload;
+  if (!body) {
+    try {
+      body = await req.json();
+    } catch {
+      return jsonResponse({ error: "Invalid request" }, 400, origin);
+    }
   }
 
-  const rawName = String(payload.name || "").trim();
-  const email = String(payload.email || "").trim().toLowerCase();
-  const source = String(payload.source || "yuzu.solutions").trim().slice(0, SOURCE_MAX_LENGTH);
-  const consent = payload.consent === true;
-  const captchaToken = String(payload.captchaToken || "").trim();
+  const rawName = String(body?.name || "").trim();
+  const email = String(body?.email || "").trim().toLowerCase();
+  const source = String(body?.source || "yuzu.solutions").trim().slice(0, SOURCE_MAX_LENGTH);
+  const consent = body?.consent === true;
+  const captchaToken = String(body?.captchaToken || "").trim();
   const name = formatName(rawName);
   const remoteIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
     || req.headers.get("x-real-ip")?.trim();
@@ -938,7 +915,7 @@ async function handleIntakeRequest(req: Request, origin: string | null) {
 
   try {
     const signToken = await createSignToken(inserted.id, email, name);
-    const signUrl = `${getFunctionsBaseUrl()}?token=${encodeURIComponent(signToken)}`;
+    const signUrl = getSignPageUrl(signToken);
     await sendSignatureRequestEmail(name, email, row.company, row.destination, signUrl);
     emailSent = true;
   } catch (error) {
@@ -968,7 +945,7 @@ Deno.serve(async (req) => {
   const signToken = url.searchParams.get("token");
 
   if (req.method === "GET" && signToken) {
-    return handleSignRequest(signToken);
+    return Response.redirect(getSignPageUrl(signToken), 302);
   }
 
   if (req.method === "OPTIONS") {
@@ -979,10 +956,26 @@ Deno.serve(async (req) => {
   }
 
   if (req.method === "POST") {
+    let body: { action?: string; token?: string; name?: string; email?: string; source?: string; consent?: boolean; captchaToken?: string };
+    try {
+      body = await req.json();
+    } catch {
+      return jsonResponse({ error: "Invalid request" }, 400, origin);
+    }
+
+    if (body.action === "sign") {
+      const token = String(body.token || "").trim();
+      if (!token) {
+        return jsonResponse({ error: "Token is required" }, 400, origin);
+      }
+      const result = await processSign(token);
+      return jsonResponse(signResultToJson(result), result.httpStatus, origin);
+    }
+
     if (!isAllowedOrigin(origin)) {
       return jsonResponse({ error: "Forbidden" }, 403, origin);
     }
-    return handleIntakeRequest(req, origin);
+    return handleIntakeRequest(req, origin, body);
   }
 
   return new Response("Not found", { status: 404 });

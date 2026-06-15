@@ -14,7 +14,7 @@ Push to `main` (or run workflow manually). GitHub Actions deploys `contract-rout
 
 1. Open the homepage **Contract Router** tab, complete consent + captcha, submit name and email.
 2. Check your inbox for a **Signature requested** email with a mock Services Agreement and **Sign here** button.
-3. Click **Sign here** — you should see a confirmation page, receive a thanks email, and the live table row should update to **Signed**.
+3. Click **Sign here** — you land on `contract-sign.html` with a branded confirmation, receive a thanks email, and the live table row updates to **Signed**.
 
 ## Optional env vars
 
