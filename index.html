@@ -641,11 +641,16 @@
                         <div class="automation-detail-anchor" data-automation-tab="contracts" hidden aria-hidden="true"></div>
                     </div>
                     <div class="automation-picker" data-automation-tab="refresh">
-                        <button type="button" class="service-card automation-lab-tab" role="tab" aria-selected="false" aria-expanded="false" data-automation-tab="refresh" id="automation-tab-refresh" aria-controls="automation-panel-refresh" disabled aria-disabled="true">
+                        <button type="button" class="service-card automation-lab-tab" role="tab" aria-selected="false" aria-expanded="false" data-automation-tab="refresh" id="automation-tab-refresh" aria-controls="automation-panel-refresh">
                             <span class="service-card-icon" aria-hidden="true">⏱️</span>
                             <span class="service-card-body">
                                 <span class="service-card-title">Refresh Watchdog</span>
-                                <span class="service-card-tag automation-lab-tab-badge automation-lab-tab-badge--soon">Soon</span>
+                                <span class="service-card-tag automation-lab-tab-badge automation-lab-tab-badge--live">Live</span>
+                                <span class="automation-lab-cta">
+                                    <span class="automation-lab-cta-try automation-lab-cta-try--tap">Tap to try</span>
+                                    <span class="automation-lab-cta-try automation-lab-cta-try--click">Click to try</span>
+                                    <span class="automation-lab-cta-close automation-lab-cta-close--tap">Tap to close</span>
+                                </span>
                             </span>
                         </button>
                         <div class="automation-detail-anchor" data-automation-tab="refresh" hidden aria-hidden="true"></div>
@@ -728,10 +733,75 @@
                 </div>
 
                 <div class="automation-lab-panel" data-automation-panel="refresh" id="automation-panel-refresh" role="tabpanel" aria-labelledby="automation-tab-refresh" hidden aria-hidden="true">
-                    <div class="automation-lab-placeholder">
-                        <span class="automation-lab-placeholder-icon" aria-hidden="true">⏱️</span>
-                        <h4 class="automation-lab-panel-title">Refresh Watchdog</h4>
-                        <p class="automation-lab-panel-desc">Monitor pipeline runtimes and ping Slack when a refresh blows past its SLA, inspired by a 78-minute refresh we cut to 4. Demo coming soon.</p>
+                    <div class="automation-lab-panel-grid">
+                        <div class="automation-lab-copy">
+                            <h4 class="automation-lab-panel-title">Refresh Watchdog</h4>
+                            <p class="automation-lab-panel-desc">Monitor pipeline runtimes and alert the team when a refresh blows past its SLA. Inspired by a <strong>78-minute refresh we cut to 4</strong>, the same pattern now watches Fabric semantic models, lakehouse jobs, and incremental loads.</p>
+                            <p class="automation-lab-panel-desc">In production, breaches route to <strong>Slack</strong> or <strong>Teams</strong> with pipeline name, runtime, and owner. Here we write every run to a live Supabase table and send an inbox alert when the SLA is exceeded.</p>
+                            <ul class="automation-lab-steps">
+                                <li><strong>Track</strong>: pipeline name, duration, and SLA threshold</li>
+                                <li><strong>Compare</strong>: flag runs that finish over the limit</li>
+                                <li><strong>Alert</strong>: ping Slack/Teams (demo uses email stand-in)</li>
+                                <li><strong>Demo</strong>: run a healthy refresh or simulate a breach below</li>
+                            </ul>
+                        </div>
+                        <div class="automation-lab-form-wrap opp-panel opp-panel--accent">
+                            <p class="automation-lab-form-label">Trigger it now</p>
+                            <form id="homeRefreshForm" class="opp-form" novalidate>
+                                <div class="opp-field">
+                                    <label for="home-refresh-pipeline">Pipeline</label>
+                                    <select id="home-refresh-pipeline" name="pipeline" required>
+                                        <option value="refresh_semantic_model">Semantic model refresh</option>
+                                        <option value="sales_dwh_incremental">Sales DWH incremental</option>
+                                        <option value="fabric_lakehouse_gold">Fabric lakehouse Gold layer</option>
+                                    </select>
+                                </div>
+                                <div class="opp-field">
+                                    <label for="home-refresh-sla">SLA (minutes)</label>
+                                    <input id="home-refresh-sla" name="sla" type="number" min="1" max="60" value="8" required>
+                                </div>
+                                <div id="home-refresh-turnstile" class="opp-turnstile" aria-label="Security check"></div>
+                                <div class="refresh-actions">
+                                    <button type="button" id="home-refresh-submit" class="opp-submit" disabled aria-disabled="true">Run healthy refresh →</button>
+                                    <button type="button" id="home-refresh-breach" class="opp-submit opp-submit--alert" disabled aria-disabled="true">Simulate SLA breach →</button>
+                                </div>
+                                <div id="homeRefreshProgress" class="refresh-progress" hidden>
+                                    <p id="homeRefreshProgressLabel" class="refresh-progress-label">Running pipeline refresh…</p>
+                                    <div class="refresh-progress-bar" aria-hidden="true">
+                                        <div id="homeRefreshProgressFill" class="refresh-progress-fill"></div>
+                                    </div>
+                                    <p id="homeRefreshProgressTimer" class="refresh-progress-timer">0m 00s</p>
+                                </div>
+                                <p id="homeRefreshFormStatus" class="opp-form-status" hidden></p>
+                            </form>
+
+                            <div class="opp-preview mt-6" aria-labelledby="home-refresh-preview-heading">
+                                <div class="opp-toolbar">
+                                    <div>
+                                        <h4 id="home-refresh-preview-heading" class="text-sm font-extrabold text-gray-900">Latest 5 runs</h4>
+                                        <p id="homeRefreshTableStatus" class="opp-status-msg mt-1">Loading…</p>
+                                    </div>
+                                </div>
+                                <div class="opp-table-wrap">
+                                    <table class="opp-table opp-table--compact">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">When</th>
+                                                <th scope="col">Pipeline</th>
+                                                <th scope="col">Duration</th>
+                                                <th scope="col">SLA</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="homeRefreshTableBody">
+                                            <tr class="opp-empty-row"><td colspan="5">Loading…</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <p class="automation-lab-form-note">SLA breaches send an alert email (Slack stand-in in this demo).</p>
+                        </div>
                     </div>
                 </div>
                 </div>
@@ -955,8 +1025,12 @@
 <script src="js/opportunities-config.js"></script>
 <script src="js/opportunities-data.js"></script>
 <script src="js/opportunities-table.js"></script>
+<script src="js/refresh-watchdog-config.js"></script>
+<script src="js/refresh-watchdog-data.js"></script>
+<script src="js/refresh-watchdog-table.js"></script>
 <script src="js/automation-picker.js"></script>
 <script src="js/automation-demos.js"></script>
+<script src="js/refresh-watchdog-demo.js"></script>
 <script>
     const svcDefs = `<defs>
         <linearGradient id="svcLemon" x1="0" y1="0" x2="1" y2="1">

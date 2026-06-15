@@ -124,11 +124,9 @@
             panel.setAttribute('aria-hidden', String(!isActive));
         });
 
-        if (tabId === DEFAULT_TAB) {
-            document.dispatchEvent(new CustomEvent('automation-panel-open', {
-                detail: { tabId }
-            }));
-        }
+        document.dispatchEvent(new CustomEvent('automation-panel-open', {
+            detail: { tabId }
+        }));
     }
 
     function placePanel(tabId) {
