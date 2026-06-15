@@ -1,2 +1,5 @@
 [functions.opportunity-intake]
 verify_jwt = false
+
+[functions.refresh-watchdog]
+verify_jwt = false

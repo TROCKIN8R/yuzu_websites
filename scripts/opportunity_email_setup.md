@@ -5,6 +5,7 @@ The homepage form calls a Supabase Edge Function that:
 1. Verifies consent and Cloudflare Turnstile (when configured)
 2. Inserts a masked row into `opportunities`
 3. Sends a personalized follow-up email via your Hostinger mailbox
+4. Sends an internal notification to `adrienyvin@gmail.com` with the full submission details
 
 SMTP and Turnstile secrets stay in Supabase, never in the public website.
 
@@ -65,6 +66,12 @@ SMTP_USER=info@yuzu.solutions
 SMTP_PASS=your-mailbox-password
 SMTP_FROM=info@yuzu.solutions
 TURNSTILE_SECRET_KEY=your-turnstile-secret-key
+```
+
+Optional notification override (defaults to `adrienyvin@gmail.com`):
+
+```
+INTAKE_NOTIFY_EMAIL=adrienyvin@gmail.com
 ```
 
 `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected automatically for Edge Functions.

@@ -18,6 +18,7 @@ const FREE_DOMAINS = new Set([
 const CALENDLY_URL = "https://calendly.com/adrienyvin/30min";
 const SITE_URL = "https://yuzu.solutions";
 const LOGO_URL = `${SITE_URL}/assets/og-image.png`;
+const NOTIFY_EMAIL = "adrienyvin@gmail.com";
 const NAME_MAX_LENGTH = 120;
 const EMAIL_MAX_LENGTH = 254;
 const SOURCE_MAX_LENGTH = 120;
@@ -360,7 +361,69 @@ function buildEmailText(name: string) {
   ].join("\n");
 }
 
-async function sendFollowUpEmail(name: string, email: string) {
+function getNotifyEmail() {
+  return (Deno.env.get("INTAKE_NOTIFY_EMAIL") || NOTIFY_EMAIL).trim();
+}
+
+function buildNotifyEmailHtml(
+  name: string,
+  email: string,
+  row: ReturnType<typeof buildRow>,
+  source: string,
+) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>New opportunity submission</title>
+</head>
+<body style="margin:0;padding:24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${BRAND.carbon};background:#F4F5F5;">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;margin:0 auto;background:${BRAND.paper};border:1px solid ${BRAND.border};border-radius:12px;">
+    <tr>
+      <td style="padding:24px;">
+        <p style="margin:0 0 8px;font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:${BRAND.zest};">New submission</p>
+        <p style="margin:0 0 20px;font-size:18px;font-weight:700;color:${BRAND.carbon};">Opportunity tracker demo</p>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="font-size:15px;line-height:1.6;">
+          <tr><td style="padding:8px 0;color:${BRAND.carbonMuted};width:110px;">Name</td><td style="padding:8px 0;"><strong>${escapeHtml(name)}</strong></td></tr>
+          <tr><td style="padding:8px 0;color:${BRAND.carbonMuted};">Email</td><td style="padding:8px 0;"><a href="mailto:${escapeHtml(email)}" style="color:${BRAND.yuzuDark};text-decoration:none;">${escapeHtml(email)}</a></td></tr>
+          <tr><td style="padding:8px 0;color:${BRAND.carbonMuted};">Company</td><td style="padding:8px 0;">${escapeHtml(row.company)}</td></tr>
+          <tr><td style="padding:8px 0;color:${BRAND.carbonMuted};">Domain</td><td style="padding:8px 0;">${escapeHtml(row.domain)}</td></tr>
+          <tr><td style="padding:8px 0;color:${BRAND.carbonMuted};">Source</td><td style="padding:8px 0;">${escapeHtml(source)}</td></tr>
+          <tr><td style="padding:8px 0;color:${BRAND.carbonMuted};">Status</td><td style="padding:8px 0;">${escapeHtml(row.status)}</td></tr>
+        </table>
+        <p style="margin:20px 0 0;font-size:14px;line-height:1.6;color:${BRAND.carbonMuted};">
+          Public table shows masked name <strong>${escapeHtml(row.name)}</strong> and email <strong>${escapeHtml(row.email_masked)}</strong>.
+          <a href="${SITE_URL}/#test-automations" style="color:${BRAND.yuzuDark};text-decoration:none;font-weight:600;">View live table</a>
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+function buildNotifyEmailText(
+  name: string,
+  email: string,
+  row: ReturnType<typeof buildRow>,
+  source: string,
+) {
+  return [
+    "New opportunity tracker submission",
+    "",
+    `Name: ${name}`,
+    `Email: ${email}`,
+    `Company: ${row.company}`,
+    `Domain: ${row.domain}`,
+    `Source: ${source}`,
+    `Status: ${row.status}`,
+    "",
+    `Public table (masked): ${row.name} / ${row.email_masked}`,
+    `${SITE_URL}/#test-automations`,
+  ].join("\n");
+}
+
+function createSmtpTransporter() {
   const host = Deno.env.get("SMTP_HOST")?.trim();
   const user = Deno.env.get("SMTP_USER")?.trim();
   const pass = Deno.env.get("SMTP_PASS")?.trim();
@@ -372,12 +435,19 @@ async function sendFollowUpEmail(name: string, email: string) {
     throw new Error("SMTP not configured");
   }
 
-  const transporter = nodemailer.createTransport({
-    host,
-    port,
-    secure,
-    auth: { user, pass },
-  });
+  return {
+    from,
+    transporter: nodemailer.createTransport({
+      host,
+      port,
+      secure,
+      auth: { user, pass },
+    }),
+  };
+}
+
+async function sendFollowUpEmail(name: string, email: string) {
+  const { from, transporter } = createSmtpTransporter();
 
   await transporter.sendMail({
     from: `"Yuzu.solutions" <${from}>`,
@@ -386,6 +456,25 @@ async function sendFollowUpEmail(name: string, email: string) {
     subject: "Thanks for trying Yuzu.solutions",
     text: buildEmailText(name),
     html: buildEmailHtml(name),
+  });
+}
+
+async function sendNotifyEmail(
+  name: string,
+  email: string,
+  row: ReturnType<typeof buildRow>,
+  source: string,
+) {
+  const { from, transporter } = createSmtpTransporter();
+  const notifyTo = getNotifyEmail();
+
+  await transporter.sendMail({
+    from: `"Yuzu.solutions" <${from}>`,
+    to: notifyTo,
+    replyTo: email,
+    subject: `New opportunity submission: ${name}`,
+    text: buildNotifyEmailText(name, email, row, source),
+    html: buildNotifyEmailHtml(name, email, row, source),
   });
 }
 
@@ -462,6 +551,7 @@ Deno.serve(async (req) => {
   }
 
   let emailSent = false;
+  let notifySent = false;
   try {
     await sendFollowUpEmail(name, email);
     emailSent = true;
@@ -470,9 +560,18 @@ Deno.serve(async (req) => {
     console.error("Follow-up email failed:", emailError);
   }
 
+  try {
+    await sendNotifyEmail(name, email, row, source);
+    notifySent = true;
+  } catch (error) {
+    const notifyError = error instanceof Error ? error.message : String(error);
+    console.error("Notify email failed:", notifyError);
+  }
+
   return jsonResponse({
     ok: true,
     row,
     emailSent,
+    notifySent,
   }, 200, origin);
 });
