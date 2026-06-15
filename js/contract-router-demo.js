@@ -205,11 +205,10 @@
 
         try {
             const result = await data.submit(name, email, source, { consent, captchaToken });
-            const destination = result.row?.destination || 'your destination';
             setFormMessage(
                 result.emailSent
-                    ? `Routed to ${destination}. Check your inbox for a follow-up with a Calendly link.`
-                    : `Routed to ${destination}. Your row should appear below shortly.`,
+                    ? 'Submitted. Check your inbox for a signature request with a sample agreement and Sign here button.'
+                    : 'Submitted. Your row should appear below shortly — check your inbox for the signature request.',
                 'success'
             );
             form.reset();

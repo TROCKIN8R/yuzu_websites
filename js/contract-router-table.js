@@ -44,10 +44,12 @@ window.ContractRouterTable = {
     },
 
     normalizeStatus(value) {
-        return String(value || 'routed').trim().toLowerCase();
+        return String(value || 'pending').trim().toLowerCase();
     },
 
     statusLabel(key) {
+        if (key === 'pending') return 'Pending';
+        if (key === 'signed') return 'Signed';
         return key.charAt(0).toUpperCase() + key.slice(1);
     },
 
@@ -145,21 +147,28 @@ window.ContractRouterTable = {
         this.clearBurst(id);
 
         let ticks = 0;
-        const maxTicks = 5;
+        const maxTicks = 90;
 
         this.load(id, { quiet: true });
 
         instance.burstTimer = window.setInterval(async () => {
             ticks += 1;
             const entries = await this.load(id, { quiet: true });
-            const found = entries.some((entry) => entry.name === name);
+            const row = entries.find((entry) => entry.name === name);
+            const signed = row?.status === 'signed';
 
-            if (found || ticks >= maxTicks) {
+            if (signed || ticks >= maxTicks) {
                 this.clearBurst(id);
-                if (found) {
+                if (signed) {
                     this.setStatus(
                         instance,
-                        `Latest ${Math.min(entries.length, instance.limit)} · your row appeared`,
+                        `Latest ${Math.min(entries.length, instance.limit)} · your row is signed`,
+                        false
+                    );
+                } else if (row) {
+                    this.setStatus(
+                        instance,
+                        `Latest ${Math.min(entries.length, instance.limit)} · open the signature email to finish`,
                         false
                     );
                 }

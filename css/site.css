@@ -2573,6 +2573,8 @@ html:has(.hero-fullscreen).nav-past-hero .nav-cta-desktop {
 .opp-status--researched { color: var(--zest-600); }
 .opp-status--sent { color: var(--carbon-400); }
 .opp-status--routed { color: var(--zest-600); }
+.opp-status--pending { color: var(--carbon-400); }
+.opp-status--signed { color: var(--zest-600); }
 @media (max-width: 767px) {
     .opp-table thead { display: none; }
     .opp-table tr {
