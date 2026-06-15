@@ -99,7 +99,7 @@ window.ContractRouterData = {
         const { url, anonKey, table } = this.config().supabase;
         const base = url.replace(/\/$/, '');
         const params = new URLSearchParams({
-            select: 'submitted_at,name,company,destination,status',
+            select: 'submitted_at,name,company,status',
             order: 'submitted_at.desc'
         });
 
