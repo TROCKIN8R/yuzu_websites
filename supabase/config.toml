@@ -3,3 +3,6 @@ verify_jwt = false
 
 [functions.refresh-watchdog]
 verify_jwt = false
+
+[functions.contract-router]
+verify_jwt = false

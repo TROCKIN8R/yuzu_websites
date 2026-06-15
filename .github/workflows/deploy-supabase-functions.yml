@@ -43,3 +43,8 @@ jobs:
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_AUTOMATION }}
         run: supabase functions deploy refresh-watchdog --project-ref mwgbeolcgigvpufjmodz
+
+      - name: Deploy contract-router
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_AUTOMATION }}
+        run: supabase functions deploy contract-router --project-ref mwgbeolcgigvpufjmodz
