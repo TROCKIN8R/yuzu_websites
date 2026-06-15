@@ -631,11 +631,16 @@
                         <div class="automation-detail-anchor" data-automation-tab="opportunity" hidden aria-hidden="true"></div>
                     </div>
                     <div class="automation-picker" data-automation-tab="contracts">
-                        <button type="button" class="service-card automation-lab-tab" role="tab" aria-selected="false" aria-expanded="false" data-automation-tab="contracts" id="automation-tab-contracts" aria-controls="automation-panel-contracts" disabled aria-disabled="true">
+                        <button type="button" class="service-card automation-lab-tab" role="tab" aria-selected="false" aria-expanded="false" data-automation-tab="contracts" id="automation-tab-contracts" aria-controls="automation-panel-contracts">
                             <span class="service-card-icon" aria-hidden="true">✍️</span>
                             <span class="service-card-body">
                                 <span class="service-card-title">Contract Router</span>
-                                <span class="service-card-tag automation-lab-tab-badge automation-lab-tab-badge--soon">Soon</span>
+                                <span class="service-card-tag automation-lab-tab-badge automation-lab-tab-badge--live">Live</span>
+                                <span class="automation-lab-cta">
+                                    <span class="automation-lab-cta-try automation-lab-cta-try--tap">Tap to try</span>
+                                    <span class="automation-lab-cta-try automation-lab-cta-try--click">Click to try</span>
+                                    <span class="automation-lab-cta-close automation-lab-cta-close--tap">Tap to close</span>
+                                </span>
                             </span>
                         </button>
                         <div class="automation-detail-anchor" data-automation-tab="contracts" hidden aria-hidden="true"></div>
@@ -725,10 +730,68 @@
                 </div>
 
                 <div class="automation-lab-panel" data-automation-panel="contracts" id="automation-panel-contracts" role="tabpanel" aria-labelledby="automation-tab-contracts" hidden aria-hidden="true">
-                    <div class="automation-lab-placeholder">
-                        <span class="automation-lab-placeholder-icon" aria-hidden="true">✍️</span>
-                        <h4 class="automation-lab-panel-title">Contract Router</h4>
-                        <p class="automation-lab-panel-desc">Auto-route signed agreements to the right folder, CRM, and notification channel, the same pattern behind 2.6K+ client e-signatures. Demo coming soon.</p>
+                    <div class="automation-lab-panel-grid">
+                        <div class="automation-lab-copy">
+                            <h4 class="automation-lab-panel-title">Contract Router</h4>
+                            <p class="automation-lab-panel-desc">Auto-route signed agreements to the right folder, CRM, and notification channel — the same pattern behind <strong>2.6K+ client e-signatures</strong>. A minimal hook (name and work email) simulates a completed signature and kicks off routing logic.</p>
+                            <p class="automation-lab-panel-desc">In production, rules can send legal docs to <strong>SharePoint</strong>, update <strong>Salesforce</strong> or your CRM, file finance copies to <strong>Drive</strong>, and ping the right <strong>Slack or Teams</strong> channel. Here we write every route to a live Supabase table so you can see it work in the open.</p>
+                            <ul class="automation-lab-steps">
+                                <li><strong>Capture</strong>: name + email from a two-field form</li>
+                                <li><strong>Route</strong>: destination picked from domain rules</li>
+                                <li><strong>Notify</strong>: alert the right team when a contract lands</li>
+                                <li><strong>Follow up</strong>: automatic email with routing summary + Calendly link</li>
+                                <li><strong>Demo</strong>: live public table below (names and emails masked)</li>
+                            </ul>
+                        </div>
+                        <div class="automation-lab-form-wrap opp-panel opp-panel--accent">
+                            <p class="automation-lab-form-label">Trigger it now</p>
+                            <form id="homeContractForm" class="opp-form" novalidate>
+                                <div class="opp-field">
+                                    <label for="home-contract-name">Name</label>
+                                    <input id="home-contract-name" name="name" type="text" autocomplete="name" required maxlength="120" placeholder="Alex Morgan">
+                                </div>
+                                <div class="opp-field">
+                                    <label for="home-contract-email">Work email</label>
+                                    <input id="home-contract-email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="alex@company.com">
+                                </div>
+                                <div class="opp-field opp-field--consent">
+                                    <label class="opp-consent" for="home-contract-consent">
+                                        <input id="home-contract-consent" name="consent" type="checkbox" value="yes" required>
+                                        <span>I agree to receive one follow-up email from Yuzu.solutions with a booking link. Names and emails are masked in the public demo table.</span>
+                                    </label>
+                                </div>
+                                <div id="home-contract-turnstile" class="opp-turnstile" aria-label="Security check"></div>
+                                <button type="submit" id="home-contract-submit" class="opp-submit" disabled aria-disabled="true">Route contract →</button>
+                                <p id="homeContractFormStatus" class="opp-form-status" hidden></p>
+                            </form>
+
+                            <div class="opp-preview mt-6" aria-labelledby="home-contract-preview-heading">
+                                <div class="opp-toolbar">
+                                    <div>
+                                        <h4 id="home-contract-preview-heading" class="text-sm font-extrabold text-gray-900">Latest 5 routes</h4>
+                                        <p id="homeContractTableStatus" class="opp-status-msg mt-1">Loading…</p>
+                                    </div>
+                                </div>
+                                <div class="opp-table-wrap">
+                                    <table class="opp-table opp-table--compact">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">When</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Company</th>
+                                                <th scope="col">Routed to</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="homeContractTableBody">
+                                            <tr class="opp-empty-row"><td colspan="5">Loading…</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <p class="automation-lab-form-note">Names and emails are masked in the public table.</p>
+                        </div>
                     </div>
                 </div>
 
@@ -1025,11 +1088,15 @@
 <script src="js/opportunities-config.js"></script>
 <script src="js/opportunities-data.js"></script>
 <script src="js/opportunities-table.js"></script>
+<script src="js/contract-router-config.js"></script>
+<script src="js/contract-router-data.js"></script>
+<script src="js/contract-router-table.js"></script>
 <script src="js/refresh-watchdog-config.js"></script>
 <script src="js/refresh-watchdog-data.js"></script>
 <script src="js/refresh-watchdog-table.js"></script>
 <script src="js/automation-picker.js"></script>
 <script src="js/automation-demos.js"></script>
+<script src="js/contract-router-demo.js"></script>
 <script src="js/refresh-watchdog-demo.js"></script>
 <script>
     const svcDefs = `<defs>
