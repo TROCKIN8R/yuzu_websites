@@ -1,0 +1,18 @@
+slug: semantic-model-rls-at-scale
+title:
+  en: "Semantic model RLS at scale: patterns that survive reorgs"
+  fr: "RLS modèle sémantique à l'échelle : patterns qui survivent aux réorganisations"
+  es: "RLS en modelos semánticos a escala: patrones que sobreviven reorganizaciones"
+description:
+  en: "Dynamic RLS with Entra groups, bridge tables for many-to-many, and testing RLS before every deployment pipeline stage."
+  fr: "RLS dynamique avec groupes Entra, tables pont many-to-many, et tests RLS avant chaque étape de pipeline."
+  es: "RLS dinámico con grupos Entra, tablas puente many-to-many, y pruebas RLS antes de cada etapa del pipeline."
+publish_at: "2026-07-03T13:00:00Z"
+status: scheduled
+author: Adrien Yvin
+category: workflows
+tags:
+  - power-bi
+  - rls
+  - security
+  - semantic-model

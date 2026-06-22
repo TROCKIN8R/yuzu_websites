@@ -1,0 +1,18 @@
+slug: power-bi-deployment-pipelines-in-practice
+title:
+  en: "Power BI deployment pipelines in practice: what to automate first"
+  fr: "Pipelines de déploiement Power BI en pratique : quoi automatiser en premier"
+  es: "Pipelines de despliegue Power BI en la práctica: qué automatizar primero"
+description:
+  en: "Dev, Test, Prod rules of thumb, dataset rules vs report-only deploys, and where GitHub Actions still beat native pipeline buttons."
+  fr: "Règles Dev/Test/Prod, règles dataset vs deploy rapport seul, et où GitHub Actions bat encore les boutons natifs."
+  es: "Reglas Dev/Test/Prod, reglas de dataset vs despliegue solo informe, y dónde GitHub Actions aún gana a botones nativos."
+publish_at: "2026-07-07T13:00:00Z"
+status: scheduled
+author: Adrien Yvin
+category: workflows
+tags:
+  - power-bi
+  - deployment
+  - fabric
+  - devops

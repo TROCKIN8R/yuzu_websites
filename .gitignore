@@ -2,3 +2,7 @@
 .bin/
 
 supabase/.temp/
+content/blog/.published.json
+yuzu_github_page/blog/
+yuzu_github_page/fr/blog/
+yuzu_github_page/es/blog/

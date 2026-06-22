@@ -3,11 +3,14 @@
 
 from __future__ import annotations
 
+import json
 import re
 from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1] / "yuzu_github_page"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+BLOG_MANIFEST = REPO_ROOT / "content" / "blog" / ".published.json"
 BASE = "https://yuzu.solutions"
 TODAY = date.today().isoformat()
 
@@ -1151,9 +1154,37 @@ def patch_english_pages(pristine_index: str, pristine_services: dict[str, str]) 
         (ROOT / "services" / f"{slug}.html").write_text(html, encoding="utf-8")
 
 
+def load_blog_manifest() -> dict:
+    if not BLOG_MANIFEST.exists():
+        return {"index_urls": {}, "posts": []}
+    return json.loads(BLOG_MANIFEST.read_text(encoding="utf-8"))
+
+
+def append_sitemap_url(
+    lines: list[str],
+    loc: str,
+    lastmod: str,
+    changefreq: str,
+    priority: str,
+    rels: dict[str, str],
+) -> None:
+    lines.append("  <url>")
+    lines.append(f"    <loc>{loc}</loc>")
+    lines.append(f"    <lastmod>{lastmod}</lastmod>")
+    lines.append(f"    <changefreq>{changefreq}</changefreq>")
+    lines.append(f"    <priority>{priority}</priority>")
+    for hl, key in [("en", "en"), ("fr-CA", "fr"), ("es", "es"), ("x-default", "en")]:
+        lines.append(
+            f'    <xhtml:link rel="alternate" hreflang="{hl}" '
+            f'href="{BASE}{rels[key]}"/>'
+        )
+    lines.append("  </url>")
+
+
 def write_sitemap() -> None:
     pages = ["home", *SERVICE_SLUGS]
     locales = [None, "fr", "es"]
+    blog = load_blog_manifest()
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
@@ -1163,21 +1194,43 @@ def write_sitemap() -> None:
         for locale in locales:
             loc = page_url(locale, page)
             rels = page_urls(page)
-            lines.append("  <url>")
-            lines.append(f"    <loc>{loc}</loc>")
-            lines.append(f"    <lastmod>{TODAY}</lastmod>")
-            if page == "home":
-                lines.append("    <changefreq>weekly</changefreq>")
-                lines.append("    <priority>1.0</priority>")
-            else:
-                lines.append("    <changefreq>monthly</changefreq>")
-                lines.append("    <priority>0.9</priority>")
-            for hl, key in [("en", "en"), ("fr-CA", "fr"), ("es", "es"), ("x-default", "en")]:
-                lines.append(
-                    f'    <xhtml:link rel="alternate" hreflang="{hl}" '
-                    f'href="{BASE}{rels[key]}"/>'
-                )
-            lines.append("  </url>")
+            append_sitemap_url(
+                lines,
+                loc,
+                TODAY,
+                "weekly" if page == "home" else "monthly",
+                "1.0" if page == "home" else "0.9",
+                rels,
+            )
+
+    index_urls = blog.get("index_urls") or {}
+    if index_urls:
+        for locale_key in ("en", "fr", "es"):
+            rels = index_urls
+            append_sitemap_url(
+                lines,
+                f"{BASE}{index_urls[locale_key]}",
+                TODAY,
+                "weekly",
+                "0.85",
+                rels,
+            )
+
+    for post in blog.get("posts") or []:
+        rels = post.get("urls") or {}
+        lastmod = post.get("lastmod") or TODAY
+        for locale_key in ("en", "fr", "es"):
+            if locale_key not in rels:
+                continue
+            append_sitemap_url(
+                lines,
+                f"{BASE}{rels[locale_key]}",
+                lastmod,
+                "monthly",
+                "0.8",
+                rels,
+            )
+
     lines.append("</urlset>")
     (ROOT / "sitemap.xml").write_text("\n".join(lines) + "\n", encoding="utf-8")
 

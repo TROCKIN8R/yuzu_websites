@@ -1,0 +1,18 @@
+slug: bi-git-like-product-code
+title:
+  en: "Why BI teams should treat Git like product code"
+  fr: "Pourquoi les équipes BI devraient traiter Git comme du code produit"
+  es: "Por qué los equipos de BI deben tratar Git como código de producto"
+description:
+  en: "Semantic models, reports, and pipelines belong in version control with PR reviews, CI checks, and deployment pipelines, not in shared folders."
+  fr: "Modèles sémantiques, rapports et pipelines appartiennent au contrôle de version avec revues PR, CI et pipelines de déploiement, pas aux dossiers partagés."
+  es: "Modelos semánticos, informes y pipelines pertenecen al control de versiones con revisiones PR, CI y pipelines de despliegue, no a carpetas compartidas."
+publish_at: "2026-06-14T13:00:00Z"
+status: published
+author: Adrien Yvin
+category: workflows
+tags:
+  - git
+  - fabric
+  - power-bi
+  - devops

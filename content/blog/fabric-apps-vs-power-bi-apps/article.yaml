@@ -1,0 +1,18 @@
+slug: fabric-apps-vs-power-bi-apps
+title:
+  en: "Fabric Apps vs Power BI Apps: web apps vs report bundles"
+  fr: "Apps Fabric vs apps Power BI : webapps vs compilations de rapports"
+  es: "Apps Fabric vs apps Power BI: webapps vs compilaciones de informes"
+description:
+  en: "Fabric Apps are read/write web experiences on your lakehouse data. Power BI Apps are curated read-only report collections. Here is how to choose."
+  fr: "Les apps Fabric sont des expériences web lecture/écriture sur vos données lakehouse. Les apps Power BI sont des compilations de rapports en lecture seule. Comment choisir."
+  es: "Las apps Fabric son experiencias web lectura/escritura sobre datos lakehouse. Las apps Power BI son compilaciones de informes de solo lectura. Cómo elegir."
+publish_at: "2026-06-21T14:00:00Z"
+status: published
+author: Adrien Yvin
+category: new-tech
+tags:
+  - fabric
+  - power-bi
+  - apps
+  - governance
