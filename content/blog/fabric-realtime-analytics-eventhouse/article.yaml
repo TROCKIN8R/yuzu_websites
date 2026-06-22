@@ -7,7 +7,7 @@ description:
   en: "How streaming events land in Eventhouse, when to expose them in Power BI vs Real-Time dashboards, and governance for high-velocity data."
   fr: "Comment les événements stream arrivent dans Eventhouse, Power BI vs dashboards Real-Time, et gouvernance des données à haute vélocité."
   es: "Cómo eventos en streaming llegan a Eventhouse, Power BI vs dashboards Real-Time, y gobernanza de datos de alta velocidad."
-publish_at: "2026-07-10T13:00:00Z"
+publish_at: "2026-07-07T13:00:00Z"
 status: scheduled
 author: Adrien Yvin
 category: bi-news

@@ -7,7 +7,7 @@ description:
   en: "Direct Lake cuts duplicate data and refresh windows. Import still wins for complex DAX and small datasets. A practical decision guide for Fabric semantic models."
   fr: "Direct Lake réduit la duplication et les fenêtres de refresh. Import reste roi pour DAX complexe et petits jeux de données. Guide pratique pour modèles Fabric."
   es: "Direct Lake reduce duplicación y ventanas de refresh. Import sigue ganando con DAX complejo y datasets pequeños. Guía práctica para modelos Fabric."
-publish_at: "2026-06-26T13:00:00Z"
+publish_at: "2026-06-23T13:00:00Z"
 status: scheduled
 author: Adrien Yvin
 category: new-tech

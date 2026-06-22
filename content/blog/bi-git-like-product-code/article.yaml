@@ -7,7 +7,7 @@ description:
   en: "Semantic models, reports, and pipelines belong in version control with PR reviews, CI checks, and deployment pipelines, not in shared folders."
   fr: "Modèles sémantiques, rapports et pipelines appartiennent au contrôle de version avec revues PR, CI et pipelines de déploiement, pas aux dossiers partagés."
   es: "Modelos semánticos, informes y pipelines pertenecen al control de versiones con revisiones PR, CI y pipelines de despliegue, no a carpetas compartidas."
-publish_at: "2026-06-14T13:00:00Z"
+publish_at: "2026-04-07T13:00:00Z"
 status: published
 author: Adrien Yvin
 category: workflows

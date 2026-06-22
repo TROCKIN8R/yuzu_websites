@@ -7,7 +7,7 @@ description:
   en: "Trunk-based vs feature branches, what to commit from Fabric, and how to avoid merge conflicts on semantic models and reports."
   fr: "Trunk vs branches feature, quoi committer depuis Fabric, et éviter les conflits sur modèles et rapports."
   es: "Trunk vs feature branches, qué commitear desde Fabric, y evitar conflictos en modelos e informes."
-publish_at: "2026-06-30T13:00:00Z"
+publish_at: "2026-06-26T13:00:00Z"
 status: scheduled
 author: Adrien Yvin
 category: workflows
