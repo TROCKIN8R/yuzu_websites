@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apps Fabric vs apps Power BI: webapps vs compilaciones de informes | Yuzu.solutions</title>
+    <meta name="description" content="Las apps Fabric son experiencias web lectura/escritura sobre datos lakehouse. Las apps Power BI son compilaciones de informes de solo lectura. Cómo elegir.">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Yuzu.solutions">
+    <meta property="og:title" content="Apps Fabric vs apps Power BI: webapps vs compilaciones de informes">
+    <meta property="og:description" content="Las apps Fabric son experiencias web lectura/escritura sobre datos lakehouse. Las apps Power BI son compilaciones de informes de solo lectura. Cómo elegir.">
+    <meta property="og:url" content="https://yuzu.solutions/es/blog/fabric-apps-vs-power-bi-apps.html">
+    <meta property="og:image" content="https://yuzu.solutions/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="🍋 Yuzu.solutions">
+    <meta property="article:published_time" content="2026-06-21T14:00:00Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://yuzu.solutions/assets/og-image.png">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="canonical" href="https://yuzu.solutions/es/blog/fabric-apps-vs-power-bi-apps.html">
+    <link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/fabric-apps-vs-power-bi-apps.html">
+    <link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/fabric-apps-vs-power-bi-apps.html">
+    <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/fabric-apps-vs-power-bi-apps.html">
+    <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/fabric-apps-vs-power-bi-apps.html">
+    <meta property="og:locale" content="es_ES">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="author" content="Adrien Yvin">
+    <meta name="theme-color" content="#F9F9F9">
+    <link rel="alternate" type="application/rss+xml" title="Blog Yuzu.solutions" href="https://yuzu.solutions/es/blog/feed.xml">
+    <link rel="alternate" type="text/plain" href="https://yuzu.solutions/llms.txt" title="LLM-readable site summary">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://yuzu.solutions/es" },
+            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://yuzu.solutions/es/blog/index.html" },
+            { "@type": "ListItem", "position": 3, "name": "Apps Fabric vs apps Power BI: webapps vs compilaciones de informes", "item": "https://yuzu.solutions/es/blog/fabric-apps-vs-power-bi-apps.html" }
+          ]
+        },
+        {
+          "@type": "BlogPosting",
+          "headline": "Apps Fabric vs apps Power BI: webapps vs compilaciones de informes",
+          "description": "Las apps Fabric son experiencias web lectura/escritura sobre datos lakehouse. Las apps Power BI son compilaciones de informes de solo lectura. C\u00f3mo elegir.",
+          "datePublished": "2026-06-21T14:00:00Z",
+          "dateModified": "2026-06-21T14:00:00Z",
+          "author": { "@type": "Person", "name": "Adrien Yvin" },
+          "publisher": { "@type": "Organization", "name": "Yuzu.solutions", "url": "https://yuzu.solutions/" },
+          "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yuzu.solutions/es/blog/fabric-apps-vs-power-bi-apps.html" },
+          "inLanguage": "es",
+          "url": "https://yuzu.solutions/es/blog/fabric-apps-vs-power-bi-apps.html"
+        }
+      ]
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/design-tokens.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../../js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../../css/site.css">
+    <link rel="stylesheet" href="../../css/logo.css">
+</head>
+<body class="min-h-screen flex flex-col nav-on-blog">
+<div class="float-layer" aria-hidden="true" id="floatLayer"></div>
+<nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
+    <div class="nav-bar-inner pl-5 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
+        <div class="shrink-0">
+            <a href="../index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--nav" aria-label="Yuzu Solutions">
+                <object type="image/svg+xml" data="../../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+            </a>
+        </div>
+        <div class="nav-bar-center">
+            <div class="nav-pill-group" id="navPillGroup">
+                <a href="../index.html#vision" class="nav-pill-item">Visión</a>
+                <div class="nav-services-wrap" id="servicesNavWrap">
+                    <a href="../index.html#our-recipes" class="nav-pill-btn" id="servicesNavBtn" aria-haspopup="true" aria-expanded="false">
+                        Servicios <span class="nav-chevron">▾</span>
+                    </a>
+                    <div class="mega-menu" id="servicesMegaMenu" role="menu">
+                        <div class="mega-menu-grid">
+<a href="../services/bi-ai-enablement.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">⚡</div>
+                                <div>
+                                    <h4>Activación BI e IA</h4>
+                                    <p>Formación Fabric, GitHub CI/CD y agentes IA · El acelerador</p>
+                                </div>
+                            </a>
+<a href="../services/infrastructure-data.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🏗️</div>
+                                <div>
+                                    <h4>Infraestructura y datos</h4>
+                                    <p>Lakehouses Fabric, ETL y modelos semánticos · El núcleo</p>
+                                </div>
+                            </a>
+<a href="../services/technical-debt.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🛠️</div>
+                                <div>
+                                    <h4>Deuda técnica y rescate</h4>
+                                    <p>Correcciones legacy, rendimiento y limpieza de modelos · El detox</p>
+                                </div>
+                            </a>
+<a href="../services/bi-dashboard-delivery.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">📊</div>
+                                <div>
+                                    <h4>Entrega BI y dashboards</h4>
+                                    <p>Modelos semánticos, dashboards ejecutivos y autoservicio · El vertido único</p>
+                                </div>
+                            </a>
+<a href="../services/mvp-builds.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🚀</div>
+                                <div>
+                                    <h4>Construcciones MVP</h4>
+                                    <p>Herramientas internas, portales y prototipos rápidos · La primera prensada</p>
+                                </div>
+                            </a>
+<a href="../services/ai-automation.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🤖</div>
+                                <div>
+                                    <h4>IA y automatización</h4>
+                                    <p>Agentes, flujos de trabajo e integraciones LLM · El zest</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <a href="index.html" class="nav-pill-item active">Blog</a>
+                <a href="../index.html#founder" class="nav-pill-item">Nuestro equipo</a>
+            </div>
+        </div>
+        <div class="nav-bar-end">
+            <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
+                <a href="/blog/fabric-apps-vs-power-bi-apps.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
+                <a href="/fr/blog/fabric-apps-vs-power-bi-apps.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/blog/fabric-apps-vs-power-bi-apps.html" class="lang-switch-btn active" hreflang="es" lang="es">ES</a>
+            </div>
+            <a href="https://calendly.com/adrienyvin/30min" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap" target="_blank" rel="noopener noreferrer">Empezar</a>
+            <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNavPanel">
+                <span class="nav-hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span>
+            </button>
+        </div>
+    </div>
+    <div class="mobile-nav-panel" id="mobileNavPanel" aria-hidden="true">
+        <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+        <div class="mobile-nav-sheet" role="dialog" aria-label="Navigation menu">
+            <a href="../index.html#vision" class="mobile-nav-link">Visión</a>
+            <div class="mobile-nav-services-row">
+                <a href="../index.html#our-recipes" class="mobile-nav-link">Servicios</a>
+                <button type="button" class="mobile-nav-chevron-btn" id="mobileServicesToggle" aria-expanded="false" aria-controls="mobileServicesSub" aria-label="Show service categories">
+                    <span class="nav-chevron" aria-hidden="true">▾</span>
+                </button>
+            </div>
+            <div class="mobile-nav-sub" id="mobileServicesSub">
+<a href="../services/bi-ai-enablement.html" class="mega-item">
+                                <div class="mega-icon">⚡</div>
+                                <div>
+                                    <h4>Activación BI e IA</h4>
+                                    <p>Formación Fabric, GitHub CI/CD y agentes IA · El acelerador</p>
+                                </div>
+                            </a>
+                <a href="../services/infrastructure-data.html" class="mega-item">
+                                <div class="mega-icon">🏗️</div>
+                                <div>
+                                    <h4>Infraestructura y datos</h4>
+                                    <p>Lakehouses Fabric, ETL y modelos semánticos · El núcleo</p>
+                                </div>
+                            </a>
+                <a href="../services/technical-debt.html" class="mega-item">
+                                <div class="mega-icon">🛠️</div>
+                                <div>
+                                    <h4>Deuda técnica y rescate</h4>
+                                    <p>Correcciones legacy, rendimiento y limpieza de modelos · El detox</p>
+                                </div>
+                            </a>
+                <a href="../services/bi-dashboard-delivery.html" class="mega-item">
+                                <div class="mega-icon">📊</div>
+                                <div>
+                                    <h4>Entrega BI y dashboards</h4>
+                                    <p>Modelos semánticos, dashboards ejecutivos y autoservicio · El vertido único</p>
+                                </div>
+                            </a>
+                <a href="../services/mvp-builds.html" class="mega-item">
+                                <div class="mega-icon">🚀</div>
+                                <div>
+                                    <h4>Construcciones MVP</h4>
+                                    <p>Herramientas internas, portales y prototipos rápidos · La primera prensada</p>
+                                </div>
+                            </a>
+                <a href="../services/ai-automation.html" class="mega-item">
+                                <div class="mega-icon">🤖</div>
+                                <div>
+                                    <h4>IA y automatización</h4>
+                                    <p>Agentes, flujos de trabajo e integraciones LLM · El zest</p>
+                                </div>
+                            </a>
+            </div>
+            <a href="index.html" class="mobile-nav-link">Blog</a>
+            <a href="../index.html#founder" class="mobile-nav-link">Nuestro equipo</a>
+            <div class="mobile-nav-footer">
+                <div class="lang-switch sm:hidden" role="navigation" aria-label="Language">
+                <a href="/blog/fabric-apps-vs-power-bi-apps.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
+                <a href="/fr/blog/fabric-apps-vs-power-bi-apps.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/blog/fabric-apps-vs-power-bi-apps.html" class="lang-switch-btn active" hreflang="es" lang="es">ES</a>
+            </div>
+                <a href="https://calendly.com/adrienyvin/30min" class="mobile-nav-cta" target="_blank" rel="noopener noreferrer">Empezar</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<main class="max-w-7xl mx-auto px-6 py-12 w-full">
+    <a href="index.html" class="text-yellow-700 font-semibold text-sm hover:underline">← Volver al blog</a>
+    <article class="blog-article mt-6">
+        <header class="blog-article-header">
+            <span class="blog-category">Nueva tecnología</span>
+            <h1 class="blog-article-title">Apps Fabric vs apps Power BI: webapps vs compilaciones de informes</h1>
+            <p class="blog-article-meta">Por Adrien Yvin · <time datetime="2026-06-21T14:00:00Z">jun. 21, 2026</time></p>
+            <div class="blog-tags"><span class="blog-tag">fabric</span><span class="blog-tag">power-bi</span><span class="blog-tag">apps</span><span class="blog-tag">governance</span></div>
+        </header>
+        <div class="blog-prose">
+            <p>Microsoft Fabric ofrece hoy dos conceptos distintos de « app ». Suenan parecido en reuniones. Resuelven problemas diferentes.</p>
+<h2>Apps Power BI: la compilación de informes</h2>
+<p>Una <strong>app Power BI</strong> es lo que la mayoría conoce: paquete de solo lectura con informes y dashboards de un workspace, publicado a una audiencia con permisos centralizados.</p>
+<p><strong>Ideal para:</strong></p>
+<ul>
+<li>Dashboards ejecutivos y paquetes mensuales</li>
+<li>Autoservicio donde el usuario consume sin editar</li>
+<li>Reemplazar enlaces caóticos al workspace por una entrada única</li>
+</ul>
+<p><strong>Límites:</strong></p>
+<ul>
+<li>Solo lectura para usuarios finales</li>
+<li>Sin write-back ni formularios operativos</li>
+<li>Centrado en informes, no en aplicación web completa</li>
+</ul>
+<p>Si el objetivo es « un enlace para el pack de finanzas », la app Power BI sigue ganando.</p>
+<h2>Apps Fabric: webapp lectura/escritura sobre sus datos</h2>
+<p>Una <strong>app Fabric</strong> es una aplicación web que puede <strong>leer y escribir</strong> sobre items del workspace: tablas lakehouse, SQL warehouse, modelos semánticos, notebooks o pipelines.</p>
+<p>Piense en herramientas operativas:</p>
+<ul>
+<li>Aprobaciones y actualizaciones de estado en tabla</li>
+<li>Equipos de campo enviando conteos desde el móvil</li>
+<li>CRUD ligero sobre datos maestros sin otro App Service</li>
+</ul>
+<p><strong>Ideal para:</strong></p>
+<ul>
+<li>Procesos donde el usuario <strong>cambia</strong> datos, no solo los ve</li>
+<li>Escenarios que superan « una página de informe más »</li>
+<li>Equipos en Fabric con una sola historia de seguridad y linaje</li>
+</ul>
+<p><strong>Contras:</strong></p>
+<ul>
+<li>Más esfuerzo de build y prueba que publicar una app de informes</li>
+<li>UX, validación y errores son su responsabilidad</li>
+<li>Gobernanza debe cubrir rutas de escritura, no solo RLS de lectura</li>
+</ul>
+<h2>Tabla de decisión rápida</h2>
+<table>
+<thead>
+<tr>
+<th>Pregunta</th>
+<th>Inclínese hacia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>¿Solo ven KPIs?</td>
+<td>App Power BI</td>
+</tr>
+<tr>
+<td>¿Deben enviar o editar registros?</td>
+<td>App Fabric</td>
+</tr>
+<tr>
+<td>¿Formularios mobile-first?</td>
+<td>App Fabric</td>
+</tr>
+<tr>
+<td>¿Catálogo certificado de informes?</td>
+<td>App Power BI</td>
+</tr>
+<tr>
+<td>¿Escrituras en OneLake / warehouse?</td>
+<td>App Fabric</td>
+</tr>
+</tbody>
+</table>
+<h2>Patrón híbrido en producción</h2>
+<p>Mantenga la <strong>app Power BI</strong> como puerta de analytics. Agregue una <strong>app Fabric</strong> para el flujo que falla cada mes (ajustes de presupuesto, correcciones de maestros, log de excepciones). Mismo workspace, mismos grupos Entra, dos superficies optimizadas.</p>
+<h2>Tip de despliegue</h2>
+<p>Pilote la app Fabric en no-prod con esquemas reales y RLS copiado de Prod. Valide volumen de escritura e impacto en refresh antes de publicar amplio.</p>
+<p><a href="https://calendly.com/adrienyvin/30min">Reserve una llamada de 30 minutos</a> para mapear rutas read vs write antes de comprometer headcount.</p>
+        </div>
+    </article>
+</main>
+<footer class="site-footer site-footer--compact mt-auto">
+    <div class="site-footer__inner">
+        <a href="../index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--footer yuzu-logo--on-dark" aria-label="Yuzu Solutions">
+            <object type="image/svg+xml" data="../../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+        </a>
+        <p class="site-footer__quip">Powered by yuzu, ETL, and the courage to finally delete that 47-tab spreadsheet.</p>
+        <p class="site-footer__copy">© 2026 Yuzu.solutions</p>
+    </div>
+</footer>
+<script src="../../js/site.js"></script>
+<script src="../../js/nav.js"></script>
+</body>
+</html>

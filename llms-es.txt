@@ -1,23 +1,32 @@
 # Yuzu.solutions
 
-> Si la vida te da yuzu, exprímelo en dashboard. Consultoría de datos centrada en la ejecución, construimos la prensa, no PowerPoints.
+> If life gives you Yuzu, make a dashboard. Execution-first data consulting, we build the press, not PowerPoints.
 
 Yuzu.solutions es una consultoría boutique en datos y BI fundada por Adrien Yvin, a Data Platform Architect and BI Leader based in Montreal, Canada. We help growing companies, enterprises, and post-merger teams turn raw data into governed warehouses, automated workflows, and boardroom-ready dashboards.
 
 ## Posicionamiento
 
-- **Filosofía:** 80 % ejecución técnica, 20 % descubrimiento, la estrategia es subproducto de construir.
+- **Philosophy:** 80% engineering execution, 20% discovery, strategy is the byproduct of building.
 - **Modelo:** Asociación directa con un especialista senior. Sin gestores de cuenta, sin plazos inflados.
 - **Stack:** Microsoft Fabric, Power BI, SQL, DAX, Python, BigQuery, Snowflake, Azure, AI agents, Cursor.
 
 ## Services
 
-- [BI & AI Enablement](https://yuzu.solutions/services/bi-ai-enablement.html): Formación práctica para equipos BI, buenas prácticas Fabric, elección de formato (PBIP vs Git vs PBIX), GitHub CI/CD, playbooks de agentes IA. Receta: El acelerador.
+- [BI & AI Enablement](https://yuzu.solutions/services/bi-ai-enablement.html): Hands-on training for BI teams, Fabric best practices, project format decisions (PBIP vs Git vs PBIX), GitHub CI/CD setup, and AI agent playbooks for semantic models and report front-ends. Recipe: The Accelerator.
 - [Infrastructure & Data](https://yuzu.solutions/services/infrastructure-data.html): Medallion lakehouse architecture (Bronze/Silver/Gold), ETL/ELT pipelines, Power BI semantic models, RLS, data quality gates. Stack: Microsoft Fabric, OneLake, Spark, Power BI.
 - [Technical Debt & Rescue](https://yuzu.solutions/services/technical-debt.html): Legacy report recovery, DAX/model refactoring, refresh optimization (e.g. 42min → 4min), production hotfixes, post-migration reconciliation.
-- [BI & Dashboard Delivery](https://yuzu.solutions/services/bi-dashboard-delivery.html): Modelos semánticos Fabric gobernados, dashboards ejecutivos Power BI, autoservicio BI y apps Fabric, una única fuente de verdad. Receta: El vertido único.
+- [BI & Dashboard Delivery](https://yuzu.solutions/services/bi-dashboard-delivery.html): Governed Fabric semantic models, executive Power BI dashboards, self-serve BI, and Fabric apps, one single source of truth for exec and analyst audiences. Recipe: The Single Pour.
 - [MVP Builds](https://yuzu.solutions/services/mvp-builds.html): Internal tools, pricing engines, customer portals, ML classifiers. Typical timeline: 6–8 weeks from discovery to production.
 - [AI & Automation](https://yuzu.solutions/services/ai-automation.html): Autonomous agents, API integrations, LLM wrappers, invoice processing, workflow automation. Stack: Python, OpenAI/Azure OpenAI, Power Automate, Fabric Notebooks.
+
+## Insights (Blog)
+
+Articles on BI news, workflows, and new technologies for SEO and practitioner guidance.
+
+- [Insights index (EN)](https://yuzu.solutions/blog/index.html)
+- [Blogue (FR)](https://yuzu.solutions/fr/blog/index.html)
+- [Blog (ES)](https://yuzu.solutions/es/blog/index.html)
+- RSS (EN): https://yuzu.solutions/blog/feed.xml
 
 ## Con quién trabajamos
 
@@ -25,7 +34,7 @@ Yuzu.solutions es una consultoría boutique en datos y BI fundada por Adrien Yvi
 - **Enterprise consolidation:** Orgs unifying siloed systems, conflicting KPIs, and years of accumulated data.
 - **Post-merger integration:** Teams needing one stack, one source of truth, and one reporting culture.
 
-## Fundador, Adrien Yvin
+## Founder, Adrien Yvin
 
 - **Role:** Data Platform Architect & BI Leader
 - **Experience:** 7+ years in data, ETL at Énergir (energy utility), BI at Keurig Dr Pepper Canada ($4B+ CPG), Squad Leader at Cascades (packaging/manufacturing).

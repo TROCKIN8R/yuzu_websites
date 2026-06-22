@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pourquoi les équipes BI devraient traiter Git comme du code produit | Yuzu.solutions</title>
+    <meta name="description" content="Modèles sémantiques, rapports et pipelines appartiennent au contrôle de version avec revues PR, CI et pipelines de déploiement, pas aux dossiers partagés.">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Yuzu.solutions">
+    <meta property="og:title" content="Pourquoi les équipes BI devraient traiter Git comme du code produit">
+    <meta property="og:description" content="Modèles sémantiques, rapports et pipelines appartiennent au contrôle de version avec revues PR, CI et pipelines de déploiement, pas aux dossiers partagés.">
+    <meta property="og:url" content="https://yuzu.solutions/fr/blog/bi-git-like-product-code.html">
+    <meta property="og:image" content="https://yuzu.solutions/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="🍋 Yuzu.solutions">
+    <meta property="article:published_time" content="2026-06-14T13:00:00Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://yuzu.solutions/assets/og-image.png">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="canonical" href="https://yuzu.solutions/fr/blog/bi-git-like-product-code.html">
+    <link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/bi-git-like-product-code.html">
+    <link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/bi-git-like-product-code.html">
+    <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/bi-git-like-product-code.html">
+    <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/bi-git-like-product-code.html">
+    <meta property="og:locale" content="fr_CA">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="author" content="Adrien Yvin">
+    <meta name="theme-color" content="#F9F9F9">
+    <link rel="alternate" type="application/rss+xml" title="Blogue Yuzu.solutions" href="https://yuzu.solutions/fr/blog/feed.xml">
+    <link rel="alternate" type="text/plain" href="https://yuzu.solutions/llms.txt" title="LLM-readable site summary">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://yuzu.solutions/fr" },
+            { "@type": "ListItem", "position": 2, "name": "Blogue", "item": "https://yuzu.solutions/fr/blog/index.html" },
+            { "@type": "ListItem", "position": 3, "name": "Pourquoi les \u00e9quipes BI devraient traiter Git comme du code produit", "item": "https://yuzu.solutions/fr/blog/bi-git-like-product-code.html" }
+          ]
+        },
+        {
+          "@type": "BlogPosting",
+          "headline": "Pourquoi les \u00e9quipes BI devraient traiter Git comme du code produit",
+          "description": "Mod\u00e8les s\u00e9mantiques, rapports et pipelines appartiennent au contr\u00f4le de version avec revues PR, CI et pipelines de d\u00e9ploiement, pas aux dossiers partag\u00e9s.",
+          "datePublished": "2026-06-14T13:00:00Z",
+          "dateModified": "2026-06-14T13:00:00Z",
+          "author": { "@type": "Person", "name": "Adrien Yvin" },
+          "publisher": { "@type": "Organization", "name": "Yuzu.solutions", "url": "https://yuzu.solutions/" },
+          "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yuzu.solutions/fr/blog/bi-git-like-product-code.html" },
+          "inLanguage": "fr-CA",
+          "url": "https://yuzu.solutions/fr/blog/bi-git-like-product-code.html"
+        }
+      ]
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/design-tokens.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../../js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../../css/site.css">
+    <link rel="stylesheet" href="../../css/logo.css">
+</head>
+<body class="min-h-screen flex flex-col nav-on-blog">
+<div class="float-layer" aria-hidden="true" id="floatLayer"></div>
+<nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
+    <div class="nav-bar-inner pl-5 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
+        <div class="shrink-0">
+            <a href="../index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--nav" aria-label="Yuzu Solutions">
+                <object type="image/svg+xml" data="../../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+            </a>
+        </div>
+        <div class="nav-bar-center">
+            <div class="nav-pill-group" id="navPillGroup">
+                <a href="../index.html#vision" class="nav-pill-item">Vision</a>
+                <div class="nav-services-wrap" id="servicesNavWrap">
+                    <a href="../index.html#our-recipes" class="nav-pill-btn" id="servicesNavBtn" aria-haspopup="true" aria-expanded="false">
+                        Services <span class="nav-chevron">▾</span>
+                    </a>
+                    <div class="mega-menu" id="servicesMegaMenu" role="menu">
+                        <div class="mega-menu-grid">
+<a href="../services/bi-ai-enablement.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">⚡</div>
+                                <div>
+                                    <h4>Activation BI et IA</h4>
+                                    <p>Formation Fabric, GitHub CI/CD et agents IA · L&#x27;accélérateur</p>
+                                </div>
+                            </a>
+<a href="../services/infrastructure-data.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🏗️</div>
+                                <div>
+                                    <h4>Infrastructure et données</h4>
+                                    <p>Lakehouses Fabric, ETL et modèles sémantiques · Le cœur</p>
+                                </div>
+                            </a>
+<a href="../services/technical-debt.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🛠️</div>
+                                <div>
+                                    <h4>Dette technique et sauvetage</h4>
+                                    <p>Correctifs legacy, performance et nettoyage de modèles · Le détox</p>
+                                </div>
+                            </a>
+<a href="../services/bi-dashboard-delivery.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">📊</div>
+                                <div>
+                                    <h4>Livraison BI et tableaux de bord</h4>
+                                    <p>Modèles sémantiques, tableaux exécutifs et BI libre-service · La verse unique</p>
+                                </div>
+                            </a>
+<a href="../services/mvp-builds.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🚀</div>
+                                <div>
+                                    <h4>Constructions MVP</h4>
+                                    <p>Outils internes, portails et prototypes rapides · La première pressée</p>
+                                </div>
+                            </a>
+<a href="../services/ai-automation.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🤖</div>
+                                <div>
+                                    <h4>IA et automatisation</h4>
+                                    <p>Agents, flux de travail et intégrations LLM · Le zeste</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <a href="index.html" class="nav-pill-item active">Blogue</a>
+                <a href="../index.html#founder" class="nav-pill-item">Notre équipe</a>
+            </div>
+        </div>
+        <div class="nav-bar-end">
+            <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
+                <a href="/blog/bi-git-like-product-code.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
+                <a href="/fr/blog/bi-git-like-product-code.html" class="lang-switch-btn active" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/blog/bi-git-like-product-code.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+            </div>
+            <a href="https://calendly.com/adrienyvin/30min" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap" target="_blank" rel="noopener noreferrer">Commencer</a>
+            <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNavPanel">
+                <span class="nav-hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span>
+            </button>
+        </div>
+    </div>
+    <div class="mobile-nav-panel" id="mobileNavPanel" aria-hidden="true">
+        <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+        <div class="mobile-nav-sheet" role="dialog" aria-label="Navigation menu">
+            <a href="../index.html#vision" class="mobile-nav-link">Vision</a>
+            <div class="mobile-nav-services-row">
+                <a href="../index.html#our-recipes" class="mobile-nav-link">Services</a>
+                <button type="button" class="mobile-nav-chevron-btn" id="mobileServicesToggle" aria-expanded="false" aria-controls="mobileServicesSub" aria-label="Show service categories">
+                    <span class="nav-chevron" aria-hidden="true">▾</span>
+                </button>
+            </div>
+            <div class="mobile-nav-sub" id="mobileServicesSub">
+<a href="../services/bi-ai-enablement.html" class="mega-item">
+                                <div class="mega-icon">⚡</div>
+                                <div>
+                                    <h4>Activation BI et IA</h4>
+                                    <p>Formation Fabric, GitHub CI/CD et agents IA · L&#x27;accélérateur</p>
+                                </div>
+                            </a>
+                <a href="../services/infrastructure-data.html" class="mega-item">
+                                <div class="mega-icon">🏗️</div>
+                                <div>
+                                    <h4>Infrastructure et données</h4>
+                                    <p>Lakehouses Fabric, ETL et modèles sémantiques · Le cœur</p>
+                                </div>
+                            </a>
+                <a href="../services/technical-debt.html" class="mega-item">
+                                <div class="mega-icon">🛠️</div>
+                                <div>
+                                    <h4>Dette technique et sauvetage</h4>
+                                    <p>Correctifs legacy, performance et nettoyage de modèles · Le détox</p>
+                                </div>
+                            </a>
+                <a href="../services/bi-dashboard-delivery.html" class="mega-item">
+                                <div class="mega-icon">📊</div>
+                                <div>
+                                    <h4>Livraison BI et tableaux de bord</h4>
+                                    <p>Modèles sémantiques, tableaux exécutifs et BI libre-service · La verse unique</p>
+                                </div>
+                            </a>
+                <a href="../services/mvp-builds.html" class="mega-item">
+                                <div class="mega-icon">🚀</div>
+                                <div>
+                                    <h4>Constructions MVP</h4>
+                                    <p>Outils internes, portails et prototypes rapides · La première pressée</p>
+                                </div>
+                            </a>
+                <a href="../services/ai-automation.html" class="mega-item">
+                                <div class="mega-icon">🤖</div>
+                                <div>
+                                    <h4>IA et automatisation</h4>
+                                    <p>Agents, flux de travail et intégrations LLM · Le zeste</p>
+                                </div>
+                            </a>
+            </div>
+            <a href="index.html" class="mobile-nav-link">Blogue</a>
+            <a href="../index.html#founder" class="mobile-nav-link">Notre équipe</a>
+            <div class="mobile-nav-footer">
+                <div class="lang-switch sm:hidden" role="navigation" aria-label="Language">
+                <a href="/blog/bi-git-like-product-code.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
+                <a href="/fr/blog/bi-git-like-product-code.html" class="lang-switch-btn active" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/blog/bi-git-like-product-code.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+            </div>
+                <a href="https://calendly.com/adrienyvin/30min" class="mobile-nav-cta" target="_blank" rel="noopener noreferrer">Commencer</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<main class="max-w-7xl mx-auto px-6 py-12 w-full">
+    <a href="index.html" class="text-yellow-700 font-semibold text-sm hover:underline">← Retour au blogue</a>
+    <article class="blog-article mt-6">
+        <header class="blog-article-header">
+            <span class="blog-category">Workflows</span>
+            <h1 class="blog-article-title">Pourquoi les équipes BI devraient traiter Git comme du code produit</h1>
+            <p class="blog-article-meta">Par Adrien Yvin · <time datetime="2026-06-14T13:00:00Z">juin 14, 2026</time></p>
+            <div class="blog-tags"><span class="blog-tag">git</span><span class="blog-tag">fabric</span><span class="blog-tag">power-bi</span><span class="blog-tag">devops</span></div>
+        </header>
+        <div class="blog-prose">
+            <p>La plupart des équipes BI traitent encore rapports et modèles sémantiques comme des documents : copier un PBIX, le renommer, envoyer le lien, espérer que personne ne casse la production. L&rsquo;ingénierie produit a abandonné ce modèle il y a dix ans. Votre stack BI devrait suivre.</p>
+<h2>Le coût du « publions et voyons »</h2>
+<p>Quand les modèles vivent hors Git, vous perdez :</p>
+<ul>
+<li><strong>L&rsquo;historique clair :</strong> qui a modifié la mesure revenus mardi dernier ?</li>
+<li><strong>L&rsquo;expérimentation sécurisée :</strong> chaque correctif est une édition en direct en Prod</li>
+<li><strong>Des releases reproductibles :</strong> le déploiement devient un événement calendaire, pas un pipeline</li>
+</ul>
+<p>L&rsquo;intégration Git de Fabric et PBIP rendent le contrôle de version pratique pour la BI. Le goulot d&rsquo;étranglement est souvent culturel, pas technique.</p>
+<h2>À quoi ressemble « Git comme code produit »</h2>
+<ol>
+<li><strong>Un dépôt par domaine</strong> (finance, ventes, ops) avec une arborescence claire pour modèles, rapports et notebooks.</li>
+<li><strong>Une branche par changement :</strong> branches feature pour nouvelles mesures, refactors ou refontes de rapports.</li>
+<li><strong>Revues PR :</strong> un autre analyste ou ingénieur vérifie les diffs DAX, relations et règles RLS avant fusion.</li>
+<li><strong>Validation CI :</strong> GitHub Actions exécutent des scripts Tabular Editor, vérifs DAX ou dry-runs Fabric.</li>
+<li><strong>Promotion d&rsquo;environnements :</strong> Dev → Test → Prod via pipelines Fabric, déclenchés depuis <code>main</code>.</li>
+</ol>
+<h2>Commencez petit, livrez cette semaine</h2>
+<p>Pas besoin d&rsquo;un monorepo parfait dès le jour un. Choisissez un modèle sémantique qui génère le plus de tickets « qui a cassé ça ? ». Branchez Fabric Git, ouvrez une PR pour le prochain changement, ajoutez une vérification automatisée. Cette boucle enseigne plus à l&rsquo;équipe qu&rsquo;un autre deck gouvernance.</p>
+<p>Besoin d&rsquo;aide pour Fabric Git, GitHub Actions ou playbooks de revue PR ? <a href="https://calendly.com/adrienyvin/30min">Réservez un appel de 30 minutes</a>.</p>
+        </div>
+    </article>
+</main>
+<footer class="site-footer site-footer--compact mt-auto">
+    <div class="site-footer__inner">
+        <a href="../index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--footer yuzu-logo--on-dark" aria-label="Yuzu Solutions">
+            <object type="image/svg+xml" data="../../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+        </a>
+        <p class="site-footer__quip">Powered by yuzu, ETL, and the courage to finally delete that 47-tab spreadsheet.</p>
+        <p class="site-footer__copy">© 2026 Yuzu.solutions</p>
+    </div>
+</footer>
+<script src="../../js/site.js"></script>
+<script src="../../js/nav.js"></script>
+</body>
+</html>

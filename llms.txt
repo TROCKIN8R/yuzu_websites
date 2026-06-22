@@ -19,6 +19,15 @@ Yuzu.solutions is a boutique data & BI consultancy founded by Adrien Yvin, a Dat
 - [MVP Builds](https://yuzu.solutions/services/mvp-builds.html): Internal tools, pricing engines, customer portals, ML classifiers. Typical timeline: 6–8 weeks from discovery to production.
 - [AI & Automation](https://yuzu.solutions/services/ai-automation.html): Autonomous agents, API integrations, LLM wrappers, invoice processing, workflow automation. Stack: Python, OpenAI/Azure OpenAI, Power Automate, Fabric Notebooks.
 
+## Insights (Blog)
+
+Articles on BI news, workflows, and new technologies for SEO and practitioner guidance.
+
+- [Insights index (EN)](https://yuzu.solutions/blog/index.html)
+- [Blogue (FR)](https://yuzu.solutions/fr/blog/index.html)
+- [Blog (ES)](https://yuzu.solutions/es/blog/index.html)
+- RSS (EN): https://yuzu.solutions/blog/feed.xml
+
 ## Who we work with
 
 - **Growing companies:** SMBs outgrowing Excel, ready for their first warehouse and governed reporting.

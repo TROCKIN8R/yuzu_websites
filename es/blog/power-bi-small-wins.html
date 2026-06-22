@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pequeñas victorias Power BI en la ola 2026 | Yuzu.solutions</title>
+    <meta name="description" content="Org apps con audiencias, slicers date picker, funciones DAX definidas por el usuario, páginas de aterrizaje, Copilot móvil y PBIR: elecciones prácticas de las actualizaciones Power BI abril–junio 2026.">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Yuzu.solutions">
+    <meta property="og:title" content="Pequeñas victorias Power BI en la ola 2026">
+    <meta property="og:description" content="Org apps con audiencias, slicers date picker, funciones DAX definidas por el usuario, páginas de aterrizaje, Copilot móvil y PBIR: elecciones prácticas de las actualizaciones Power BI abril–junio 2026.">
+    <meta property="og:url" content="https://yuzu.solutions/es/blog/power-bi-small-wins.html">
+    <meta property="og:image" content="https://yuzu.solutions/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="🍋 Yuzu.solutions">
+    <meta property="article:published_time" content="2026-06-21T15:00:00Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://yuzu.solutions/assets/og-image.png">
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+    <link rel="canonical" href="https://yuzu.solutions/es/blog/power-bi-small-wins.html">
+    <link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/power-bi-small-wins.html">
+    <link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/power-bi-small-wins.html">
+    <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/power-bi-small-wins.html">
+    <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/power-bi-small-wins.html">
+    <meta property="og:locale" content="es_ES">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="author" content="Adrien Yvin">
+    <meta name="theme-color" content="#F9F9F9">
+    <link rel="alternate" type="application/rss+xml" title="Blog Yuzu.solutions" href="https://yuzu.solutions/es/blog/feed.xml">
+    <link rel="alternate" type="text/plain" href="https://yuzu.solutions/llms.txt" title="LLM-readable site summary">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://yuzu.solutions/es" },
+            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://yuzu.solutions/es/blog/index.html" },
+            { "@type": "ListItem", "position": 3, "name": "Peque\u00f1as victorias Power BI en la ola 2026", "item": "https://yuzu.solutions/es/blog/power-bi-small-wins.html" }
+          ]
+        },
+        {
+          "@type": "BlogPosting",
+          "headline": "Peque\u00f1as victorias Power BI en la ola 2026",
+          "description": "Org apps con audiencias, slicers date picker, funciones DAX definidas por el usuario, p\u00e1ginas de aterrizaje, Copilot m\u00f3vil y PBIR: elecciones pr\u00e1cticas de las actualizaciones Power BI abril\u2013junio 2026.",
+          "datePublished": "2026-06-21T15:00:00Z",
+          "dateModified": "2026-06-21T15:00:00Z",
+          "author": { "@type": "Person", "name": "Adrien Yvin" },
+          "publisher": { "@type": "Organization", "name": "Yuzu.solutions", "url": "https://yuzu.solutions/" },
+          "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yuzu.solutions/es/blog/power-bi-small-wins.html" },
+          "inLanguage": "es",
+          "url": "https://yuzu.solutions/es/blog/power-bi-small-wins.html"
+        }
+      ]
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/design-tokens.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../../js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../../css/site.css">
+    <link rel="stylesheet" href="../../css/logo.css">
+</head>
+<body class="min-h-screen flex flex-col nav-on-blog">
+<div class="float-layer" aria-hidden="true" id="floatLayer"></div>
+<nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
+    <div class="nav-bar-inner pl-5 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
+        <div class="shrink-0">
+            <a href="../index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--nav" aria-label="Yuzu Solutions">
+                <object type="image/svg+xml" data="../../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+            </a>
+        </div>
+        <div class="nav-bar-center">
+            <div class="nav-pill-group" id="navPillGroup">
+                <a href="../index.html#vision" class="nav-pill-item">Visión</a>
+                <div class="nav-services-wrap" id="servicesNavWrap">
+                    <a href="../index.html#our-recipes" class="nav-pill-btn" id="servicesNavBtn" aria-haspopup="true" aria-expanded="false">
+                        Servicios <span class="nav-chevron">▾</span>
+                    </a>
+                    <div class="mega-menu" id="servicesMegaMenu" role="menu">
+                        <div class="mega-menu-grid">
+<a href="../services/bi-ai-enablement.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">⚡</div>
+                                <div>
+                                    <h4>Activación BI e IA</h4>
+                                    <p>Formación Fabric, GitHub CI/CD y agentes IA · El acelerador</p>
+                                </div>
+                            </a>
+<a href="../services/infrastructure-data.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🏗️</div>
+                                <div>
+                                    <h4>Infraestructura y datos</h4>
+                                    <p>Lakehouses Fabric, ETL y modelos semánticos · El núcleo</p>
+                                </div>
+                            </a>
+<a href="../services/technical-debt.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🛠️</div>
+                                <div>
+                                    <h4>Deuda técnica y rescate</h4>
+                                    <p>Correcciones legacy, rendimiento y limpieza de modelos · El detox</p>
+                                </div>
+                            </a>
+<a href="../services/bi-dashboard-delivery.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">📊</div>
+                                <div>
+                                    <h4>Entrega BI y dashboards</h4>
+                                    <p>Modelos semánticos, dashboards ejecutivos y autoservicio · El vertido único</p>
+                                </div>
+                            </a>
+<a href="../services/mvp-builds.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🚀</div>
+                                <div>
+                                    <h4>Construcciones MVP</h4>
+                                    <p>Herramientas internas, portales y prototipos rápidos · La primera prensada</p>
+                                </div>
+                            </a>
+<a href="../services/ai-automation.html" class="mega-item" role="menuitem">
+                                <div class="mega-icon">🤖</div>
+                                <div>
+                                    <h4>IA y automatización</h4>
+                                    <p>Agentes, flujos de trabajo e integraciones LLM · El zest</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <a href="index.html" class="nav-pill-item active">Blog</a>
+                <a href="../index.html#founder" class="nav-pill-item">Nuestro equipo</a>
+            </div>
+        </div>
+        <div class="nav-bar-end">
+            <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
+                <a href="/blog/power-bi-small-wins.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
+                <a href="/fr/blog/power-bi-small-wins.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/blog/power-bi-small-wins.html" class="lang-switch-btn active" hreflang="es" lang="es">ES</a>
+            </div>
+            <a href="https://calendly.com/adrienyvin/30min" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap" target="_blank" rel="noopener noreferrer">Empezar</a>
+            <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNavPanel">
+                <span class="nav-hamburger-box" aria-hidden="true"><span></span><span></span><span></span></span>
+            </button>
+        </div>
+    </div>
+    <div class="mobile-nav-panel" id="mobileNavPanel" aria-hidden="true">
+        <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+        <div class="mobile-nav-sheet" role="dialog" aria-label="Navigation menu">
+            <a href="../index.html#vision" class="mobile-nav-link">Visión</a>
+            <div class="mobile-nav-services-row">
+                <a href="../index.html#our-recipes" class="mobile-nav-link">Servicios</a>
+                <button type="button" class="mobile-nav-chevron-btn" id="mobileServicesToggle" aria-expanded="false" aria-controls="mobileServicesSub" aria-label="Show service categories">
+                    <span class="nav-chevron" aria-hidden="true">▾</span>
+                </button>
+            </div>
+            <div class="mobile-nav-sub" id="mobileServicesSub">
+<a href="../services/bi-ai-enablement.html" class="mega-item">
+                                <div class="mega-icon">⚡</div>
+                                <div>
+                                    <h4>Activación BI e IA</h4>
+                                    <p>Formación Fabric, GitHub CI/CD y agentes IA · El acelerador</p>
+                                </div>
+                            </a>
+                <a href="../services/infrastructure-data.html" class="mega-item">
+                                <div class="mega-icon">🏗️</div>
+                                <div>
+                                    <h4>Infraestructura y datos</h4>
+                                    <p>Lakehouses Fabric, ETL y modelos semánticos · El núcleo</p>
+                                </div>
+                            </a>
+                <a href="../services/technical-debt.html" class="mega-item">
+                                <div class="mega-icon">🛠️</div>
+                                <div>
+                                    <h4>Deuda técnica y rescate</h4>
+                                    <p>Correcciones legacy, rendimiento y limpieza de modelos · El detox</p>
+                                </div>
+                            </a>
+                <a href="../services/bi-dashboard-delivery.html" class="mega-item">
+                                <div class="mega-icon">📊</div>
+                                <div>
+                                    <h4>Entrega BI y dashboards</h4>
+                                    <p>Modelos semánticos, dashboards ejecutivos y autoservicio · El vertido único</p>
+                                </div>
+                            </a>
+                <a href="../services/mvp-builds.html" class="mega-item">
+                                <div class="mega-icon">🚀</div>
+                                <div>
+                                    <h4>Construcciones MVP</h4>
+                                    <p>Herramientas internas, portales y prototipos rápidos · La primera prensada</p>
+                                </div>
+                            </a>
+                <a href="../services/ai-automation.html" class="mega-item">
+                                <div class="mega-icon">🤖</div>
+                                <div>
+                                    <h4>IA y automatización</h4>
+                                    <p>Agentes, flujos de trabajo e integraciones LLM · El zest</p>
+                                </div>
+                            </a>
+            </div>
+            <a href="index.html" class="mobile-nav-link">Blog</a>
+            <a href="../index.html#founder" class="mobile-nav-link">Nuestro equipo</a>
+            <div class="mobile-nav-footer">
+                <div class="lang-switch sm:hidden" role="navigation" aria-label="Language">
+                <a href="/blog/power-bi-small-wins.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
+                <a href="/fr/blog/power-bi-small-wins.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/blog/power-bi-small-wins.html" class="lang-switch-btn active" hreflang="es" lang="es">ES</a>
+            </div>
+                <a href="https://calendly.com/adrienyvin/30min" class="mobile-nav-cta" target="_blank" rel="noopener noreferrer">Empezar</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<main class="max-w-7xl mx-auto px-6 py-12 w-full">
+    <a href="index.html" class="text-yellow-700 font-semibold text-sm hover:underline">← Volver al blog</a>
+    <article class="blog-article mt-6">
+        <header class="blog-article-header">
+            <span class="blog-category">Noticias BI</span>
+            <h1 class="blog-article-title">Pequeñas victorias Power BI en la ola 2026</h1>
+            <p class="blog-article-meta">Por Adrien Yvin · <time datetime="2026-06-21T15:00:00Z">jun. 21, 2026</time></p>
+            <div class="blog-tags"><span class="blog-tag">power-bi</span><span class="blog-tag">fabric</span><span class="blog-tag">org-apps</span><span class="blog-tag">copilot</span><span class="blog-tag">modeling</span></div>
+        </header>
+        <div class="blog-prose">
+            <p>Microsoft publica actualizaciones de Power BI cada mes. La mayoría no exige un proyecto de migración. Parte de las entregas de <strong>abril a junio de 2026</strong> son cambios pequeños y de alto impacto que puede activar esta semana sin replatformar el warehouse.</p>
+<p>Este artículo filtra los <a href="https://community.fabric.microsoft.com/t5/Power-BI-Updates-Blog/Power-BI-June-2026-Feature-Summary/ba-p/5193264">resúmenes de junio 2026</a>, <a href="https://community.fabric.microsoft.com/t5/Power-BI-Updates-Blog/Power-BI-April-2026-Feature-Summary/ba-p/5173904">abril 2026</a> y posts GA relacionados hacia acciones concretas para admins BI y autores de informes.</p>
+<h2>1. Org apps con audiencias (disponibilidad general)</h2>
+<p>Las <strong>org apps</strong> replantean las apps de workspace en Fabric: varias apps por workspace, branding, páginas Overview y navegación controlada. A mediados de 2026 alcanzan <strong>GA</strong>, con <strong>audiencias</strong>: una superficie de app, contenido y visibilidad de nav distintos por grupo (ejecutivos, managers, primera línea).</p>
+<p>Por qué supera « comparte el enlace del workspace »:</p>
+<ul>
+<li>Descubrimiento en <strong>Recent</strong> y listas de items sin paso de instalación</li>
+<li><strong>Varias org apps por workspace</strong> o <strong>una app + audiencias</strong></li>
+<li>Al compartir, asigne audiencias al conceder acceso</li>
+</ul>
+<p><strong>Victoria esta semana:</strong> Elija el workspace más ruidoso. Cree una org app con dos audiencias (p. ej. Dirección vs Analista). Añada página <strong>Overview</strong>. Retire la wiki « ¿cuál enlace es el oficial? ».</p>
+<p>Las apps workspace legacy siguen soportadas. Planifique nueva distribución en org apps.</p>
+<h2>2. Página de aterrizaje del informe (GA)</h2>
+<p><strong>Set as landing page</strong> fija la página que deben ver primero los usuarios (clic derecho en pestaña o panel de formato). GA en la ola de mayo 2026. La org app lleva al informe; la landing page lleva a la página <strong>correcta</strong>.</p>
+<p><strong>Aplique en:</strong> paquetes ejecutivos, árboles de KPI e informes cuya página 1 sigue siendo borrador de 2022.</p>
+<h2>3. Slicer date picker (preview)</h2>
+<p>El <strong>date picker</strong> para slicers (preview junio 2026) ataca reabrir informes cada mes para resetear rangos. Publica un default <strong>relativo</strong> (p. ej. últimos 12 meses anclados a la última fecha de datos). Los usuarios mantienen selección manual en un solo control.</p>
+<p>Active en <strong>Options &gt; Preview features</strong> en Desktop y opción <strong>Date picker</strong> en slicer de fecha.</p>
+<h2>4. Funciones DAX definidas por el usuario (GA)</h2>
+<p>Las <strong>UDF DAX</strong> pasaron a GA en junio 2026. Defina una función (firma tipada, parámetros opcionales), reutilice en medidas, columnas y cálculos visuales. Las UDF viven en el modelo, siguen renombres y se editan en <strong>modelado web</strong> o Model View en Desktop.</p>
+<p>Ejemplos que pagan rápido:</p>
+<ul>
+<li>Conversión de moneda o días hábiles compartidos</li>
+<li>Márgenes aprobados referenciados por muchas medidas</li>
+<li>Snippets TMDL en Git con el modelo semántico</li>
+</ul>
+<p><strong>Regla de equipo:</strong> UDF aprobadas = biblioteca compartida. Revisión PR antes del modelo golden.</p>
+<h2>5. Copilot en modelado web (preview)</h2>
+<p>Junio 2026: <strong>Copilot en modelado web</strong> en el servicio. Lenguaje natural para analizar estructura, renombrar tablas/columnas, relaciones y borradores de medidas en el navegador.</p>
+<p><strong>Barrera práctica:</strong> workspaces <strong>Dev/Test</strong> primero. Copilot propone; humanos aprueban antes del promote. Empareje con Fabric Git para renombres vía PR.</p>
+<h2>6. Copilot en Power BI mobile (ampliado)</h2>
+<p>Abril 2026 expandió <strong>Copilot in-report en mobile</strong> de prompts fijos a <strong>chat multi-turno</strong> anclado al informe abierto, con <strong>citas a visuales</strong>. Dictado por voz en iOS para revisiones ejecutivas fuera del escritorio.</p>
+<p><strong>Victoria:</strong> Actívelo en los tres informes más usados en móvil. Documente preguntas ejemplo que funcionan vs las que requieren desktop.</p>
+<h2>7. Auto-expand de matriz y slicers de tamaño fijo</h2>
+<ul>
+<li><strong>Auto-expand matriz (GA):</strong> Niveles de jerarquía nuevos pueden expandirse por defecto. Ayuda a <strong>Personalize this visual</strong> cuando las matrices parecen vacías colapsadas.</li>
+<li><strong>Layout tamaño fijo en card/button/list slicer (GA abril):</strong> Control en píxeles cuando « fit to space » falla en temas oscuros.</li>
+</ul>
+<h2>8. PBIR default-on: higiene dev, no brillo de usuario</h2>
+<p>Microsoft reanudó el despliegue <strong>PBIR default-on</strong> en el servicio en junio 2026; Desktop apuntado más tarde en verano. PBIR alinea PBIX con <strong>PBIP</strong> para Git, CI/CD y edición programática. PBIX sigue siendo el formato de autor; el cambio es sobre todo metadatos internos.</p>
+<p><strong>PBIP + GitHub:</strong> siga invirtiendo. Opt-in en Desktop si falta. <strong>Solo PBIX:</strong> sin capacitación; vigile release notes junio/julio.</p>
+<p><strong>Desktop Bridge (preview)</strong> conecta autoría agent con Desktop para <strong>agent skills</strong> de informes. Trátese como I+D hasta tener gobernanza.</p>
+<h2>9. Azure Maps y tooltips (UX visible, poco esfuerzo)</h2>
+<ul>
+<li><strong>Selección por formas Azure Maps activada por defecto (GA junio):</strong> Lazo regional y selección por tiempo de viaje visibles sin config del autor.</li>
+<li><strong>Modo frase en tooltip (GA junio):</strong> Explique métricas en lenguaje claro sin página tooltip custom.</li>
+</ul>
+<p>Confirme <strong>ajustes tenant Azure Maps</strong> si los mapas fallaron tras la refactorización 2025 (Desktop abril 2025+ requerido).</p>
+<h2>Qué posponer (hype preview vs victorias diarias)</h2>
+<p>Los titulares de Build 2026 (<strong>Agent Skills</strong>, <strong>Fabric Apps en modelos semánticos</strong>) son reales pero van en <strong>workspace piloto</strong> con capacidad Copilot, Git y reglas de aprobación. No son « victorias pequeñas » si aún pelea con refreshes fallidos.</p>
+<table>
+<thead>
+<tr>
+<th>Adoptar ahora</th>
+<th>Pilotar aparte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Org apps + audiencias</td>
+<td>Agent skills de informes</td>
+</tr>
+<tr>
+<td>Landing + Overview</td>
+<td>Fabric Apps semánticas</td>
+</tr>
+<tr>
+<td>UDF DAX en golden</td>
+<td>Desktop Bridge</td>
+</tr>
+<tr>
+<td>Date picker (preview)</td>
+<td>Fabric IQ en M365 (Frontier)</td>
+</tr>
+<tr>
+<td>Chat Copilot mobile</td>
+<td>Copilot modelado web en Prod</td>
+</tr>
+</tbody>
+</table>
+<h2>Checklist de una tarde</h2>
+<ol>
+<li>Crear o mejorar una <strong>org app</strong> con dos audiencias y Overview</li>
+<li><strong>Landing page</strong> en el informe ejecutivo principal</li>
+<li><strong>Date picker</strong> en un informe ops mensual (preview)</li>
+<li>Extraer un patrón DAX repetido a <strong>UDF</strong> en Dev</li>
+<li>Confirmar tenant <strong>Azure Maps</strong> y versión mínima de Desktop</li>
+<li>Revisar el <a href="https://community.fabric.microsoft.com/t5/Power-BI-Updates-Blog/Power-BI-June-2026-Feature-Summary/ba-p/5193264">resumen junio 2026</a> por un tweak visual GA (color icono slicer, padding eje, hover card)</li>
+</ol>
+<p>Estos pasos no reemplazan migración Fabric ni refactor del modelo. Reducen fricción mientras Microsoft empuja BI agéntica y dan a usuarios una puerta de entrada más clara este trimestre.</p>
+<p>¿Priorizar audiencias org app o estándares UDF? <a href="https://calendly.com/adrienyvin/30min">Reserve una llamada de 30 minutos</a>.</p>
+        </div>
+    </article>
+</main>
+<footer class="site-footer site-footer--compact mt-auto">
+    <div class="site-footer__inner">
+        <a href="../index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--footer yuzu-logo--on-dark" aria-label="Yuzu Solutions">
+            <object type="image/svg+xml" data="../../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+        </a>
+        <p class="site-footer__quip">Powered by yuzu, ETL, and the courage to finally delete that 47-tab spreadsheet.</p>
+        <p class="site-footer__copy">© 2026 Yuzu.solutions</p>
+    </div>
+</footer>
+<script src="../../js/site.js"></script>
+<script src="../../js/nav.js"></script>
+</body>
+</html>

@@ -3,7 +3,7 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://yuzu.solutions/</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/"/>
@@ -13,7 +13,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/fr/</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/"/>
@@ -23,7 +23,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/es/</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/"/>
@@ -33,7 +33,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/services/ai-automation.html</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/ai-automation.html"/>
@@ -43,7 +43,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/fr/services/ai-automation.html</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/ai-automation.html"/>
@@ -53,7 +53,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/es/services/ai-automation.html</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/ai-automation.html"/>
@@ -63,7 +63,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/services/infrastructure-data.html</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/infrastructure-data.html"/>
@@ -73,7 +73,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/fr/services/infrastructure-data.html</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/infrastructure-data.html"/>
@@ -83,7 +83,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/es/services/infrastructure-data.html</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/infrastructure-data.html"/>
@@ -93,7 +93,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/services/technical-debt.html</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/technical-debt.html"/>
@@ -103,7 +103,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/fr/services/technical-debt.html</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/technical-debt.html"/>
@@ -113,7 +113,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/es/services/technical-debt.html</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/technical-debt.html"/>
@@ -122,38 +122,8 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/services/technical-debt.html"/>
   </url>
   <url>
-    <loc>https://yuzu.solutions/services/bi-dashboard-delivery.html</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/bi-dashboard-delivery.html"/>
-    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/services/bi-dashboard-delivery.html"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/services/bi-dashboard-delivery.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/services/bi-dashboard-delivery.html"/>
-  </url>
-  <url>
-    <loc>https://yuzu.solutions/fr/services/bi-dashboard-delivery.html</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/bi-dashboard-delivery.html"/>
-    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/services/bi-dashboard-delivery.html"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/services/bi-dashboard-delivery.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/services/bi-dashboard-delivery.html"/>
-  </url>
-  <url>
-    <loc>https://yuzu.solutions/es/services/bi-dashboard-delivery.html</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/bi-dashboard-delivery.html"/>
-    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/services/bi-dashboard-delivery.html"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/services/bi-dashboard-delivery.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/services/bi-dashboard-delivery.html"/>
-  </url>
-  <url>
     <loc>https://yuzu.solutions/services/mvp-builds.html</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/mvp-builds.html"/>
@@ -163,7 +133,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/fr/services/mvp-builds.html</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/mvp-builds.html"/>
@@ -173,7 +143,7 @@
   </url>
   <url>
     <loc>https://yuzu.solutions/es/services/mvp-builds.html</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/mvp-builds.html"/>
@@ -182,33 +152,123 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/services/mvp-builds.html"/>
   </url>
   <url>
-    <loc>https://yuzu.solutions/services/bi-ai-enablement.html</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/bi-ai-enablement.html"/>
-    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/services/bi-ai-enablement.html"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/services/bi-ai-enablement.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/services/bi-ai-enablement.html"/>
+    <loc>https://yuzu.solutions/blog/index.html</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/index.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/index.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/index.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/index.html"/>
   </url>
   <url>
-    <loc>https://yuzu.solutions/fr/services/bi-ai-enablement.html</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/bi-ai-enablement.html"/>
-    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/services/bi-ai-enablement.html"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/services/bi-ai-enablement.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/services/bi-ai-enablement.html"/>
+    <loc>https://yuzu.solutions/fr/blog/index.html</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/index.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/index.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/index.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/index.html"/>
   </url>
   <url>
-    <loc>https://yuzu.solutions/es/services/bi-ai-enablement.html</loc>
+    <loc>https://yuzu.solutions/es/blog/index.html</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/index.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/index.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/index.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/index.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/blog/power-bi-small-wins.html</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/power-bi-small-wins.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/power-bi-small-wins.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/power-bi-small-wins.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/power-bi-small-wins.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/fr/blog/power-bi-small-wins.html</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/power-bi-small-wins.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/power-bi-small-wins.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/power-bi-small-wins.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/power-bi-small-wins.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/es/blog/power-bi-small-wins.html</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/power-bi-small-wins.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/power-bi-small-wins.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/power-bi-small-wins.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/power-bi-small-wins.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/blog/fabric-apps-vs-power-bi-apps.html</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/fabric-apps-vs-power-bi-apps.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/fabric-apps-vs-power-bi-apps.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/fabric-apps-vs-power-bi-apps.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/fabric-apps-vs-power-bi-apps.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/fr/blog/fabric-apps-vs-power-bi-apps.html</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/fabric-apps-vs-power-bi-apps.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/fabric-apps-vs-power-bi-apps.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/fabric-apps-vs-power-bi-apps.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/fabric-apps-vs-power-bi-apps.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/es/blog/fabric-apps-vs-power-bi-apps.html</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/fabric-apps-vs-power-bi-apps.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/fabric-apps-vs-power-bi-apps.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/fabric-apps-vs-power-bi-apps.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/fabric-apps-vs-power-bi-apps.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/blog/bi-git-like-product-code.html</loc>
     <lastmod>2026-06-14</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/services/bi-ai-enablement.html"/>
-    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/services/bi-ai-enablement.html"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/services/bi-ai-enablement.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/services/bi-ai-enablement.html"/>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/bi-git-like-product-code.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/bi-git-like-product-code.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/bi-git-like-product-code.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/bi-git-like-product-code.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/fr/blog/bi-git-like-product-code.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/bi-git-like-product-code.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/bi-git-like-product-code.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/bi-git-like-product-code.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/bi-git-like-product-code.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/es/blog/bi-git-like-product-code.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/bi-git-like-product-code.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/bi-git-like-product-code.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/bi-git-like-product-code.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/bi-git-like-product-code.html"/>
   </url>
 </urlset>
