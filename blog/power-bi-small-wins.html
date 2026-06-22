@@ -14,7 +14,7 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="🍋 Yuzu.solutions">
-    <meta property="article:published_time" content="2026-06-21T15:00:00Z">
+    <meta property="article:published_time" content="2026-06-05T15:00:00Z">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://yuzu.solutions/assets/og-image.png">
     <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -45,8 +45,8 @@
           "@type": "BlogPosting",
           "headline": "Power BI small wins from the 2026 rollout wave",
           "description": "Org apps with audiences, date picker slicers, DAX user-defined functions, report landing pages, Copilot on mobile, and PBIR default-on: practical picks from April\u2013June 2026 Power BI updates.",
-          "datePublished": "2026-06-21T15:00:00Z",
-          "dateModified": "2026-06-21T15:00:00Z",
+          "datePublished": "2026-06-05T15:00:00Z",
+          "dateModified": "2026-06-05T15:00:00Z",
           "author": { "@type": "Person", "name": "Adrien Yvin" },
           "publisher": { "@type": "Organization", "name": "Yuzu.solutions", "url": "https://yuzu.solutions/" },
           "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yuzu.solutions/blog/power-bi-small-wins.html" },
@@ -63,10 +63,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../js/tailwind-config.js"></script>
     <link rel="stylesheet" href="../css/site.css">
+    <link rel="stylesheet" href="../css/blog-themes.css">
     <link rel="stylesheet" href="../css/logo.css">
 </head>
-<body class="min-h-screen flex flex-col nav-on-blog">
-<div class="float-layer" aria-hidden="true" id="floatLayer"></div>
+<body class="min-h-screen flex flex-col nav-on-blog blog-article-page blog-theme-08">
 <nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
     <div class="nav-bar-inner pl-5 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
         <div class="shrink-0">
@@ -211,17 +211,18 @@
         </div>
     </div>
 </nav>
-<main class="max-w-7xl mx-auto px-6 py-12 w-full">
-    <a href="index.html" class="text-yellow-700 font-semibold text-sm hover:underline">← Back to Insights</a>
-    <article class="blog-article mt-6">
-        <header class="blog-article-header">
-            <span class="blog-category">BI News</span>
+<main class="blog-article-shell">
+    <a href="index.html" class="blog-back-link">← Back to Insights</a>
+    <article class="blog-article">
+        <header class="blog-article-hero">
+            <span class="blog-category-pill">BI News</span>
             <h1 class="blog-article-title">Power BI small wins from the 2026 rollout wave</h1>
-            <p class="blog-article-meta">By Adrien Yvin · <time datetime="2026-06-21T15:00:00Z">Jun 21, 2026</time></p>
+            <p class="blog-article-meta">By Adrien Yvin · <time datetime="2026-06-05T15:00:00Z">Jun 5, 2026</time></p>
             <div class="blog-tags"><span class="blog-tag">power-bi</span><span class="blog-tag">fabric</span><span class="blog-tag">org-apps</span><span class="blog-tag">copilot</span><span class="blog-tag">modeling</span></div>
         </header>
-        <div class="blog-prose">
-            <p>Microsoft ships Power BI updates every month. Most of them are not migration projects. A slice of the <strong>April through June 2026</strong> rollouts are small, high-leverage changes you can turn on this week without replatforming your warehouse.</p>
+        <div class="blog-prose-card">
+            <div class="blog-prose">
+                <p>Microsoft ships Power BI updates every month. Most of them are not migration projects. A slice of the <strong>April through June 2026</strong> rollouts are small, high-leverage changes you can turn on this week without replatforming your warehouse.</p>
 <p>This article filters the <a href="https://community.fabric.microsoft.com/t5/Power-BI-Updates-Blog/Power-BI-June-2026-Feature-Summary/ba-p/5193264">June 2026 feature summary</a>, <a href="https://community.fabric.microsoft.com/t5/Power-BI-Updates-Blog/Power-BI-April-2026-Feature-Summary/ba-p/5173904">April 2026 summary</a>, and related GA posts down to wins that BI admins and report authors can act on now.</p>
 <h2>1. Org apps with audiences (generally available)</h2>
 <p><strong>Org apps</strong> are Fabric&rsquo;s rethink of workspace apps: multiple app items per workspace, branding, overview pages, and navigation you control. In mid-2026 they reached <strong>general availability</strong>, including <strong>audiences</strong>: one app surface, different content and nav visibility per group (execs, managers, frontline).</p>
@@ -273,7 +274,7 @@
 <p>Confirm <strong>Azure Maps tenant settings</strong> if maps broke after the 2025 split controls rollout (Desktop April 2025+ required, regional processing toggles for non-US/EU tenants).</p>
 <h2>What to defer (preview hype vs daily wins)</h2>
 <p>Build 2026 headlines (<strong>Agent Skills end-to-end</strong>, <strong>Fabric Apps on semantic models</strong>) are real but belong in a <strong>pilot workspace</strong> with Copilot capacity, Git, and sign-off rules. They are not &ldquo;small wins&rdquo; for a team still fighting refresh failures.</p>
-<table>
+<div class="blog-prose-table-wrap"><table>
 <thead>
 <tr>
 <th>Adopt now</th>
@@ -302,7 +303,7 @@
 <td>Copilot web modeling in Prod</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>One-afternoon checklist</h2>
 <ol>
 <li>Create or upgrade one <strong>org app</strong> with two audiences and an Overview page</li>
@@ -314,6 +315,7 @@
 </ol>
 <p>These moves will not replace a Fabric migration or semantic model refactor. They cut friction while Microsoft pushes toward agentic BI, and they give your users a cleaner front door this quarter.</p>
 <p>Want help prioritizing org app audiences or UDF standards for your golden model? <a href="https://calendly.com/adrienyvin/30min">Book a 30-minute call</a>.</p>
+            </div>
         </div>
     </article>
 </main>

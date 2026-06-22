@@ -46,10 +46,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../js/tailwind-config.js"></script>
     <link rel="stylesheet" href="../css/site.css">
+    <link rel="stylesheet" href="../css/blog-themes.css">
     <link rel="stylesheet" href="../css/logo.css">
 </head>
-<body class="min-h-screen flex flex-col nav-on-blog">
-<div class="float-layer" aria-hidden="true" id="floatLayer"></div>
+<body class="min-h-screen flex flex-col nav-on-blog blog-index-page">
 <nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
     <div class="nav-bar-inner pl-5 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
         <div class="shrink-0">
@@ -194,36 +194,36 @@
         </div>
     </div>
 </nav>
-<main class="max-w-7xl mx-auto px-6 py-12 w-full">
-    <header class="blog-index-header">
+<main class="blog-index-shell">
+    <header class="blog-index-hero">
         <h1 class="blog-index-title">Insights</h1>
         <p class="blog-index-sub">BI news, workflows, and new technologies from the Yuzu press room.</p>
     </header>
     <div class="blog-grid">
-        <article class="blog-card yuzu-card">
-            <span class="blog-category">BI News</span>
+        <article class="blog-card blog-theme-08">
+            <span class="blog-category-pill">BI News</span>
             <h2 class="blog-card-title"><a href="power-bi-small-wins.html">Power BI small wins from the 2026 rollout wave</a></h2>
             <p class="blog-card-excerpt">Org apps with audiences, date picker slicers, DAX user-defined functions, report landing pages, Copilot on mobile, and PBIR default-on: practical picks from April–June 2026 Power BI updates.</p>
             <div class="blog-card-footer">
-                <time datetime="2026-06-21">Jun 21, 2026</time>
+                <time datetime="2026-06-05">Jun 5, 2026</time>
                 <a href="power-bi-small-wins.html" class="blog-card-link">Read article →</a>
             </div>
         </article>
-        <article class="blog-card yuzu-card">
-            <span class="blog-category">New Tech</span>
+        <article class="blog-card blog-theme-27">
+            <span class="blog-category-pill">New Tech</span>
             <h2 class="blog-card-title"><a href="fabric-apps-vs-power-bi-apps.html">Fabric Apps vs Power BI Apps: web apps vs report bundles</a></h2>
             <p class="blog-card-excerpt">Fabric Apps are read/write web experiences on your lakehouse data. Power BI Apps are curated read-only report collections. Here is how to choose.</p>
             <div class="blog-card-footer">
-                <time datetime="2026-06-21">Jun 21, 2026</time>
+                <time datetime="2026-05-12">May 12, 2026</time>
                 <a href="fabric-apps-vs-power-bi-apps.html" class="blog-card-link">Read article →</a>
             </div>
         </article>
-        <article class="blog-card yuzu-card">
-            <span class="blog-category">Workflows</span>
+        <article class="blog-card blog-theme-20">
+            <span class="blog-category-pill">Workflows</span>
             <h2 class="blog-card-title"><a href="bi-git-like-product-code.html">Why BI teams should treat Git like product code</a></h2>
             <p class="blog-card-excerpt">Semantic models, reports, and pipelines belong in version control with PR reviews, CI checks, and deployment pipelines, not in shared folders.</p>
             <div class="blog-card-footer">
-                <time datetime="2026-06-14">Jun 14, 2026</time>
+                <time datetime="2026-04-07">Apr 7, 2026</time>
                 <a href="bi-git-like-product-code.html" class="blog-card-link">Read article →</a>
             </div>
         </article>
