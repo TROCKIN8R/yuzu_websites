@@ -1,18 +1,21 @@
 slug: direct-lake-vs-import-mode
 title:
-  en: "Direct Lake vs Import mode: when each storage mode earns its keep"
-  fr: "Direct Lake vs mode Import : quand chaque mode de stockage vaut le coup"
-  es: "Direct Lake vs modo Import: cuándo cada modo de almacenamiento vale la pena"
+  en: 'Direct Lake vs Import mode: when each storage mode earns its keep'
+  fr: 'Direct Lake vs mode Import : quand chaque mode de stockage vaut le coup'
+  es: 'Direct Lake vs modo Import: cuándo cada modo de almacenamiento vale la pena'
 description:
-  en: "Direct Lake cuts duplicate data and refresh windows. Import still wins for complex DAX and small datasets. A practical decision guide for Fabric semantic models."
-  fr: "Direct Lake réduit la duplication et les fenêtres de refresh. Import reste roi pour DAX complexe et petits jeux de données. Guide pratique pour modèles Fabric."
-  es: "Direct Lake reduce duplicación y ventanas de refresh. Import sigue ganando con DAX complejo y datasets pequeños. Guía práctica para modelos Fabric."
-publish_at: "2026-06-23T13:00:00Z"
-status: scheduled
+  en: Direct Lake cuts duplicate data and refresh windows. Import still wins for complex
+    DAX and small datasets. A practical decision guide for Fabric semantic models.
+  fr: Direct Lake réduit la duplication et les fenêtres de refresh. Import reste roi
+    pour DAX complexe et petits jeux de données. Guide pratique pour modèles Fabric.
+  es: Direct Lake reduce duplicación y ventanas de refresh. Import sigue ganando con
+    DAX complejo y datasets pequeños. Guía práctica para modelos Fabric.
+publish_at: '2026-06-23T13:00:00Z'
+status: published
 author: Adrien Yvin
 category: new-tech
 tags:
-  - fabric
-  - direct-lake
-  - semantic-model
-  - power-bi
+- fabric
+- direct-lake
+- semantic-model
+- power-bi
