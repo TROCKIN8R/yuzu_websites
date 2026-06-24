@@ -34,6 +34,21 @@
   margin: 0;
 }
 
+.stm-hero-links {
+  margin-top: 0.85rem !important;
+  font-size: 0.875rem !important;
+}
+
+.stm-hero-links a {
+  color: var(--zest-700);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.stm-hero-links a:hover {
+  text-decoration: underline;
+}
+
 .stm-dashboard {
   background: var(--paper-100);
   border: 1px solid var(--carbon-100);
@@ -414,9 +429,68 @@
 .stm-pill--busy { background: #FBE9E7; color: #D84315; }
 .stm-pill--unknown { background: #EEEEEE; color: #616161; }
 
-.stm-popup {
+.stm-grid--analysis {
+  grid-template-columns: 1.1fr 0.9fr;
+}
+
+.stm-table--ranked .stm-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: var(--paper-300);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--carbon-500);
+}
+
+.stm-delay-chart {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.stm-delay-bucket__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
   font-size: 0.8125rem;
-  line-height: 1.45;
+  color: var(--carbon-500);
+}
+
+.stm-bar-row__fill--on_time {
+  background: linear-gradient(90deg, #81C784, #4CAF50);
+}
+
+.stm-bar-row__fill--minor {
+  background: linear-gradient(90deg, #FFD54F, #F8C607);
+}
+
+.stm-bar-row__fill--late {
+  background: linear-gradient(90deg, #FF8A65, #E65100);
+}
+
+.stm-bar-row__fill--severe {
+  background: linear-gradient(90deg, #E57373, #C62828);
+}
+
+.stm-late-bars {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--paper-600);
+}
+
+.stm-late-bar-row {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--carbon-500);
 }
 
 .stm-table {
@@ -461,7 +535,8 @@
 @media (max-width: 900px) {
   .stm-kpi-row,
   .stm-grid,
-  .stm-grid--wide {
+  .stm-grid--wide,
+  .stm-grid--analysis {
     grid-template-columns: 1fr 1fr;
   }
 }
@@ -469,7 +544,8 @@
 @media (max-width: 640px) {
   .stm-kpi-row,
   .stm-grid,
-  .stm-grid--wide {
+  .stm-grid--wide,
+  .stm-grid--analysis {
     grid-template-columns: 1fr;
   }
 
