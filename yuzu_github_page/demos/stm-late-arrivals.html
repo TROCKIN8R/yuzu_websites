@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STM Late Arrival Analysis | BI Demo · Yuzu.solutions</title>
+    <meta name="description" content="Live STM bus delay analysis — top late lines, on-time rate, and delay distribution from GTFS-RT trip updates.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Yuzu.solutions">
+    <meta property="og:title" content="STM Late Arrival Analysis | BI Demo">
+    <meta property="og:url" content="https://yuzu.solutions/demos/stm-late-arrivals.html">
+    <meta property="og:image" content="https://yuzu.solutions/assets/og-image.png">
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="canonical" href="https://yuzu.solutions/demos/stm-late-arrivals.html">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#F9F9F9">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/design-tokens.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../css/site.css">
+    <link rel="stylesheet" href="../css/logo.css">
+    <link rel="stylesheet" href="../css/stm-dashboard.css">
+</head>
+<body class="min-h-screen flex flex-col stm-page">
+
+<nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
+    <div class="nav-bar-inner glass-surface pl-5 pr-3 py-3 rounded-full">
+        <div class="shrink-0">
+            <a href="../index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--nav" aria-label="Yuzu Solutions">
+                <object type="image/svg+xml" data="../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+            </a>
+        </div>
+        <div class="nav-bar-center hidden md:flex">
+            <div class="nav-pill-group">
+                <a href="../demos/stm-live.html" class="nav-pill-item">Live map</a>
+                <a href="../services/bi-dashboard-delivery.html" class="nav-pill-item">BI Delivery</a>
+            </div>
+        </div>
+        <div class="nav-bar-right flex items-center gap-2">
+            <a href="../demos/stm-live.html" class="hidden sm:inline-flex text-sm font-semibold text-stone-600 hover:text-stone-900">← Live map demo</a>
+        </div>
+    </div>
+</nav>
+
+<main class="flex-1 w-[94%] max-w-6xl mx-auto px-0 py-8 md:py-12">
+    <header class="stm-hero">
+        <p class="stm-hero-eyebrow">Operations analytics · STM Montréal</p>
+        <h1>Late arrival analysis</h1>
+        <p>Rank the bus lines falling behind schedule using live GTFS-RT trip updates — delay stats, distribution buckets, and the top five late lines in one view.</p>
+        <p class="stm-hero-links">
+            <a href="../demos/stm-live.html">Live vehicle map</a>
+            <span aria-hidden="true">·</span>
+            <a href="../services/bi-dashboard-delivery.html">BI delivery service</a>
+        </p>
+    </header>
+
+    <div class="stm-dashboard" id="stmLateDashboard">
+        <div class="stm-dashboard-toolbar">
+            <div class="stm-dashboard-dots" aria-hidden="true">
+                <span class="bg-red-400"></span>
+                <span class="bg-yellow-400"></span>
+                <span class="bg-green-400"></span>
+            </div>
+            <span class="stm-dashboard-title">Yuzu · STM Late Arrivals · tripUpdates feed</span>
+            <button type="button" class="stm-btn" id="stmLateRefreshBtn">↻ Refresh</button>
+        </div>
+
+        <p class="stm-status stm-status--idle" id="stmLateStatus" hidden>Loading…</p>
+
+        <section class="stm-panel stm-live-body">
+            <div class="stm-kpi-row" id="stmLateKpis"></div>
+
+            <div class="stm-grid stm-grid--analysis">
+                <div class="stm-card">
+                    <h3>Top 5 late bus lines</h3>
+                    <div id="stmLateTopLines"></div>
+                </div>
+                <div class="stm-card">
+                    <h3>Delay distribution</h3>
+                    <p class="stm-card-meta" id="stmLateMeta">Waiting for trip updates…</p>
+                    <div id="stmLateDistribution" class="stm-delay-chart"></div>
+                </div>
+            </div>
+
+            <p class="stm-footnote">
+                Late threshold: 2 minutes behind schedule · Data © <a href="https://www.stm.info/fr/a-propos/developpeurs" target="_blank" rel="noopener noreferrer">STM</a> ·
+                API key stored in Supabase Edge Function secrets (<code>STM_API_KEY</code>)
+            </p>
+        </section>
+    </div>
+</main>
+
+<footer class="text-center text-xs text-stone-500 py-8">
+    <a href="../index.html" class="font-semibold text-stone-600 hover:text-stone-900">yuzu.solutions</a>
+</footer>
+
+<script src="../js/stm-config.js"></script>
+<script src="../js/stm-config.local.js" onerror=""></script>
+<script src="../js/stm-data.js"></script>
+<script src="../js/stm-late-analysis.js"></script>
+<script src="../js/stm-late-dashboard.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

@@ -154,12 +154,34 @@ function decodeGtfsRt(buffer: ArrayBuffer, feed: FeedName) {
     const tripUpdate = entity.tripUpdate;
     if (!tripUpdate) continue;
 
+    const tripDelay = tripUpdate.delay ?? 0;
+    let maxStopDelay = 0;
+    let stopDelayTotal = 0;
+    let stopDelayCount = 0;
+
+    for (const stopUpdate of tripUpdate.stopTimeUpdate || []) {
+      for (const event of [stopUpdate.arrival, stopUpdate.departure]) {
+        if (event?.delay == null) continue;
+        const delay = Number(event.delay);
+        if (!Number.isFinite(delay)) continue;
+        maxStopDelay = Math.max(maxStopDelay, delay);
+        stopDelayTotal += delay;
+        stopDelayCount += 1;
+      }
+    }
+
+    const effectiveDelay = Math.max(Number(tripDelay) || 0, maxStopDelay);
+
     updates.push({
       id: entity.id || null,
       routeId: tripUpdate.trip?.routeId || null,
       tripId: tripUpdate.trip?.tripId || null,
-      delay: tripUpdate.delay ?? null,
+      delay: Number(tripDelay) || 0,
+      maxStopDelay,
+      avgStopDelay: stopDelayCount ? Math.round(stopDelayTotal / stopDelayCount) : 0,
+      effectiveDelay,
       stopTimeUpdateCount: tripUpdate.stopTimeUpdate?.length ?? 0,
+      isLate: effectiveDelay >= 120,
     });
 
     if (updates.length >= MAX_VEHICLES) break;
