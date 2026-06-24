@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insights | Yuzu.solutions</title>
-    <meta name="description" content="BI news, workflows, and new technologies from the Yuzu press room.">
-    <meta property="og:type" content="website">
+    <title>Direct Lake vs Import mode: when each storage mode earns its keep | Yuzu.solutions</title>
+    <meta name="description" content="Direct Lake cuts duplicate data and refresh windows. Import still wins for complex DAX and small datasets. A practical decision guide for Fabric semantic models.">
+    <meta property="og:type" content="article">
     <meta property="og:site_name" content="Yuzu.solutions">
-    <meta property="og:title" content="Insights">
-    <meta property="og:description" content="BI news, workflows, and new technologies from the Yuzu press room.">
-    <meta property="og:url" content="https://yuzu.solutions/blog/index.html">
+    <meta property="og:title" content="Direct Lake vs Import mode: when each storage mode earns its keep">
+    <meta property="og:description" content="Direct Lake cuts duplicate data and refresh windows. Import still wins for complex DAX and small datasets. A practical decision guide for Fabric semantic models.">
+    <meta property="og:url" content="https://yuzu.solutions/blog/direct-lake-vs-import-mode.html">
     <meta property="og:image" content="https://yuzu.solutions/assets/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="🍋 Yuzu.solutions">
+    <meta property="article:published_time" content="2026-06-23T13:00:00Z">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://yuzu.solutions/assets/og-image.png">
     <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-    <link rel="canonical" href="https://yuzu.solutions/blog/index.html">
-    <link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/index.html">
-    <link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/index.html">
-    <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/index.html">
-    <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/index.html">
+    <link rel="canonical" href="https://yuzu.solutions/blog/direct-lake-vs-import-mode.html">
+    <link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/direct-lake-vs-import-mode.html">
+    <link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/direct-lake-vs-import-mode.html">
+    <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/direct-lake-vs-import-mode.html">
+    <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/direct-lake-vs-import-mode.html">
     <meta property="og:locale" content="en_US">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Adrien Yvin">
@@ -31,12 +32,28 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Blog",
-      "name": "Yuzu.solutions Insights",
-      "description": "BI news, workflows, and new technologies from the Yuzu press room.",
-      "url": "https://yuzu.solutions/blog/index.html",
-      "publisher": { "@type": "Organization", "name": "Yuzu.solutions", "url": "https://yuzu.solutions/" },
-      "inLanguage": "en"
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://yuzu.solutions/" },
+            { "@type": "ListItem", "position": 2, "name": "Insights", "item": "https://yuzu.solutions/blog/index.html" },
+            { "@type": "ListItem", "position": 3, "name": "Direct Lake vs Import mode: when each storage mode earns its keep", "item": "https://yuzu.solutions/blog/direct-lake-vs-import-mode.html" }
+          ]
+        },
+        {
+          "@type": "BlogPosting",
+          "headline": "Direct Lake vs Import mode: when each storage mode earns its keep",
+          "description": "Direct Lake cuts duplicate data and refresh windows. Import still wins for complex DAX and small datasets. A practical decision guide for Fabric semantic models.",
+          "datePublished": "2026-06-23T13:00:00Z",
+          "dateModified": "2026-06-23T13:00:00Z",
+          "author": { "@type": "Person", "name": "Adrien Yvin" },
+          "publisher": { "@type": "Organization", "name": "Yuzu.solutions", "url": "https://yuzu.solutions/" },
+          "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yuzu.solutions/blog/direct-lake-vs-import-mode.html" },
+          "inLanguage": "en",
+          "url": "https://yuzu.solutions/blog/direct-lake-vs-import-mode.html"
+        }
+      ]
     }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,7 +66,7 @@
     <link rel="stylesheet" href="../css/blog-themes.css">
     <link rel="stylesheet" href="../css/logo.css">
 </head>
-<body class="min-h-screen flex flex-col nav-on-blog blog-index-page">
+<body class="min-h-screen flex flex-col nav-on-blog blog-article-page blog-theme-02">
 <nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
     <div class="nav-bar-inner pl-5 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
         <div class="shrink-0">
@@ -117,9 +134,9 @@
         </div>
         <div class="nav-bar-end">
             <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
-                <a href="/blog/index.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
-                <a href="/fr/blog/index.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
-                <a href="/es/blog/index.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+                <a href="/blog/direct-lake-vs-import-mode.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
+                <a href="/fr/blog/direct-lake-vs-import-mode.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/blog/direct-lake-vs-import-mode.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
             </div>
             <a href="https://calendly.com/adrienyvin/30min" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap" target="_blank" rel="noopener noreferrer">Get Started</a>
             <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNavPanel">
@@ -185,67 +202,96 @@
             <a href="../index.html#founder" class="mobile-nav-link">Our Team</a>
             <div class="mobile-nav-footer">
                 <div class="lang-switch sm:hidden" role="navigation" aria-label="Language">
-                <a href="/blog/index.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
-                <a href="/fr/blog/index.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
-                <a href="/es/blog/index.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+                <a href="/blog/direct-lake-vs-import-mode.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
+                <a href="/fr/blog/direct-lake-vs-import-mode.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/blog/direct-lake-vs-import-mode.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
             </div>
                 <a href="https://calendly.com/adrienyvin/30min" class="mobile-nav-cta" target="_blank" rel="noopener noreferrer">Get Started</a>
             </div>
         </div>
     </div>
 </nav>
-<main class="blog-index-shell">
-    <header class="blog-index-hero">
-        <h1 class="blog-index-title">Insights</h1>
-        <p class="blog-index-sub">BI news, workflows, and new technologies from the Yuzu press room.</p>
-    </header>
-    <div class="blog-grid">
-        <article class="blog-card blog-theme-02">
+<main class="blog-article-shell">
+    <a href="index.html" class="blog-back-link">← Back to Insights</a>
+    <article class="blog-article">
+        <header class="blog-article-hero">
             <span class="blog-category-pill">New Tech</span>
-            <h2 class="blog-card-title"><a href="direct-lake-vs-import-mode.html">Direct Lake vs Import mode: when each storage mode earns its keep</a></h2>
-            <p class="blog-card-excerpt">Direct Lake cuts duplicate data and refresh windows. Import still wins for complex DAX and small datasets. A practical decision guide for Fabric semantic models.</p>
-            <div class="blog-card-footer">
-                <time datetime="2026-06-23">Jun 23, 2026</time>
-                <a href="direct-lake-vs-import-mode.html" class="blog-card-link">Read article →</a>
+            <h1 class="blog-article-title">Direct Lake vs Import mode: when each storage mode earns its keep</h1>
+            <p class="blog-article-meta">By Adrien Yvin · <time datetime="2026-06-23T13:00:00Z">Jun 23, 2026</time></p>
+            <div class="blog-tags"><span class="blog-tag">fabric</span><span class="blog-tag">direct-lake</span><span class="blog-tag">semantic-model</span><span class="blog-tag">power-bi</span></div>
+        </header>
+        <div class="blog-prose-card">
+            <div class="blog-prose">
+                <p>Storage mode picks used to be Import vs DirectQuery. Fabric adds <strong>Direct Lake</strong>: query parquet in OneLake without importing into VertiPaq. That changes the math for large models.</p>
+<h2>Import mode: still the comfort zone</h2>
+<p><strong>Import</strong> copies data into the semantic model engine. Queries are fast. DAX is full-featured. Offline refresh windows are predictable.</p>
+<p><strong>Choose Import when:</strong></p>
+<ul>
+<li>Dataset is small enough for nightly refresh (rough rule: under a few GB in model, depends on SKU)</li>
+<li>You rely on complex DAX, calculated tables, or legacy patterns</li>
+<li>Source systems cannot tolerate live query load</li>
+</ul>
+<p><strong>Watch for:</strong> duplicate storage (lake + model), long refresh chains, and drift between warehouse truth and imported snapshot.</p>
+<h2>DirectQuery: live SQL, live trade-offs</h2>
+<p><strong>DirectQuery</strong> sends queries to the source at report runtime. No big local copy. Latency and load follow user activity.</p>
+<p><strong>Choose DirectQuery when:</strong></p>
+<ul>
+<li>Data must be near real-time and model size forbids Import</li>
+<li>Source is a tuned SQL endpoint or warehouse with capacity headroom</li>
+</ul>
+<p><strong>Watch for:</strong> slow visuals, restricted DAX, and report user spikes hammering the warehouse.</p>
+<h2>Direct Lake: query the lake in place</h2>
+<p><strong>Direct Lake</strong> reads OneLake files (often parquet from a shortcut lakehouse) through the semantic model without a full Import. Less duplication, shorter refresh for the cached portion, alignment with medallion architecture.</p>
+<p><strong>Choose Direct Lake when:</strong></p>
+<ul>
+<li>Gold layer already lives in OneLake</li>
+<li>You want Import-like performance on lake files without doubling storage</li>
+<li>Fabric capacity supports Direct Lake for your item types</li>
+</ul>
+<p><strong>Watch for:</strong> preview/feature availability by region, mixed tables (some Import fallback), and team skill gap on lake file layout.</p>
+<h2>Quick comparison</h2>
+<div class="blog-prose-table-wrap"><table>
+<thead>
+<tr>
+<th>Factor</th>
+<th>Import</th>
+<th>DirectQuery</th>
+<th>Direct Lake</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data freshness</td>
+<td>Refresh schedule</td>
+<td>Near live</td>
+<td>Refresh + lake files</td>
+</tr>
+<tr>
+<td>Model size pressure</td>
+<td>High</td>
+<td>Low</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>DAX flexibility</td>
+<td>Highest</td>
+<td>Limited</td>
+<td>Growing</td>
+</tr>
+<tr>
+<td>Ops complexity</td>
+<td>Refresh jobs</td>
+<td>Source load</td>
+<td>Lake + model sync</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Migration path we recommend</h2>
+<p>Do not flip a 200-table model overnight. Start with a <strong>new subject area</strong> on Direct Lake (one gold mart). Run parallel reports for one sprint. Compare refresh time, query latency, and developer ergonomics. Then decide domain by domain.</p>
+<p>Need help sizing Direct Lake for your lakehouse layout? <a href="https://calendly.com/adrienyvin/30min">Book a 30-minute call</a>.</p>
             </div>
-        </article>
-        <article class="blog-card blog-theme-03">
-            <span class="blog-category-pill">New Tech</span>
-            <h2 class="blog-card-title"><a href="fabric-copilot-workflows.html">Microsoft Fabric Copilot: first workflows to automate</a></h2>
-            <p class="blog-card-excerpt">Practical Copilot patterns for BI teams: measure scaffolding, pipeline documentation, and natural-language queries without breaking governance.</p>
-            <div class="blog-card-footer">
-                <time datetime="2026-06-19">Jun 19, 2026</time>
-                <a href="fabric-copilot-workflows.html" class="blog-card-link">Read article →</a>
-            </div>
-        </article>
-        <article class="blog-card blog-theme-08">
-            <span class="blog-category-pill">BI News</span>
-            <h2 class="blog-card-title"><a href="power-bi-small-wins.html">Power BI small wins from the 2026 rollout wave</a></h2>
-            <p class="blog-card-excerpt">Org apps with audiences, date picker slicers, DAX user-defined functions, report landing pages, Copilot on mobile, and PBIR default-on: practical picks from April–June 2026 Power BI updates.</p>
-            <div class="blog-card-footer">
-                <time datetime="2026-06-05">Jun 5, 2026</time>
-                <a href="power-bi-small-wins.html" class="blog-card-link">Read article →</a>
-            </div>
-        </article>
-        <article class="blog-card blog-theme-27">
-            <span class="blog-category-pill">New Tech</span>
-            <h2 class="blog-card-title"><a href="fabric-apps-vs-power-bi-apps.html">Fabric Apps vs Power BI Apps: web apps vs report bundles</a></h2>
-            <p class="blog-card-excerpt">Fabric Apps are read/write web experiences on your lakehouse data. Power BI Apps are curated read-only report collections. Here is how to choose.</p>
-            <div class="blog-card-footer">
-                <time datetime="2026-05-12">May 12, 2026</time>
-                <a href="fabric-apps-vs-power-bi-apps.html" class="blog-card-link">Read article →</a>
-            </div>
-        </article>
-        <article class="blog-card blog-theme-20">
-            <span class="blog-category-pill">Workflows</span>
-            <h2 class="blog-card-title"><a href="bi-git-like-product-code.html">Why BI teams should treat Git like product code</a></h2>
-            <p class="blog-card-excerpt">Semantic models, reports, and pipelines belong in version control with PR reviews, CI checks, and deployment pipelines, not in shared folders.</p>
-            <div class="blog-card-footer">
-                <time datetime="2026-04-07">Apr 7, 2026</time>
-                <a href="bi-git-like-product-code.html" class="blog-card-link">Read article →</a>
-            </div>
-        </article>
-    </div>
+        </div>
+    </article>
 </main>
 <footer class="site-footer site-footer--compact mt-auto">
     <div class="site-footer__inner">

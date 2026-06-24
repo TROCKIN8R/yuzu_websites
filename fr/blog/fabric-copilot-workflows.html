@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blogue | Yuzu.solutions</title>
-    <meta name="description" content="Actualités BI, workflows et nouvelles technologies depuis la presse Yuzu.">
-    <meta property="og:type" content="website">
+    <title>Microsoft Fabric Copilot : premiers workflows à automatiser | Yuzu.solutions</title>
+    <meta name="description" content="Patterns Copilot pratiques pour équipes BI : échafaudage de mesures, documentation pipeline et requêtes en langage naturel sans casser la gouvernance.">
+    <meta property="og:type" content="article">
     <meta property="og:site_name" content="Yuzu.solutions">
-    <meta property="og:title" content="Blogue">
-    <meta property="og:description" content="Actualités BI, workflows et nouvelles technologies depuis la presse Yuzu.">
-    <meta property="og:url" content="https://yuzu.solutions/fr/blog/index.html">
+    <meta property="og:title" content="Microsoft Fabric Copilot : premiers workflows à automatiser">
+    <meta property="og:description" content="Patterns Copilot pratiques pour équipes BI : échafaudage de mesures, documentation pipeline et requêtes en langage naturel sans casser la gouvernance.">
+    <meta property="og:url" content="https://yuzu.solutions/fr/blog/fabric-copilot-workflows.html">
     <meta property="og:image" content="https://yuzu.solutions/assets/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="🍋 Yuzu.solutions">
+    <meta property="article:published_time" content="2026-06-19T13:00:00Z">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://yuzu.solutions/assets/og-image.png">
     <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
-    <link rel="canonical" href="https://yuzu.solutions/fr/blog/index.html">
-    <link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/index.html">
-    <link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/index.html">
-    <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/index.html">
-    <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/index.html">
+    <link rel="canonical" href="https://yuzu.solutions/fr/blog/fabric-copilot-workflows.html">
+    <link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/fabric-copilot-workflows.html">
+    <link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/fabric-copilot-workflows.html">
+    <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/fabric-copilot-workflows.html">
+    <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/fabric-copilot-workflows.html">
     <meta property="og:locale" content="fr_CA">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Adrien Yvin">
@@ -31,12 +32,28 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Blog",
-      "name": "Blogue Yuzu.solutions",
-      "description": "Actualit\u00e9s BI, workflows et nouvelles technologies depuis la presse Yuzu.",
-      "url": "https://yuzu.solutions/fr/blog/index.html",
-      "publisher": { "@type": "Organization", "name": "Yuzu.solutions", "url": "https://yuzu.solutions/" },
-      "inLanguage": "fr-CA"
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://yuzu.solutions/fr" },
+            { "@type": "ListItem", "position": 2, "name": "Blogue", "item": "https://yuzu.solutions/fr/blog/index.html" },
+            { "@type": "ListItem", "position": 3, "name": "Microsoft Fabric Copilot : premiers workflows \u00e0 automatiser", "item": "https://yuzu.solutions/fr/blog/fabric-copilot-workflows.html" }
+          ]
+        },
+        {
+          "@type": "BlogPosting",
+          "headline": "Microsoft Fabric Copilot : premiers workflows \u00e0 automatiser",
+          "description": "Patterns Copilot pratiques pour \u00e9quipes BI : \u00e9chafaudage de mesures, documentation pipeline et requ\u00eates en langage naturel sans casser la gouvernance.",
+          "datePublished": "2026-06-19T13:00:00Z",
+          "dateModified": "2026-06-19T13:00:00Z",
+          "author": { "@type": "Person", "name": "Adrien Yvin" },
+          "publisher": { "@type": "Organization", "name": "Yuzu.solutions", "url": "https://yuzu.solutions/" },
+          "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yuzu.solutions/fr/blog/fabric-copilot-workflows.html" },
+          "inLanguage": "fr-CA",
+          "url": "https://yuzu.solutions/fr/blog/fabric-copilot-workflows.html"
+        }
+      ]
     }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,7 +66,7 @@
     <link rel="stylesheet" href="../../css/blog-themes.css">
     <link rel="stylesheet" href="../../css/logo.css">
 </head>
-<body class="min-h-screen flex flex-col nav-on-blog blog-index-page">
+<body class="min-h-screen flex flex-col nav-on-blog blog-article-page blog-theme-03">
 <nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
     <div class="nav-bar-inner pl-5 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
         <div class="shrink-0">
@@ -117,9 +134,9 @@
         </div>
         <div class="nav-bar-end">
             <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
-                <a href="/blog/index.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
-                <a href="/fr/blog/index.html" class="lang-switch-btn active" hreflang="fr-CA" lang="fr-CA">FR</a>
-                <a href="/es/blog/index.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+                <a href="/blog/fabric-copilot-workflows.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
+                <a href="/fr/blog/fabric-copilot-workflows.html" class="lang-switch-btn active" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/blog/fabric-copilot-workflows.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
             </div>
             <a href="https://calendly.com/adrienyvin/30min" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap" target="_blank" rel="noopener noreferrer">Commencer</a>
             <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNavPanel">
@@ -185,67 +202,45 @@
             <a href="../index.html#founder" class="mobile-nav-link">Notre équipe</a>
             <div class="mobile-nav-footer">
                 <div class="lang-switch sm:hidden" role="navigation" aria-label="Language">
-                <a href="/blog/index.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
-                <a href="/fr/blog/index.html" class="lang-switch-btn active" hreflang="fr-CA" lang="fr-CA">FR</a>
-                <a href="/es/blog/index.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+                <a href="/blog/fabric-copilot-workflows.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
+                <a href="/fr/blog/fabric-copilot-workflows.html" class="lang-switch-btn active" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/blog/fabric-copilot-workflows.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
             </div>
                 <a href="https://calendly.com/adrienyvin/30min" class="mobile-nav-cta" target="_blank" rel="noopener noreferrer">Commencer</a>
             </div>
         </div>
     </div>
 </nav>
-<main class="blog-index-shell">
-    <header class="blog-index-hero">
-        <h1 class="blog-index-title">Blogue</h1>
-        <p class="blog-index-sub">Actualités BI, workflows et nouvelles technologies depuis la presse Yuzu.</p>
-    </header>
-    <div class="blog-grid">
-        <article class="blog-card blog-theme-02">
+<main class="blog-article-shell">
+    <a href="index.html" class="blog-back-link">← Retour au blogue</a>
+    <article class="blog-article">
+        <header class="blog-article-hero">
             <span class="blog-category-pill">Nouvelles tech</span>
-            <h2 class="blog-card-title"><a href="direct-lake-vs-import-mode.html">Direct Lake vs mode Import : quand chaque mode de stockage vaut le coup</a></h2>
-            <p class="blog-card-excerpt">Direct Lake réduit la duplication et les fenêtres de refresh. Import reste roi pour DAX complexe et petits jeux de données. Guide pratique pour modèles Fabric.</p>
-            <div class="blog-card-footer">
-                <time datetime="2026-06-23">juin 23, 2026</time>
-                <a href="direct-lake-vs-import-mode.html" class="blog-card-link">Lire l'article →</a>
+            <h1 class="blog-article-title">Microsoft Fabric Copilot : premiers workflows à automatiser</h1>
+            <p class="blog-article-meta">Par Adrien Yvin · <time datetime="2026-06-19T13:00:00Z">juin 19, 2026</time></p>
+            <div class="blog-tags"><span class="blog-tag">fabric</span><span class="blog-tag">copilot</span><span class="blog-tag">power-bi</span><span class="blog-tag">ai</span></div>
+        </header>
+        <div class="blog-prose-card">
+            <div class="blog-prose">
+                <p>Copilot dans Microsoft Fabric ne remplace pas votre modèle sémantique. C&rsquo;est un accélérateur pour le travail BI répétitif, si vous lui donnez des garde-fous.</p>
+<h2>Workflow 1 : Échafaudage de mesures</h2>
+<p>Demandez à Copilot de rédiger des mesures DAX à partir d&rsquo;une spec en langage clair, puis révisez en PR comme tout autre code. Ne fusionnez jamais du DAX généré par IA sans un humain responsable de la définition métier.</p>
+<p><strong>Pattern de prompt :</strong> « Ajoute croissance revenus YoY avec intelligence temporelle sur Sales[OrderDate]. Utilise notre suffixe <code>_ YoY Growth</code>. »</p>
+<h2>Workflow 2 : Documentation pipeline et notebooks</h2>
+<p>Les data engineers passent des heures à documenter notebooks Spark et étapes pipeline. Copilot peut générer une première passe de README à partir des commentaires et sorties de cellules. Les éditeurs valident encore l&rsquo;exactitude contre le graphe de lignée réel.</p>
+<h2>Workflow 3 : Q&amp;R en langage naturel gouverné</h2>
+<p>Copilot pour Power BI fonctionne mieux quand le modèle sémantique est propre : noms de tables clairs, mesures documentées, RLS déjà testé. Corrigez le modèle d&rsquo;abord ; Copilot ensuite.</p>
+<h2>Ce qu&rsquo;il faut éviter</h2>
+<ul>
+<li>Laisser Copilot renommer des tables en production sans Git</li>
+<li>Utiliser du SQL généré dans des pipelines sans EXPLAIN / contrôles de volumétrie</li>
+<li>Sauter la revue PR parce que « l&rsquo;IA l&rsquo;a écrit »</li>
+</ul>
+<h2>Prochaines étapes</h2>
+<p>Choisissez un rapport à fort turnover. Ajoutez trois mesures assistées Copilot via branche + PR. Mesurez le cycle time avant/après. Ces données vendent le workflow à la direction mieux qu&rsquo;une démo éditeur.</p>
             </div>
-        </article>
-        <article class="blog-card blog-theme-03">
-            <span class="blog-category-pill">Nouvelles tech</span>
-            <h2 class="blog-card-title"><a href="fabric-copilot-workflows.html">Microsoft Fabric Copilot : premiers workflows à automatiser</a></h2>
-            <p class="blog-card-excerpt">Patterns Copilot pratiques pour équipes BI : échafaudage de mesures, documentation pipeline et requêtes en langage naturel sans casser la gouvernance.</p>
-            <div class="blog-card-footer">
-                <time datetime="2026-06-19">juin 19, 2026</time>
-                <a href="fabric-copilot-workflows.html" class="blog-card-link">Lire l'article →</a>
-            </div>
-        </article>
-        <article class="blog-card blog-theme-08">
-            <span class="blog-category-pill">Actualités BI</span>
-            <h2 class="blog-card-title"><a href="power-bi-small-wins.html">Petites victoires Power BI dans la vague 2026</a></h2>
-            <p class="blog-card-excerpt">Org apps avec audiences, slicers date picker, fonctions DAX définies par l&#x27;utilisateur, pages d&#x27;atterrissage, Copilot mobile et PBIR : choix pratiques des mises à jour Power BI avril–juin 2026.</p>
-            <div class="blog-card-footer">
-                <time datetime="2026-06-05">juin 5, 2026</time>
-                <a href="power-bi-small-wins.html" class="blog-card-link">Lire l'article →</a>
-            </div>
-        </article>
-        <article class="blog-card blog-theme-27">
-            <span class="blog-category-pill">Nouvelles tech</span>
-            <h2 class="blog-card-title"><a href="fabric-apps-vs-power-bi-apps.html">Apps Fabric vs apps Power BI : webapps vs compilations de rapports</a></h2>
-            <p class="blog-card-excerpt">Les apps Fabric sont des expériences web lecture/écriture sur vos données lakehouse. Les apps Power BI sont des compilations de rapports en lecture seule. Comment choisir.</p>
-            <div class="blog-card-footer">
-                <time datetime="2026-05-12">mai 12, 2026</time>
-                <a href="fabric-apps-vs-power-bi-apps.html" class="blog-card-link">Lire l'article →</a>
-            </div>
-        </article>
-        <article class="blog-card blog-theme-20">
-            <span class="blog-category-pill">Workflows</span>
-            <h2 class="blog-card-title"><a href="bi-git-like-product-code.html">Pourquoi les équipes BI devraient traiter Git comme du code produit</a></h2>
-            <p class="blog-card-excerpt">Modèles sémantiques, rapports et pipelines appartiennent au contrôle de version avec revues PR, CI et pipelines de déploiement, pas aux dossiers partagés.</p>
-            <div class="blog-card-footer">
-                <time datetime="2026-04-07">avr. 7, 2026</time>
-                <a href="bi-git-like-product-code.html" class="blog-card-link">Lire l'article →</a>
-            </div>
-        </article>
-    </div>
+        </div>
+    </article>
 </main>
 <footer class="site-footer site-footer--compact mt-auto">
     <div class="site-footer__inner">
