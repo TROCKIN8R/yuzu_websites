@@ -84,6 +84,29 @@ function buildStmHeaders(apiKey: string, accept: string) {
   };
 }
 
+function toUnixSeconds(value: unknown): number | null {
+  if (value == null) return null;
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "object" && value !== null && "low" in value) {
+    const low = Number((value as { low?: unknown }).low);
+    return Number.isFinite(low) ? low : null;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+const OCCUPANCY_LABELS: Record<number, string> = {
+  0: "empty",
+  1: "seats_available",
+  2: "few_seats",
+  3: "standing",
+  4: "crowded",
+  5: "full",
+  6: "not_accepting",
+  7: "unknown",
+  8: "not_boardable",
+};
+
 function decodeGtfsRt(buffer: ArrayBuffer, feed: FeedName) {
   const message = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(
     new Uint8Array(buffer),
@@ -98,6 +121,9 @@ function decodeGtfsRt(buffer: ArrayBuffer, feed: FeedName) {
       if (!vehicle || !position) continue;
       if (position.latitude == null || position.longitude == null) continue;
 
+      const occupancyCode = vehicle.occupancyStatus ?? null;
+      const occupancy = occupancyCode == null ? null : Number(occupancyCode);
+
       vehicles.push({
         id: entity.id || vehicle.vehicle?.id || null,
         routeId: vehicle.trip?.routeId || null,
@@ -106,8 +132,9 @@ function decodeGtfsRt(buffer: ArrayBuffer, feed: FeedName) {
         lng: position.longitude,
         bearing: position.bearing ?? null,
         speed: position.speed ?? null,
-        occupancy: vehicle.occupancyStatus ?? null,
-        timestamp: vehicle.timestamp ?? message.header?.timestamp ?? null,
+        occupancy,
+        occupancyLabel: occupancy == null ? "unknown" : (OCCUPANCY_LABELS[occupancy] || "unknown"),
+        timestamp: toUnixSeconds(vehicle.timestamp ?? message.header?.timestamp ?? null),
       });
 
       if (vehicles.length >= MAX_VEHICLES) break;

@@ -5,6 +5,7 @@ window.StmMap = (function createStmMap() {
   let map = null;
   let markerLayer = null;
   let ready = false;
+  let lastBoundsKey = "";
 
   function init(containerId) {
     if (map || !window.L) return map;
@@ -44,8 +45,38 @@ window.StmMap = (function createStmMap() {
     markerLayer?.clearLayers();
   }
 
-  function plotVehicles(vehicles) {
+  function formatSpeed(speed) {
+    const value = Number(speed);
+    if (!Number.isFinite(value)) return "—";
+    return `${Math.round(value * 3.6)} km/h`;
+  }
+
+  function buildPopup(vehicle, filters) {
+    const route = vehicle.routeId ? `Line ${vehicle.routeId}` : "STM vehicle";
+    const load = filters?.getLoadProfile?.(vehicle) || "unknown";
+    const moving = filters?.isMoving?.(vehicle) ? "In motion" : "Stopped";
+    const occupancy = vehicle.occupancyLabel
+      ? vehicle.occupancyLabel.replace(/_/g, " ")
+      : load;
+
+    return `
+      <div class="stm-popup">
+        <strong>${route}</strong>
+        <div>Vehicle ${vehicle.id || "—"}</div>
+        <div>Load: ${occupancy}</div>
+        <div>${moving} · ${formatSpeed(vehicle.speed)}</div>
+      </div>
+    `;
+  }
+
+  function plotVehicles(vehicles, options = {}) {
     if (!ensureReady("stmLiveMap")) return 0;
+
+    const {
+      colorFor = null,
+      fitBounds = true,
+      filters = null
+    } = options;
 
     clear();
     const bounds = [];
@@ -55,28 +86,40 @@ window.StmMap = (function createStmMap() {
       const lng = Number(vehicle.lng);
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
 
+      const fillColor = typeof colorFor === "function"
+        ? colorFor(vehicle)
+        : "#F8C607";
+
       const marker = L.circleMarker([lat, lng], {
-        radius: 4,
+        radius: 5,
         weight: 1,
         color: "#2D3436",
-        fillColor: "#F8C607",
-        fillOpacity: 0.85
+        fillColor,
+        fillOpacity: 0.9
       });
 
-      const label = vehicle.routeId ? `Route ${vehicle.routeId}` : "STM vehicle";
-      marker.bindPopup(`<strong>${label}</strong>`);
+      marker.bindPopup(buildPopup(vehicle, filters));
       marker.addTo(markerLayer);
       bounds.push([lat, lng]);
     });
 
-    if (bounds.length > 1) {
-      map.fitBounds(bounds, { padding: [24, 24], maxZoom: 12 });
-    } else {
+    const boundsKey = bounds.map((point) => point.join(",")).join("|");
+    const shouldFit = fitBounds && bounds.length > 0 && boundsKey !== lastBoundsKey;
+
+    if (shouldFit && bounds.length > 1) {
+      map.fitBounds(bounds, { padding: [24, 24], maxZoom: 13 });
+      lastBoundsKey = boundsKey;
+    } else if (!bounds.length) {
       map.setView([45.55, -73.62], 11);
+      lastBoundsKey = "";
     }
 
     invalidate();
     return bounds.length;
+  }
+
+  function resetBounds() {
+    lastBoundsKey = "";
   }
 
   return {
@@ -84,6 +127,7 @@ window.StmMap = (function createStmMap() {
     invalidate,
     clear,
     plotVehicles,
+    resetBounds,
     isReady: () => ready
   };
 })();
