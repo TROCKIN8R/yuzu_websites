@@ -23,11 +23,11 @@ The STM API key must **never** ship in the public website. The browser calls a S
 
 **Supabase Dashboard** → your project → **Edge Functions** → **Secrets**
 
-```
-STM_API_KEY=paste-your-stm-api-key-here
-```
+| Name | Value |
+|------|--------|
+| `STM_API_KEY` | paste **only** the key from the STM portal |
 
-Value only — no quotes in the dashboard field.
+Do **not** paste `STM_API_KEY=...` into the value field — just the key string. No quotes.
 
 ### 3. Sync via GitHub (recommended)
 
@@ -71,3 +71,24 @@ Optional: copy `js/stm-config.local.example.js` → `js/stm-config.local.js` and
 - `stm-config.js` — public
 - `stm-config.local.js` — gitignored, overrides only (no API keys)
 - Any HTML/JS in `yuzu_github_page/`
+
+## Troubleshooting "Invalid API Key"
+
+1. **STM portal** → your application must show **Enabled** (click **Publish** at the bottom of the app editor).
+2. Under **APIs**, confirm both are added to the app:
+   - Données Ouvertes iBUS - GTFS-Realtime (v2.0)
+   - API i3 (for service status)
+3. **Re-copy** the key from **Authentication & Credentials** — no spaces before/after.
+4. In **Supabase secrets**, the value must be the key alone (not `STM_API_KEY=...`).
+5. If you use **GitHub Actions** secrets too, both must match. A wrong GitHub secret overwrites Supabase on every deploy.
+6. Redeploy after updating the secret:
+   ```bash
+   supabase functions deploy stm-proxy --project-ref mwgbeolcgigvpufjmodz
+   ```
+7. Check the proxy loaded your secret (not the key itself):
+   ```bash
+   curl -s -H "apikey: YOUR_SUPABASE_ANON_KEY" \
+     -H "Authorization: Bearer YOUR_SUPABASE_ANON_KEY" \
+     "https://mwgbeolcgigvpufjmodz.supabase.co/functions/v1/stm-proxy?feed=health"
+   ```
+   Expect `"configured": true` and a reasonable `keyLength` (typically 32–64 chars).

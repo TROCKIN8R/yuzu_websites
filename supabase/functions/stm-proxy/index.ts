@@ -65,7 +65,23 @@ function jsonResponse(
 }
 
 function getApiKey() {
-  return Deno.env.get("STM_API_KEY")?.trim() || "";
+  let raw = Deno.env.get("STM_API_KEY")?.trim() || "";
+  if (!raw) return "";
+
+  // Common paste mistakes in Supabase/GitHub secret UIs.
+  raw = raw.replace(/^STM_API_KEY\s*=\s*/i, "");
+  raw = raw.replace(/^["']|["']$/g, "").trim();
+
+  return raw;
+}
+
+function buildStmHeaders(apiKey: string, accept: string) {
+  return {
+    // STM portal "Authorize" uses apiKey; some examples use apikey.
+    apiKey,
+    apikey: apiKey,
+    accept,
+  };
 }
 
 function decodeGtfsRt(buffer: ArrayBuffer, feed: FeedName) {
@@ -133,13 +149,12 @@ function decodeGtfsRt(buffer: ArrayBuffer, feed: FeedName) {
 
 async function fetchStmFeed(feedName: FeedName, apiKey: string) {
   const feed = FEEDS[feedName];
+  const accept = feed.format === "json"
+    ? "application/json"
+    : "application/x-protobuf";
+
   const response = await fetch(feed.url, {
-    headers: {
-      apikey: apiKey,
-      accept: feed.format === "json"
-        ? "application/json"
-        : "application/x-protobuf",
-    },
+    headers: buildStmHeaders(apiKey, accept),
   });
 
   if (!response.ok) {
@@ -193,6 +208,16 @@ Deno.serve(async (req) => {
 
   const url = new URL(req.url);
   const feedParam = (url.searchParams.get("feed") || "serviceStatus").trim();
+
+  if (feedParam === "health") {
+    return jsonResponse({
+      ok: true,
+      configured: true,
+      keyLength: apiKey.length,
+      hint: "Secret is loaded. If STM still returns Invalid API Key, re-copy the key from the STM portal and ensure the app is Published.",
+    }, 200, origin);
+  }
+
   const feedName = feedParam in FEEDS ? feedParam as FeedName : null;
 
   if (!feedName) {
@@ -207,6 +232,13 @@ Deno.serve(async (req) => {
     return jsonResponse({ ok: true, ...payload }, 200, origin);
   } catch (error) {
     const message = error instanceof Error ? error.message : "STM proxy failed";
-    return jsonResponse({ error: message }, 502, origin);
+    const invalidKey = /invalid api key/i.test(message);
+    return jsonResponse({
+      error: message,
+      hint: invalidKey
+        ? "Re-copy the API key from portail.developpeurs.stm.info (value only, no STM_API_KEY= prefix). App must be Published/Enabled with GTFS-RT v2 and API i3 subscribed."
+        : undefined,
+      keyLength: apiKey.length,
+    }, 502, origin);
   }
 });
