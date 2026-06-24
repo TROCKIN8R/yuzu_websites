@@ -6,3 +6,6 @@ verify_jwt = false
 
 [functions.contract-router]
 verify_jwt = false
+
+[functions.stm-proxy]
+verify_jwt = false

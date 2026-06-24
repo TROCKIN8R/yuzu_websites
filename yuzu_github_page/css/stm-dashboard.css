@@ -1,0 +1,235 @@
+/* STM live transit demo */
+
+.stm-page {
+  background: linear-gradient(180deg, var(--yuzu-50) 0%, var(--paper-500) 28%, var(--paper-500) 100%);
+}
+
+.stm-hero {
+  text-align: center;
+  max-width: 42rem;
+  margin: 0 auto 2rem;
+}
+
+.stm-hero-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--zest-700);
+  margin-bottom: 0.5rem;
+}
+
+.stm-hero h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--carbon-500);
+  line-height: 1.15;
+  margin: 0 0 0.75rem;
+}
+
+.stm-hero p {
+  color: var(--carbon-400);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.stm-dashboard {
+  background: var(--paper-100);
+  border: 1px solid var(--carbon-100);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+}
+
+.stm-dashboard--loading .stm-live-body {
+  opacity: 0.72;
+}
+
+.stm-dashboard-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: var(--carbon-800);
+  border-bottom: 1px solid var(--carbon-700);
+}
+
+.stm-dashboard-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.stm-dashboard-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.stm-dashboard-title {
+  flex: 1;
+  text-align: center;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--carbon-300);
+}
+
+.stm-btn {
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--carbon-200);
+}
+
+.stm-status {
+  margin: 0 1rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.stm-status--loading { background: var(--info-100); color: var(--info-800); }
+.stm-status--ok { background: var(--zest-100); color: var(--zest-800); }
+.stm-status--error { background: var(--error-100); color: var(--error-800); }
+.stm-status--idle { background: var(--paper-200); color: var(--carbon-400); }
+
+.stm-panel {
+  padding: 1.25rem;
+}
+
+.stm-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.stm-kpi {
+  background: var(--paper-100);
+  border: 1px solid var(--paper-700);
+  border-left: 4px solid var(--kpi-accent, var(--yuzu-500));
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.stm-kpi__label {
+  display: block;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--carbon-400);
+}
+
+.stm-kpi__value {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--carbon-500);
+}
+
+.stm-kpi__hint {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.6875rem;
+  color: var(--carbon-400);
+}
+
+.stm-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1rem;
+}
+
+.stm-card {
+  background: var(--paper-100);
+  border: 1px solid var(--paper-700);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.stm-card h3 {
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--carbon-400);
+}
+
+.stm-map-caption {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--carbon-400);
+}
+
+.stm-live-map {
+  width: 100%;
+  height: clamp(360px, 55vh, 560px);
+  min-height: 360px;
+  background: var(--paper-200);
+}
+
+.stm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.stm-table th,
+.stm-table td {
+  padding: 0.55rem 0.65rem;
+  text-align: left;
+  border-bottom: 1px solid var(--paper-600);
+}
+
+.stm-table th {
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--carbon-400);
+  background: var(--paper-200);
+}
+
+.stm-empty {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--carbon-400);
+}
+
+.stm-footnote {
+  margin-top: 1rem;
+  font-size: 0.6875rem;
+  color: var(--carbon-400);
+  text-align: center;
+}
+
+.stm-footnote a {
+  color: var(--zest-700);
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .stm-kpi-row,
+  .stm-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .stm-kpi-row,
+  .stm-grid {
+    grid-template-columns: 1fr;
+  }
+}

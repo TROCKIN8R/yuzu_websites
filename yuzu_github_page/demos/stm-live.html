@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STM Live Transit | BI Demo · Yuzu.solutions</title>
+    <meta name="description" content="Live STM bus positions and service status — powered by GTFS-RT and API i3 via a secure Supabase proxy.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Yuzu.solutions">
+    <meta property="og:title" content="STM Live Transit | BI Demo">
+    <meta property="og:url" content="https://yuzu.solutions/demos/stm-live.html">
+    <meta property="og:image" content="https://yuzu.solutions/assets/og-image.png">
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="canonical" href="https://yuzu.solutions/demos/stm-live.html">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#F9F9F9">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/design-tokens.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../css/site.css">
+    <link rel="stylesheet" href="../css/logo.css">
+    <link rel="stylesheet" href="../css/stm-dashboard.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+</head>
+<body class="min-h-screen flex flex-col stm-page">
+
+<nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
+    <div class="nav-bar-inner glass-surface pl-5 pr-3 py-3 rounded-full">
+        <div class="shrink-0">
+            <a href="../index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--nav" aria-label="Yuzu Solutions">
+                <object type="image/svg+xml" data="../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+            </a>
+        </div>
+        <div class="nav-bar-center hidden md:flex">
+            <div class="nav-pill-group">
+                <a href="../services/bi-dashboard-delivery.html" class="nav-pill-item">BI Delivery</a>
+                <a href="../index.html#our-recipes" class="nav-pill-item">Services</a>
+            </div>
+        </div>
+        <div class="nav-bar-right flex items-center gap-2">
+            <a href="../services/bi-dashboard-delivery.html" class="hidden sm:inline-flex text-sm font-semibold text-stone-600 hover:text-stone-900">← Back to BI service</a>
+        </div>
+    </div>
+</nav>
+
+<main class="flex-1 w-[94%] max-w-6xl mx-auto px-0 py-8 md:py-12">
+    <header class="stm-hero">
+        <p class="stm-hero-eyebrow">Live BI demo · STM Montréal</p>
+        <h1>Real-time transit, governed end to end</h1>
+        <p>Bus positions from GTFS-RT and service status from API i3 — your STM key stays server-side in Supabase, the dashboard only sees JSON.</p>
+    </header>
+
+    <div class="stm-dashboard" id="stmDashboard">
+        <div class="stm-dashboard-toolbar">
+            <div class="stm-dashboard-dots" aria-hidden="true">
+                <span class="bg-red-400"></span>
+                <span class="bg-yellow-400"></span>
+                <span class="bg-green-400"></span>
+            </div>
+            <span class="stm-dashboard-title">Yuzu · STM Live · Supabase proxy</span>
+            <button type="button" class="stm-btn" id="stmRefreshBtn">↻ Refresh</button>
+        </div>
+
+        <p class="stm-status stm-status--idle" id="stmStatus" hidden>Loading…</p>
+
+        <section class="stm-panel stm-live-body">
+            <div class="stm-kpi-row" id="stmKpis"></div>
+
+            <div class="stm-grid">
+                <div class="stm-card">
+                    <h3>Live bus map</h3>
+                    <p class="stm-map-caption" id="stmMapCaption">Waiting for vehicle positions…</p>
+                    <div id="stmLiveMap" class="stm-live-map" role="application" aria-label="Montreal live bus map"></div>
+                </div>
+                <div class="stm-card">
+                    <h3>Service status</h3>
+                    <div id="stmServiceList"></div>
+                </div>
+            </div>
+
+            <p class="stm-footnote">
+                Data © <a href="https://www.stm.info/fr/a-propos/developpeurs" target="_blank" rel="noopener noreferrer">STM</a> ·
+                API key stored in Supabase Edge Function secrets (<code>STM_API_KEY</code>)
+            </p>
+        </section>
+    </div>
+</main>
+
+<footer class="text-center text-xs text-stone-500 py-8">
+    <a href="../index.html" class="font-semibold text-stone-600 hover:text-stone-900">yuzu.solutions</a>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="../js/stm-config.js"></script>
+<script src="../js/stm-config.local.js" onerror=""></script>
+<script src="../js/stm-data.js"></script>
+<script src="../js/stm-map.js"></script>
+<script src="../js/stm-dashboard.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

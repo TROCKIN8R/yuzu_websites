@@ -2,7 +2,9 @@
 .bin/
 
 supabase/.temp/
+supabase/.env.local
 content/blog/.published.json
 yuzu_github_page/blog/
 yuzu_github_page/fr/blog/
 yuzu_github_page/es/blog/
+yuzu_github_page/js/stm-config.local.js
