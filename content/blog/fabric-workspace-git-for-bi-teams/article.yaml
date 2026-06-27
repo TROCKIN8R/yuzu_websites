@@ -1,18 +1,21 @@
 slug: fabric-workspace-git-for-bi-teams
 title:
-  en: "Fabric workspace Git: branching patterns BI teams actually use"
-  fr: "Git workspace Fabric : modèles de branches que les équipes BI utilisent vraiment"
-  es: "Git en workspace Fabric: patrones de ramas que equipos BI usan de verdad"
+  en: 'Fabric workspace Git: branching patterns BI teams actually use'
+  fr: 'Git workspace Fabric : modèles de branches que les équipes BI utilisent vraiment'
+  es: 'Git en workspace Fabric: patrones de ramas que equipos BI usan de verdad'
 description:
-  en: "Trunk-based vs feature branches, what to commit from Fabric, and how to avoid merge conflicts on semantic models and reports."
-  fr: "Trunk vs branches feature, quoi committer depuis Fabric, et éviter les conflits sur modèles et rapports."
-  es: "Trunk vs feature branches, qué commitear desde Fabric, y evitar conflictos en modelos e informes."
-publish_at: "2026-06-26T13:00:00Z"
-status: scheduled
+  en: Trunk-based vs feature branches, what to commit from Fabric, and how to avoid
+    merge conflicts on semantic models and reports.
+  fr: Trunk vs branches feature, quoi committer depuis Fabric, et éviter les conflits
+    sur modèles et rapports.
+  es: Trunk vs feature branches, qué commitear desde Fabric, y evitar conflictos en
+    modelos e informes.
+publish_at: '2026-06-26T13:00:00Z'
+status: published
 author: Adrien Yvin
 category: workflows
 tags:
-  - fabric
-  - git
-  - devops
-  - power-bi
+- fabric
+- git
+- devops
+- power-bi
