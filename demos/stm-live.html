@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STM Live Transit | BI Demo · Yuzu.solutions</title>
-    <meta name="description" content="Live STM bus positions and service status — powered by GTFS-RT and API i3 via a secure Supabase proxy.">
+    <meta name="description" content="Live STM bus and metro positions, delays, occupancy, and service alerts — powered by GTFS-RT and API i3 via a secure Supabase proxy.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Yuzu.solutions">
     <meta property="og:title" content="STM Live Transit | BI Demo">
@@ -50,7 +50,7 @@
     <header class="stm-hero">
         <p class="stm-hero-eyebrow">Live BI demo · STM Montréal</p>
         <h1>Real-time transit, governed end to end</h1>
-        <p>Bus positions from GTFS-RT and service status from API i3 — slice by line, passenger load, and motion state. Your STM key stays server-side in Supabase.</p>
+        <p>Bus and metro positions from GTFS-RT, delays from trip updates, service alerts from API i3, and scheduled headways from GTFS static — all sliceable in one dashboard.</p>
         <p class="stm-hero-links">
             <a href="../demos/stm-late-arrivals.html">Late arrival analysis</a>
             <span aria-hidden="true">·</span>
@@ -72,7 +72,7 @@
         <p class="stm-status stm-status--idle" id="stmStatus" hidden>Loading…</p>
 
         <section class="stm-panel stm-live-body">
-            <div class="stm-kpi-row" id="stmKpis"></div>
+            <div class="stm-kpi-row stm-kpi-row--wide" id="stmKpis"></div>
 
             <div class="stm-slicer-panel">
                 <div class="stm-slicer-head">
@@ -83,45 +83,80 @@
                     <button type="button" class="stm-btn stm-btn--light" id="stmClearFiltersBtn" disabled>Clear slicers</button>
                 </div>
 
-                <div class="stm-slicer-group">
-                    <span class="stm-slicer-label">Passenger load</span>
-                    <div class="stm-chip-row" id="stmLoadSlicers"></div>
-                </div>
-
-                <div class="stm-slicer-group">
-                    <span class="stm-slicer-label">Vehicle motion</span>
-                    <div class="stm-chip-row" id="stmMotionSlicers"></div>
-                </div>
-
-                <div class="stm-slicer-group">
-                    <span class="stm-slicer-label">Bus lines</span>
-                    <div class="stm-line-tools">
-                        <input type="search" class="stm-line-search" id="stmLineSearch" placeholder="Search line number…" aria-label="Search bus line">
+                <div class="stm-slicer-grid">
+                    <div class="stm-slicer-group">
+                        <span class="stm-slicer-label">Passenger load</span>
+                        <div class="stm-chip-row" id="stmLoadSlicers"></div>
                     </div>
-                    <div class="stm-chip-row stm-chip-row--lines" id="stmLineSlicers"></div>
+                    <div class="stm-slicer-group">
+                        <span class="stm-slicer-label">Speed band</span>
+                        <div class="stm-chip-row" id="stmSpeedSlicers"></div>
+                    </div>
+                    <div class="stm-slicer-group">
+                        <span class="stm-slicer-label">Delay status</span>
+                        <div class="stm-chip-row" id="stmDelaySlicers"></div>
+                    </div>
+                    <div class="stm-slicer-group">
+                        <span class="stm-slicer-label">Service alerts</span>
+                        <div class="stm-chip-row" id="stmAlertSlicers"></div>
+                    </div>
+                    <div class="stm-slicer-group">
+                        <span class="stm-slicer-label">Position freshness</span>
+                        <div class="stm-chip-row" id="stmFreshnessSlicers"></div>
+                    </div>
+                    <div class="stm-slicer-group">
+                        <span class="stm-slicer-label">Map colours</span>
+                        <div class="stm-chip-row" id="stmColorSlicers"></div>
+                    </div>
                 </div>
             </div>
 
             <div class="stm-grid stm-grid--wide">
                 <div class="stm-card stm-card--map">
-                    <h3>Live bus map</h3>
+                    <div class="stm-map-head">
+                        <h3>Live transit map</h3>
+                        <div class="stm-map-tools">
+                            <select class="stm-select" id="stmDirectionSelect" hidden aria-label="Route direction">
+                                <option value="all">All directions</option>
+                            </select>
+                            <label class="stm-toggle">
+                                <input type="checkbox" id="stmAccessibleToggle">
+                                <span>Accessible stops only</span>
+                            </label>
+                        </div>
+                    </div>
                     <p class="stm-map-caption" id="stmMapCaption">Waiting for vehicle positions…</p>
-                    <div class="stm-map-legend" aria-hidden="true">
+                    <div class="stm-map-legend" id="stmMapLegendLoad" aria-hidden="true">
                         <span><i style="background:#7CB342"></i> Light</span>
                         <span><i style="background:#F8C607"></i> Moderate</span>
                         <span><i style="background:#E65100"></i> Busy</span>
                         <span><i style="background:#9E9E9E"></i> Unknown</span>
                     </div>
-                    <div id="stmLiveMap" class="stm-live-map" role="application" aria-label="Montreal live bus map"></div>
+                    <div class="stm-map-legend stm-map-legend--delay" id="stmMapLegendDelay" hidden aria-hidden="true">
+                        <span><i style="background:#43A047"></i> On time</span>
+                        <span><i style="background:#F8C607"></i> 1–2 min late</span>
+                        <span><i style="background:#E65100"></i> 2+ min late</span>
+                        <span><i style="background:#9E9E9E"></i> Unknown</span>
+                    </div>
+                    <div class="stm-map-legend stm-map-legend--routes" aria-hidden="true">
+                        <span><i style="background:#00B300;border-radius:2px;width:0.85rem;height:0.2rem"></i> Metro (always on)</span>
+                        <span><i style="background:#1565C0;border-radius:2px;width:0.85rem;height:0.2rem"></i> Bus path</span>
+                        <span><i style="background:#ECEFF1;border:1px solid #546E7A"></i> Stop</span>
+                        <span><i style="background:#FFEBEE;border:1px solid #C62828"></i> Alert stop</span>
+                    </div>
+                    <div id="stmLiveMap" class="stm-live-map" role="application" aria-label="Montreal live transit map"></div>
                 </div>
                 <div class="stm-side-stack">
                     <div class="stm-card">
                         <h3>Top lines in view</h3>
+                        <div class="stm-line-tools">
+                            <input type="search" class="stm-line-search" id="stmLineSearch" placeholder="Search line number or name…" aria-label="Search bus line">
+                        </div>
                         <div id="stmRouteChart" class="stm-route-chart"></div>
                     </div>
                     <div class="stm-card">
-                        <h3>Service alerts</h3>
-                        <div id="stmServiceList"></div>
+                        <h3>Busiest lines by occupancy</h3>
+                        <div id="stmOccupancyChart" class="stm-route-chart"></div>
                     </div>
                 </div>
             </div>
@@ -147,7 +182,9 @@
 <script src="../js/stm-config.js"></script>
 <script src="../js/stm-config.local.js" onerror=""></script>
 <script src="../js/stm-data.js"></script>
+<script src="../js/stm-enrich.js"></script>
 <script src="../js/stm-filters.js"></script>
+<script src="../js/stm-routes.js"></script>
 <script src="../js/stm-map.js"></script>
 <script src="../js/stm-dashboard.js"></script>
 <script src="../js/nav.js"></script>
