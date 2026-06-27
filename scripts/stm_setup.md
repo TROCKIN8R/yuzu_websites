@@ -66,6 +66,23 @@ Optional: copy `js/stm-config.local.example.js` → `js/stm-config.local.js` and
 - `serviceStatus` — métro / bus service messages (JSON)
 - `vehiclePositions` — live bus positions (GTFS-RT → JSON via proxy)
 
+Route paths, stops, and stop-level service alerts on the map come from **GTFS static** files under `yuzu_github_page/data/stm-routes/` (built locally, not fetched at runtime from STM).
+
+### Rebuild route geometry (after STM publishes a new GTFS)
+
+```bash
+python3 scripts/build_stm_routes.py
+# Or, if the STM download is slow:
+curl -L -o /tmp/gtfs_stm.zip https://www.stm.info/sites/default/files/gtfs/gtfs_stm.zip
+python3 scripts/build_stm_routes.py /tmp/gtfs_stm.zip
+```
+
+This downloads `gtfs_stm.zip`, extracts bus line shapes and stops, and writes:
+- `yuzu_github_page/data/stm-routes/` — one JSON file per bus route
+- `yuzu_github_page/data/stm-metro.json` — all metro lines (always shown on the map)
+- `yuzu_github_page/data/stm-meta.json` — route names and colours
+- `yuzu_github_page/data/stm-headways.json` — scheduled average headways
+
 ## Do not put secrets here
 
 - `stm-config.js` — public
