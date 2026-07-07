@@ -1,18 +1,21 @@
 slug: fabric-realtime-analytics-eventhouse
 title:
-  en: "Real-time analytics in Fabric: Eventstream, KQL, and the BI layer"
-  fr: "Analytics temps réel dans Fabric : Eventstream, KQL et la couche BI"
-  es: "Analytics en tiempo real en Fabric: Eventstream, KQL y la capa BI"
+  en: 'Real-time analytics in Fabric: Eventstream, KQL, and the BI layer'
+  fr: 'Analytics temps réel dans Fabric : Eventstream, KQL et la couche BI'
+  es: 'Analytics en tiempo real en Fabric: Eventstream, KQL y la capa BI'
 description:
-  en: "How streaming events land in Eventhouse, when to expose them in Power BI vs Real-Time dashboards, and governance for high-velocity data."
-  fr: "Comment les événements stream arrivent dans Eventhouse, Power BI vs dashboards Real-Time, et gouvernance des données à haute vélocité."
-  es: "Cómo eventos en streaming llegan a Eventhouse, Power BI vs dashboards Real-Time, y gobernanza de datos de alta velocidad."
-publish_at: "2026-07-07T13:00:00Z"
-status: scheduled
+  en: How streaming events land in Eventhouse, when to expose them in Power BI vs
+    Real-Time dashboards, and governance for high-velocity data.
+  fr: Comment les événements stream arrivent dans Eventhouse, Power BI vs dashboards
+    Real-Time, et gouvernance des données à haute vélocité.
+  es: Cómo eventos en streaming llegan a Eventhouse, Power BI vs dashboards Real-Time,
+    y gobernanza de datos de alta velocidad.
+publish_at: '2026-07-07T13:00:00Z'
+status: published
 author: Adrien Yvin
 category: bi-news
 tags:
-  - fabric
-  - realtime
-  - eventhouse
-  - kql
+- fabric
+- realtime
+- eventhouse
+- kql
