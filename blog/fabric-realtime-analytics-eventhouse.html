@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Power BI small wins from the 2026 rollout wave | Yuzu.solutions</title>
-    <meta name="description" content="Org apps with audiences, date picker slicers, DAX user-defined functions, report landing pages, Copilot on mobile, and PBIR default-on: practical picks from April–June 2026 Power BI updates.">
+    <title>Real-time analytics in Fabric: Eventstream, KQL, and the BI layer | Yuzu.solutions</title>
+    <meta name="description" content="How streaming events land in Eventhouse, when to expose them in Power BI vs Real-Time dashboards, and governance for high-velocity data.">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Yuzu.solutions">
-    <meta property="og:title" content="Power BI small wins from the 2026 rollout wave">
-    <meta property="og:description" content="Org apps with audiences, date picker slicers, DAX user-defined functions, report landing pages, Copilot on mobile, and PBIR default-on: practical picks from April–June 2026 Power BI updates.">
-    <meta property="og:url" content="https://yuzu.solutions/blog/power-bi-small-wins.html">
+    <meta property="og:title" content="Real-time analytics in Fabric: Eventstream, KQL, and the BI layer">
+    <meta property="og:description" content="How streaming events land in Eventhouse, when to expose them in Power BI vs Real-Time dashboards, and governance for high-velocity data.">
+    <meta property="og:url" content="https://yuzu.solutions/blog/fabric-realtime-analytics-eventhouse.html">
     <meta property="og:image" content="https://yuzu.solutions/assets/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="🍋 Yuzu.solutions">
-    <meta property="article:published_time" content="2026-06-05T15:00:00Z">
+    <meta property="article:published_time" content="2026-07-07T13:00:00Z">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://yuzu.solutions/assets/og-image.png">
     <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-    <link rel="canonical" href="https://yuzu.solutions/blog/power-bi-small-wins.html">
-    <link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/power-bi-small-wins.html">
-    <link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/power-bi-small-wins.html">
-    <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/power-bi-small-wins.html">
-    <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/power-bi-small-wins.html">
+    <link rel="canonical" href="https://yuzu.solutions/blog/fabric-realtime-analytics-eventhouse.html">
+    <link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/fabric-realtime-analytics-eventhouse.html">
+    <link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/fabric-realtime-analytics-eventhouse.html">
+    <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/fabric-realtime-analytics-eventhouse.html">
+    <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/fabric-realtime-analytics-eventhouse.html">
     <meta property="og:locale" content="en_US">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Adrien Yvin">
@@ -39,22 +39,22 @@
             { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://yuzu.solutions/" },
             { "@type": "ListItem", "position": 2, "name": "Insights", "item": "https://yuzu.solutions/blog/index.html" },
             { "@type": "ListItem", "position": 3, "name": "BI News", "item": "https://yuzu.solutions/blog/index.html" },
-            { "@type": "ListItem", "position": 4, "name": "Power BI small wins from the 2026 rollout wave", "item": "https://yuzu.solutions/blog/power-bi-small-wins.html" }
+            { "@type": "ListItem", "position": 4, "name": "Real-time analytics in Fabric: Eventstream, KQL, and the BI layer", "item": "https://yuzu.solutions/blog/fabric-realtime-analytics-eventhouse.html" }
           ]
         },
         {
           "@type": "BlogPosting",
-          "headline": "Power BI small wins from the 2026 rollout wave",
-          "description": "Org apps with audiences, date picker slicers, DAX user-defined functions, report landing pages, Copilot on mobile, and PBIR default-on: practical picks from April\u2013June 2026 Power BI updates.",
-          "datePublished": "2026-06-05T15:00:00Z",
-          "dateModified": "2026-06-05T15:00:00Z",
+          "headline": "Real-time analytics in Fabric: Eventstream, KQL, and the BI layer",
+          "description": "How streaming events land in Eventhouse, when to expose them in Power BI vs Real-Time dashboards, and governance for high-velocity data.",
+          "datePublished": "2026-07-07T13:00:00Z",
+          "dateModified": "2026-07-07T13:00:00Z",
           "author": { "@type": "Person", "name": "Adrien Yvin" },
           "publisher": { "@type": "Organization", "name": "Yuzu.solutions", "url": "https://yuzu.solutions/" },
-          "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yuzu.solutions/blog/power-bi-small-wins.html" },
+          "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yuzu.solutions/blog/fabric-realtime-analytics-eventhouse.html" },
           "articleSection": "BI News",
           "inLanguage": "en",
-          "url": "https://yuzu.solutions/blog/power-bi-small-wins.html",
-          "keywords": "power-bi, fabric, org-apps, copilot, modeling"
+          "url": "https://yuzu.solutions/blog/fabric-realtime-analytics-eventhouse.html",
+          "keywords": "fabric, realtime, eventhouse, kql"
         }
       ]
     }
@@ -69,7 +69,7 @@
     <link rel="stylesheet" href="../css/blog-themes.css">
     <link rel="stylesheet" href="../css/logo.css">
 </head>
-<body class="min-h-screen flex flex-col nav-on-blog blog-article-page blog-theme-08">
+<body class="min-h-screen flex flex-col nav-on-blog blog-article-page blog-theme-23">
 <nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
     <div class="nav-bar-inner pl-5 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
         <div class="shrink-0">
@@ -137,9 +137,9 @@
         </div>
         <div class="nav-bar-end">
             <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
-                <a href="/blog/power-bi-small-wins.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
-                <a href="/fr/blog/power-bi-small-wins.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
-                <a href="/es/blog/power-bi-small-wins.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+                <a href="/blog/fabric-realtime-analytics-eventhouse.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
+                <a href="/fr/blog/fabric-realtime-analytics-eventhouse.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/blog/fabric-realtime-analytics-eventhouse.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
             </div>
             <a href="https://calendly.com/adrienyvin/30min" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap" target="_blank" rel="noopener noreferrer">Get Started</a>
             <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNavPanel">
@@ -205,9 +205,9 @@
             <a href="../index.html#founder" class="mobile-nav-link">Our Team</a>
             <div class="mobile-nav-footer">
                 <div class="lang-switch sm:hidden" role="navigation" aria-label="Language">
-                <a href="/blog/power-bi-small-wins.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
-                <a href="/fr/blog/power-bi-small-wins.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
-                <a href="/es/blog/power-bi-small-wins.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
+                <a href="/blog/fabric-realtime-analytics-eventhouse.html" class="lang-switch-btn active" hreflang="en" lang="en">EN</a>
+                <a href="/fr/blog/fabric-realtime-analytics-eventhouse.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/blog/fabric-realtime-analytics-eventhouse.html" class="lang-switch-btn" hreflang="es" lang="es">ES</a>
             </div>
                 <a href="https://calendly.com/adrienyvin/30min" class="mobile-nav-cta" target="_blank" rel="noopener noreferrer">Get Started</a>
             </div>
@@ -230,8 +230,8 @@
                 <meta itemprop="position" content="3">
             </li>
             <li class="blog-breadcrumb__item blog-breadcrumb__item--current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
-                <span itemprop="name">Power BI small wins from the 2026 rollout wave</span>
-                <meta itemprop="item" content="https://yuzu.solutions/blog/power-bi-small-wins.html">
+                <span itemprop="name">Real-time analytics in Fabric: Eventstream, KQL, and the BI layer</span>
+                <meta itemprop="item" content="https://yuzu.solutions/blog/fabric-realtime-analytics-eventhouse.html">
                 <meta itemprop="position" content="4">
             </li>
         </ol>
@@ -239,105 +239,61 @@
     <article class="blog-article">
         <header class="blog-article-hero">
             <span class="blog-category-pill">BI News</span>
-            <h1 class="blog-article-title">Power BI small wins from the 2026 rollout wave</h1>
-            <p class="blog-article-meta">By Adrien Yvin · <time datetime="2026-06-05T15:00:00Z">Jun 5, 2026</time></p>
-            <div class="blog-tags"><span class="blog-tag">power-bi</span><span class="blog-tag">fabric</span><span class="blog-tag">org-apps</span><span class="blog-tag">copilot</span><span class="blog-tag">modeling</span></div>
+            <h1 class="blog-article-title">Real-time analytics in Fabric: Eventstream, KQL, and the BI layer</h1>
+            <p class="blog-article-meta">By Adrien Yvin · <time datetime="2026-07-07T13:00:00Z">Jul 7, 2026</time></p>
+            <div class="blog-tags"><span class="blog-tag">fabric</span><span class="blog-tag">realtime</span><span class="blog-tag">eventhouse</span><span class="blog-tag">kql</span></div>
         </header>
         <div class="blog-prose-card">
             <div class="blog-prose">
-                <p>Microsoft ships Power BI updates every month. Most of them are not migration projects. A slice of the <strong>April through June 2026</strong> rollouts are small, high-leverage changes you can turn on this week without replatforming your warehouse.</p>
-<p>This article filters the <a href="https://community.fabric.microsoft.com/t5/Power-BI-Updates-Blog/Power-BI-June-2026-Feature-Summary/ba-p/5193264">June 2026 feature summary</a>, <a href="https://community.fabric.microsoft.com/t5/Power-BI-Updates-Blog/Power-BI-April-2026-Feature-Summary/ba-p/5173904">April 2026 summary</a>, and related GA posts down to wins that BI admins and report authors can act on now.</p>
-<h2>1. Org apps with audiences (generally available)</h2>
-<p><strong>Org apps</strong> are Fabric&rsquo;s rethink of workspace apps: multiple app items per workspace, branding, overview pages, and navigation you control. In mid-2026 they reached <strong>general availability</strong>, including <strong>audiences</strong>: one app surface, different content and nav visibility per group (execs, managers, frontline).</p>
-<p>Why it beats &ldquo;share the workspace link&rdquo;:</p>
-<ul>
-<li>Users discover org apps in <strong>Recent</strong> and item lists without a separate install step</li>
-<li>You can run <strong>multiple org apps per workspace</strong> (exec pack, ops pack) or <strong>one app + audiences</strong></li>
-<li>Share flow lets you assign users to audiences directly when you grant access</li>
-</ul>
-<p><strong>Small win this week:</strong> Pick your noisiest workspace. Create one org app with two audiences (e.g. Leadership vs Analyst). Add an <strong>Overview</strong> landing page. Retire the &ldquo;which link is official?&rdquo; wiki page.</p>
-<p>Legacy workspace apps remain supported; no forced migration. Plan new distribution on org apps.</p>
-<h2>2. Report landing page (generally available)</h2>
-<p><strong>Set as landing page</strong> lets authors pin the page viewers should see first. Right-click a report page tab or use the page formatting pane. This shipped GA in the May 2026 wave and pairs well with org apps: the app gets you to the report; the landing page gets you to the <em>right</em> page.</p>
-<p><strong>Do this on:</strong> board packs, metric trees, and any report where page 1 is still &ldquo;scratch&rdquo; from 2022.</p>
-<h2>3. Date picker slicer (preview)</h2>
-<p>The <strong>date picker</strong> option for slicers (June 2026 preview) targets a boring but expensive chore: reopening reports every month to reset date ranges. You publish a <strong>relative</strong> default (e.g. last 12 months anchored to last data date). Viewers can still pick manual ranges from one control.</p>
-<p>Enable under <strong>Options &gt; Preview features</strong> in Desktop, then set a date column slicer to <strong>Date picker</strong>.</p>
-<p><strong>Skip if:</strong> you already use a robust relative date pattern in DAX and bookmarks. <strong>Use if:</strong> business users constantly ask why the report &ldquo;stopped at last month.&rdquo;</p>
-<h2>4. DAX user-defined functions (generally available)</h2>
-<p><strong>DAX UDFs</strong> graduated to GA in June 2026. Define a function once (typed signature, optional parameters), reuse across measures, columns, and visual calculations. UDFs live in the model, sync when you rename dependencies, and can be edited in <strong>web modeling</strong> or Desktop Model View.</p>
-<p>Examples that pay off quickly:</p>
-<ul>
-<li>Shared currency conversion or working-day logic</li>
-<li>Approved margin calculations referenced by many measures</li>
-<li>TMDL-friendly snippets you can store in Git with the semantic model</li>
-</ul>
-<p><strong>Team rule:</strong> treat approved UDFs like shared libraries. PR review before adding to the golden model.</p>
-<h2>5. Copilot in web modeling (preview)</h2>
-<p>Also rolling out in June 2026: <strong>Copilot in web modeling</strong> in the Power BI service. Natural-language help to analyze model structure, rename tables/columns, add relationships, and draft measures in the browser.</p>
-<p><strong>Practical guardrail:</strong> use it in <strong>Dev/Test</strong> workspaces first. Let Copilot propose; humans approve before promote. Pair with Fabric Git so renames land in a PR, not silently in Prod.</p>
-<h2>6. Copilot on Power BI mobile (expanded)</h2>
-<p>April 2026 expanded <strong>in-report Copilot on mobile</strong> from canned prompts to <strong>multi-turn chat</strong> grounded in the open report, with <strong>citations back to visuals</strong>. Voice dictation on iOS speeds exec check-ins away from desk.</p>
-<p><strong>Small win:</strong> Enable on your top three mobile-heavy reports. Add one slide to the report readme: example questions that work well vs questions that need desktop.</p>
-<h2>7. Matrix auto-expand and date picker maintenance</h2>
-<p>Two reporting tweaks that reduce support ping-pong:</p>
-<ul>
-<li><strong>Matrix auto-expand (GA):</strong> New hierarchy levels can default to expanded row/column headers. Helps <strong>Personalize this visual</strong> users who add fields and otherwise see collapsed empty-looking matrices.</li>
-<li><strong>Fixed size layout for card/button/list slicers (April GA):</strong> Pixel-level control for slicer tiles when &ldquo;fit to space&rdquo; layouts break on dark themes or dense pages.</li>
-</ul>
-<h2>8. PBIR default-on: developer hygiene, not user-facing flash</h2>
-<p>Microsoft resumed the <strong>PBIR (Enhanced Report Format) default-on</strong> rollout in the service in June 2026, with Desktop default-on targeted later in the summer. PBIR aligns PBIX internals with <strong>PBIP</strong> for Git, CI/CD, and programmatic editing. PBIX remains the author-facing format; the swap is largely internal metadata.</p>
-<p><strong>If you use PBIP + GitHub today:</strong> keep investing. Opt in on Desktop if you have not. <strong>If you are PBIX-only:</strong> no user training needed; watch June/July release notes for any report-level quirks on upgrade.</p>
-<p><strong>Desktop Bridge (preview)</strong> connects agent-based report authoring to local Desktop for teams experimenting with <strong>Fabric agent skills</strong> for report build/validate/publish. Treat as R&amp;D until your governance model catches up.</p>
-<h2>9. Azure Maps and tooltip polish (low effort, visible UX)</h2>
-<ul>
-<li><strong>Azure Maps shape selection on by default (June GA):</strong> Region lasso and travel-time selection show up without authors enabling controls. Turn off per visual if it clutters simple geo reports.</li>
-<li><strong>Tooltip sentence mode (June GA):</strong> Explain metrics in plain language in the format pane without a custom tooltip page or extra DAX measure.</li>
-</ul>
-<p>Confirm <strong>Azure Maps tenant settings</strong> if maps broke after the 2025 split controls rollout (Desktop April 2025+ required, regional processing toggles for non-US/EU tenants).</p>
-<h2>What to defer (preview hype vs daily wins)</h2>
-<p>Build 2026 headlines (<strong>Agent Skills end-to-end</strong>, <strong>Fabric Apps on semantic models</strong>) are real but belong in a <strong>pilot workspace</strong> with Copilot capacity, Git, and sign-off rules. They are not &ldquo;small wins&rdquo; for a team still fighting refresh failures.</p>
+                <p>Batch BI still runs the business. But ops teams now ask for minutes, not nightly refresh. Fabric&rsquo;s real-time path connects Eventstream, Eventhouse, and your existing Power BI layer.</p>
+<h2>The streaming stack in Fabric</h2>
+<p>Typical flow:</p>
+<ol>
+<li><strong>Eventstream</strong> ingests IoT, app events, or CDC streams</li>
+<li><strong>Eventhouse (KQL database)</strong> stores high-velocity tables optimized for time-series queries</li>
+<li><strong>Semantic model or DirectQuery</strong> exposes curated views to Power BI</li>
+<li>Optional <strong>Real-Time dashboard</strong> for sub-second ops tiles without full report chrome</li>
+</ol>
+<p>You do not need every event in a Import model. Most teams aggregate in KQL, then surface hourly or 5-minute grains to BI.</p>
+<h2>Power BI vs Real-Time dashboards</h2>
 <div class="blog-prose-table-wrap"><table>
 <thead>
 <tr>
-<th>Adopt now</th>
-<th>Pilot separately</th>
+<th>Need</th>
+<th>Surface</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Org apps + audiences</td>
-<td>Agent skills report authoring</td>
+<td>Exec KPIs with drill-down</td>
+<td>Power BI report on aggregated KQL export or DirectQuery</td>
 </tr>
 <tr>
-<td>Landing pages + overview</td>
-<td>Fabric Apps on semantic models</td>
+<td>NOC wall, line status, alerts</td>
+<td>Real-Time dashboard</td>
 </tr>
 <tr>
-<td>DAX UDFs in golden model</td>
-<td>Desktop Bridge automation</td>
-</tr>
-<tr>
-<td>Date picker slicer (preview)</td>
-<td>Fabric IQ in M365 Copilot (Frontier)</td>
-</tr>
-<tr>
-<td>Mobile Copilot chat</td>
-<td>Copilot web modeling in Prod</td>
+<td>Combined batch + live</td>
+<td>Hybrid: Import history + live tile from KQL</td>
 </tr>
 </tbody>
 </table></div>
-<h2>One-afternoon checklist</h2>
-<ol>
-<li>Create or upgrade one <strong>org app</strong> with two audiences and an Overview page</li>
-<li>Set <strong>landing page</strong> on your top exec report</li>
-<li>Enable <strong>date picker</strong> on one monthly ops report (preview)</li>
-<li>Extract one repeated DAX pattern into a <strong>UDF</strong> in Dev</li>
-<li>Confirm <strong>Azure Maps</strong> tenant settings and Desktop minimum version</li>
-<li>Skim the <a href="https://community.fabric.microsoft.com/t5/Power-BI-Updates-Blog/Power-BI-June-2026-Feature-Summary/ba-p/5193264">June 2026 summary</a> for one GA visual tweak relevant to your brand theme (slicer icon color, bar axis padding, card hover)</li>
-</ol>
-<p>These moves will not replace a Fabric migration or semantic model refactor. They cut friction while Microsoft pushes toward agentic BI, and they give your users a cleaner front door this quarter.</p>
-<p>Want help prioritizing org app audiences or UDF standards for your golden model? <a href="https://calendly.com/adrienyvin/30min">Book a 30-minute call</a>.</p>
+<h2>Governance at velocity</h2>
+<ul>
+<li><strong>Retention policies</strong> on raw Eventhouse tables (7 days hot, archive to OneLake)</li>
+<li><strong>PII scrubbing</strong> in Eventstream before persist</li>
+<li>Separate workspace for streaming experiments vs certified BI models</li>
+<li>Document which measures are <strong>live</strong> vs <strong>delayed</strong> on report headers</li>
+</ul>
+<h2>BI developer tips</h2>
+<ul>
+<li>Push complex shaping to <strong>KQL materialized views</strong>, not DAX on billion-row imports</li>
+<li>Test query cost on capacity during peak event rates</li>
+<li>Name streams and databases like warehouse schemas (<code>ops.machine_events</code>, not <code>test123</code>)</li>
+</ul>
+<h2>Pilot scope</h2>
+<p>One line of business, one event type, one dashboard with three metrics. Run parallel to batch report for two weeks. Compare incident response time before expanding.</p>
+<p>Exploring Eventstream to Power BI for your plant or app telemetry? <a href="https://calendly.com/adrienyvin/30min">Book a 30-minute call</a>.</p>
             </div>
         </div>
     </article>

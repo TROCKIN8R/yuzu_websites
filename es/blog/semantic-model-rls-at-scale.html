@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Direct Lake vs modo Import: cuándo cada modo de almacenamiento vale la pena | Yuzu.solutions</title>
-    <meta name="description" content="Direct Lake reduce duplicación y ventanas de refresh. Import sigue ganando con DAX complejo y datasets pequeños. Guía práctica para modelos Fabric.">
+    <title>RLS en modelos semánticos a escala: patrones que sobreviven reorganizaciones | Yuzu.solutions</title>
+    <meta name="description" content="RLS dinámico con grupos Entra, tablas puente many-to-many, y pruebas RLS antes de cada etapa del pipeline.">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Yuzu.solutions">
-    <meta property="og:title" content="Direct Lake vs modo Import: cuándo cada modo de almacenamiento vale la pena">
-    <meta property="og:description" content="Direct Lake reduce duplicación y ventanas de refresh. Import sigue ganando con DAX complejo y datasets pequeños. Guía práctica para modelos Fabric.">
-    <meta property="og:url" content="https://yuzu.solutions/es/blog/direct-lake-vs-import-mode.html">
+    <meta property="og:title" content="RLS en modelos semánticos a escala: patrones que sobreviven reorganizaciones">
+    <meta property="og:description" content="RLS dinámico con grupos Entra, tablas puente many-to-many, y pruebas RLS antes de cada etapa del pipeline.">
+    <meta property="og:url" content="https://yuzu.solutions/es/blog/semantic-model-rls-at-scale.html">
     <meta property="og:image" content="https://yuzu.solutions/assets/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="🍋 Yuzu.solutions">
-    <meta property="article:published_time" content="2026-06-23T13:00:00Z">
+    <meta property="article:published_time" content="2026-06-30T13:00:00Z">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://yuzu.solutions/assets/og-image.png">
     <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
-    <link rel="canonical" href="https://yuzu.solutions/es/blog/direct-lake-vs-import-mode.html">
-    <link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/direct-lake-vs-import-mode.html">
-    <link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/direct-lake-vs-import-mode.html">
-    <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/direct-lake-vs-import-mode.html">
-    <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/direct-lake-vs-import-mode.html">
+    <link rel="canonical" href="https://yuzu.solutions/es/blog/semantic-model-rls-at-scale.html">
+    <link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/semantic-model-rls-at-scale.html">
+    <link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/semantic-model-rls-at-scale.html">
+    <link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/semantic-model-rls-at-scale.html">
+    <link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/semantic-model-rls-at-scale.html">
     <meta property="og:locale" content="es_ES">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Adrien Yvin">
@@ -38,23 +38,23 @@
           "itemListElement": [
             { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://yuzu.solutions/es" },
             { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://yuzu.solutions/es/blog/index.html" },
-            { "@type": "ListItem", "position": 3, "name": "Nueva tecnolog\u00eda", "item": "https://yuzu.solutions/es/blog/index.html" },
-            { "@type": "ListItem", "position": 4, "name": "Direct Lake vs modo Import: cu\u00e1ndo cada modo de almacenamiento vale la pena", "item": "https://yuzu.solutions/es/blog/direct-lake-vs-import-mode.html" }
+            { "@type": "ListItem", "position": 3, "name": "Flujos de trabajo", "item": "https://yuzu.solutions/es/blog/index.html" },
+            { "@type": "ListItem", "position": 4, "name": "RLS en modelos sem\u00e1nticos a escala: patrones que sobreviven reorganizaciones", "item": "https://yuzu.solutions/es/blog/semantic-model-rls-at-scale.html" }
           ]
         },
         {
           "@type": "BlogPosting",
-          "headline": "Direct Lake vs modo Import: cu\u00e1ndo cada modo de almacenamiento vale la pena",
-          "description": "Direct Lake reduce duplicaci\u00f3n y ventanas de refresh. Import sigue ganando con DAX complejo y datasets peque\u00f1os. Gu\u00eda pr\u00e1ctica para modelos Fabric.",
-          "datePublished": "2026-06-23T13:00:00Z",
-          "dateModified": "2026-06-23T13:00:00Z",
+          "headline": "RLS en modelos sem\u00e1nticos a escala: patrones que sobreviven reorganizaciones",
+          "description": "RLS din\u00e1mico con grupos Entra, tablas puente many-to-many, y pruebas RLS antes de cada etapa del pipeline.",
+          "datePublished": "2026-06-30T13:00:00Z",
+          "dateModified": "2026-06-30T13:00:00Z",
           "author": { "@type": "Person", "name": "Adrien Yvin" },
           "publisher": { "@type": "Organization", "name": "Yuzu.solutions", "url": "https://yuzu.solutions/" },
-          "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yuzu.solutions/es/blog/direct-lake-vs-import-mode.html" },
-          "articleSection": "Nueva tecnolog\u00eda",
+          "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yuzu.solutions/es/blog/semantic-model-rls-at-scale.html" },
+          "articleSection": "Flujos de trabajo",
           "inLanguage": "es",
-          "url": "https://yuzu.solutions/es/blog/direct-lake-vs-import-mode.html",
-          "keywords": "fabric, direct-lake, semantic-model, power-bi"
+          "url": "https://yuzu.solutions/es/blog/semantic-model-rls-at-scale.html",
+          "keywords": "power-bi, rls, security, semantic-model"
         }
       ]
     }
@@ -69,7 +69,7 @@
     <link rel="stylesheet" href="../../css/blog-themes.css">
     <link rel="stylesheet" href="../../css/logo.css">
 </head>
-<body class="min-h-screen flex flex-col nav-on-blog blog-article-page blog-theme-02">
+<body class="min-h-screen flex flex-col nav-on-blog blog-article-page blog-theme-26">
 <nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
     <div class="nav-bar-inner pl-5 pr-3 py-3 rounded-full bg-white/50 backdrop-blur-xl border border-white/60 shadow-lg shadow-yellow-200/40 ring-1 ring-black/5">
         <div class="shrink-0">
@@ -137,9 +137,9 @@
         </div>
         <div class="nav-bar-end">
             <div class="lang-switch hidden sm:flex" role="navigation" aria-label="Language">
-                <a href="/blog/direct-lake-vs-import-mode.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
-                <a href="/fr/blog/direct-lake-vs-import-mode.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
-                <a href="/es/blog/direct-lake-vs-import-mode.html" class="lang-switch-btn active" hreflang="es" lang="es">ES</a>
+                <a href="/blog/semantic-model-rls-at-scale.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
+                <a href="/fr/blog/semantic-model-rls-at-scale.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/blog/semantic-model-rls-at-scale.html" class="lang-switch-btn active" hreflang="es" lang="es">ES</a>
             </div>
             <a href="https://calendly.com/adrienyvin/30min" class="nav-cta-desktop px-4 sm:px-5 py-2 bg-yellow-500 text-white text-sm font-bold rounded-full hover:bg-yellow-600 shadow-sm transition whitespace-nowrap" target="_blank" rel="noopener noreferrer">Empezar</a>
             <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNavPanel">
@@ -205,9 +205,9 @@
             <a href="../index.html#founder" class="mobile-nav-link">Nuestro equipo</a>
             <div class="mobile-nav-footer">
                 <div class="lang-switch sm:hidden" role="navigation" aria-label="Language">
-                <a href="/blog/direct-lake-vs-import-mode.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
-                <a href="/fr/blog/direct-lake-vs-import-mode.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
-                <a href="/es/blog/direct-lake-vs-import-mode.html" class="lang-switch-btn active" hreflang="es" lang="es">ES</a>
+                <a href="/blog/semantic-model-rls-at-scale.html" class="lang-switch-btn" hreflang="en" lang="en">EN</a>
+                <a href="/fr/blog/semantic-model-rls-at-scale.html" class="lang-switch-btn" hreflang="fr-CA" lang="fr-CA">FR</a>
+                <a href="/es/blog/semantic-model-rls-at-scale.html" class="lang-switch-btn active" hreflang="es" lang="es">ES</a>
             </div>
                 <a href="https://calendly.com/adrienyvin/30min" class="mobile-nav-cta" target="_blank" rel="noopener noreferrer">Empezar</a>
             </div>
@@ -226,86 +226,53 @@
                 <meta itemprop="position" content="2">
             </li>
             <li class="blog-breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <a href="index.html" itemprop="item"><span itemprop="name">Nueva tecnología</span></a>
+                <a href="index.html" itemprop="item"><span itemprop="name">Flujos de trabajo</span></a>
                 <meta itemprop="position" content="3">
             </li>
             <li class="blog-breadcrumb__item blog-breadcrumb__item--current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
-                <span itemprop="name">Direct Lake vs modo Import: cuándo cada modo de almacenamiento vale la pena</span>
-                <meta itemprop="item" content="https://yuzu.solutions/es/blog/direct-lake-vs-import-mode.html">
+                <span itemprop="name">RLS en modelos semánticos a escala: patrones que sobreviven reorganizaciones</span>
+                <meta itemprop="item" content="https://yuzu.solutions/es/blog/semantic-model-rls-at-scale.html">
                 <meta itemprop="position" content="4">
             </li>
         </ol>
     </nav>
     <article class="blog-article">
         <header class="blog-article-hero">
-            <span class="blog-category-pill">Nueva tecnología</span>
-            <h1 class="blog-article-title">Direct Lake vs modo Import: cuándo cada modo de almacenamiento vale la pena</h1>
-            <p class="blog-article-meta">Por Adrien Yvin · <time datetime="2026-06-23T13:00:00Z">jun. 23, 2026</time></p>
-            <div class="blog-tags"><span class="blog-tag">fabric</span><span class="blog-tag">direct-lake</span><span class="blog-tag">semantic-model</span><span class="blog-tag">power-bi</span></div>
+            <span class="blog-category-pill">Flujos de trabajo</span>
+            <h1 class="blog-article-title">RLS en modelos semánticos a escala: patrones que sobreviven reorganizaciones</h1>
+            <p class="blog-article-meta">Por Adrien Yvin · <time datetime="2026-06-30T13:00:00Z">jun. 30, 2026</time></p>
+            <div class="blog-tags"><span class="blog-tag">power-bi</span><span class="blog-tag">rls</span><span class="blog-tag">security</span><span class="blog-tag">semantic-model</span></div>
         </header>
         <div class="blog-prose-card">
             <div class="blog-prose">
-                <p>La elección de modo solía ser Import vs DirectQuery. Fabric suma <strong>Direct Lake</strong>: consultar parquet en OneLake sin Import en VertiPaq. Eso cambia el cálculo en modelos grandes.</p>
-<h2>Modo Import: la zona cómoda</h2>
-<p><strong>Import</strong> copia datos al motor semántico. Consultas rápidas. DAX completo. Refreshes predecibles.</p>
-<p><strong>Elija Import cuando:</strong></p>
+                <p>La seguridad a nivel fila (RLS) falla cuando el headcount cambia más rápido que su DAX. Algunos patrones sobreviven reorganizaciones y auditorías.</p>
+<h2>Patrón 1: RLS con grupos Entra</h2>
+<p>Enlace <code>USERPRINCIPALNAME()</code> a tabla <strong>UserAccess</strong> mantenida por IT, no emails pegados en Excel.</p>
+<p>Columnas: UserEmail, Region, CostCenter, Role. Refresh desde HR o Entra cada noche.</p>
+<h2>Patrón 2: tabla puente many-to-many</h2>
+<p>El usuario cubre varias regiones o marcas. Tabla <strong>UserRegionBridge</strong>:</p>
+<p><code>UserEmail | RegionKey</code></p>
+<p>Relaciones: Users → Bridge → Dimensión Region → Hecho.</p>
+<p>Una regla escala cuando marketing agrega región.</p>
+<h2>Patrón 3: seguridad dinámica en dimensión, no en hecho</h2>
+<p>RLS en <strong>Region</strong> o <strong>Customer</strong>, no en el hecho de 40M filas. Contexto de filtro menor, consultas más rápidas.</p>
+<h2>Pruebas antes de promote en pipeline</h2>
+<p>Mínimo automatizado:</p>
+<ol>
+<li><strong>Cuentas test</strong> Entra (acceso total, restringido, ninguno)</li>
+<li><strong>View as role</strong> en Desktop antes del commit</li>
+<li>Script XMLA o preview de rol en Tabular Editor en CI</li>
+</ol>
+<h2>Fallos comunes</h2>
 <ul>
-<li>El dataset cabe en refresh nocturno</li>
-<li>Depende de DAX complejo, tablas calculadas o patrones legacy</li>
-<li>Las fuentes no toleran carga live query</li>
+<li>Emails hard-coded en DAX</li>
+<li>RLS en columnas calculadas que rompe folding</li>
+<li>Cuentas de servicio olvidadas para suscripciones</li>
 </ul>
-<p><strong>Cuidado:</strong> almacenamiento duplicado (lake + modelo), cadenas de refresh largas, drift entre warehouse e snapshot.</p>
-<h2>DirectQuery: SQL en vivo</h2>
-<p><strong>DirectQuery</strong> consulta la fuente al abrir el informe. Sin copia local grande.</p>
-<p><strong>Elija DirectQuery cuando:</strong></p>
-<ul>
-<li>Datos casi en tiempo real y el tamaño impide Import</li>
-<li>Fuente SQL o warehouse con capacidad de sobra</li>
-</ul>
-<p><strong>Cuidado:</strong> visuales lentos, DAX limitado, picos de usuarios en el warehouse.</p>
-<h2>Direct Lake: consultar el lake in situ</h2>
-<p><strong>Direct Lake</strong> lee archivos OneLake vía el modelo sin Import total. Menos duplicación, refresh más corto, alineación con arquitectura medallion.</p>
-<p><strong>Elija Direct Lake cuando:</strong></p>
-<ul>
-<li>Gold ya vive en OneLake</li>
-<li>Quiere rendimiento tipo Import sin duplicar storage</li>
-<li>Su capacidad Fabric lo soporta</li>
-</ul>
-<p><strong>Cuidado:</strong> disponibilidad regional, tablas mixtas, brecha de skills en layout del lake.</p>
-<h2>Comparación rápida</h2>
-<div class="blog-prose-table-wrap"><table>
-<thead>
-<tr>
-<th>Factor</th>
-<th>Import</th>
-<th>DirectQuery</th>
-<th>Direct Lake</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Frescura</td>
-<td>Refresh programado</td>
-<td>Casi live</td>
-<td>Refresh + archivos lake</td>
-</tr>
-<tr>
-<td>Tamaño modelo</td>
-<td>Alta presión</td>
-<td>Baja</td>
-<td>Media</td>
-</tr>
-<tr>
-<td>DAX</td>
-<td>Máximo</td>
-<td>Limitado</td>
-<td>En evolución</td>
-</tr>
-</tbody>
-</table></div>
-<h2>Camino de migración</h2>
-<p>No voltee 200 tablas de una noche. Empiece un <strong>dominio nuevo</strong> en Direct Lake. Informes paralelos un sprint. Compare refresh, latencia y ergonomía. Luego decida dominio por dominio.</p>
-<p><a href="https://calendly.com/adrienyvin/30min">Reserve una llamada de 30 minutos</a>.</p>
+<p>Documente roles admin break-glass por separado.</p>
+<h2>Object-level security</h2>
+<p>OLS en tabla/columna para PII (salario, ID nacional). Combine con RLS: ve región pero no columna salario.</p>
+<p>¿RLS en modelo live con 200 usuarios? <a href="https://calendly.com/adrienyvin/30min">Reserve una llamada de 30 minutos</a>.</p>
             </div>
         </div>
     </article>

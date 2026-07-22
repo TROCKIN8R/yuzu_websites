@@ -36,9 +36,10 @@
         {
           "@type": "BreadcrumbList",
           "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://yuzu.solutions/es" },
+            { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://yuzu.solutions/es" },
             { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://yuzu.solutions/es/blog/index.html" },
-            { "@type": "ListItem", "position": 3, "name": "Peque\u00f1as victorias Power BI en la ola 2026", "item": "https://yuzu.solutions/es/blog/power-bi-small-wins.html" }
+            { "@type": "ListItem", "position": 3, "name": "Noticias BI", "item": "https://yuzu.solutions/es/blog/index.html" },
+            { "@type": "ListItem", "position": 4, "name": "Peque\u00f1as victorias Power BI en la ola 2026", "item": "https://yuzu.solutions/es/blog/power-bi-small-wins.html" }
           ]
         },
         {
@@ -50,8 +51,10 @@
           "author": { "@type": "Person", "name": "Adrien Yvin" },
           "publisher": { "@type": "Organization", "name": "Yuzu.solutions", "url": "https://yuzu.solutions/" },
           "mainEntityOfPage": { "@type": "WebPage", "@id": "https://yuzu.solutions/es/blog/power-bi-small-wins.html" },
+          "articleSection": "Noticias BI",
           "inLanguage": "es",
-          "url": "https://yuzu.solutions/es/blog/power-bi-small-wins.html"
+          "url": "https://yuzu.solutions/es/blog/power-bi-small-wins.html",
+          "keywords": "power-bi, fabric, org-apps, copilot, modeling"
         }
       ]
     }
@@ -212,7 +215,27 @@
     </div>
 </nav>
 <main class="blog-article-shell">
-    <a href="index.html" class="blog-back-link">← Volver al blog</a>
+    <nav class="blog-breadcrumb" aria-label="Breadcrumb">
+        <ol class="blog-breadcrumb__list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li class="blog-breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="../index.html" itemprop="item"><span itemprop="name">Inicio</span></a>
+                <meta itemprop="position" content="1">
+            </li>
+            <li class="blog-breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="index.html" itemprop="item"><span itemprop="name">Blog</span></a>
+                <meta itemprop="position" content="2">
+            </li>
+            <li class="blog-breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="index.html" itemprop="item"><span itemprop="name">Noticias BI</span></a>
+                <meta itemprop="position" content="3">
+            </li>
+            <li class="blog-breadcrumb__item blog-breadcrumb__item--current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+                <span itemprop="name">Pequeñas victorias Power BI en la ola 2026</span>
+                <meta itemprop="item" content="https://yuzu.solutions/es/blog/power-bi-small-wins.html">
+                <meta itemprop="position" content="4">
+            </li>
+        </ol>
+    </nav>
     <article class="blog-article">
         <header class="blog-article-hero">
             <span class="blog-category-pill">Noticias BI</span>
