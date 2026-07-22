@@ -31,6 +31,7 @@ LOCALE_META = {
 
 UI = {
     "en": {
+        "home": "Home",
         "insights": "Insights",
         "vision": "Vision",
         "services": "Services",
@@ -44,6 +45,7 @@ UI = {
         "rss_title": "Yuzu.solutions Insights",
     },
     "fr": {
+        "home": "Accueil",
         "insights": "Blogue",
         "vision": "Vision",
         "services": "Services",
@@ -57,6 +59,7 @@ UI = {
         "rss_title": "Blogue Yuzu.solutions",
     },
     "es": {
+        "home": "Inicio",
         "insights": "Blog",
         "vision": "Visión",
         "services": "Servicios",
@@ -348,6 +351,33 @@ def lang_switcher(locale: str, slug: str | None = None) -> str:
     return "\n                ".join(parts)
 
 
+def render_breadcrumb(locale: str, category: str, title: str, canonical: str) -> str:
+    ui = UI[locale]
+    paths = site_paths(locale)
+    blog_index = f"{BASE}{LOCALE_META[locale]['prefix']}/blog/index.html"
+    return f"""    <nav class="blog-breadcrumb" aria-label="Breadcrumb">
+        <ol class="blog-breadcrumb__list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li class="blog-breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="{paths['home']}" itemprop="item"><span itemprop="name">{html.escape(ui['home'])}</span></a>
+                <meta itemprop="position" content="1">
+            </li>
+            <li class="blog-breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="{paths['blog_index']}" itemprop="item"><span itemprop="name">{html.escape(ui['insights'])}</span></a>
+                <meta itemprop="position" content="2">
+            </li>
+            <li class="blog-breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="{paths['blog_index']}" itemprop="item"><span itemprop="name">{html.escape(category)}</span></a>
+                <meta itemprop="position" content="3">
+            </li>
+            <li class="blog-breadcrumb__item blog-breadcrumb__item--current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+                <span itemprop="name">{html.escape(title)}</span>
+                <meta itemprop="item" content="{canonical}">
+                <meta itemprop="position" content="4">
+            </li>
+        </ol>
+    </nav>"""
+
+
 def render_nav(locale: str, active: str, slug: str | None = None) -> str:
     ui = UI[locale]
     paths = site_paths(locale)
@@ -437,6 +467,8 @@ def head_common(
     slug: str | None,
     og_type: str = "website",
     published_iso: str | None = None,
+    category: str | None = None,
+    tags: list[str] | None = None,
 ) -> str:
     lm = LOCALE_META[locale]
     feed_path = index_paths()[locale].replace("index.html", "feed.xml")
@@ -447,6 +479,11 @@ def head_common(
         article_meta = f'\n    <meta property="article:published_time" content="{published_iso}">'
     json_ld = ""
     if page == "article" and slug and published_iso:
+        home_name = UI[locale]["home"]
+        insights_name = UI[locale]["insights"]
+        category_name = category or CATEGORIES.get("workflows", {}).get(locale, "Insights")
+        keywords_json = json.dumps(", ".join(tags)) if tags else None
+        keywords_field = f',\n          "keywords": {keywords_json}' if keywords_json else ""
         json_ld = f"""
     <script type="application/ld+json">
     {{
@@ -455,9 +492,10 @@ def head_common(
         {{
           "@type": "BreadcrumbList",
           "itemListElement": [
-            {{ "@type": "ListItem", "position": 1, "name": "Home", "item": "{BASE}{lm['prefix'] or '/'}" }},
-            {{ "@type": "ListItem", "position": 2, "name": "{html.escape(UI[locale]['insights'])}", "item": "{blog_url(locale)}" }},
-            {{ "@type": "ListItem", "position": 3, "name": {json.dumps(title)}, "item": "{canonical}" }}
+            {{ "@type": "ListItem", "position": 1, "name": {json.dumps(home_name)}, "item": "{BASE}{lm['prefix'] or '/'}" }},
+            {{ "@type": "ListItem", "position": 2, "name": {json.dumps(insights_name)}, "item": "{blog_url(locale)}" }},
+            {{ "@type": "ListItem", "position": 3, "name": {json.dumps(category_name)}, "item": "{blog_url(locale)}" }},
+            {{ "@type": "ListItem", "position": 4, "name": {json.dumps(title)}, "item": "{canonical}" }}
           ]
         }},
         {{
@@ -469,8 +507,9 @@ def head_common(
           "author": {{ "@type": "Person", "name": "Adrien Yvin" }},
           "publisher": {{ "@type": "Organization", "name": "Yuzu.solutions", "url": "{BASE}/" }},
           "mainEntityOfPage": {{ "@type": "WebPage", "@id": "{canonical}" }},
+          "articleSection": {json.dumps(category_name)},
           "inLanguage": "{lm['html_lang']}",
-          "url": "{canonical}"
+          "url": "{canonical}"{keywords_field}
         }}
       ]
     }}
@@ -545,12 +584,12 @@ def render_article_page(article: dict, locale: str) -> str:
     return f"""<!DOCTYPE html>
 <html lang="{LOCALE_META[locale]['html_lang']}">
 <head>
-{head_common(locale, title, description, canonical, "article", slug, "article", published_iso)}
+{head_common(locale, title, description, canonical, "article", slug, "article", published_iso, category, tags)}
 </head>
 <body class="min-h-screen flex flex-col nav-on-blog blog-article-page {theme}">
 {render_nav(locale, "insights", slug)}
 <main class="blog-article-shell">
-    <a href="index.html" class="blog-back-link">{ui['back_blog']}</a>
+{render_breadcrumb(locale, category, title, canonical)}
     <article class="blog-article">
         <header class="blog-article-hero">
             <span class="blog-category-pill">{html.escape(category)}</span>

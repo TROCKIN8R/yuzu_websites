@@ -1,0 +1,19 @@
+slug: microsoft-fabric-medallion-architecture-guide
+title:
+  en: "Microsoft Fabric medallion architecture: Bronze, Silver, Gold without the buzzword bingo"
+  fr: "Architecture médaille Microsoft Fabric : Bronze, Silver, Gold sans jargon vide"
+  es: "Arquitectura medallion en Microsoft Fabric: Bronze, Silver, Gold sin buzzwords"
+description:
+  en: "A practical Fabric lakehouse layout: what belongs in each medallion layer, naming conventions, and how Power BI semantic models should attach to Gold."
+  fr: "Layout lakehouse Fabric pratique : contenu de chaque couche médaille, conventions de nommage et attachement des modèles sémantiques Power BI au Gold."
+  es: "Diseño práctico de lakehouse Fabric: qué va en cada capa medallion, convenciones de nombres y cómo conectar modelos semánticos Power BI a Gold."
+publish_at: "2026-07-13T13:00:00Z"
+status: scheduled
+author: Adrien Yvin
+category: new-tech
+tags:
+  - fabric
+  - lakehouse
+  - medallion
+  - onelake
+  - architecture

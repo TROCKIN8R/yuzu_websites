@@ -1,0 +1,19 @@
+slug: power-bi-gateway-hybrid-architecture
+title:
+  en: "Power BI gateway hybrid architecture: on-prem sources without refresh roulette"
+  fr: "Architecture hybride gateway Power BI : sources on-prem sans roulette du refresh"
+  es: "Arquitectura híbrida del gateway Power BI: fuentes on-prem sin ruleta de refresh"
+description:
+  en: "Cluster design, credential patterns, and Fabric migration paths when SQL Server, files, and SAP still live behind a gateway."
+  fr: "Design de cluster, patterns d'identifiants et migration Fabric quand SQL, fichiers et SAP restent derrière un gateway."
+  es: "Diseño de clúster, patrones de credenciales y migración Fabric cuando SQL, archivos y SAP siguen tras un gateway."
+publish_at: "2026-07-28T13:00:00Z"
+status: scheduled
+author: Adrien Yvin
+category: workflows
+tags:
+  - gateway
+  - power-bi
+  - hybrid
+  - on-premises
+  - fabric

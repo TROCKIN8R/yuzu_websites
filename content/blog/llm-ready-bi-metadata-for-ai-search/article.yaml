@@ -1,0 +1,19 @@
+slug: llm-ready-bi-metadata-for-ai-search
+title:
+  en: "LLM-ready BI metadata: make your semantic models answer AI search correctly"
+  fr: "Métadonnées BI prêtes pour les LLM : modèles sémantiques compatibles recherche IA"
+  es: "Metadatos BI listos para LLM: modelos semánticos que responden bien a búsqueda IA"
+description:
+  en: "How clear table descriptions, measure definitions, and llms.txt-style docs help Copilot, enterprise search, and AI crawlers surface the right BI answers."
+  fr: "Descriptions claires, définitions de mesures et docs type llms.txt pour que Copilot et la recherche IA surfacent les bonnes réponses BI."
+  es: "Descripciones claras, definiciones de medidas y docs tipo llms.txt para que Copilot y búsqueda IA muestren respuestas BI correctas."
+publish_at: "2026-07-22T13:00:00Z"
+status: scheduled
+author: Adrien Yvin
+category: new-tech
+tags:
+  - ai
+  - llm
+  - metadata
+  - power-bi
+  - seo

@@ -1,0 +1,18 @@
+slug: dax-measure-performance-tuning
+title:
+  en: "DAX measure performance tuning: fixes that survive the next model refresh"
+  fr: "Optimisation de mesures DAX : correctifs qui survivent au prochain refresh"
+  es: "Ajuste de rendimiento de medidas DAX: arreglos que sobreviven al próximo refresh"
+description:
+  en: "Identify slow DAX with Performance Analyzer and DAX Studio, fix iterator abuse, and document patterns your team can reuse across reports."
+  fr: "Repérer le DAX lent avec Performance Analyzer et DAX Studio, corriger les itérateurs abusifs et documenter des patterns réutilisables."
+  es: "Detectar DAX lento con Performance Analyzer y DAX Studio, corregir abuso de iteradores y documentar patrones reutilizables."
+publish_at: "2026-07-16T13:00:00Z"
+status: scheduled
+author: Adrien Yvin
+category: workflows
+tags:
+  - dax
+  - power-bi
+  - performance
+  - semantic-model

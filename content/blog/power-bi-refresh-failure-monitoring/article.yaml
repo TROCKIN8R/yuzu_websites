@@ -1,0 +1,19 @@
+slug: power-bi-refresh-failure-monitoring
+title:
+  en: "Power BI refresh failure monitoring: alerts that actually wake someone up"
+  fr: "Surveillance des échecs de refresh Power BI : alertes qui réveillent vraiment quelqu'un"
+  es: "Monitorización de fallos de refresh en Power BI: alertas que despiertan a alguien"
+description:
+  en: "How to detect failed dataset refreshes before executives open blank dashboards: gateway logs, Fabric alerts, and a minimum viable runbook."
+  fr: "Détecter les échecs de refresh avant les tableaux vides : logs gateway, alertes Fabric et runbook minimal viable."
+  es: "Detectar refrescos fallidos antes de dashboards vacíos: logs del gateway, alertas Fabric y runbook mínimo viable."
+publish_at: "2026-07-10T13:00:00Z"
+status: scheduled
+author: Adrien Yvin
+category: workflows
+tags:
+  - power-bi
+  - refresh
+  - monitoring
+  - fabric
+  - alerts

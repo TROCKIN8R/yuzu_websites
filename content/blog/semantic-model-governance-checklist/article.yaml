@@ -1,0 +1,18 @@
+slug: semantic-model-governance-checklist
+title:
+  en: "Semantic model governance checklist for Power BI and Fabric teams"
+  fr: "Checklist de gouvernance des modèles sémantiques pour équipes Power BI et Fabric"
+  es: "Checklist de gobernanza de modelos semánticos para equipos Power BI y Fabric"
+description:
+  en: "Certification, naming, ownership, and change control for semantic models — a checklist BI leads can run before promoting to production."
+  fr: "Certification, nommage, ownership et contrôle des changements — checklist avant promotion en production."
+  es: "Certificación, nombres, ownership y control de cambios — checklist antes de promover a producción."
+publish_at: "2026-07-19T13:00:00Z"
+status: scheduled
+author: Adrien Yvin
+category: workflows
+tags:
+  - semantic-model
+  - governance
+  - power-bi
+  - fabric

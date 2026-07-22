@@ -1,0 +1,19 @@
+slug: power-bi-incremental-refresh-best-practices
+title:
+  en: "Power BI incremental refresh: partition design and failure modes that stick"
+  fr: "Refresh incrémental Power BI : partitions et modes d'échec qui persistent"
+  es: "Refresh incremental en Power BI: particiones y fallos que persisten"
+description:
+  en: "Set RangeStart/RangeEnd correctly, choose date partitions that match source logic, and detect silent full refreshes before Monday."
+  fr: "RangeStart/RangeEnd, partitions date alignées à la source et détection des full refresh silencieux avant lundi."
+  es: "RangeStart/RangeEnd, particiones de fecha alineadas al origen y detección de full refresh silencioso antes del lunes."
+publish_at: "2026-08-06T13:00:00Z"
+status: scheduled
+author: Adrien Yvin
+category: workflows
+tags:
+  - power-bi
+  - incremental-refresh
+  - refresh
+  - performance
+  - fabric

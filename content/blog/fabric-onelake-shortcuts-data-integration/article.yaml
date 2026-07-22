@@ -1,0 +1,19 @@
+slug: fabric-onelake-shortcuts-data-integration
+title:
+  en: "OneLake shortcuts for data integration: when to link, copy, or move"
+  fr: "Shortcuts OneLake pour l'intégration : quand lier, copier ou déplacer"
+  es: "Shortcuts de OneLake para integración: cuándo enlazar, copiar o mover"
+description:
+  en: "Fabric OneLake shortcuts reduce duplication — if you understand cross-workspace permissions, refresh order, and Direct Lake eligibility."
+  fr: "Les shortcuts OneLake réduisent la duplication — avec permissions inter-workspaces, ordre de refresh et éligibilité Direct Lake maîtrisés."
+  es: "Los shortcuts OneLake reducen duplicación — entendiendo permisos entre workspaces, orden de refresh y elegibilidad Direct Lake."
+publish_at: "2026-08-03T13:00:00Z"
+status: scheduled
+author: Adrien Yvin
+category: new-tech
+tags:
+  - fabric
+  - onelake
+  - shortcuts
+  - lakehouse
+  - integration

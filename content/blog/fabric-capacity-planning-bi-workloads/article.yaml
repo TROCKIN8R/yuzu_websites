@@ -1,0 +1,19 @@
+slug: fabric-capacity-planning-bi-workloads
+title:
+  en: "Fabric capacity planning for BI workloads: SKU math without spreadsheet myths"
+  fr: "Planification capacité Fabric pour charges BI : calcul SKU sans mythes Excel"
+  es: "Planificación de capacidad Fabric para cargas BI: matemática SKU sin mitos"
+description:
+  en: "Size Fabric F SKUs for refresh windows, concurrent users, and Direct Lake — plus signals from the Capacity Metrics app before you over-buy."
+  fr: "Dimensionner les SKU Fabric F pour refresh, utilisateurs concurrents et Direct Lake — signaux de l'app Capacity Metrics avant surachat."
+  es: "Dimensionar SKU Fabric F para refresh, usuarios concurrentes y Direct Lake — señales de Capacity Metrics antes de sobrecomprar."
+publish_at: "2026-07-25T13:00:00Z"
+status: scheduled
+author: Adrien Yvin
+category: bi-news
+tags:
+  - fabric
+  - capacity
+  - power-bi
+  - sku
+  - cost

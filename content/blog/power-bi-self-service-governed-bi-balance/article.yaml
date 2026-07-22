@@ -1,0 +1,19 @@
+slug: power-bi-self-service-governed-bi-balance
+title:
+  en: "Self-service vs governed BI: a decision framework Power BI leaders can defend"
+  fr: "Self-service vs BI gouverné : cadre de décision pour leaders Power BI"
+  es: "Self-service vs BI gobernado: marco de decisión para líderes Power BI"
+description:
+  en: "Where to allow personal workspaces, when to require certified datasets, and how Fabric workspaces map to trust tiers without killing agility."
+  fr: "Où autoriser les workspaces personnels, quand exiger des datasets certifiés et comment mapper les workspaces Fabric aux niveaux de confiance."
+  es: "Dónde permitir workspaces personales, cuándo exigir datasets certificados y cómo mapear workspaces Fabric a niveles de confianza."
+publish_at: "2026-07-31T13:00:00Z"
+status: scheduled
+author: Adrien Yvin
+category: workflows
+tags:
+  - self-service
+  - governance
+  - power-bi
+  - fabric
+  - certification
