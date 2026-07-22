@@ -26,11 +26,13 @@ jobs:
       - name: Publish due articles
         id: publish
         run: |
-          python3 scripts/build_blog.py --publish-due
+          python3 scripts/build_blog.py --publish-due-only
           if git diff --quiet content/blog; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No article status changes to commit."
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
+            git diff --stat content/blog
           fi
 
       - name: Commit and push

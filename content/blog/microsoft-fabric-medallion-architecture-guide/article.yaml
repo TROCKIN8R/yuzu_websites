@@ -8,7 +8,7 @@ description:
   fr: "Layout lakehouse Fabric pratique : contenu de chaque couche médaille, conventions de nommage et attachement des modèles sémantiques Power BI au Gold."
   es: "Diseño práctico de lakehouse Fabric: qué va en cada capa medallion, convenciones de nombres y cómo conectar modelos semánticos Power BI a Gold."
 publish_at: "2026-07-13T13:00:00Z"
-status: scheduled
+status: published
 author: Adrien Yvin
 category: new-tech
 tags:

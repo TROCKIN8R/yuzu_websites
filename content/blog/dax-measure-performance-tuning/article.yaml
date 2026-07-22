@@ -8,7 +8,7 @@ description:
   fr: "Repérer le DAX lent avec Performance Analyzer et DAX Studio, corriger les itérateurs abusifs et documenter des patterns réutilisables."
   es: "Detectar DAX lento con Performance Analyzer y DAX Studio, corregir abuso de iteradores y documentar patrones reutilizables."
 publish_at: "2026-07-16T13:00:00Z"
-status: scheduled
+status: published
 author: Adrien Yvin
 category: workflows
 tags:

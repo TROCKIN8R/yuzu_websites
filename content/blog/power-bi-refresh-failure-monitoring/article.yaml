@@ -8,7 +8,7 @@ description:
   fr: "Détecter les échecs de refresh avant les tableaux vides : logs gateway, alertes Fabric et runbook minimal viable."
   es: "Detectar refrescos fallidos antes de dashboards vacíos: logs del gateway, alertas Fabric y runbook mínimo viable."
 publish_at: "2026-07-10T13:00:00Z"
-status: scheduled
+status: published
 author: Adrien Yvin
 category: workflows
 tags:

@@ -24,9 +24,22 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install dependencies
+        run: pip install -r scripts/requirements-blog.txt
+
+      - name: Publish due articles
+        id: publish
+        run: |
+          python3 scripts/build_blog.py --publish-due-only
+          if git diff --quiet content/blog; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git diff --stat content/blog
+          fi
+
       - name: Build site
         run: |
-          pip install -r scripts/requirements-blog.txt
           python3 scripts/build_blog.py
           python3 scripts/build_locales.py
           python3 scripts/patch_nav_blog.py
@@ -40,3 +53,12 @@ jobs:
           publish_branch: gh-pages
           keep_files: true
           commit_message: "Deploy production site from main"
+
+      - name: Commit published article status
+        if: steps.publish.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add content/blog
+          git commit -m "Publish scheduled blog posts"
+          git push

@@ -280,6 +280,7 @@ def load_all_articles() -> list[dict]:
 
 
 def publish_due(now: datetime | None = None) -> bool:
+    """Flip scheduled articles to published when publish_at has passed."""
     now = now or datetime.now(timezone.utc)
     changed = False
     for folder in CONTENT_DIR.iterdir():
@@ -288,17 +289,24 @@ def publish_due(now: datetime | None = None) -> bool:
         yaml_path = folder / "article.yaml"
         if not yaml_path.exists():
             continue
-        meta = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
+        text = yaml_path.read_text(encoding="utf-8")
+        meta = yaml.safe_load(text)
         if meta.get("status") != "scheduled":
             continue
         if parse_dt(str(meta["publish_at"])) <= now:
-            meta["status"] = "published"
-            yaml_path.write_text(
-                yaml.dump(meta, sort_keys=False, allow_unicode=True, default_flow_style=False),
-                encoding="utf-8",
+            new_text, count = re.subn(
+                r"(?m)^status:\s*scheduled\s*$",
+                "status: published",
+                text,
+                count=1,
             )
+            if count != 1:
+                raise ValueError(f"Could not update status in {yaml_path}")
+            yaml_path.write_text(new_text, encoding="utf-8")
             changed = True
             print(f"Published: {meta.get('slug', folder.name)}")
+    if not changed:
+        print("No scheduled articles due for publication.")
     return changed
 
 
@@ -806,7 +814,12 @@ def main() -> None:
     parser.add_argument(
         "--publish-due",
         action="store_true",
-        help="Flip scheduled articles to published when publish_at has passed.",
+        help="Flip scheduled articles to published when publish_at has passed, then build.",
+    )
+    parser.add_argument(
+        "--publish-due-only",
+        action="store_true",
+        help="Only flip due scheduled articles; do not build HTML.",
     )
     parser.add_argument(
         "--teasers-only",
@@ -814,6 +827,9 @@ def main() -> None:
         help="Only refresh homepage blog teaser blocks (run after build_locales.py).",
     )
     args = parser.parse_args()
+    if args.publish_due_only:
+        publish_due()
+        return
     build(publish_due_flag=args.publish_due, teasers_only=args.teasers_only)
 
 
