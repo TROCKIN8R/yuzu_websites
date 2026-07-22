@@ -182,6 +182,156 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/index.html"/>
   </url>
   <url>
+    <loc>https://yuzu.solutions/blog/llm-ready-bi-metadata-for-ai-search.html</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/llm-ready-bi-metadata-for-ai-search.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/llm-ready-bi-metadata-for-ai-search.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/llm-ready-bi-metadata-for-ai-search.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/llm-ready-bi-metadata-for-ai-search.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/fr/blog/llm-ready-bi-metadata-for-ai-search.html</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/llm-ready-bi-metadata-for-ai-search.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/llm-ready-bi-metadata-for-ai-search.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/llm-ready-bi-metadata-for-ai-search.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/llm-ready-bi-metadata-for-ai-search.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/es/blog/llm-ready-bi-metadata-for-ai-search.html</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/llm-ready-bi-metadata-for-ai-search.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/llm-ready-bi-metadata-for-ai-search.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/llm-ready-bi-metadata-for-ai-search.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/llm-ready-bi-metadata-for-ai-search.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/blog/semantic-model-governance-checklist.html</loc>
+    <lastmod>2026-07-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/semantic-model-governance-checklist.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/semantic-model-governance-checklist.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/semantic-model-governance-checklist.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/semantic-model-governance-checklist.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/fr/blog/semantic-model-governance-checklist.html</loc>
+    <lastmod>2026-07-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/semantic-model-governance-checklist.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/semantic-model-governance-checklist.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/semantic-model-governance-checklist.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/semantic-model-governance-checklist.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/es/blog/semantic-model-governance-checklist.html</loc>
+    <lastmod>2026-07-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/semantic-model-governance-checklist.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/semantic-model-governance-checklist.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/semantic-model-governance-checklist.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/semantic-model-governance-checklist.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/blog/dax-measure-performance-tuning.html</loc>
+    <lastmod>2026-07-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/dax-measure-performance-tuning.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/dax-measure-performance-tuning.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/dax-measure-performance-tuning.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/dax-measure-performance-tuning.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/fr/blog/dax-measure-performance-tuning.html</loc>
+    <lastmod>2026-07-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/dax-measure-performance-tuning.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/dax-measure-performance-tuning.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/dax-measure-performance-tuning.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/dax-measure-performance-tuning.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/es/blog/dax-measure-performance-tuning.html</loc>
+    <lastmod>2026-07-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/dax-measure-performance-tuning.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/dax-measure-performance-tuning.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/dax-measure-performance-tuning.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/dax-measure-performance-tuning.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/blog/microsoft-fabric-medallion-architecture-guide.html</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/microsoft-fabric-medallion-architecture-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/microsoft-fabric-medallion-architecture-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/microsoft-fabric-medallion-architecture-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/microsoft-fabric-medallion-architecture-guide.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/fr/blog/microsoft-fabric-medallion-architecture-guide.html</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/microsoft-fabric-medallion-architecture-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/microsoft-fabric-medallion-architecture-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/microsoft-fabric-medallion-architecture-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/microsoft-fabric-medallion-architecture-guide.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/es/blog/microsoft-fabric-medallion-architecture-guide.html</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/microsoft-fabric-medallion-architecture-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/microsoft-fabric-medallion-architecture-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/microsoft-fabric-medallion-architecture-guide.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/microsoft-fabric-medallion-architecture-guide.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/blog/power-bi-refresh-failure-monitoring.html</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/power-bi-refresh-failure-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/power-bi-refresh-failure-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/power-bi-refresh-failure-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/power-bi-refresh-failure-monitoring.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/fr/blog/power-bi-refresh-failure-monitoring.html</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/power-bi-refresh-failure-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/power-bi-refresh-failure-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/power-bi-refresh-failure-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/power-bi-refresh-failure-monitoring.html"/>
+  </url>
+  <url>
+    <loc>https://yuzu.solutions/es/blog/power-bi-refresh-failure-monitoring.html</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yuzu.solutions/blog/power-bi-refresh-failure-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://yuzu.solutions/fr/blog/power-bi-refresh-failure-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://yuzu.solutions/es/blog/power-bi-refresh-failure-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yuzu.solutions/blog/power-bi-refresh-failure-monitoring.html"/>
+  </url>
+  <url>
     <loc>https://yuzu.solutions/blog/fabric-realtime-analytics-eventhouse.html</loc>
     <lastmod>2026-07-07</lastmod>
     <changefreq>monthly</changefreq>
