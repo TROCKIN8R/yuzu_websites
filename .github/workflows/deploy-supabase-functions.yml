@@ -60,3 +60,8 @@ jobs:
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_AUTOMATION }}
         run: supabase functions deploy stm-proxy --project-ref mwgbeolcgigvpufjmodz
+
+      - name: Deploy imm1294-filler
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_AUTOMATION }}
+        run: supabase functions deploy imm1294-filler --project-ref mwgbeolcgigvpufjmodz

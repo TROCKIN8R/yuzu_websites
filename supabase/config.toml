@@ -9,3 +9,6 @@ verify_jwt = false
 
 [functions.stm-proxy]
 verify_jwt = false
+
+[functions.imm1294-filler]
+verify_jwt = false

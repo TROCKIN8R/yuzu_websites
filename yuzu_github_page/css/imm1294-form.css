@@ -1,0 +1,126 @@
+.imm-page {
+    --imm-max: 42rem;
+}
+
+.imm-hero {
+    margin-top: 1.5rem;
+    margin-bottom: 2.5rem;
+    max-width: 40rem;
+}
+
+.imm-hero-eyebrow {
+    color: var(--yuzu-700);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8rem;
+}
+
+.imm-hero h1 {
+    margin: 0.4rem 0 0.75rem;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: var(--carbon-500);
+    line-height: 1.15;
+}
+
+.imm-hero p {
+    margin: 0;
+    color: var(--carbon-400);
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.imm-hero-links {
+    margin-top: 0.85rem;
+    font-size: 0.9rem;
+    color: var(--carbon-400);
+}
+
+.imm-hero-links a {
+    color: var(--yuzu-700);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.imm-hero-links a:hover {
+    text-decoration: underline;
+}
+
+.imm-form {
+    max-width: var(--imm-max);
+    display: grid;
+    gap: 1.75rem;
+}
+
+.imm-section {
+    padding: 1.35rem 1.4rem 1.5rem;
+    border: 1px solid var(--paper-300);
+    border-radius: var(--radius-lg);
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--yuzu-100) 55%, white) 0%, white 42%);
+}
+
+.imm-section h2 {
+    margin: 0 0 0.35rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--carbon-500);
+}
+
+.imm-section > p {
+    margin: 0 0 1.1rem;
+    font-size: 0.88rem;
+    color: var(--carbon-400);
+    line-height: 1.5;
+}
+
+.imm-grid {
+    display: grid;
+    gap: 0.9rem;
+}
+
+@media (min-width: 640px) {
+    .imm-grid--2 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .imm-grid--3 {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+.imm-form .opp-field label {
+    display: block;
+    margin-bottom: 0.35rem;
+}
+
+.imm-form .opp-field input,
+.imm-form .opp-field select {
+    width: 100%;
+    border: 1px solid var(--paper-400);
+    border-radius: var(--radius-md);
+    padding: 0.8rem 0.95rem;
+    font: inherit;
+    background: #fff;
+}
+
+.imm-form .opp-field input:focus,
+.imm-form .opp-field select:focus {
+    outline: none;
+    border-color: var(--yuzu-500);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--yuzu-400) 25%, transparent);
+}
+
+.imm-actions {
+    display: grid;
+    gap: 0.9rem;
+    max-width: var(--imm-max);
+}
+
+.imm-note {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--carbon-400);
+    line-height: 1.5;
+}
