@@ -400,6 +400,51 @@ async function sendFilledPdf(answers: Imm1294Answers, pdfBytes: Uint8Array) {
   });
 }
 
+let cachedBlankPdf: Uint8Array | null = null;
+
+async function loadBlankPdf(): Promise<Uint8Array> {
+  if (cachedBlankPdf) return cachedBlankPdf;
+
+  const candidates = [
+    Deno.env.get("IMM1294_BLANK_URL")?.trim(),
+    `${SITE_URL}/assets/forms/imm1294-blank.pdf`,
+    "https://raw.githubusercontent.com/TROCKIN8R/yuzu_websites/main/supabase/functions/imm1294-filler/imm1294-blank.pdf",
+  ].filter((url): url is string => Boolean(url));
+
+  // Prefer bundled file when the edge runtime includes it.
+  try {
+    const local = await Deno.readFile(new URL("./imm1294-blank.pdf", import.meta.url));
+    if (local.byteLength > 1000) {
+      cachedBlankPdf = local;
+      return local;
+    }
+  } catch (error) {
+    console.warn("Local blank PDF unavailable, falling back to URL:", error);
+  }
+
+  let lastError = "No blank PDF source available";
+  for (const url of candidates) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        lastError = `HTTP ${response.status} fetching blank PDF`;
+        continue;
+      }
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      if (bytes.byteLength < 1000) {
+        lastError = "Blank PDF response too small";
+        continue;
+      }
+      cachedBlankPdf = bytes;
+      return bytes;
+    } catch (error) {
+      lastError = error instanceof Error ? error.message : String(error);
+    }
+  }
+
+  throw new Error(lastError);
+}
+
 async function sendNotify(answers: Imm1294Answers) {
   const { from, transporter } = createSmtpTransporter();
   const notifyTo = (Deno.env.get("INTAKE_NOTIFY_EMAIL") || NOTIFY_EMAIL).trim();
@@ -477,12 +522,12 @@ Deno.serve(async (req) => {
 
   let pdfBytes: Uint8Array;
   try {
-    const blankPath = new URL("./imm1294-blank.pdf", import.meta.url);
-    const blankPdf = await Deno.readFile(blankPath);
+    const blankPdf = await loadBlankPdf();
     pdfBytes = fillImm1294Pdf(blankPdf, validated.answers);
   } catch (error) {
-    console.error("PDF fill failed:", error);
-    return jsonResponse({ error: "Could not fill the PDF form" }, 500, origin);
+    const detail = error instanceof Error ? error.message : String(error);
+    console.error("PDF fill failed:", detail);
+    return jsonResponse({ error: `Could not fill the PDF form: ${detail}` }, 500, origin);
   }
 
   try {
