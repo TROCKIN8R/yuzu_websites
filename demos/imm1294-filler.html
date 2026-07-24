@@ -49,7 +49,7 @@
     <header class="imm-hero">
         <p class="imm-hero-eyebrow">Automation POC · IRCC IMM 1294</p>
         <h1>Study permit form, filled for you</h1>
-        <p>Answer the questions below. On submit we validate every field, fill the official IMM 1294 PDF, and email the completed file to the address you enter.</p>
+        <p>The form is prefilled with a sample applicant. Change any field to prove it is live — on submit we fill IMM 1294 from whatever is in the form and email that PDF.</p>
         <p class="imm-hero-links">
             <a href="../assets/forms/imm1294f.pdf" target="_blank" rel="noopener noreferrer">Blank IMM 1294 PDF</a>
             <span aria-hidden="true"> · </span>
@@ -64,7 +64,7 @@
             <div class="imm-grid">
                 <div class="opp-field">
                     <label for="imm-email">Email</label>
-                    <input id="imm-email" name="email" type="email" required maxlength="254" autocomplete="email" placeholder="you@company.com">
+                    <input id="imm-email" name="email" type="email" required maxlength="254" autocomplete="email" placeholder="you@company.com" value="you@example.com">
                 </div>
                 <div class="opp-field">
                     <label for="imm-serviceIn">Form language</label>
@@ -78,46 +78,46 @@
 
         <section class="imm-section" aria-labelledby="imm-personal">
             <h2 id="imm-personal">Personal details</h2>
-            <p>As shown on your passport or travel document.</p>
+            <p>Sample applicant — edit freely. Values below are what get written into the PDF.</p>
             <div class="imm-grid imm-grid--2">
                 <div class="opp-field">
                     <label for="imm-familyName">Family name</label>
-                    <input id="imm-familyName" name="familyName" type="text" required maxlength="120" autocomplete="family-name">
+                    <input id="imm-familyName" name="familyName" type="text" required maxlength="120" autocomplete="family-name" value="Dupont">
                 </div>
                 <div class="opp-field">
                     <label for="imm-givenName">Given name(s)</label>
-                    <input id="imm-givenName" name="givenName" type="text" required maxlength="120" autocomplete="given-name">
+                    <input id="imm-givenName" name="givenName" type="text" required maxlength="120" autocomplete="given-name" value="Marie Claire">
                 </div>
                 <div class="opp-field">
                     <label for="imm-sex">Sex</label>
                     <select id="imm-sex" name="sex" required>
-                        <option value="" disabled selected>Select…</option>
-                        <option value="Female">Female</option>
+                        <option value="" disabled>Select…</option>
+                        <option value="Female" selected>Female</option>
                         <option value="Male">Male</option>
                         <option value="Unknown">Unknown</option>
                     </select>
                 </div>
                 <div class="opp-field">
                     <label for="imm-dob">Date of birth</label>
-                    <input id="imm-dob" name="dob" type="date" required>
+                    <input id="imm-dob" name="dob" type="date" required value="1998-04-12">
                 </div>
                 <div class="opp-field">
                     <label for="imm-placeBirthCity">City of birth</label>
-                    <input id="imm-placeBirthCity" name="placeBirthCity" type="text" required maxlength="120">
+                    <input id="imm-placeBirthCity" name="placeBirthCity" type="text" required maxlength="120" value="Lyon">
                 </div>
                 <div class="opp-field">
                     <label for="imm-placeBirthCountry">Country of birth</label>
-                    <input id="imm-placeBirthCountry" name="placeBirthCountry" type="text" required maxlength="120" placeholder="e.g. France">
+                    <input id="imm-placeBirthCountry" name="placeBirthCountry" type="text" required maxlength="120" placeholder="e.g. France" value="France">
                 </div>
                 <div class="opp-field">
                     <label for="imm-citizenship">Citizenship</label>
-                    <input id="imm-citizenship" name="citizenship" type="text" required maxlength="120" placeholder="e.g. France">
+                    <input id="imm-citizenship" name="citizenship" type="text" required maxlength="120" placeholder="e.g. France" value="France">
                 </div>
                 <div class="opp-field">
                     <label for="imm-maritalStatus">Marital status</label>
                     <select id="imm-maritalStatus" name="maritalStatus" required>
-                        <option value="" disabled selected>Select…</option>
-                        <option value="02">Single</option>
+                        <option value="" disabled>Select…</option>
+                        <option value="02" selected>Single</option>
                         <option value="01">Married</option>
                         <option value="03">Common-law</option>
                         <option value="04">Divorced</option>
@@ -129,13 +129,13 @@
                 </div>
                 <div class="opp-field">
                     <label for="imm-currentCountry">Country of residence</label>
-                    <input id="imm-currentCountry" name="currentCountry" type="text" required maxlength="120">
+                    <input id="imm-currentCountry" name="currentCountry" type="text" required maxlength="120" value="France">
                 </div>
                 <div class="opp-field">
                     <label for="imm-currentStatus">Status there</label>
                     <select id="imm-currentStatus" name="currentStatus" required>
-                        <option value="" disabled selected>Select…</option>
-                        <option value="01">Citizen</option>
+                        <option value="" disabled>Select…</option>
+                        <option value="01" selected>Citizen</option>
                         <option value="02">Permanent resident</option>
                         <option value="03">Visitor</option>
                         <option value="04">Worker</option>
@@ -152,27 +152,27 @@
             <div class="imm-grid imm-grid--2">
                 <div class="opp-field">
                     <label for="imm-passportNumber">Passport number</label>
-                    <input id="imm-passportNumber" name="passportNumber" type="text" required maxlength="40" autocomplete="off">
+                    <input id="imm-passportNumber" name="passportNumber" type="text" required maxlength="40" autocomplete="off" value="12AB34567">
                 </div>
                 <div class="opp-field">
                     <label for="imm-passportCountry">Country of issue</label>
-                    <input id="imm-passportCountry" name="passportCountry" type="text" required maxlength="120">
+                    <input id="imm-passportCountry" name="passportCountry" type="text" required maxlength="120" value="France">
                 </div>
                 <div class="opp-field">
                     <label for="imm-passportExpiry">Passport expiry</label>
-                    <input id="imm-passportExpiry" name="passportExpiry" type="date" required>
+                    <input id="imm-passportExpiry" name="passportExpiry" type="date" required value="2030-08-01">
                 </div>
                 <div class="opp-field">
                     <label for="imm-nativeLang">Native language</label>
-                    <input id="imm-nativeLang" name="nativeLang" type="text" required maxlength="80" placeholder="e.g. French">
+                    <input id="imm-nativeLang" name="nativeLang" type="text" required maxlength="80" placeholder="e.g. French" value="French">
                 </div>
                 <div class="opp-field">
                     <label for="imm-ableToCommunicate">Communicate in English or French?</label>
                     <select id="imm-ableToCommunicate" name="ableToCommunicate" required>
-                        <option value="" disabled selected>Select…</option>
+                        <option value="" disabled>Select…</option>
                         <option value="English">English</option>
                         <option value="French">French</option>
-                        <option value="Both">Both</option>
+                        <option value="Both" selected>Both</option>
                         <option value="Neither">Neither</option>
                     </select>
                 </div>
@@ -185,31 +185,31 @@
             <div class="imm-grid imm-grid--2">
                 <div class="opp-field">
                     <label for="imm-streetNum">Street number</label>
-                    <input id="imm-streetNum" name="streetNum" type="text" required maxlength="20">
+                    <input id="imm-streetNum" name="streetNum" type="text" required maxlength="20" value="10">
                 </div>
                 <div class="opp-field">
                     <label for="imm-streetName">Street name</label>
-                    <input id="imm-streetName" name="streetName" type="text" required maxlength="120">
+                    <input id="imm-streetName" name="streetName" type="text" required maxlength="120" value="Rue de Rivoli">
                 </div>
                 <div class="opp-field">
                     <label for="imm-city">City / town</label>
-                    <input id="imm-city" name="city" type="text" required maxlength="120" autocomplete="address-level2">
+                    <input id="imm-city" name="city" type="text" required maxlength="120" autocomplete="address-level2" value="Paris">
                 </div>
                 <div class="opp-field">
                     <label for="imm-provinceState">Province / state</label>
-                    <input id="imm-provinceState" name="provinceState" type="text" maxlength="80" autocomplete="address-level1">
+                    <input id="imm-provinceState" name="provinceState" type="text" maxlength="80" autocomplete="address-level1" value="Île-de-France">
                 </div>
                 <div class="opp-field">
                     <label for="imm-country">Country</label>
-                    <input id="imm-country" name="country" type="text" required maxlength="120" autocomplete="country-name">
+                    <input id="imm-country" name="country" type="text" required maxlength="120" autocomplete="country-name" value="France">
                 </div>
                 <div class="opp-field">
                     <label for="imm-postalCode">Postal / ZIP code</label>
-                    <input id="imm-postalCode" name="postalCode" type="text" required maxlength="20" autocomplete="postal-code">
+                    <input id="imm-postalCode" name="postalCode" type="text" required maxlength="20" autocomplete="postal-code" value="75001">
                 </div>
                 <div class="opp-field">
                     <label for="imm-phone">Phone (with country code)</label>
-                    <input id="imm-phone" name="phone" type="tel" required maxlength="40" autocomplete="tel" placeholder="+33 6 12 34 56 78">
+                    <input id="imm-phone" name="phone" type="tel" required maxlength="40" autocomplete="tel" placeholder="+33 6 12 34 56 78" value="+33612345678">
                 </div>
             </div>
         </section>
@@ -220,20 +220,20 @@
             <div class="imm-grid imm-grid--2">
                 <div class="opp-field" style="grid-column: 1 / -1;">
                     <label for="imm-schoolName">School name</label>
-                    <input id="imm-schoolName" name="schoolName" type="text" required maxlength="160" placeholder="e.g. McGill University">
+                    <input id="imm-schoolName" name="schoolName" type="text" required maxlength="160" placeholder="e.g. McGill University" value="McGill University">
                 </div>
                 <div class="opp-field">
                     <label for="imm-program">Program</label>
-                    <input id="imm-program" name="program" type="text" required maxlength="120" placeholder="e.g. Computer Science">
+                    <input id="imm-program" name="program" type="text" required maxlength="120" placeholder="e.g. Computer Science" value="Computer Science">
                 </div>
                 <div class="opp-field">
                     <label for="imm-dli">DLI number</label>
-                    <input id="imm-dli" name="dli" type="text" required maxlength="40" placeholder="e.g. O19349011030">
+                    <input id="imm-dli" name="dli" type="text" required maxlength="40" placeholder="e.g. O19349011030" value="O19349011030">
                 </div>
                 <div class="opp-field">
                     <label for="imm-schoolProvince">Province of school</label>
                     <select id="imm-schoolProvince" name="schoolProvince" required>
-                        <option value="" disabled selected>Select…</option>
+                        <option value="" disabled>Select…</option>
                         <option value="AB">Alberta</option>
                         <option value="BC">British Columbia</option>
                         <option value="MB">Manitoba</option>
@@ -244,37 +244,37 @@
                         <option value="NU">Nunavut</option>
                         <option value="ON">Ontario</option>
                         <option value="PE">Prince Edward Island</option>
-                        <option value="QC">Quebec</option>
+                        <option value="QC" selected>Quebec</option>
                         <option value="SK">Saskatchewan</option>
                         <option value="YT">Yukon</option>
                     </select>
                 </div>
                 <div class="opp-field">
                     <label for="imm-schoolCity">City of school</label>
-                    <input id="imm-schoolCity" name="schoolCity" type="text" required maxlength="120">
+                    <input id="imm-schoolCity" name="schoolCity" type="text" required maxlength="120" value="Montreal">
                 </div>
                 <div class="opp-field" style="grid-column: 1 / -1;">
                     <label for="imm-schoolAddress">School address</label>
-                    <input id="imm-schoolAddress" name="schoolAddress" type="text" required maxlength="200">
+                    <input id="imm-schoolAddress" name="schoolAddress" type="text" required maxlength="200" value="845 Sherbrooke Street West">
                 </div>
                 <div class="opp-field">
                     <label for="imm-studyFrom">Study start</label>
-                    <input id="imm-studyFrom" name="studyFrom" type="date" required>
+                    <input id="imm-studyFrom" name="studyFrom" type="date" required value="2026-09-01">
                 </div>
                 <div class="opp-field">
                     <label for="imm-studyTo">Study end</label>
-                    <input id="imm-studyTo" name="studyTo" type="date" required>
+                    <input id="imm-studyTo" name="studyTo" type="date" required value="2028-04-30">
                 </div>
                 <div class="opp-field">
                     <label for="imm-tuitionAmount">Tuition amount (CAD)</label>
-                    <input id="imm-tuitionAmount" name="tuitionAmount" type="text" required maxlength="20" inputmode="decimal" placeholder="25000">
+                    <input id="imm-tuitionAmount" name="tuitionAmount" type="text" required maxlength="20" inputmode="decimal" placeholder="25000" value="25000">
                 </div>
                 <div class="opp-field">
                     <label for="imm-funds">Expenses paid by</label>
                     <select id="imm-funds" name="funds" required>
-                        <option value="" disabled selected>Select…</option>
+                        <option value="" disabled>Select…</option>
                         <option value="Myself">Myself</option>
-                        <option value="Parents">Parents</option>
+                        <option value="Parents" selected>Parents</option>
                         <option value="Other">Other</option>
                     </select>
                 </div>
