@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMM 1294 Auto-Fill Demo | Yuzu.solutions</title>
+    <meta name="description" content="Proof of concept: answer a short questionnaire, we fill IRCC form IMM 1294, and email you the completed PDF.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Yuzu.solutions">
+    <meta property="og:title" content="IMM 1294 Auto-Fill Demo | Yuzu.solutions">
+    <meta property="og:url" content="https://yuzu.solutions/demos/imm1294-filler.html">
+    <meta property="og:image" content="https://yuzu.solutions/assets/og-image.png">
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="canonical" href="https://yuzu.solutions/demos/imm1294-filler.html">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#F9F9F9">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/design-tokens.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../css/site.css">
+    <link rel="stylesheet" href="../css/logo.css">
+    <link rel="stylesheet" href="../css/imm1294-form.css">
+</head>
+<body class="min-h-screen flex flex-col imm-page">
+
+<nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
+    <div class="nav-bar-inner glass-surface pl-5 pr-3 py-3 rounded-full">
+        <div class="shrink-0">
+            <a href="../index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--nav" aria-label="Yuzu Solutions">
+                <object type="image/svg+xml" data="../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+            </a>
+        </div>
+        <div class="nav-bar-center hidden md:flex">
+            <div class="nav-pill-group">
+                <a href="../services/ai-automation.html" class="nav-pill-item">AI &amp; Automation</a>
+                <a href="../index.html#our-recipes" class="nav-pill-item">Services</a>
+            </div>
+        </div>
+        <div class="nav-bar-right flex items-center gap-2">
+            <a href="../services/ai-automation.html" class="hidden sm:inline-flex text-sm font-semibold text-stone-600 hover:text-stone-900">← Back to Automation</a>
+        </div>
+    </div>
+</nav>
+
+<main class="flex-1 w-[94%] max-w-3xl mx-auto px-0 py-8 md:py-12">
+    <header class="imm-hero">
+        <p class="imm-hero-eyebrow">Automation POC · IRCC IMM 1294</p>
+        <h1>Study permit form, filled for you</h1>
+        <p>Answer the questions below. On submit we validate every field, fill the official IMM 1294 PDF, and email the completed file to the address you enter.</p>
+        <p class="imm-hero-links">
+            <a href="../assets/forms/imm1294f.pdf" target="_blank" rel="noopener noreferrer">Blank IMM 1294 PDF</a>
+            <span aria-hidden="true"> · </span>
+            <a href="../services/ai-automation.html">AI &amp; Automation service</a>
+        </p>
+    </header>
+
+    <form class="imm-form opp-form" id="imm1294Form" novalidate>
+        <section class="imm-section" aria-labelledby="imm-delivery">
+            <h2 id="imm-delivery">Where should we send it?</h2>
+            <p>The filled PDF is emailed only to this address.</p>
+            <div class="imm-grid">
+                <div class="opp-field">
+                    <label for="imm-email">Email</label>
+                    <input id="imm-email" name="email" type="email" required maxlength="254" autocomplete="email" placeholder="you@company.com">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-serviceIn">Form language</label>
+                    <select id="imm-serviceIn" name="serviceIn" required>
+                        <option value="English" selected>English</option>
+                        <option value="French">French</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="imm-section" aria-labelledby="imm-personal">
+            <h2 id="imm-personal">Personal details</h2>
+            <p>As shown on your passport or travel document.</p>
+            <div class="imm-grid imm-grid--2">
+                <div class="opp-field">
+                    <label for="imm-familyName">Family name</label>
+                    <input id="imm-familyName" name="familyName" type="text" required maxlength="120" autocomplete="family-name">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-givenName">Given name(s)</label>
+                    <input id="imm-givenName" name="givenName" type="text" required maxlength="120" autocomplete="given-name">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-sex">Sex</label>
+                    <select id="imm-sex" name="sex" required>
+                        <option value="" disabled selected>Select…</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Unknown">Unknown</option>
+                    </select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-dob">Date of birth</label>
+                    <input id="imm-dob" name="dob" type="date" required>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-placeBirthCity">City of birth</label>
+                    <input id="imm-placeBirthCity" name="placeBirthCity" type="text" required maxlength="120">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-placeBirthCountry">Country of birth</label>
+                    <input id="imm-placeBirthCountry" name="placeBirthCountry" type="text" required maxlength="120" placeholder="e.g. France">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-citizenship">Citizenship</label>
+                    <input id="imm-citizenship" name="citizenship" type="text" required maxlength="120" placeholder="e.g. France">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-maritalStatus">Marital status</label>
+                    <select id="imm-maritalStatus" name="maritalStatus" required>
+                        <option value="" disabled selected>Select…</option>
+                        <option value="02">Single</option>
+                        <option value="01">Married</option>
+                        <option value="03">Common-law</option>
+                        <option value="04">Divorced</option>
+                        <option value="05">Separated</option>
+                        <option value="06">Widowed</option>
+                        <option value="09">Annulled marriage</option>
+                        <option value="00">Unknown</option>
+                    </select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-currentCountry">Country of residence</label>
+                    <input id="imm-currentCountry" name="currentCountry" type="text" required maxlength="120">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-currentStatus">Status there</label>
+                    <select id="imm-currentStatus" name="currentStatus" required>
+                        <option value="" disabled selected>Select…</option>
+                        <option value="01">Citizen</option>
+                        <option value="02">Permanent resident</option>
+                        <option value="03">Visitor</option>
+                        <option value="04">Worker</option>
+                        <option value="05">Student</option>
+                        <option value="06">Other</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="imm-section" aria-labelledby="imm-passport">
+            <h2 id="imm-passport">Passport &amp; languages</h2>
+            <p>Passport details and how you communicate.</p>
+            <div class="imm-grid imm-grid--2">
+                <div class="opp-field">
+                    <label for="imm-passportNumber">Passport number</label>
+                    <input id="imm-passportNumber" name="passportNumber" type="text" required maxlength="40" autocomplete="off">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-passportCountry">Country of issue</label>
+                    <input id="imm-passportCountry" name="passportCountry" type="text" required maxlength="120">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-passportExpiry">Passport expiry</label>
+                    <input id="imm-passportExpiry" name="passportExpiry" type="date" required>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-nativeLang">Native language</label>
+                    <input id="imm-nativeLang" name="nativeLang" type="text" required maxlength="80" placeholder="e.g. French">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-ableToCommunicate">Communicate in English or French?</label>
+                    <select id="imm-ableToCommunicate" name="ableToCommunicate" required>
+                        <option value="" disabled selected>Select…</option>
+                        <option value="English">English</option>
+                        <option value="French">French</option>
+                        <option value="Both">Both</option>
+                        <option value="Neither">Neither</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="imm-section" aria-labelledby="imm-contact">
+            <h2 id="imm-contact">Mailing address &amp; phone</h2>
+            <p>Where IRCC can reach you.</p>
+            <div class="imm-grid imm-grid--2">
+                <div class="opp-field">
+                    <label for="imm-streetNum">Street number</label>
+                    <input id="imm-streetNum" name="streetNum" type="text" required maxlength="20">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-streetName">Street name</label>
+                    <input id="imm-streetName" name="streetName" type="text" required maxlength="120">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-city">City / town</label>
+                    <input id="imm-city" name="city" type="text" required maxlength="120" autocomplete="address-level2">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-provinceState">Province / state</label>
+                    <input id="imm-provinceState" name="provinceState" type="text" maxlength="80" autocomplete="address-level1">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-country">Country</label>
+                    <input id="imm-country" name="country" type="text" required maxlength="120" autocomplete="country-name">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-postalCode">Postal / ZIP code</label>
+                    <input id="imm-postalCode" name="postalCode" type="text" required maxlength="20" autocomplete="postal-code">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-phone">Phone (with country code)</label>
+                    <input id="imm-phone" name="phone" type="tel" required maxlength="40" autocomplete="tel" placeholder="+33 6 12 34 56 78">
+                </div>
+            </div>
+        </section>
+
+        <section class="imm-section" aria-labelledby="imm-study">
+            <h2 id="imm-study">Details of study in Canada</h2>
+            <p>School, program, and funding — mapped into IMM 1294 section 3.</p>
+            <div class="imm-grid imm-grid--2">
+                <div class="opp-field" style="grid-column: 1 / -1;">
+                    <label for="imm-schoolName">School name</label>
+                    <input id="imm-schoolName" name="schoolName" type="text" required maxlength="160" placeholder="e.g. McGill University">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-program">Program</label>
+                    <input id="imm-program" name="program" type="text" required maxlength="120" placeholder="e.g. Computer Science">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-dli">DLI number</label>
+                    <input id="imm-dli" name="dli" type="text" required maxlength="40" placeholder="e.g. O19349011030">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-schoolProvince">Province of school</label>
+                    <select id="imm-schoolProvince" name="schoolProvince" required>
+                        <option value="" disabled selected>Select…</option>
+                        <option value="AB">Alberta</option>
+                        <option value="BC">British Columbia</option>
+                        <option value="MB">Manitoba</option>
+                        <option value="NB">New Brunswick</option>
+                        <option value="NL">Newfoundland and Labrador</option>
+                        <option value="NS">Nova Scotia</option>
+                        <option value="NT">Northwest Territories</option>
+                        <option value="NU">Nunavut</option>
+                        <option value="ON">Ontario</option>
+                        <option value="PE">Prince Edward Island</option>
+                        <option value="QC">Quebec</option>
+                        <option value="SK">Saskatchewan</option>
+                        <option value="YT">Yukon</option>
+                    </select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-schoolCity">City of school</label>
+                    <input id="imm-schoolCity" name="schoolCity" type="text" required maxlength="120">
+                </div>
+                <div class="opp-field" style="grid-column: 1 / -1;">
+                    <label for="imm-schoolAddress">School address</label>
+                    <input id="imm-schoolAddress" name="schoolAddress" type="text" required maxlength="200">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-studyFrom">Study start</label>
+                    <input id="imm-studyFrom" name="studyFrom" type="date" required>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-studyTo">Study end</label>
+                    <input id="imm-studyTo" name="studyTo" type="date" required>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-tuitionAmount">Tuition amount (CAD)</label>
+                    <input id="imm-tuitionAmount" name="tuitionAmount" type="text" required maxlength="20" inputmode="decimal" placeholder="25000">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-funds">Expenses paid by</label>
+                    <select id="imm-funds" name="funds" required>
+                        <option value="" disabled selected>Select…</option>
+                        <option value="Myself">Myself</option>
+                        <option value="Parents">Parents</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <div class="imm-actions">
+            <div class="opp-field opp-field--consent">
+                <label class="opp-consent">
+                    <input id="imm1294Consent" name="consent" type="checkbox" value="yes" required>
+                    <span>I agree to receive the filled IMM 1294 PDF at the email above. This is a demo; do not use it for an official IRCC filing without review.</span>
+                </label>
+            </div>
+            <div id="imm1294Turnstile" class="opp-turnstile" aria-label="Security check"></div>
+            <p id="imm1294FormStatus" class="opp-form-status" hidden></p>
+            <button type="submit" id="imm1294Submit" class="opp-submit" disabled aria-disabled="true">Fill PDF &amp; email it</button>
+            <p class="imm-note">Requires Adobe Acrobat/Reader to display the filled XFA fields. Demo data is rate-limited and not stored as an immigration file.</p>
+        </div>
+    </form>
+</main>
+
+<footer class="site-footer site-footer--compact mt-auto">
+    <div class="site-footer__inner">
+        <a href="../index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--footer yuzu-logo--on-dark" aria-label="Yuzu Solutions">
+            <object type="image/svg+xml" data="../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+        </a>
+        <p class="site-footer__quip">Forms that fill themselves — so your team stops retyping the same passport number.</p>
+        <p class="site-footer__copy">© 2026 Yuzu.solutions</p>
+    </div>
+</footer>
+
+<script src="../js/site.js"></script>
+<script src="../js/imm1294-config.js"></script>
+<script src="../js/imm1294-form.js"></script>
+</body>
+</html>
