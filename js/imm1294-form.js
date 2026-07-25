@@ -97,12 +97,19 @@
         return { year: y, month: m, day: d };
     }
 
+    function splitMonth(value) {
+        const [y = '', m = ''] = String(value || '').split('-');
+        return { year: y, month: m };
+    }
+
     function collectPayload(delivery) {
         const data = new FormData(form);
         const dob = splitDate(data.get('dob'));
+        const passportIssue = splitDate(data.get('passportIssue'));
         const passportExpiry = splitDate(data.get('passportExpiry'));
         const studyFrom = splitDate(data.get('studyFrom'));
         const studyTo = splitDate(data.get('studyTo'));
+        const occupationFrom = splitMonth(data.get('occupationFrom'));
 
         return {
             delivery,
@@ -119,22 +126,34 @@
             maritalStatus: String(data.get('maritalStatus') || '').trim(),
             currentCountry: String(data.get('currentCountry') || '').trim(),
             currentStatus: String(data.get('currentStatus') || '').trim(),
+            previousCor: String(data.get('previousCor') || 'N').trim(),
+            sameAsCor: String(data.get('sameAsCor') || 'Y').trim(),
+            previouslyMarried: String(data.get('previouslyMarried') || 'N').trim(),
             passportNumber: String(data.get('passportNumber') || '').trim(),
             passportCountry: String(data.get('passportCountry') || '').trim(),
+            passportIssueYear: passportIssue.year,
+            passportIssueMonth: passportIssue.month,
+            passportIssueDay: passportIssue.day,
             passportExpiryYear: passportExpiry.year,
             passportExpiryMonth: passportExpiry.month,
             passportExpiryDay: passportExpiry.day,
             nativeLang: String(data.get('nativeLang') || '').trim(),
             ableToCommunicate: String(data.get('ableToCommunicate') || '').trim(),
+            preferredLang: String(data.get('preferredLang') || 'English').trim(),
+            langTest: String(data.get('langTest') || 'N').trim(),
             streetNum: String(data.get('streetNum') || '').trim(),
             streetName: String(data.get('streetName') || '').trim(),
             city: String(data.get('city') || '').trim(),
             country: String(data.get('country') || '').trim(),
             provinceState: String(data.get('provinceState') || '').trim(),
             postalCode: String(data.get('postalCode') || '').trim(),
+            sameAsMailing: String(data.get('sameAsMailing') || 'Y').trim(),
             phone: String(data.get('phone') || '').trim(),
+            phoneType: String(data.get('phoneType') || '02').trim(),
+            phoneCountryCode: String(data.get('phoneCountryCode') || '33').trim(),
             schoolName: String(data.get('schoolName') || '').trim(),
-            program: String(data.get('program') || '').trim(),
+            studyLevel: String(data.get('studyLevel') || '').trim(),
+            fieldOfStudy: String(data.get('fieldOfStudy') || '').trim(),
             schoolProvince: String(data.get('schoolProvince') || '').trim(),
             schoolCity: String(data.get('schoolCity') || '').trim(),
             schoolAddress: String(data.get('schoolAddress') || '').trim(),
@@ -148,6 +167,23 @@
             tuitionAmount: String(data.get('tuitionAmount') || '').trim(),
             availableFunds: String(data.get('availableFunds') || data.get('tuitionAmount') || '').trim(),
             funds: String(data.get('funds') || '').trim(),
+            educationIndicator: String(data.get('educationIndicator') || 'N').trim(),
+            occupation: String(data.get('occupation') || '').trim(),
+            employer: String(data.get('employer') || '').trim(),
+            occupationCity: String(data.get('occupationCity') || '').trim(),
+            occupationCountry: String(data.get('occupationCountry') || '').trim(),
+            occupationFromYear: occupationFrom.year,
+            occupationFromMonth: occupationFrom.month,
+            bgTb: String(data.get('bgTb') || 'N').trim(),
+            bgDisorder: String(data.get('bgDisorder') || 'N').trim(),
+            bgOverstay: String(data.get('bgOverstay') || 'N').trim(),
+            bgRefused: String(data.get('bgRefused') || 'N').trim(),
+            bgClaimAsylum: String(data.get('bgClaimAsylum') || 'N').trim(),
+            bgCrime: String(data.get('bgCrime') || 'N').trim(),
+            bgMilitary: String(data.get('bgMilitary') || 'N').trim(),
+            bgViolence: String(data.get('bgViolence') || 'N').trim(),
+            bgWitness: String(data.get('bgWitness') || 'N').trim(),
+            cicContactConsent: String(data.get('cicContactConsent') || 'N').trim(),
             serviceIn: String(data.get('serviceIn') || 'English').trim(),
             consent: data.get('consent') === 'yes',
             captchaToken: getCaptchaToken()
