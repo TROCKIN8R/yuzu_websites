@@ -143,12 +143,33 @@
                         <option value="06">Other</option>
                     </select>
                 </div>
+                <div class="opp-field">
+                    <label for="imm-previousCor">Lived in another country in the last 5 years?</label>
+                    <select id="imm-previousCor" name="previousCor" required>
+                        <option value="N" selected>No</option>
+                        <option value="Y">Yes</option>
+                    </select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-sameAsCor">Applying from same country as residence?</label>
+                    <select id="imm-sameAsCor" name="sameAsCor" required>
+                        <option value="Y" selected>Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-previouslyMarried">Previously married or common-law?</label>
+                    <select id="imm-previouslyMarried" name="previouslyMarried" required>
+                        <option value="N" selected>No</option>
+                        <option value="Y">Yes</option>
+                    </select>
+                </div>
             </div>
         </section>
 
         <section class="imm-section" aria-labelledby="imm-passport">
             <h2 id="imm-passport">Passport &amp; languages</h2>
-            <p>Passport details and how you communicate.</p>
+            <p>Passport dates and language answers IRCC validates before signing.</p>
             <div class="imm-grid imm-grid--2">
                 <div class="opp-field">
                     <label for="imm-passportNumber">Passport number</label>
@@ -157,6 +178,10 @@
                 <div class="opp-field">
                     <label for="imm-passportCountry">Country of issue</label>
                     <input id="imm-passportCountry" name="passportCountry" type="text" required maxlength="120" value="France">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-passportIssue">Passport issue date</label>
+                    <input id="imm-passportIssue" name="passportIssue" type="date" required value="2018-05-15">
                 </div>
                 <div class="opp-field">
                     <label for="imm-passportExpiry">Passport expiry</label>
@@ -174,6 +199,20 @@
                         <option value="French">French</option>
                         <option value="Both" selected>Both</option>
                         <option value="Neither">Neither</option>
+                    </select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-preferredLang">Most comfortable language</label>
+                    <select id="imm-preferredLang" name="preferredLang" required>
+                        <option value="English" selected>English</option>
+                        <option value="French">French</option>
+                    </select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-langTest">Took an approved language test?</label>
+                    <select id="imm-langTest" name="langTest" required>
+                        <option value="N" selected>No</option>
+                        <option value="Y">Yes</option>
                     </select>
                 </div>
             </div>
@@ -208,7 +247,27 @@
                     <input id="imm-postalCode" name="postalCode" type="text" required maxlength="20" autocomplete="postal-code" value="75001">
                 </div>
                 <div class="opp-field">
-                    <label for="imm-phone">Phone (with country code)</label>
+                    <label for="imm-sameAsMailing">Residential address same as mailing?</label>
+                    <select id="imm-sameAsMailing" name="sameAsMailing" required>
+                        <option value="Y" selected>Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-phoneType">Phone type</label>
+                    <select id="imm-phoneType" name="phoneType" required>
+                        <option value="02" selected>Cellular</option>
+                        <option value="01">Residence</option>
+                        <option value="03">Business</option>
+                        <option value="05">Other</option>
+                    </select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-phoneCountryCode">Phone country code</label>
+                    <input id="imm-phoneCountryCode" name="phoneCountryCode" type="text" required maxlength="4" inputmode="numeric" value="33">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-phone">Phone number</label>
                     <input id="imm-phone" name="phone" type="tel" required maxlength="40" autocomplete="tel" placeholder="+33 6 12 34 56 78" value="+33612345678">
                 </div>
             </div>
@@ -216,15 +275,42 @@
 
         <section class="imm-section" aria-labelledby="imm-study">
             <h2 id="imm-study">Details of study in Canada</h2>
-            <p>School, program, and funding — mapped into IMM 1294 section 3.</p>
+            <p>School, IRCC level/field codes, and funding — required for Valider.</p>
             <div class="imm-grid imm-grid--2">
                 <div class="opp-field" style="grid-column: 1 / -1;">
                     <label for="imm-schoolName">School name</label>
                     <input id="imm-schoolName" name="schoolName" type="text" required maxlength="160" placeholder="e.g. McGill University" value="McGill University">
                 </div>
                 <div class="opp-field">
-                    <label for="imm-program">Program</label>
-                    <input id="imm-program" name="program" type="text" required maxlength="120" placeholder="e.g. Computer Science" value="Computer Science">
+                    <label for="imm-studyLevel">Level of study</label>
+                    <select id="imm-studyLevel" name="studyLevel" required>
+                        <option value="04" selected>University — Bachelor's</option>
+                        <option value="05">University — Master's</option>
+                        <option value="06">University — Doctorate</option>
+                        <option value="07">University — Other</option>
+                        <option value="13">College — Certificate</option>
+                        <option value="14">College — Diploma</option>
+                        <option value="11">CEGEP — Pre-university</option>
+                        <option value="12">CEGEP — Technical</option>
+                        <option value="16">ESL/FSL</option>
+                        <option value="18">ESL/FSL and university</option>
+                        <option value="08">Other studies</option>
+                    </select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-fieldOfStudy">Field of study</label>
+                    <select id="imm-fieldOfStudy" name="fieldOfStudy" required>
+                        <option value="04" selected>Computer science / IT</option>
+                        <option value="03">Business / Commerce</option>
+                        <option value="01">Arts / humanities / social sciences</option>
+                        <option value="10">Applied sciences</option>
+                        <option value="11">General sciences</option>
+                        <option value="12">Health sciences</option>
+                        <option value="08">Law</option>
+                        <option value="09">Medicine</option>
+                        <option value="07">Hospitality / Tourism</option>
+                        <option value="15">Other</option>
+                    </select>
                 </div>
                 <div class="opp-field">
                     <label for="imm-dli">DLI number</label>
@@ -251,7 +337,19 @@
                 </div>
                 <div class="opp-field">
                     <label for="imm-schoolCity">City of school</label>
-                    <input id="imm-schoolCity" name="schoolCity" type="text" required maxlength="120" value="Montreal">
+                    <select id="imm-schoolCity" name="schoolCity" required>
+                        <option value="Montreal" selected>Montreal</option>
+                        <option value="Quebec">Quebec City</option>
+                        <option value="Laval">Laval</option>
+                        <option value="Gatineau">Gatineau</option>
+                        <option value="Sherbrooke">Sherbrooke</option>
+                        <option value="Toronto">Toronto</option>
+                        <option value="Ottawa">Ottawa</option>
+                        <option value="Mississauga">Mississauga</option>
+                        <option value="Vancouver">Vancouver</option>
+                        <option value="Calgary">Calgary</option>
+                        <option value="Edmonton">Edmonton</option>
+                    </select>
                 </div>
                 <div class="opp-field" style="grid-column: 1 / -1;">
                     <label for="imm-schoolAddress">School address</label>
@@ -281,6 +379,87 @@
                         <option value="Parents" selected>Parents</option>
                         <option value="Other">Other</option>
                     </select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-educationIndicator">Prior post-secondary education?</label>
+                    <select id="imm-educationIndicator" name="educationIndicator" required>
+                        <option value="N" selected>No</option>
+                        <option value="Y">Yes</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="imm-section" aria-labelledby="imm-work">
+            <h2 id="imm-work">Current occupation</h2>
+            <p>At least one employment / activity row is required.</p>
+            <div class="imm-grid imm-grid--2">
+                <div class="opp-field">
+                    <label for="imm-occupation">Occupation / activity</label>
+                    <input id="imm-occupation" name="occupation" type="text" required maxlength="80" value="Student">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-employer">Employer / school</label>
+                    <input id="imm-employer" name="employer" type="text" required maxlength="120" value="Universite Lyon">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-occupationCity">City</label>
+                    <input id="imm-occupationCity" name="occupationCity" type="text" required maxlength="80" value="Lyon">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-occupationCountry">Country</label>
+                    <input id="imm-occupationCountry" name="occupationCountry" type="text" required maxlength="80" value="France">
+                </div>
+                <div class="opp-field">
+                    <label for="imm-occupationFrom">Started</label>
+                    <input id="imm-occupationFrom" name="occupationFrom" type="month" required value="2022-09">
+                </div>
+            </div>
+        </section>
+
+        <section class="imm-section" aria-labelledby="imm-bg">
+            <h2 id="imm-bg">Background questions</h2>
+            <p>All default to No for this sample — change if your case differs. Required for Valider / signature.</p>
+            <div class="imm-grid imm-grid--2">
+                <div class="opp-field">
+                    <label for="imm-bgTb">TB in last 2 years (you/family)?</label>
+                    <select id="imm-bgTb" name="bgTb" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-bgDisorder">Disorder that could endanger public health?</label>
+                    <select id="imm-bgDisorder" name="bgDisorder" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-bgOverstay">Overstayed / studied or worked without authorization?</label>
+                    <select id="imm-bgOverstay" name="bgOverstay" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-bgRefused">Refused a visa / entry to any country?</label>
+                    <select id="imm-bgRefused" name="bgRefused" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-bgClaimAsylum">Claimed refugee protection before?</label>
+                    <select id="imm-bgClaimAsylum" name="bgClaimAsylum" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-bgCrime">Criminal offence / arrest / charge / conviction?</label>
+                    <select id="imm-bgCrime" name="bgCrime" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-bgMilitary">Military / police / intelligence service?</label>
+                    <select id="imm-bgMilitary" name="bgMilitary" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-bgViolence">Membership in group that used violence?</label>
+                    <select id="imm-bgViolence" name="bgViolence" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-bgWitness">Witnessed / participated in prisoner abuse or looting?</label>
+                    <select id="imm-bgWitness" name="bgWitness" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-cicContactConsent">Allow CIC to contact you later for research?</label>
+                    <select id="imm-cicContactConsent" name="cicContactConsent" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
                 </div>
             </div>
         </section>

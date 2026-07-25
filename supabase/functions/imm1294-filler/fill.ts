@@ -9,6 +9,9 @@ import pako from "npm:pako@2.1.0";
 import { md5 } from "npm:js-md5@0.8.3";
 import countryCodes from "./country-codes.json" with { type: "json" };
 import languageCodes from "./language-codes.json" with { type: "json" };
+import cityCodes from "./city-codes.json" with { type: "json" };
+
+export type YesNo = "Y" | "N";
 
 export type Imm1294Answers = {
   email: string;
@@ -24,22 +27,42 @@ export type Imm1294Answers = {
   maritalStatus: string;
   currentCountry: string;
   currentStatus: string;
+  /** Lived in another country in last 5 years? */
+  previousCor: YesNo;
+  /** Applying from same country as current residence? */
+  sameAsCor: YesNo;
+  /** Previously married / common-law? */
+  previouslyMarried: YesNo;
   passportNumber: string;
   passportCountry: string;
+  passportIssueYear: string;
+  passportIssueMonth: string;
+  passportIssueDay: string;
   passportExpiryYear: string;
   passportExpiryMonth: string;
   passportExpiryDay: string;
   nativeLang: string;
   ableToCommunicate: "English" | "French" | "Both" | "Neither";
+  /** PreferenceLanguage lic when ableToCommunicate is Both (01/02). */
+  preferredLang?: "English" | "French";
+  /** Language test taken? */
+  langTest: YesNo;
   streetNum: string;
   streetName: string;
   city: string;
   country: string;
   provinceState: string;
   postalCode: string;
+  /** Residential address same as mailing? */
+  sameAsMailing: YesNo;
   phone: string;
+  phoneType: string; // PhoneType lic 01-03,05
+  phoneCountryCode: string;
   schoolName: string;
-  program: string;
+  /** LevelOfStudy lic */
+  studyLevel: string;
+  /** FieldOfStudy lic (not free text) */
+  fieldOfStudy: string;
   schoolProvince: string;
   schoolCity: string;
   schoolAddress: string;
@@ -53,6 +76,26 @@ export type Imm1294Answers = {
   tuitionAmount: string;
   availableFunds: string;
   funds: "Myself" | "Parents" | "Other";
+  /** Post-secondary education history beyond the planned study? */
+  educationIndicator: YesNo;
+  occupation: string;
+  employer: string;
+  occupationCity: string;
+  occupationCountry: string;
+  occupationFromYear: string;
+  occupationFromMonth: string;
+  /** Background / security Yes/No (default N for clean POC). */
+  bgTb: YesNo;
+  bgDisorder: YesNo;
+  bgOverstay: YesNo;
+  bgRefused: YesNo;
+  bgClaimAsylum: YesNo;
+  bgCrime: YesNo;
+  bgMilitary: YesNo;
+  bgViolence: YesNo;
+  bgWitness: YesNo;
+  /** CIC future contact consent */
+  cicContactConsent: YesNo;
   serviceIn?: "English" | "French";
 };
 
@@ -188,9 +231,40 @@ function resolveProvinceLic(value: string): string {
   throw new Error(`Unknown school province code: ${value}`);
 }
 
+function resolveCityLic(value: string): string {
+  const raw = value.trim();
+  if (/^\d+$/.test(raw)) return raw;
+  const { aliases, labels } = cityCodes as {
+    aliases: Record<string, string>;
+    labels: Record<string, string>;
+  };
+  if (aliases[raw.toLowerCase()]) return aliases[raw.toLowerCase()];
+  if (labels[raw]) return labels[raw];
+  for (const [label, lic] of Object.entries(labels)) {
+    if (label.toLowerCase() === raw.toLowerCase() && lic) return lic;
+  }
+  throw new Error(
+    `Unknown school city (use a major Canadian city name or IRCC city code): ${raw}`,
+  );
+}
+
+function yn(value: string | undefined, fallback: YesNo = "N"): YesNo {
+  const v = String(value || fallback).trim().toUpperCase();
+  return v === "Y" || v === "YES" ? "Y" : "N";
+}
+
+function isoDate(y: string, m: string, d: string): string {
+  return [y, m, d].filter(Boolean).join("-");
+}
+
+function phoneDigits(phone: string): string {
+  return phone.replace(/\D/g, "");
+}
+
 /** Map human form answers to IRCC LOV `lic` codes stored in XFA datasets. */
 export function normalizeAnswers(a: Imm1294Answers): Imm1294Answers {
   const serviceIn = a.serviceIn === "French" ? "French" : "English";
+  const preferredLang = a.preferredLang === "French" ? "French" : "English";
   return {
     ...a,
     familyName: asciiSafe(a.familyName),
@@ -199,25 +273,64 @@ export function normalizeAnswers(a: Imm1294Answers): Imm1294Answers {
     placeBirthCountry: resolveCountryLic(a.placeBirthCountry),
     citizenship: resolveCountryLic(a.citizenship),
     currentCountry: resolveCountryLic(a.currentCountry),
+    previousCor: yn(a.previousCor, "N"),
+    sameAsCor: yn(a.sameAsCor, "Y"),
+    previouslyMarried: yn(a.previouslyMarried, "N"),
     passportCountry: resolveCountryLic(a.passportCountry),
     nativeLang: resolveLanguageLic(a.nativeLang),
+    preferredLang,
+    langTest: yn(a.langTest, "N"),
     streetName: asciiSafe(a.streetName),
     city: asciiSafe(a.city),
     country: resolveCountryLic(a.country),
     provinceState: asciiSafe(a.provinceState),
+    sameAsMailing: yn(a.sameAsMailing, "Y"),
+    phoneType: a.phoneType || "02",
+    phoneCountryCode: (a.phoneCountryCode || "").replace(/\D/g, "") || "33",
     schoolName: asciiSafe(a.schoolName),
-    program: asciiSafe(a.program),
+    studyLevel: a.studyLevel || "04",
+    fieldOfStudy: a.fieldOfStudy || "04",
     schoolProvince: resolveProvinceLic(a.schoolProvince),
-    schoolCity: asciiSafe(a.schoolCity),
+    schoolCity: resolveCityLic(a.schoolCity),
     schoolAddress: asciiSafe(a.schoolAddress),
+    educationIndicator: yn(a.educationIndicator, "N"),
+    occupation: asciiSafe(a.occupation || "Student"),
+    employer: asciiSafe(a.employer || a.schoolName),
+    occupationCity: asciiSafe(a.occupationCity || a.city),
+    occupationCountry: resolveCountryLic(a.occupationCountry || a.currentCountry),
+    occupationFromYear: a.occupationFromYear || "2022",
+    occupationFromMonth: a.occupationFromMonth || "09",
+    bgTb: yn(a.bgTb, "N"),
+    bgDisorder: yn(a.bgDisorder, "N"),
+    bgOverstay: yn(a.bgOverstay, "N"),
+    bgRefused: yn(a.bgRefused, "N"),
+    bgClaimAsylum: yn(a.bgClaimAsylum, "N"),
+    bgCrime: yn(a.bgCrime, "N"),
+    bgMilitary: yn(a.bgMilitary, "N"),
+    bgViolence: yn(a.bgViolence, "N"),
+    bgWitness: yn(a.bgWitness, "N"),
+    cicContactConsent: yn(a.cicContactConsent, "N"),
     serviceIn,
-    // PreferenceLanguage lic for ServiceIn radio/dropdown
-    // stored later via SERVICE_LIC
   };
 }
 
 export function buildFilledForm1(template: string, a: Imm1294Answers): string {
   const serviceLic = SERVICE_LIC[a.serviceIn || "English"] || "01";
+  const preferredLic = a.preferredLang === "French" ? "02" : "01";
+  const issueDate = isoDate(
+    a.passportIssueYear,
+    a.passportIssueMonth,
+    a.passportIssueDay,
+  );
+  const expiryDate = isoDate(
+    a.passportExpiryYear,
+    a.passportExpiryMonth,
+    a.passportExpiryDay,
+  );
+  const studyFrom = isoDate(a.studyFromYear, a.studyFromMonth, a.studyFromDay);
+  const studyTo = isoDate(a.studyToYear, a.studyToMonth, a.studyToDay);
+  const intlPhone = phoneDigits(a.phone);
+
   let xml = template;
 
   xml = fillNested(xml, "ServiceIn", serviceLic);
@@ -233,77 +346,112 @@ export function buildFilledForm1(template: string, a: Imm1294Answers): string {
   xml = fillNested(xml, "Citizenship", a.citizenship);
   xml = fillEmpty(xml, "Pays", a.currentCountry, "><CurrentCOR\n>");
   xml = fillEmpty(xml, "Status", a.currentStatus, "><CurrentCOR\n>");
+  xml = fillEmpty(xml, "PCRIndicator", a.previousCor);
+  xml = fillEmpty(xml, "SameAsCORIndicator", a.sameAsCor);
   xml = fillEmpty(
     xml,
     "MaritalStatus",
     a.maritalStatus,
     "><MaritalStatus\n><SectionA\n>",
   );
+  xml = fillEmpty(xml, "PrevMarriedIndicator", a.previouslyMarried);
 
   xml = fillEmpty(xml, "natIDIndicator", "N", "><natID\n>");
   xml = fillEmpty(xml, "usCardIndicator", "N", "><USCard\n>");
 
   xml = fillNested(xml, "nativeLang", a.nativeLang);
   xml = fillNested(xml, "ableToCommunicate", a.ableToCommunicate);
+  if (a.ableToCommunicate === "Both") {
+    xml = fillEmpty(xml, "lov", preferredLic, "><languages\n>");
+  }
+  xml = fillEmpty(xml, "LangTestIndicator", a.langTest);
+
   xml = fillNested(xml, "PassportNum", a.passportNumber);
-  xml = fillNested(xml, "CountryofIssue", a.passportCountry);
+  xml = fillNested(xml, "CountryofIssue", a.passportCountry, "><Passport\n>");
+  xml = fillNested(xml, "IssueDate", issueDate, "><Passport\n>");
+  xml = fillEmpty(xml, "IssueYYYY", a.passportIssueYear);
+  xml = fillEmpty(xml, "IssueMM", a.passportIssueMonth);
+  xml = fillEmpty(xml, "IssueDD", a.passportIssueDay);
+  xml = fillEmpty(xml, "ExpiryDate", expiryDate, "><Passport\n>");
   xml = fillEmpty(xml, "expiryYYYY", a.passportExpiryYear);
   xml = fillEmpty(xml, "expiryMM", a.passportExpiryMonth);
   xml = fillEmpty(xml, "expiryDD", a.passportExpiryDay);
 
   xml = fillNested(xml, "StreetNum", a.streetNum, "><AddressRow1\n>");
   xml = fillNested(xml, "Streetname", a.streetName, "><AddressRow1\n>");
-  xml = fillNested(xml, "CityTown", a.city, "><AddressRow2\n>");
+  // Mailing city is <CityTow><CityTown/></CityTow> (self-closing), not nested.
+  xml = fillEmpty(xml, "CityTown", a.city, "><CityTow\n>");
   xml = fillNested(xml, "Pays", a.country, "><AddressRow2\n>");
   if (a.provinceState) {
     xml = fillNested(xml, "ProvinceState", a.provinceState, "><AddressRow2\n>");
   }
   xml = fillNested(xml, "PostalCode", a.postalCode, "><AddressRow2\n>");
+  xml = fillEmpty(xml, "SameAsMailingIndicator", a.sameAsMailing);
 
   xml = xml.replace(
     "<Phone\n><Type\n/><CanadaUS\n>0</CanadaUS\n><Other\n>0</Other\n>",
-    "<Phone\n><Type\n/><CanadaUS\n>0</CanadaUS\n><Other\n>1</Other\n>",
+    `<Phone\n><Type\n>${esc(a.phoneType)}</Type\n><CanadaUS\n>0</CanadaUS\n><Other\n>1</Other\n>`,
   );
+  xml = fillEmpty(xml, "NumberCountry", a.phoneCountryCode, "><PhoneNumbers\n><Phone\n>");
   xml = fillNested(
     xml,
     "IntlNumber",
-    a.phone.replace(/\D/g, ""),
+    intlPhone,
     "><PhoneNumbers\n><Phone\n>",
   );
+  xml = fillEmpty(xml, "ActualNumber", intlPhone, "><PhoneNumbers\n><Phone\n>");
   xml = fillEmpty(xml, "Email", a.email, "><FaxEmail\n>");
 
   xml = fillEmpty(xml, "SchoolName", a.schoolName, "><schoolName\n>");
-  xml = fillEmpty(xml, "Program", a.program, "><schoolName\n>");
+  xml = fillEmpty(xml, "Level", a.studyLevel, "><schoolName\n>");
+  xml = fillEmpty(xml, "Program", a.fieldOfStudy, "><schoolName\n>");
   xml = fillEmpty(xml, "Prov", a.schoolProvince, "><ProvinceState\n>");
   xml = fillNested(xml, "CityTown", a.schoolCity, "><PurposeRow1\n>");
   xml = fillNested(xml, "Address", a.schoolAddress, "><PurposeRow1\n>");
   xml = fillEmpty(xml, "DLI", a.dli, "><PurposeRow1\n>");
-
-  const studyFrom = [a.studyFromYear, a.studyFromMonth, a.studyFromDay]
-    .filter(Boolean)
-    .join("-");
-  const studyTo = [a.studyToYear, a.studyToMonth, a.studyToDay]
-    .filter(Boolean)
-    .join("-");
   xml = fillEmpty(xml, "FromDate", studyFrom, "><HowLongStudy\n>");
   xml = fillEmpty(xml, "ToDate", studyTo, "><HowLongStudy\n>");
 
   xml = fillEmpty(xml, "amount", a.tuitionAmount, "><tuition\n>");
-  // Nested Funds under expensesPaid is the CAD "available funds" text field.
   xml = fillNested(xml, "Funds", a.availableFunds, "><expensesPaid\n>");
   xml = fillEmpty(xml, "expensesPaidBy", a.funds, "><expensesPaid\n>");
 
-  // Minimal occupation row so EMPLOI mandatory fields are not left red.
-  xml = fillEmpty(xml, "FromYear", a.studyFromYear, "><OccupationRow1\n>");
-  xml = fillEmpty(xml, "FromMonth", a.studyFromMonth, "><OccupationRow1\n>");
-  xml = fillNested(xml, "Occupation", "Student", "><OccupationRow1\n>");
-  xml = fillEmpty(xml, "Employer", a.schoolName, "><OccupationRow1\n>");
-  xml = fillNested(xml, "CityTown", a.schoolCity, "><OccupationRow1\n>");
-  xml = fillNested(
-    xml,
-    "Pays",
-    resolveCountryLic("Canada"),
-    "><OccupationRow1\n>",
+  xml = fillEmpty(xml, "EducationIndicator", a.educationIndicator);
+
+  xml = fillEmpty(xml, "FromYear", a.occupationFromYear, "><OccupationRow1\n>");
+  xml = fillEmpty(xml, "FromMonth", a.occupationFromMonth, "><OccupationRow1\n>");
+  xml = fillNested(xml, "Occupation", a.occupation, "><OccupationRow1\n>");
+  xml = fillEmpty(xml, "Employer", a.employer, "><OccupationRow1\n>");
+  xml = fillNested(xml, "CityTown", a.occupationCity, "><OccupationRow1\n>");
+  xml = fillNested(xml, "Pays", a.occupationCountry, "><OccupationRow1\n>");
+
+  // Background / security questions (Page4) — two Choice nodes under BackgroundInfo.
+  xml = xml.replace(
+    /<BackgroundInfo\n><Choice\n\/><Choice\n\/>/,
+    `<BackgroundInfo\n><Choice\n>${a.bgTb}</Choice\n><Choice\n>${a.bgDisorder}</Choice\n>`,
+  );
+  xml = fillEmpty(xml, "VisaChoice1", a.bgOverstay);
+  xml = fillEmpty(xml, "VisaChoice2", a.bgRefused);
+  xml = fillEmpty(xml, "VisaChoice3", a.bgClaimAsylum);
+  xml = xml.replace(
+    /<BackgroundInfo3\n><Choice\n\/>/,
+    `<BackgroundInfo3\n><Choice\n>${a.bgCrime}</Choice\n>`,
+  );
+  xml = xml.replace(
+    /<Military\n><Choice\n\/>/,
+    `<Military\n><Choice\n>${a.bgMilitary}</Choice\n>`,
+  );
+  xml = xml.replace(
+    /<Occupation\n><Choice\n\/>/,
+    `<Occupation\n><Choice\n>${a.bgViolence}</Choice\n>`,
+  );
+  xml = xml.replace(
+    /<GovPosition\n><Choice\n\/>/,
+    `<GovPosition\n><Choice\n>${a.bgWitness}</Choice\n>`,
+  );
+  xml = xml.replace(
+    /<Consent0\n><Choice\n\/>/,
+    `<Consent0\n><Choice\n>${a.cicContactConsent}</Choice\n>`,
   );
 
   return xml;

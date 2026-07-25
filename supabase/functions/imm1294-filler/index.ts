@@ -201,6 +201,13 @@ async function verifyTurnstile(token: string, remoteIp?: string) {
   };
 }
 
+function parseYn(raw: unknown, fallback: "Y" | "N" = "N"): "Y" | "N" {
+  const v = cleanText(raw, 8).toUpperCase();
+  if (v === "Y" || v === "YES") return "Y";
+  if (v === "N" || v === "NO") return "N";
+  return fallback;
+}
+
 function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm1294Answers } | { ok: false; error: string } {
   const email = cleanText(raw.email, EMAIL_MAX_LENGTH).toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -231,6 +238,15 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
     return { ok: false, error: "Select a Canadian province/territory for the school." };
   }
 
+  const studyLevel = cleanText(raw.studyLevel, 2);
+  if (!studyLevel) return { ok: false, error: "Select a level of study." };
+
+  const fieldOfStudy = cleanText(raw.fieldOfStudy ?? raw.program, 2);
+  if (!fieldOfStudy) return { ok: false, error: "Select a field of study." };
+
+  const phoneType = cleanText(raw.phoneType, 2) || "02";
+  const phoneCountryCode = digits(raw.phoneCountryCode, 4) || "33";
+
   const dobYear = digits(raw.dobYear, 4);
   const dobMonth = digits(raw.dobMonth, 2).padStart(2, "0");
   const dobDay = digits(raw.dobDay, 2).padStart(2, "0");
@@ -255,16 +271,24 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
     ["postalCode", cleanText(raw.postalCode, 20)],
     ["phone", cleanText(raw.phone, 40)],
     ["schoolName", cleanText(raw.schoolName)],
-    ["program", cleanText(raw.program)],
     ["schoolCity", cleanText(raw.schoolCity)],
     ["schoolAddress", cleanText(raw.schoolAddress)],
     ["dli", cleanText(raw.dli, 40)],
     ["tuitionAmount", cleanText(raw.tuitionAmount, 20)],
     ["availableFunds", cleanText(raw.availableFunds ?? raw.tuitionAmount, 20)],
+    ["occupation", cleanText(raw.occupation) || "Student"],
+    ["employer", cleanText(raw.employer) || cleanText(raw.schoolName)],
   ];
 
   for (const [key, value] of required) {
     if (!value) return { ok: false, error: `Missing required field: ${key}` };
+  }
+
+  const passportIssueYear = digits(raw.passportIssueYear, 4);
+  const passportIssueMonth = digits(raw.passportIssueMonth, 2).padStart(2, "0");
+  const passportIssueDay = digits(raw.passportIssueDay, 2).padStart(2, "0");
+  if (passportIssueYear.length !== 4 || Number(passportIssueMonth) < 1 || Number(passportIssueMonth) > 12) {
+    return { ok: false, error: "Enter a valid passport issue date." };
   }
 
   const passportExpiryYear = digits(raw.passportExpiryYear, 4);
@@ -284,6 +308,9 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
     return { ok: false, error: "Enter valid study start and end dates." };
   }
 
+  const occupationFromYear = digits(raw.occupationFromYear, 4) || "2022";
+  const occupationFromMonth = digits(raw.occupationFromMonth, 2).padStart(2, "0") || "09";
+
   const answers: Imm1294Answers = {
     email,
     familyName: required[0][1],
@@ -298,35 +325,64 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
     maritalStatus,
     currentCountry: required[5][1],
     currentStatus,
+    previousCor: parseYn(raw.previousCor, "N"),
+    sameAsCor: parseYn(raw.sameAsCor, "Y"),
+    previouslyMarried: parseYn(raw.previouslyMarried, "N"),
     passportNumber: required[6][1],
     passportCountry: required[7][1],
+    passportIssueYear,
+    passportIssueMonth,
+    passportIssueDay,
     passportExpiryYear,
     passportExpiryMonth,
     passportExpiryDay,
     nativeLang: required[8][1],
     ableToCommunicate: ableToCommunicate as Imm1294Answers["ableToCommunicate"],
+    preferredLang: cleanText(raw.preferredLang, 20) === "French" ? "French" : "English",
+    langTest: parseYn(raw.langTest, "N"),
     streetNum: required[9][1],
     streetName: required[10][1],
     city: required[11][1],
     country: required[12][1],
     provinceState: cleanText(raw.provinceState, 40),
     postalCode: required[13][1],
+    sameAsMailing: parseYn(raw.sameAsMailing, "Y"),
     phone: required[14][1],
+    phoneType,
+    phoneCountryCode,
     schoolName: required[15][1],
-    program: required[16][1],
+    studyLevel,
+    fieldOfStudy,
     schoolProvince,
-    schoolCity: required[17][1],
-    schoolAddress: required[18][1],
-    dli: required[19][1],
+    schoolCity: required[16][1],
+    schoolAddress: required[17][1],
+    dli: required[18][1],
     studyFromYear,
     studyFromMonth,
     studyFromDay,
     studyToYear,
     studyToMonth,
     studyToDay,
-    tuitionAmount: required[20][1],
-    availableFunds: required[21][1],
+    tuitionAmount: required[19][1],
+    availableFunds: required[20][1],
     funds: funds as Imm1294Answers["funds"],
+    educationIndicator: parseYn(raw.educationIndicator, "N"),
+    occupation: required[21][1],
+    employer: required[22][1],
+    occupationCity: cleanText(raw.occupationCity) || required[11][1],
+    occupationCountry: cleanText(raw.occupationCountry) || required[5][1],
+    occupationFromYear,
+    occupationFromMonth,
+    bgTb: parseYn(raw.bgTb, "N"),
+    bgDisorder: parseYn(raw.bgDisorder, "N"),
+    bgOverstay: parseYn(raw.bgOverstay, "N"),
+    bgRefused: parseYn(raw.bgRefused, "N"),
+    bgClaimAsylum: parseYn(raw.bgClaimAsylum, "N"),
+    bgCrime: parseYn(raw.bgCrime, "N"),
+    bgMilitary: parseYn(raw.bgMilitary, "N"),
+    bgViolence: parseYn(raw.bgViolence, "N"),
+    bgWitness: parseYn(raw.bgWitness, "N"),
+    cicContactConsent: parseYn(raw.cicContactConsent, "N"),
     serviceIn: cleanText(raw.serviceIn, 20) === "French" ? "French" : "English",
   };
 
