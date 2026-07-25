@@ -89,6 +89,28 @@
                     <input id="imm-givenName" name="givenName" type="text" required maxlength="120" autocomplete="given-name" value="Marie Claire">
                 </div>
                 <div class="opp-field">
+                    <label for="imm-hasAlias">Used another name (alias)?</label>
+                    <select id="imm-hasAlias" name="hasAlias" required>
+                        <option value="N" selected>No</option>
+                        <option value="Y">Yes</option>
+                    </select>
+                </div>
+            </div>
+            <div class="imm-branch" data-imm-show="hasAlias=Y" hidden>
+                <h3 class="imm-branch__title">Alias / other name</h3>
+                <div class="imm-grid imm-grid--2">
+                    <div class="opp-field">
+                        <label for="imm-aliasFamilyName">Alias family name</label>
+                        <input id="imm-aliasFamilyName" name="aliasFamilyName" type="text" maxlength="120" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-aliasGivenName">Alias given name(s)</label>
+                        <input id="imm-aliasGivenName" name="aliasGivenName" type="text" maxlength="120" data-imm-required value="">
+                    </div>
+                </div>
+            </div>
+            <div class="imm-grid imm-grid--2">
+                <div class="opp-field">
                     <label for="imm-sex">Sex</label>
                     <select id="imm-sex" name="sex" required>
                         <option value="" disabled>Select…</option>
@@ -127,6 +149,25 @@
                         <option value="00">Unknown</option>
                     </select>
                 </div>
+            </div>
+            <div class="imm-branch" data-imm-show="maritalStatus=01|03" hidden>
+                <h3 class="imm-branch__title">Current spouse / common-law partner</h3>
+                <div class="imm-grid imm-grid--2">
+                    <div class="opp-field">
+                        <label for="imm-spouseFamilyName">Spouse family name</label>
+                        <input id="imm-spouseFamilyName" name="spouseFamilyName" type="text" maxlength="120" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-spouseGivenName">Spouse given name(s)</label>
+                        <input id="imm-spouseGivenName" name="spouseGivenName" type="text" maxlength="120" value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-marriageDate">Date of marriage / union</label>
+                        <input id="imm-marriageDate" name="marriageDate" type="date" data-imm-required value="">
+                    </div>
+                </div>
+            </div>
+            <div class="imm-grid imm-grid--2">
                 <div class="opp-field">
                     <label for="imm-currentCountry">Country of residence</label>
                     <input id="imm-currentCountry" name="currentCountry" type="text" required maxlength="120" value="France">
@@ -143,6 +184,29 @@
                         <option value="06">Other</option>
                     </select>
                 </div>
+            </div>
+            <div class="imm-branch" data-imm-show="currentStatus=06" hidden>
+                <div class="imm-grid">
+                    <div class="opp-field">
+                        <label for="imm-corOther">Describe other status</label>
+                        <input id="imm-corOther" name="corOther" type="text" maxlength="80" data-imm-required value="">
+                    </div>
+                </div>
+            </div>
+            <div class="imm-branch" data-imm-show="currentStatus=03|04|05|06" hidden>
+                <h3 class="imm-branch__title">Dates for current status (temporary)</h3>
+                <div class="imm-grid imm-grid--2">
+                    <div class="opp-field">
+                        <label for="imm-corFrom">From</label>
+                        <input id="imm-corFrom" name="corFrom" type="date" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-corTo">To</label>
+                        <input id="imm-corTo" name="corTo" type="date" data-imm-required value="">
+                    </div>
+                </div>
+            </div>
+            <div class="imm-grid imm-grid--2">
                 <div class="opp-field">
                     <label for="imm-previousCor">Lived in another country in the last 5 years?</label>
                     <select id="imm-previousCor" name="previousCor" required>
@@ -163,6 +227,148 @@
                         <option value="N" selected>No</option>
                         <option value="Y">Yes</option>
                     </select>
+                </div>
+            </div>
+            <div class="imm-branch" data-imm-show="previousCor=Y" hidden>
+                <h3 class="imm-branch__title">Previous countries of residence (up to 2)</h3>
+                <p class="imm-branch__hint">List each country you lived in during the last 5 years (other than your current country of residence).</p>
+                <fieldset class="imm-fieldset">
+                    <legend>Country 1</legend>
+                    <div class="imm-grid imm-grid--2">
+                        <div class="opp-field">
+                            <label for="imm-pcor1Country">Country</label>
+                            <input id="imm-pcor1Country" name="pcor1Country" type="text" maxlength="120" data-imm-required placeholder="e.g. Spain" value="">
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-pcor1Status">Status</label>
+                            <select id="imm-pcor1Status" name="pcor1Status" data-imm-required>
+                                <option value="" selected disabled>Select…</option>
+                                <option value="01">Citizen</option>
+                                <option value="02">Permanent resident</option>
+                                <option value="03">Visitor</option>
+                                <option value="04">Worker</option>
+                                <option value="05">Student</option>
+                                <option value="06">Other</option>
+                            </select>
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-pcor1From">From</label>
+                            <input id="imm-pcor1From" name="pcor1From" type="date" data-imm-required value="">
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-pcor1To">To</label>
+                            <input id="imm-pcor1To" name="pcor1To" type="date" data-imm-required value="">
+                        </div>
+                    </div>
+                    <div class="imm-branch" data-imm-show="previousCor=Y,pcor1Status=06" hidden>
+                        <div class="opp-field">
+                            <label for="imm-pcor1Other">Describe other status</label>
+                            <input id="imm-pcor1Other" name="pcor1Other" type="text" maxlength="80" data-imm-required value="">
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="imm-fieldset">
+                    <legend>Country 2 (optional)</legend>
+                    <div class="imm-grid imm-grid--2">
+                        <div class="opp-field">
+                            <label for="imm-pcor2Country">Country</label>
+                            <input id="imm-pcor2Country" name="pcor2Country" type="text" maxlength="120" placeholder="Leave blank if none" value="">
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-pcor2Status">Status</label>
+                            <select id="imm-pcor2Status" name="pcor2Status">
+                                <option value="" selected>Select…</option>
+                                <option value="01">Citizen</option>
+                                <option value="02">Permanent resident</option>
+                                <option value="03">Visitor</option>
+                                <option value="04">Worker</option>
+                                <option value="05">Student</option>
+                                <option value="06">Other</option>
+                            </select>
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-pcor2From">From</label>
+                            <input id="imm-pcor2From" name="pcor2From" type="date" value="">
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-pcor2To">To</label>
+                            <input id="imm-pcor2To" name="pcor2To" type="date" value="">
+                        </div>
+                    </div>
+                    <div class="imm-branch" data-imm-show="previousCor=Y,pcor2Status=06" hidden>
+                        <div class="opp-field">
+                            <label for="imm-pcor2Other">Describe other status</label>
+                            <input id="imm-pcor2Other" name="pcor2Other" type="text" maxlength="80" data-imm-required value="">
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="imm-branch" data-imm-show="sameAsCor=N" hidden>
+                <h3 class="imm-branch__title">Country where you are applying</h3>
+                <div class="imm-grid imm-grid--2">
+                    <div class="opp-field">
+                        <label for="imm-cwaCountry">Country</label>
+                        <input id="imm-cwaCountry" name="cwaCountry" type="text" maxlength="120" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-cwaStatus">Status there</label>
+                        <select id="imm-cwaStatus" name="cwaStatus" data-imm-required>
+                            <option value="" selected disabled>Select…</option>
+                            <option value="01">Citizen</option>
+                            <option value="02">Permanent resident</option>
+                            <option value="03">Visitor</option>
+                            <option value="04">Worker</option>
+                            <option value="05">Student</option>
+                            <option value="06">Other</option>
+                        </select>
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-cwaFrom">From</label>
+                        <input id="imm-cwaFrom" name="cwaFrom" type="date" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-cwaTo">To</label>
+                        <input id="imm-cwaTo" name="cwaTo" type="date" data-imm-required value="">
+                    </div>
+                </div>
+                <div class="imm-branch" data-imm-show="sameAsCor=N,cwaStatus=06" hidden>
+                    <div class="opp-field">
+                        <label for="imm-cwaOther">Describe other status</label>
+                        <input id="imm-cwaOther" name="cwaOther" type="text" maxlength="80" data-imm-required value="">
+                    </div>
+                </div>
+            </div>
+            <div class="imm-branch" data-imm-show="previouslyMarried=Y" hidden>
+                <h3 class="imm-branch__title">Previous spouse / common-law partner</h3>
+                <div class="imm-grid imm-grid--2">
+                    <div class="opp-field">
+                        <label for="imm-prevSpouseFamilyName">Family name</label>
+                        <input id="imm-prevSpouseFamilyName" name="prevSpouseFamilyName" type="text" maxlength="120" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-prevSpouseGivenName">Given name(s)</label>
+                        <input id="imm-prevSpouseGivenName" name="prevSpouseGivenName" type="text" maxlength="120" value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-prevSpouseDob">Date of birth</label>
+                        <input id="imm-prevSpouseDob" name="prevSpouseDob" type="date" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-prevSpouseRelationship">Type of relationship</label>
+                        <select id="imm-prevSpouseRelationship" name="prevSpouseRelationship" data-imm-required>
+                            <option value="" selected disabled>Select…</option>
+                            <option value="01">Married</option>
+                            <option value="03">Common-law</option>
+                        </select>
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-prevSpouseFrom">From</label>
+                        <input id="imm-prevSpouseFrom" name="prevSpouseFrom" type="date" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-prevSpouseTo">To</label>
+                        <input id="imm-prevSpouseTo" name="prevSpouseTo" type="date" data-imm-required value="">
+                    </div>
                 </div>
             </div>
         </section>
@@ -215,6 +421,54 @@
                         <option value="Y">Yes</option>
                     </select>
                 </div>
+                <div class="opp-field">
+                    <label for="imm-hasNatId">Have a national identity document?</label>
+                    <select id="imm-hasNatId" name="hasNatId" required>
+                        <option value="N" selected>No</option>
+                        <option value="Y">Yes</option>
+                    </select>
+                </div>
+                <div class="opp-field">
+                    <label for="imm-hasUsCard">Have a U.S. permanent resident card?</label>
+                    <select id="imm-hasUsCard" name="hasUsCard" required>
+                        <option value="N" selected>No</option>
+                        <option value="Y">Yes</option>
+                    </select>
+                </div>
+            </div>
+            <div class="imm-branch" data-imm-show="hasNatId=Y" hidden>
+                <h3 class="imm-branch__title">National identity document</h3>
+                <div class="imm-grid imm-grid--2">
+                    <div class="opp-field">
+                        <label for="imm-natIdNumber">Document number</label>
+                        <input id="imm-natIdNumber" name="natIdNumber" type="text" maxlength="40" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-natIdCountry">Country of issue</label>
+                        <input id="imm-natIdCountry" name="natIdCountry" type="text" maxlength="120" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-natIdIssue">Issue date</label>
+                        <input id="imm-natIdIssue" name="natIdIssue" type="date" value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-natIdExpiry">Expiry date</label>
+                        <input id="imm-natIdExpiry" name="natIdExpiry" type="date" value="">
+                    </div>
+                </div>
+            </div>
+            <div class="imm-branch" data-imm-show="hasUsCard=Y" hidden>
+                <h3 class="imm-branch__title">U.S. permanent resident card</h3>
+                <div class="imm-grid imm-grid--2">
+                    <div class="opp-field">
+                        <label for="imm-usCardNumber">Card number</label>
+                        <input id="imm-usCardNumber" name="usCardNumber" type="text" maxlength="40" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-usCardExpiry">Expiry date</label>
+                        <input id="imm-usCardExpiry" name="usCardExpiry" type="date" value="">
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -253,6 +507,41 @@
                         <option value="N">No</option>
                     </select>
                 </div>
+            </div>
+            <div class="imm-branch" data-imm-show="sameAsMailing=N" hidden>
+                <h3 class="imm-branch__title">Residential address</h3>
+                <div class="imm-grid imm-grid--2">
+                    <div class="opp-field">
+                        <label for="imm-resStreetNum">Street number</label>
+                        <input id="imm-resStreetNum" name="resStreetNum" type="text" maxlength="20" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-resStreetName">Street name</label>
+                        <input id="imm-resStreetName" name="resStreetName" type="text" maxlength="120" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-resAptUnit">Apt / unit (optional)</label>
+                        <input id="imm-resAptUnit" name="resAptUnit" type="text" maxlength="20" value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-resCity">City / town</label>
+                        <input id="imm-resCity" name="resCity" type="text" maxlength="120" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-resProvinceState">Province / state</label>
+                        <input id="imm-resProvinceState" name="resProvinceState" type="text" maxlength="80" value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-resCountry">Country</label>
+                        <input id="imm-resCountry" name="resCountry" type="text" maxlength="120" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-resPostalCode">Postal / ZIP code</label>
+                        <input id="imm-resPostalCode" name="resPostalCode" type="text" maxlength="20" data-imm-required value="">
+                    </div>
+                </div>
+            </div>
+            <div class="imm-grid imm-grid--2">
                 <div class="opp-field">
                     <label for="imm-phoneType">Phone type</label>
                     <select id="imm-phoneType" name="phoneType" required>
@@ -388,32 +677,171 @@
                     </select>
                 </div>
             </div>
+            <div class="imm-branch" data-imm-show="funds=Other" hidden>
+                <div class="imm-grid">
+                    <div class="opp-field">
+                        <label for="imm-fundsOtherPerson">Who pays your expenses?</label>
+                        <input id="imm-fundsOtherPerson" name="fundsOtherPerson" type="text" maxlength="120" data-imm-required placeholder="Name of person or organization" value="">
+                    </div>
+                </div>
+            </div>
+            <div class="imm-branch" data-imm-show="schoolProvince=QC" hidden>
+                <h3 class="imm-branch__title">Quebec CAQ / PAL (if you have them)</h3>
+                <div class="imm-grid imm-grid--2">
+                    <div class="opp-field">
+                        <label for="imm-caqNumber">CAQ number</label>
+                        <input id="imm-caqNumber" name="caqNumber" type="text" maxlength="40" value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-caqExpiry">CAQ expiry</label>
+                        <input id="imm-caqExpiry" name="caqExpiry" type="date" value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-palNumber">PAL / letter of acceptance number</label>
+                        <input id="imm-palNumber" name="palNumber" type="text" maxlength="40" value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-palExpiry">PAL expiry</label>
+                        <input id="imm-palExpiry" name="palExpiry" type="date" value="">
+                    </div>
+                </div>
+            </div>
+            <div class="imm-branch" data-imm-show="educationIndicator=Y" hidden>
+                <h3 class="imm-branch__title">Prior education</h3>
+                <div class="imm-grid imm-grid--2">
+                    <div class="opp-field">
+                        <label for="imm-eduFrom">From</label>
+                        <input id="imm-eduFrom" name="eduFrom" type="month" data-imm-required value="2018-09">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-eduTo">To</label>
+                        <input id="imm-eduTo" name="eduTo" type="month" data-imm-required value="2022-06">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-eduField">Field of study</label>
+                        <input id="imm-eduField" name="eduField" type="text" maxlength="120" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-eduSchool">School / institution</label>
+                        <input id="imm-eduSchool" name="eduSchool" type="text" maxlength="160" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-eduCity">City / town</label>
+                        <input id="imm-eduCity" name="eduCity" type="text" maxlength="120" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-eduCountry">Country</label>
+                        <input id="imm-eduCountry" name="eduCountry" type="text" maxlength="120" data-imm-required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-eduProvince">Province / state (if applicable)</label>
+                        <input id="imm-eduProvince" name="eduProvince" type="text" maxlength="80" value="">
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section class="imm-section" aria-labelledby="imm-work">
-            <h2 id="imm-work">Current occupation</h2>
-            <p>At least one employment / activity row is required.</p>
-            <div class="imm-grid imm-grid--2">
-                <div class="opp-field">
-                    <label for="imm-occupation">Occupation / activity</label>
-                    <input id="imm-occupation" name="occupation" type="text" required maxlength="80" value="Student">
+            <h2 id="imm-work">Employment / activity history</h2>
+            <p>At least one row is required. Add up to two previous jobs if needed (IRCC validates rows you start).</p>
+            <fieldset class="imm-fieldset">
+                <legend>Current / most recent</legend>
+                <div class="imm-grid imm-grid--2">
+                    <div class="opp-field">
+                        <label for="imm-occupation">Occupation / activity</label>
+                        <input id="imm-occupation" name="occupation" type="text" required maxlength="80" value="Student">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-employer">Employer / school</label>
+                        <input id="imm-employer" name="employer" type="text" required maxlength="120" value="Universite Lyon">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-occupationCity">City</label>
+                        <input id="imm-occupationCity" name="occupationCity" type="text" required maxlength="80" value="Lyon">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-occupationCountry">Country</label>
+                        <input id="imm-occupationCountry" name="occupationCountry" type="text" required maxlength="80" value="France">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-occupationProvince">Province / state</label>
+                        <input id="imm-occupationProvince" name="occupationProvince" type="text" maxlength="80" value="">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-occupationFrom">Started</label>
+                        <input id="imm-occupationFrom" name="occupationFrom" type="month" required value="2022-09">
+                    </div>
+                    <div class="opp-field">
+                        <label for="imm-occupationTo">Ended (leave blank if current)</label>
+                        <input id="imm-occupationTo" name="occupationTo" type="month" value="">
+                    </div>
                 </div>
-                <div class="opp-field">
-                    <label for="imm-employer">Employer / school</label>
-                    <input id="imm-employer" name="employer" type="text" required maxlength="120" value="Universite Lyon">
-                </div>
-                <div class="opp-field">
-                    <label for="imm-occupationCity">City</label>
-                    <input id="imm-occupationCity" name="occupationCity" type="text" required maxlength="80" value="Lyon">
-                </div>
-                <div class="opp-field">
-                    <label for="imm-occupationCountry">Country</label>
-                    <input id="imm-occupationCountry" name="occupationCountry" type="text" required maxlength="80" value="France">
-                </div>
-                <div class="opp-field">
-                    <label for="imm-occupationFrom">Started</label>
-                    <input id="imm-occupationFrom" name="occupationFrom" type="month" required value="2022-09">
-                </div>
+            </fieldset>
+            <div class="imm-branch" data-imm-job-row="2" hidden>
+                <fieldset class="imm-fieldset">
+                    <legend>Previous job 2</legend>
+                    <div class="imm-grid imm-grid--2">
+                        <div class="opp-field">
+                            <label for="imm-job2Occupation">Occupation</label>
+                            <input id="imm-job2Occupation" name="job2Occupation" type="text" maxlength="80" data-imm-required value="">
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-job2Employer">Employer</label>
+                            <input id="imm-job2Employer" name="job2Employer" type="text" maxlength="120" data-imm-required value="">
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-job2City">City</label>
+                            <input id="imm-job2City" name="job2City" type="text" maxlength="80" data-imm-required value="">
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-job2Country">Country</label>
+                            <input id="imm-job2Country" name="job2Country" type="text" maxlength="80" data-imm-required value="">
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-job2From">From</label>
+                            <input id="imm-job2From" name="job2From" type="month" data-imm-required value="">
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-job2To">To</label>
+                            <input id="imm-job2To" name="job2To" type="month" value="">
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="imm-branch" data-imm-job-row="3" hidden>
+                <fieldset class="imm-fieldset">
+                    <legend>Previous job 3</legend>
+                    <div class="imm-grid imm-grid--2">
+                        <div class="opp-field">
+                            <label for="imm-job3Occupation">Occupation</label>
+                            <input id="imm-job3Occupation" name="job3Occupation" type="text" maxlength="80" data-imm-required value="">
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-job3Employer">Employer</label>
+                            <input id="imm-job3Employer" name="job3Employer" type="text" maxlength="120" data-imm-required value="">
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-job3City">City</label>
+                            <input id="imm-job3City" name="job3City" type="text" maxlength="80" data-imm-required value="">
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-job3Country">Country</label>
+                            <input id="imm-job3Country" name="job3Country" type="text" maxlength="80" data-imm-required value="">
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-job3From">From</label>
+                            <input id="imm-job3From" name="job3From" type="month" data-imm-required value="">
+                        </div>
+                        <div class="opp-field">
+                            <label for="imm-job3To">To</label>
+                            <input id="imm-job3To" name="job3To" type="month" value="">
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="imm-job-actions">
+                <button type="button" id="imm-add-job" class="imm-link-btn">+ Add previous job</button>
+                <button type="button" id="imm-remove-job" class="imm-link-btn" hidden>− Remove last job</button>
             </div>
         </section>
 
@@ -460,6 +888,30 @@
                 <div class="opp-field">
                     <label for="imm-cicContactConsent">Allow CIC to contact you later for research?</label>
                     <select id="imm-cicContactConsent" name="cicContactConsent" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                </div>
+            </div>
+            <div class="imm-branch" data-imm-show="bgTb=Y,bgDisorder=Y" data-imm-show-mode="any" hidden>
+                <div class="opp-field">
+                    <label for="imm-bgMedicalDetails">Medical / TB details</label>
+                    <textarea id="imm-bgMedicalDetails" name="bgMedicalDetails" rows="3" maxlength="500" data-imm-required placeholder="Provide details required by IRCC"></textarea>
+                </div>
+            </div>
+            <div class="imm-branch" data-imm-show="bgOverstay=Y,bgRefused=Y,bgClaimAsylum=Y" data-imm-show-mode="any" hidden>
+                <div class="opp-field">
+                    <label for="imm-bgRefusedDetails">Immigration history details</label>
+                    <textarea id="imm-bgRefusedDetails" name="bgRefusedDetails" rows="3" maxlength="500" data-imm-required placeholder="Dates, countries, and outcomes"></textarea>
+                </div>
+            </div>
+            <div class="imm-branch" data-imm-show="bgCrime=Y" hidden>
+                <div class="opp-field">
+                    <label for="imm-bgCrimeDetails">Criminal history details</label>
+                    <textarea id="imm-bgCrimeDetails" name="bgCrimeDetails" rows="3" maxlength="500" data-imm-required></textarea>
+                </div>
+            </div>
+            <div class="imm-branch" data-imm-show="bgMilitary=Y" hidden>
+                <div class="opp-field">
+                    <label for="imm-bgMilitaryDetails">Military / police / intelligence details</label>
+                    <textarea id="imm-bgMilitaryDetails" name="bgMilitaryDetails" rows="3" maxlength="500" data-imm-required></textarea>
                 </div>
             </div>
         </section>
