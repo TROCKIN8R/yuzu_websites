@@ -8,7 +8,7 @@ description:
   fr: "Dimensionner les SKU Fabric F pour refresh, utilisateurs concurrents et Direct Lake — signaux de l'app Capacity Metrics avant surachat."
   es: "Dimensionar SKU Fabric F para refresh, usuarios concurrentes y Direct Lake — señales de Capacity Metrics antes de sobrecomprar."
 publish_at: "2026-07-25T13:00:00Z"
-status: scheduled
+status: published
 author: Adrien Yvin
 category: bi-news
 tags:
