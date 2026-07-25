@@ -118,6 +118,30 @@
     max-width: var(--imm-max);
 }
 
+.imm-actions__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: stretch;
+}
+
+.imm-actions__buttons .opp-submit {
+    flex: 1 1 12rem;
+}
+
+.opp-submit--secondary {
+    background: transparent;
+    color: var(--carbon-700, #2d3436);
+    border: 1.5px solid var(--carbon-300, #b2bec3);
+    box-shadow: none;
+}
+
+.opp-submit--secondary:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--yuzu-400, #f8c607) 18%, transparent);
+    border-color: var(--yuzu-600, #bc9605);
+    color: var(--carbon-800, #1e272e);
+}
+
 .imm-note {
     margin: 0;
     font-size: 0.78rem;
