@@ -197,7 +197,7 @@
                 </div>
                 <div class="opp-field">
                     <label for="imm-provinceState">Province / state</label>
-                    <input id="imm-provinceState" name="provinceState" type="text" maxlength="80" autocomplete="address-level1" value="Île-de-France">
+                    <input id="imm-provinceState" name="provinceState" type="text" maxlength="80" autocomplete="address-level1" value="Ile-de-France">
                 </div>
                 <div class="opp-field">
                     <label for="imm-country">Country</label>
@@ -270,6 +270,10 @@
                     <input id="imm-tuitionAmount" name="tuitionAmount" type="text" required maxlength="20" inputmode="decimal" placeholder="25000" value="25000">
                 </div>
                 <div class="opp-field">
+                    <label for="imm-availableFunds">Funds available for stay (CAD)</label>
+                    <input id="imm-availableFunds" name="availableFunds" type="text" required maxlength="20" inputmode="decimal" placeholder="40000" value="40000">
+                </div>
+                <div class="opp-field">
                     <label for="imm-funds">Expenses paid by</label>
                     <select id="imm-funds" name="funds" required>
                         <option value="" disabled>Select…</option>
@@ -285,13 +289,16 @@
             <div class="opp-field opp-field--consent">
                 <label class="opp-consent">
                     <input id="imm1294Consent" name="consent" type="checkbox" value="yes" required>
-                    <span>I agree to receive the filled IMM 1294 PDF at the email above. This is a demo; do not use it for an official IRCC filing without review.</span>
+                    <span>I understand this is a demo and the filled IMM 1294 is not an official IRCC filing. I agree to generate the PDF (download or email).</span>
                 </label>
             </div>
             <div id="imm1294Turnstile" class="opp-turnstile" aria-label="Security check"></div>
             <p id="imm1294FormStatus" class="opp-form-status" hidden></p>
-            <button type="submit" id="imm1294Submit" class="opp-submit" disabled aria-disabled="true">Fill PDF &amp; email it</button>
-            <p class="imm-note">Requires Adobe Acrobat/Reader to display the filled XFA fields. Demo data is rate-limited and not stored as an immigration file.</p>
+            <div class="imm-actions__buttons">
+                <button type="submit" id="imm1294Submit" class="opp-submit" disabled aria-disabled="true">Fill PDF &amp; email it</button>
+                <button type="button" id="imm1294Download" class="opp-submit opp-submit--secondary" disabled aria-disabled="true">Download PDF</button>
+            </div>
+            <p class="imm-note">Open the PDF in Adobe Acrobat/Reader (not Preview). The IRCC certification is preserved so Validate and signature remain available. Demo data is rate-limited and not stored as an immigration file.</p>
         </div>
     </form>
 </main>

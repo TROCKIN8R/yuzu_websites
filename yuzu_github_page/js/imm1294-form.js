@@ -2,6 +2,7 @@
     const form = document.getElementById('imm1294Form');
     const statusEl = document.getElementById('imm1294FormStatus');
     const submitBtn = document.getElementById('imm1294Submit');
+    const downloadBtn = document.getElementById('imm1294Download');
     const turnstileMount = document.getElementById('imm1294Turnstile');
     const consentInput = document.getElementById('imm1294Consent');
     const config = window.IMM1294_CONFIG || {};
@@ -11,6 +12,8 @@
     let submitting = false;
 
     if (!form || !submitBtn) return;
+
+    const actionButtons = [submitBtn, downloadBtn].filter(Boolean);
 
     function setMessage(message, type) {
         if (!statusEl) return;
@@ -24,9 +27,11 @@
         const captchaOk = !captchaRequired || captchaPassed;
         const consentOk = Boolean(consentInput?.checked);
         const enabled = !submitting && captchaOk && consentOk;
-        submitBtn.disabled = !enabled;
-        submitBtn.setAttribute('aria-disabled', enabled ? 'false' : 'true');
-        submitBtn.classList.toggle('opp-submit--locked', !enabled && !submitting);
+        for (const btn of actionButtons) {
+            btn.disabled = !enabled;
+            btn.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+            btn.classList.toggle('opp-submit--locked', !enabled && !submitting);
+        }
     }
 
     function loadTurnstileScript() {
@@ -92,7 +97,7 @@
         return { year: y, month: m, day: d };
     }
 
-    function collectPayload() {
+    function collectPayload(delivery) {
         const data = new FormData(form);
         const dob = splitDate(data.get('dob'));
         const passportExpiry = splitDate(data.get('passportExpiry'));
@@ -100,6 +105,7 @@
         const studyTo = splitDate(data.get('studyTo'));
 
         return {
+            delivery,
             email: String(data.get('email') || '').trim().toLowerCase(),
             familyName: String(data.get('familyName') || '').trim(),
             givenName: String(data.get('givenName') || '').trim(),
@@ -140,6 +146,7 @@
             studyToMonth: studyTo.month,
             studyToDay: studyTo.day,
             tuitionAmount: String(data.get('tuitionAmount') || '').trim(),
+            availableFunds: String(data.get('availableFunds') || data.get('tuitionAmount') || '').trim(),
             funds: String(data.get('funds') || '').trim(),
             serviceIn: String(data.get('serviceIn') || 'English').trim(),
             consent: data.get('consent') === 'yes',
@@ -147,7 +154,7 @@
         };
     }
 
-    function clientValidate(payload) {
+    function clientValidate(payload, delivery) {
         if (!form.checkValidity()) {
             form.reportValidity();
             return 'Please correct the highlighted fields.';
@@ -155,15 +162,44 @@
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
             return 'Enter a valid email address.';
         }
-        if (!payload.consent) return 'Agree to receive the filled PDF by email.';
+        if (!payload.consent) {
+            return delivery === 'download'
+                ? 'Confirm the demo consent to download the PDF.'
+                : 'Confirm the demo consent to email the PDF.';
+        }
         if (captchaRequired && !payload.captchaToken) return 'Complete the security check.';
         return '';
     }
 
-    async function handleSubmit(event) {
-        event.preventDefault();
-        const payload = collectPayload();
-        const clientError = clientValidate(payload);
+    function filenameFromDisposition(header, fallback) {
+        if (!header) return fallback;
+        const utf = /filename\*=UTF-8''([^;]+)/i.exec(header);
+        if (utf?.[1]) {
+            try {
+                return decodeURIComponent(utf[1].trim());
+            } catch {
+                /* keep fallback */
+            }
+        }
+        const plain = /filename="?([^";]+)"?/i.exec(header);
+        return plain?.[1]?.trim() || fallback;
+    }
+
+    function triggerBrowserDownload(blob, filename) {
+        const objectUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = objectUrl;
+        link.download = filename;
+        link.rel = 'noopener';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(objectUrl);
+    }
+
+    async function handleFill(delivery) {
+        const payload = collectPayload(delivery);
+        const clientError = clientValidate(payload, delivery);
         if (clientError) {
             setMessage(clientError, 'error');
             return;
@@ -177,7 +213,12 @@
 
         submitting = true;
         updateSubmitState();
-        setMessage('Validating answers and filling IMM 1294…', 'info');
+        setMessage(
+            delivery === 'download'
+                ? 'Validating answers and preparing your download…'
+                : 'Validating answers and filling IMM 1294…',
+            'info'
+        );
 
         try {
             const base = url.replace(/\/$/, '');
@@ -190,6 +231,34 @@
                 },
                 body: JSON.stringify(payload)
             });
+
+            const contentType = (response.headers.get('content-type') || '').toLowerCase();
+
+            if (delivery === 'download') {
+                if (!response.ok) {
+                    const result = await response.json().catch(() => ({}));
+                    throw new Error(result.error || `Request failed (${response.status})`);
+                }
+                if (!contentType.includes('application/pdf')) {
+                    const result = await response.json().catch(() => ({}));
+                    throw new Error(result.error || 'Server did not return a PDF.');
+                }
+                const blob = await response.blob();
+                const fallbackName = `IMM1294_${payload.familyName}_${payload.givenName}.pdf`
+                    .replace(/[^\w.\-]+/g, '_');
+                const filename = filenameFromDisposition(
+                    response.headers.get('content-disposition'),
+                    fallbackName
+                );
+                triggerBrowserDownload(blob, filename);
+                setMessage(
+                    'Download started. Open the PDF in Adobe Acrobat/Reader to review and Validate.',
+                    'success'
+                );
+                resetCaptcha();
+                return;
+            }
+
             const result = await response.json().catch(() => ({}));
             if (!response.ok) {
                 throw new Error(result.error || `Request failed (${response.status})`);
@@ -219,7 +288,11 @@
         }
     }
 
-    form.addEventListener('submit', handleSubmit);
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        handleFill('email');
+    });
+    downloadBtn?.addEventListener('click', () => handleFill('download'));
     consentInput?.addEventListener('change', () => updateSubmitState());
 
     if (captchaRequired) {

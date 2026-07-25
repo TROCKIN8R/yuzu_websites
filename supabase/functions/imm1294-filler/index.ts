@@ -53,8 +53,27 @@ function buildCorsHeaders(origin: string | null) {
     "Access-Control-Allow-Origin": resolveCorsOrigin(origin),
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Expose-Headers": "Content-Disposition",
     "Vary": "Origin",
   };
+}
+
+function pdfFilename(answers: Imm1294Answers) {
+  return `IMM1294_${answers.familyName}_${answers.givenName}.pdf`
+    .replace(/[^\w.\-]+/g, "_");
+}
+
+function pdfResponse(pdfBytes: Uint8Array, answers: Imm1294Answers, origin: string | null) {
+  const filename = pdfFilename(answers);
+  return new Response(pdfBytes, {
+    status: 200,
+    headers: {
+      ...buildCorsHeaders(origin),
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename="${filename}"`,
+      "Cache-Control": "no-store",
+    },
+  });
 }
 
 function jsonResponse(
@@ -241,6 +260,7 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
     ["schoolAddress", cleanText(raw.schoolAddress)],
     ["dli", cleanText(raw.dli, 40)],
     ["tuitionAmount", cleanText(raw.tuitionAmount, 20)],
+    ["availableFunds", cleanText(raw.availableFunds ?? raw.tuitionAmount, 20)],
   ];
 
   for (const [key, value] of required) {
@@ -305,6 +325,7 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
     studyToMonth,
     studyToDay,
     tuitionAmount: required[20][1],
+    availableFunds: required[21][1],
     funds: funds as Imm1294Answers["funds"],
     serviceIn: cleanText(raw.serviceIn, 20) === "French" ? "French" : "English",
   };
@@ -353,7 +374,8 @@ function buildEmailHtml(name: string) {
           The completed PDF is attached.
         </p>
         <p style="margin:0;font-size:15px;line-height:1.6;color:${BRAND.carbonMuted};">
-          This is a proof of concept. Open the attachment in Adobe Acrobat/Reader to review the filled XFA fields before any real filing.
+          This is a proof of concept. Open the attachment in <strong>Adobe Acrobat/Reader</strong>
+          (not Preview). The IRCC certification is preserved so Validate and signature stay available.
         </p>
       </td></tr>
       <tr><td style="padding:22px 32px;background:#FAFAFA;border-top:1px solid ${BRAND.border};">
@@ -370,8 +392,7 @@ function buildEmailHtml(name: string) {
 async function sendFilledPdf(answers: Imm1294Answers, pdfBytes: Uint8Array) {
   const { from, transporter } = createSmtpTransporter();
   const name = `${answers.givenName} ${answers.familyName}`.trim();
-  const filename = `IMM1294_${answers.familyName}_${answers.givenName}.pdf`
-    .replace(/[^\w.\-]+/g, "_");
+  const filename = pdfFilename(answers);
 
   await transporter.sendMail({
     from: `"Yuzu.solutions" <${from}>`,
@@ -405,21 +426,23 @@ let cachedBlankPdf: Uint8Array | null = null;
 async function loadBlankPdf(): Promise<Uint8Array> {
   if (cachedBlankPdf) return cachedBlankPdf;
 
+  // Must be the original IRCC-certified PDF (not a rewritten blank).
   const candidates = [
     Deno.env.get("IMM1294_BLANK_URL")?.trim(),
-    `${SITE_URL}/assets/forms/imm1294-blank.pdf`,
-    "https://raw.githubusercontent.com/TROCKIN8R/yuzu_websites/main/supabase/functions/imm1294-filler/imm1294-blank.pdf",
+    `${SITE_URL}/assets/forms/imm1294f.pdf`,
+    "https://raw.githubusercontent.com/TROCKIN8R/yuzu_websites/main/yuzu_github_page/assets/forms/imm1294f.pdf",
+    "https://raw.githubusercontent.com/TROCKIN8R/yuzu_websites/main/supabase/functions/imm1294-filler/imm1294f.pdf",
   ].filter((url): url is string => Boolean(url));
 
-  // Prefer bundled file when the edge runtime includes it.
+  // Prefer bundled certified original when the edge runtime includes it.
   try {
-    const local = await Deno.readFile(new URL("./imm1294-blank.pdf", import.meta.url));
+    const local = await Deno.readFile(new URL("./imm1294f.pdf", import.meta.url));
     if (local.byteLength > 1000) {
       cachedBlankPdf = local;
       return local;
     }
   } catch (error) {
-    console.warn("Local blank PDF unavailable, falling back to URL:", error);
+    console.warn("Local certified PDF unavailable, falling back to URL:", error);
   }
 
   let lastError = "No blank PDF source available";
@@ -520,14 +543,27 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: rateLimit.error }, 429, origin);
   }
 
+  const delivery = cleanText(payload.delivery, 20).toLowerCase() === "download"
+    ? "download"
+    : "email";
+
   let pdfBytes: Uint8Array;
   try {
     const blankPdf = await loadBlankPdf();
-    pdfBytes = fillImm1294Pdf(blankPdf, validated.answers);
+    pdfBytes = await fillImm1294Pdf(blankPdf, validated.answers);
   } catch (error) {
     const detail = error instanceof Error ? error.message : String(error);
     console.error("PDF fill failed:", detail);
     return jsonResponse({ error: `Could not fill the PDF form: ${detail}` }, 500, origin);
+  }
+
+  if (delivery === "download") {
+    try {
+      await sendNotify(validated.answers);
+    } catch (error) {
+      console.error("Notify email failed:", error);
+    }
+    return pdfResponse(pdfBytes, validated.answers, origin);
   }
 
   try {
