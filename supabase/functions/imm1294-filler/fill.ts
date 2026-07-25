@@ -8,10 +8,21 @@
 import pako from "npm:pako@2.1.0";
 import { md5 } from "npm:js-md5@0.8.3";
 import countryCodes from "./country-codes.json" with { type: "json" };
+import countryAliases from "./country-aliases.json" with { type: "json" };
 import languageCodes from "./language-codes.json" with { type: "json" };
 import cityCodes from "./city-codes.json" with { type: "json" };
+import {
+  type CorRow,
+  type EducationRow,
+  type JobRow,
+  type PrevSpouse,
+  type ResidentialAddress,
+  type YesNo,
+  isoDate,
+  yn,
+} from "./branches.ts";
 
-export type YesNo = "Y" | "N";
+export type { YesNo, CorRow, EducationRow, JobRow, PrevSpouse, ResidentialAddress };
 
 export type Imm1294Answers = {
   email: string;
@@ -25,14 +36,45 @@ export type Imm1294Answers = {
   placeBirthCountry: string;
   citizenship: string;
   maritalStatus: string;
+  /** Spouse fields when maritalStatus is 01/03 */
+  spouseFamilyName?: string;
+  spouseGivenName?: string;
+  marriageYear?: string;
+  marriageMonth?: string;
+  marriageDay?: string;
   currentCountry: string;
   currentStatus: string;
-  /** Lived in another country in last 5 years? */
+  /** From/to when current status is temporary (03/04/05/06) */
+  corFromYear?: string;
+  corFromMonth?: string;
+  corFromDay?: string;
+  corToYear?: string;
+  corToMonth?: string;
+  corToDay?: string;
+  corOther?: string;
   previousCor: YesNo;
-  /** Applying from same country as current residence? */
+  previousCorRows?: CorRow[];
   sameAsCor: YesNo;
-  /** Previously married / common-law? */
+  cwaRow?: CorRow;
   previouslyMarried: YesNo;
+  prevSpouse?: PrevSpouse;
+  hasAlias: YesNo;
+  aliasFamilyName?: string;
+  aliasGivenName?: string;
+  hasNatId: YesNo;
+  natIdNumber?: string;
+  natIdCountry?: string;
+  natIdIssueYear?: string;
+  natIdIssueMonth?: string;
+  natIdIssueDay?: string;
+  natIdExpiryYear?: string;
+  natIdExpiryMonth?: string;
+  natIdExpiryDay?: string;
+  hasUsCard: YesNo;
+  usCardNumber?: string;
+  usCardExpiryYear?: string;
+  usCardExpiryMonth?: string;
+  usCardExpiryDay?: string;
   passportNumber: string;
   passportCountry: string;
   passportIssueYear: string;
@@ -43,9 +85,7 @@ export type Imm1294Answers = {
   passportExpiryDay: string;
   nativeLang: string;
   ableToCommunicate: "English" | "French" | "Both" | "Neither";
-  /** PreferenceLanguage lic when ableToCommunicate is Both (01/02). */
   preferredLang?: "English" | "French";
-  /** Language test taken? */
   langTest: YesNo;
   streetNum: string;
   streetName: string;
@@ -53,15 +93,13 @@ export type Imm1294Answers = {
   country: string;
   provinceState: string;
   postalCode: string;
-  /** Residential address same as mailing? */
   sameAsMailing: YesNo;
+  residential?: ResidentialAddress;
   phone: string;
-  phoneType: string; // PhoneType lic 01-03,05
+  phoneType: string;
   phoneCountryCode: string;
   schoolName: string;
-  /** LevelOfStudy lic */
   studyLevel: string;
-  /** FieldOfStudy lic (not free text) */
   fieldOfStudy: string;
   schoolProvince: string;
   schoolCity: string;
@@ -76,25 +114,31 @@ export type Imm1294Answers = {
   tuitionAmount: string;
   availableFunds: string;
   funds: "Myself" | "Parents" | "Other";
-  /** Post-secondary education history beyond the planned study? */
+  fundsOtherPerson?: string;
+  caqNumber?: string;
+  caqExpiryYear?: string;
+  caqExpiryMonth?: string;
+  caqExpiryDay?: string;
+  palNumber?: string;
+  palExpiryYear?: string;
+  palExpiryMonth?: string;
+  palExpiryDay?: string;
   educationIndicator: YesNo;
-  occupation: string;
-  employer: string;
-  occupationCity: string;
-  occupationCountry: string;
-  occupationFromYear: string;
-  occupationFromMonth: string;
-  /** Background / security Yes/No (default N for clean POC). */
+  educationRow?: EducationRow;
+  jobs: JobRow[];
   bgTb: YesNo;
   bgDisorder: YesNo;
+  bgMedicalDetails?: string;
   bgOverstay: YesNo;
   bgRefused: YesNo;
   bgClaimAsylum: YesNo;
+  bgRefusedDetails?: string;
   bgCrime: YesNo;
+  bgCrimeDetails?: string;
   bgMilitary: YesNo;
+  bgMilitaryDetails?: string;
   bgViolence: YesNo;
   bgWitness: YesNo;
-  /** CIC future contact consent */
   cicContactConsent: YesNo;
   serviceIn?: "English" | "French";
 };
@@ -206,8 +250,16 @@ function resolveCountryLic(value: string): string {
   const map = countryCodes as Record<string, string>;
   if (map[raw]) return map[raw];
   const lower = raw.toLowerCase();
+  const aliases = countryAliases as Record<string, string>;
+  if (aliases[lower]) return aliases[lower];
   for (const [label, lic] of Object.entries(map)) {
     if (label.toLowerCase() === lower) return lic;
+  }
+  // Accent-insensitive match against IRCC French labels
+  const folded = lower.normalize("NFD").replace(/\p{M}/gu, "");
+  for (const [label, lic] of Object.entries(map)) {
+    const lab = label.toLowerCase().normalize("NFD").replace(/\p{M}/gu, "");
+    if (lab === folded) return lic;
   }
   throw new Error(`Unknown country (use IRCC list name or 3-digit code): ${raw}`);
 }
@@ -248,23 +300,106 @@ function resolveCityLic(value: string): string {
   );
 }
 
-function yn(value: string | undefined, fallback: YesNo = "N"): YesNo {
-  const v = String(value || fallback).trim().toUpperCase();
-  return v === "Y" || v === "YES" ? "Y" : "N";
-}
-
-function isoDate(y: string, m: string, d: string): string {
-  return [y, m, d].filter(Boolean).join("-");
-}
-
 function phoneDigits(phone: string): string {
   return phone.replace(/\D/g, "");
+}
+
+function normalizeCorRow(row: CorRow): CorRow {
+  return {
+    country: resolveCountryLic(row.country),
+    status: row.status,
+    other: row.other ? asciiSafe(row.other) : undefined,
+    fromYear: row.fromYear,
+    fromMonth: row.fromMonth.padStart(2, "0"),
+    fromDay: row.fromDay.padStart(2, "0"),
+    toYear: row.toYear,
+    toMonth: row.toMonth.padStart(2, "0"),
+    toDay: row.toDay.padStart(2, "0"),
+  };
+}
+
+function corRowXml(row: CorRow): string {
+  const from = isoDate(row.fromYear, row.fromMonth, row.fromDay);
+  const to = isoDate(row.toYear, row.toMonth, row.toDay);
+  const other = row.other
+    ? `<Other\n>${esc(row.other)}</Other\n>`
+    : `<Other\n/>`;
+  return (
+    `<Pays\n>${esc(row.country)}</Pays\n>` +
+    `<Status\n>${esc(row.status)}</Status\n>` +
+    other +
+    `<FromDate\n>${esc(from)}</FromDate\n>` +
+    `<ToDate\n>${esc(to)}</ToDate\n>`
+  );
+}
+
+function datesXml(
+  fromY: string,
+  fromM: string,
+  fromD: string,
+  toY: string,
+  toM: string,
+  toD: string,
+): string {
+  return (
+    `<FromYr\n>${esc(fromY)}</FromYr\n>` +
+    `<FromMM\n>${esc(fromM)}</FromMM\n>` +
+    `<FromDD\n>${esc(fromD)}</FromDD\n>` +
+    `<ToYr\n>${esc(toY)}</ToYr\n>` +
+    `<ToMM\n>${esc(toM)}</ToMM\n>` +
+    `<ToDD\n>${esc(toD)}</ToDD\n>`
+  );
+}
+
+function normalizeJob(job: JobRow): JobRow {
+  const country = resolveCountryLic(job.country);
+  let provinceState = job.provinceState
+    ? asciiSafe(job.provinceState)
+    : undefined;
+  if (country === "511" && job.provinceState) {
+    try {
+      provinceState = resolveProvinceLic(job.provinceState);
+    } catch {
+      provinceState = asciiSafe(job.provinceState);
+    }
+  }
+  return {
+    fromYear: job.fromYear,
+    fromMonth: job.fromMonth.padStart(2, "0"),
+    toYear: job.toYear || undefined,
+    toMonth: job.toMonth ? job.toMonth.padStart(2, "0") : undefined,
+    occupation: asciiSafe(job.occupation),
+    employer: asciiSafe(job.employer),
+    city: asciiSafe(job.city),
+    country,
+    provinceState,
+  };
 }
 
 /** Map human form answers to IRCC LOV `lic` codes stored in XFA datasets. */
 export function normalizeAnswers(a: Imm1294Answers): Imm1294Answers {
   const serviceIn = a.serviceIn === "French" ? "French" : "English";
   const preferredLang = a.preferredLang === "French" ? "French" : "English";
+  const jobs = (a.jobs?.length
+    ? a.jobs
+    : [{
+      fromYear: "2022",
+      fromMonth: "09",
+      occupation: "Student",
+      employer: a.schoolName || "School",
+      city: a.city || "Paris",
+      country: a.currentCountry || "France",
+    }]).map(normalizeJob);
+
+  const previousCor = yn(a.previousCor, "N");
+  const sameAsCor = yn(a.sameAsCor, "Y");
+  const previouslyMarried = yn(a.previouslyMarried, "N");
+  const educationIndicator = yn(a.educationIndicator, "N");
+  const sameAsMailing = yn(a.sameAsMailing, "Y");
+  const hasAlias = yn(a.hasAlias, "N");
+  const hasNatId = yn(a.hasNatId, "N");
+  const hasUsCard = yn(a.hasUsCard, "N");
+
   return {
     ...a,
     familyName: asciiSafe(a.familyName),
@@ -272,10 +407,49 @@ export function normalizeAnswers(a: Imm1294Answers): Imm1294Answers {
     placeBirthCity: asciiSafe(a.placeBirthCity),
     placeBirthCountry: resolveCountryLic(a.placeBirthCountry),
     citizenship: resolveCountryLic(a.citizenship),
+    spouseFamilyName: a.spouseFamilyName
+      ? asciiSafe(a.spouseFamilyName)
+      : undefined,
+    spouseGivenName: a.spouseGivenName
+      ? asciiSafe(a.spouseGivenName)
+      : undefined,
     currentCountry: resolveCountryLic(a.currentCountry),
-    previousCor: yn(a.previousCor, "N"),
-    sameAsCor: yn(a.sameAsCor, "Y"),
-    previouslyMarried: yn(a.previouslyMarried, "N"),
+    corOther: a.corOther ? asciiSafe(a.corOther) : undefined,
+    previousCor,
+    previousCorRows: previousCor === "Y"
+      ? (a.previousCorRows || []).slice(0, 2).map(normalizeCorRow)
+      : [],
+    sameAsCor,
+    cwaRow: sameAsCor === "N" && a.cwaRow
+      ? normalizeCorRow(a.cwaRow)
+      : undefined,
+    previouslyMarried,
+    prevSpouse: previouslyMarried === "Y" && a.prevSpouse
+      ? {
+        ...a.prevSpouse,
+        familyName: asciiSafe(a.prevSpouse.familyName),
+        givenName: asciiSafe(a.prevSpouse.givenName),
+        fromMonth: a.prevSpouse.fromMonth.padStart(2, "0"),
+        fromDay: a.prevSpouse.fromDay.padStart(2, "0"),
+        toMonth: a.prevSpouse.toMonth.padStart(2, "0"),
+        toDay: a.prevSpouse.toDay.padStart(2, "0"),
+        dobMonth: a.prevSpouse.dobMonth.padStart(2, "0"),
+        dobDay: a.prevSpouse.dobDay.padStart(2, "0"),
+      }
+      : undefined,
+    hasAlias,
+    aliasFamilyName: hasAlias === "Y" && a.aliasFamilyName
+      ? asciiSafe(a.aliasFamilyName)
+      : undefined,
+    aliasGivenName: hasAlias === "Y" && a.aliasGivenName
+      ? asciiSafe(a.aliasGivenName)
+      : undefined,
+    hasNatId,
+    natIdNumber: a.natIdNumber,
+    natIdCountry: hasNatId === "Y" && a.natIdCountry
+      ? resolveCountryLic(a.natIdCountry)
+      : undefined,
+    hasUsCard,
     passportCountry: resolveCountryLic(a.passportCountry),
     nativeLang: resolveLanguageLic(a.nativeLang),
     preferredLang,
@@ -284,7 +458,22 @@ export function normalizeAnswers(a: Imm1294Answers): Imm1294Answers {
     city: asciiSafe(a.city),
     country: resolveCountryLic(a.country),
     provinceState: asciiSafe(a.provinceState),
-    sameAsMailing: yn(a.sameAsMailing, "Y"),
+    sameAsMailing,
+    residential: sameAsMailing === "N" && a.residential
+      ? {
+        streetNum: a.residential.streetNum,
+        streetName: asciiSafe(a.residential.streetName),
+        city: asciiSafe(a.residential.city),
+        country: resolveCountryLic(a.residential.country),
+        provinceState: a.residential.provinceState
+          ? asciiSafe(a.residential.provinceState)
+          : undefined,
+        postalCode: a.residential.postalCode,
+        aptUnit: a.residential.aptUnit
+          ? asciiSafe(a.residential.aptUnit)
+          : undefined,
+      }
+      : undefined,
     phoneType: a.phoneType || "02",
     phoneCountryCode: (a.phoneCountryCode || "").replace(/\D/g, "") || "33",
     schoolName: asciiSafe(a.schoolName),
@@ -293,20 +482,42 @@ export function normalizeAnswers(a: Imm1294Answers): Imm1294Answers {
     schoolProvince: resolveProvinceLic(a.schoolProvince),
     schoolCity: resolveCityLic(a.schoolCity),
     schoolAddress: asciiSafe(a.schoolAddress),
-    educationIndicator: yn(a.educationIndicator, "N"),
-    occupation: asciiSafe(a.occupation || "Student"),
-    employer: asciiSafe(a.employer || a.schoolName),
-    occupationCity: asciiSafe(a.occupationCity || a.city),
-    occupationCountry: resolveCountryLic(a.occupationCountry || a.currentCountry),
-    occupationFromYear: a.occupationFromYear || "2022",
-    occupationFromMonth: a.occupationFromMonth || "09",
+    fundsOtherPerson: a.funds === "Other" && a.fundsOtherPerson
+      ? asciiSafe(a.fundsOtherPerson)
+      : undefined,
+    educationIndicator,
+    educationRow: educationIndicator === "Y" && a.educationRow
+      ? {
+        ...a.educationRow,
+        fieldOfStudy: asciiSafe(a.educationRow.fieldOfStudy),
+        school: asciiSafe(a.educationRow.school),
+        city: asciiSafe(a.educationRow.city),
+        country: resolveCountryLic(a.educationRow.country),
+        fromMonth: a.educationRow.fromMonth.padStart(2, "0"),
+        toMonth: a.educationRow.toMonth.padStart(2, "0"),
+        provinceState: a.educationRow.provinceState
+          ? asciiSafe(a.educationRow.provinceState)
+          : undefined,
+      }
+      : undefined,
+    jobs,
     bgTb: yn(a.bgTb, "N"),
     bgDisorder: yn(a.bgDisorder, "N"),
+    bgMedicalDetails: a.bgMedicalDetails
+      ? asciiSafe(a.bgMedicalDetails)
+      : undefined,
     bgOverstay: yn(a.bgOverstay, "N"),
     bgRefused: yn(a.bgRefused, "N"),
     bgClaimAsylum: yn(a.bgClaimAsylum, "N"),
+    bgRefusedDetails: a.bgRefusedDetails
+      ? asciiSafe(a.bgRefusedDetails)
+      : undefined,
     bgCrime: yn(a.bgCrime, "N"),
+    bgCrimeDetails: a.bgCrimeDetails ? asciiSafe(a.bgCrimeDetails) : undefined,
     bgMilitary: yn(a.bgMilitary, "N"),
+    bgMilitaryDetails: a.bgMilitaryDetails
+      ? asciiSafe(a.bgMilitaryDetails)
+      : undefined,
     bgViolence: yn(a.bgViolence, "N"),
     bgWitness: yn(a.bgWitness, "N"),
     cicContactConsent: yn(a.cicContactConsent, "N"),
@@ -330,13 +541,18 @@ export function buildFilledForm1(template: string, a: Imm1294Answers): string {
   const studyFrom = isoDate(a.studyFromYear, a.studyFromMonth, a.studyFromDay);
   const studyTo = isoDate(a.studyToYear, a.studyToMonth, a.studyToDay);
   const intlPhone = phoneDigits(a.phone);
+  const jobs = a.jobs?.length ? a.jobs : [];
 
   let xml = template;
 
   xml = fillNested(xml, "ServiceIn", serviceLic);
   xml = fillEmpty(xml, "FamilyName", a.familyName, "><Name\n>");
   xml = fillEmpty(xml, "GivenName", a.givenName, "><Name\n>");
-  xml = fillNested(xml, "AliasNameIndicator", "N");
+  xml = fillNested(xml, "AliasNameIndicator", a.hasAlias === "Y" ? "Y" : "N");
+  if (a.hasAlias === "Y") {
+    xml = fillEmpty(xml, "AliasFamilyName", a.aliasFamilyName || "", "><AliasName\n>");
+    xml = fillEmpty(xml, "AliasGivenName", a.aliasGivenName || "", "><AliasName\n>");
+  }
   xml = fillNested(xml, "Sex", a.sex);
   xml = fillEmpty(xml, "DOBYear", a.dobYear, "><Sex\n>");
   xml = fillEmpty(xml, "DOBMonth", a.dobMonth, "><Sex\n>");
@@ -346,18 +562,179 @@ export function buildFilledForm1(template: string, a: Imm1294Answers): string {
   xml = fillNested(xml, "Citizenship", a.citizenship);
   xml = fillEmpty(xml, "Pays", a.currentCountry, "><CurrentCOR\n>");
   xml = fillEmpty(xml, "Status", a.currentStatus, "><CurrentCOR\n>");
+  if (a.corOther) {
+    xml = fillEmpty(xml, "Other", a.corOther, "><CurrentCOR\n>");
+  }
+  if (a.corFromYear && a.corToYear) {
+    const from = isoDate(a.corFromYear, a.corFromMonth || "", a.corFromDay || "");
+    const to = isoDate(a.corToYear, a.corToMonth || "", a.corToDay || "");
+    xml = fillEmpty(xml, "FromDate", from, "><CurrentCOR\n>");
+    xml = fillEmpty(xml, "ToDate", to, "><CurrentCOR\n>");
+    xml = xml.replace(
+      /<CORDates\n><FromYr\n\/><FromMM\n\/><FromDD\n\/><ToYr\n\/><ToMM\n\/><ToDD\n\/>/,
+      `<CORDates\n>${datesXml(
+        a.corFromYear,
+        a.corFromMonth || "",
+        a.corFromDay || "",
+        a.corToYear,
+        a.corToMonth || "",
+        a.corToDay || "",
+      )}`,
+    );
+  }
+
   xml = fillEmpty(xml, "PCRIndicator", a.previousCor);
+  if (a.previousCor === "Y" && a.previousCorRows?.length) {
+    const r1 = a.previousCorRows[0];
+    const r2 = a.previousCorRows[1];
+    let prev =
+      `<PreviousCOR\n><Row1 xfa:dataNode="dataGroup"\n/><Row2\n>${corRowXml(r1)}</Row2\n>`;
+    if (r2) {
+      prev += `<Row3\n>${corRowXml(r2)}</Row3\n></PreviousCOR\n>`;
+      prev += `<PCRDatesR1\n>${
+        datesXml(
+          r1.fromYear,
+          r1.fromMonth,
+          r1.fromDay,
+          r1.toYear,
+          r1.toMonth,
+          r1.toDay,
+        )
+      }</PCRDatesR1\n>`;
+      prev += `<PCRDatesR2\n>${
+        datesXml(
+          r2.fromYear,
+          r2.fromMonth,
+          r2.fromDay,
+          r2.toYear,
+          r2.toMonth,
+          r2.toDay,
+        )
+      }</PCRDatesR2\n>`;
+    } else {
+      prev +=
+        `<Row3\n><Pays\n/><Status\n/><Other\n/><FromDate\n/><ToDate\n/></Row3\n></PreviousCOR\n>`;
+      prev += `<PCRDatesR1\n>${
+        datesXml(
+          r1.fromYear,
+          r1.fromMonth,
+          r1.fromDay,
+          r1.toYear,
+          r1.toMonth,
+          r1.toDay,
+        )
+      }</PCRDatesR1\n>`;
+      prev +=
+        `<PCRDatesR2\n><FromYr\n/><FromMM\n/><FromDD\n/><ToYr\n/><ToMM\n/><ToDD\n/></PCRDatesR2\n>`;
+    }
+    xml = xml.replace(
+      /<PreviousCOR\n>[\s\S]*?<\/PCRDatesR2\n>/,
+      prev,
+    );
+  }
+
   xml = fillEmpty(xml, "SameAsCORIndicator", a.sameAsCor);
+  if (a.sameAsCor === "N" && a.cwaRow) {
+    const row = a.cwaRow;
+    const block =
+      `<CountryWhereApplying\n><Row1 xfa:dataNode="dataGroup"\n/><Row2\n>${corRowXml(row)}</Row2\n></CountryWhereApplying\n>` +
+      `<CWADates\n>${
+        datesXml(
+          row.fromYear,
+          row.fromMonth,
+          row.fromDay,
+          row.toYear,
+          row.toMonth,
+          row.toDay,
+        )
+      }</CWADates\n>`;
+    xml = xml.replace(
+      /<CountryWhereApplying\n>[\s\S]*?<\/CWADates\n>/,
+      block,
+    );
+  }
+
   xml = fillEmpty(
     xml,
     "MaritalStatus",
     a.maritalStatus,
     "><MaritalStatus\n><SectionA\n>",
   );
-  xml = fillEmpty(xml, "PrevMarriedIndicator", a.previouslyMarried);
+  if (a.maritalStatus === "01" || a.maritalStatus === "03") {
+    const mDate = isoDate(
+      a.marriageYear || "",
+      a.marriageMonth || "",
+      a.marriageDay || "",
+    );
+    xml = fillEmpty(xml, "DateOfMarriage", mDate, "><MaritalStatus\n><SectionA\n>");
+    xml = fillEmpty(xml, "FamilyName", a.spouseFamilyName || "", "><MaritalStatus\n><SectionA\n>");
+    xml = fillEmpty(xml, "GivenName", a.spouseGivenName || "", "><MaritalStatus\n><SectionA\n>");
+    if (a.marriageYear) {
+      xml = xml.replace(
+        /<MarriageDate\n><FromYr\n\/><FromMM\n\/><FromDD\n\/>/,
+        `<MarriageDate\n><FromYr\n>${esc(a.marriageYear)}</FromYr\n><FromMM\n>${
+          esc(a.marriageMonth || "")
+        }</FromMM\n><FromDD\n>${esc(a.marriageDay || "")}</FromDD\n>`,
+      );
+    }
+  }
 
-  xml = fillEmpty(xml, "natIDIndicator", "N", "><natID\n>");
-  xml = fillEmpty(xml, "usCardIndicator", "N", "><USCard\n>");
+  xml = fillEmpty(xml, "PrevMarriedIndicator", a.previouslyMarried);
+  if (a.previouslyMarried === "Y" && a.prevSpouse) {
+    const p = a.prevSpouse;
+    const from = isoDate(p.fromYear, p.fromMonth, p.fromDay);
+    const to = isoDate(p.toYear, p.toMonth, p.toDay);
+    xml = fillEmpty(xml, "PMFamilyName", p.familyName);
+    xml = fillEmpty(xml, "PMGivenName", p.givenName);
+    xml = fillEmpty(xml, "DOBYear", p.dobYear, "><PrevSpouseDOB\n>");
+    xml = fillEmpty(xml, "DOBMonth", p.dobMonth, "><PrevSpouseDOB\n>");
+    xml = fillEmpty(xml, "DOBDay", p.dobDay, "><PrevSpouseDOB\n>");
+    xml = fillEmpty(xml, "TypeOfRelationship", p.relationshipType);
+    xml = fillEmpty(xml, "FromDate", from, "><TypeOfRelationship\n>");
+    xml = fillNested(xml, "ToDate", to);
+    xml = xml.replace(
+      /<PreviouslyMarriedDates\n><FromYr\n\/><FromMM\n\/><FromDD\n\/><ToYr\n\/><ToMM\n\/><ToDD\n\/>/,
+      `<PreviouslyMarriedDates\n>${
+        datesXml(
+          p.fromYear,
+          p.fromMonth,
+          p.fromDay,
+          p.toYear,
+          p.toMonth,
+          p.toDay,
+        )
+      }`,
+    );
+  }
+
+  xml = fillEmpty(xml, "natIDIndicator", a.hasNatId === "Y" ? "Y" : "N", "><natID\n>");
+  if (a.hasNatId === "Y") {
+    xml = fillNested(xml, "DocNum", a.natIdNumber || "", "><natIDdocs\n>");
+    xml = fillNested(xml, "CountryofIssue", a.natIdCountry || "", "><natIDdocs\n>");
+    const nidIssue = isoDate(
+      a.natIdIssueYear || "",
+      a.natIdIssueMonth || "",
+      a.natIdIssueDay || "",
+    );
+    const nidExp = isoDate(
+      a.natIdExpiryYear || "",
+      a.natIdExpiryMonth || "",
+      a.natIdExpiryDay || "",
+    );
+    xml = fillNested(xml, "IssueDate", nidIssue, "><natIDdocs\n>");
+    xml = fillEmpty(xml, "ExpiryDate", nidExp, "><natIDdocs\n>");
+  }
+
+  xml = fillEmpty(xml, "usCardIndicator", a.hasUsCard === "Y" ? "Y" : "N", "><USCard\n>");
+  if (a.hasUsCard === "Y") {
+    xml = fillNested(xml, "DocNum", a.usCardNumber || "", "><usCarddocs\n>");
+    const usExp = isoDate(
+      a.usCardExpiryYear || "",
+      a.usCardExpiryMonth || "",
+      a.usCardExpiryDay || "",
+    );
+    xml = fillEmpty(xml, "ExpiryDate", usExp, "><usCarddocs\n>");
+  }
 
   xml = fillNested(xml, "nativeLang", a.nativeLang);
   xml = fillNested(xml, "ableToCommunicate", a.ableToCommunicate);
@@ -379,7 +756,6 @@ export function buildFilledForm1(template: string, a: Imm1294Answers): string {
 
   xml = fillNested(xml, "StreetNum", a.streetNum, "><AddressRow1\n>");
   xml = fillNested(xml, "Streetname", a.streetName, "><AddressRow1\n>");
-  // Mailing city is <CityTow><CityTown/></CityTow> (self-closing), not nested.
   xml = fillEmpty(xml, "CityTown", a.city, "><CityTow\n>");
   xml = fillNested(xml, "Pays", a.country, "><AddressRow2\n>");
   if (a.provinceState) {
@@ -388,17 +764,33 @@ export function buildFilledForm1(template: string, a: Imm1294Answers): string {
   xml = fillNested(xml, "PostalCode", a.postalCode, "><AddressRow2\n>");
   xml = fillEmpty(xml, "SameAsMailingIndicator", a.sameAsMailing);
 
+  if (a.sameAsMailing === "N" && a.residential) {
+    const r = a.residential;
+    if (r.aptUnit) {
+      xml = fillNested(xml, "AptUnit", r.aptUnit, "><ResidentialAddressRow1\n>");
+    }
+    xml = fillNested(xml, "StreetNum", r.streetNum, "><ResidentialAddressRow1\n>");
+    // Residential uses <StreetName><Streetname/></StreetName> (not nested Streetname/Streetname).
+    xml = fillEmpty(xml, "Streetname", r.streetName, "><ResidentialAddressRow1\n>");
+    xml = fillNested(xml, "CityTown", r.city, "><ResidentialAddressRow1\n>");
+    xml = fillNested(xml, "Pays", r.country, "><ResidentialAddressRow2\n>");
+    if (r.provinceState) {
+      xml = fillNested(
+        xml,
+        "ProvinceState",
+        r.provinceState,
+        "><ResidentialAddressRow2\n>",
+      );
+    }
+    xml = fillNested(xml, "PostalCode", r.postalCode, "><ResidentialAddressRow2\n>");
+  }
+
   xml = xml.replace(
     "<Phone\n><Type\n/><CanadaUS\n>0</CanadaUS\n><Other\n>0</Other\n>",
     `<Phone\n><Type\n>${esc(a.phoneType)}</Type\n><CanadaUS\n>0</CanadaUS\n><Other\n>1</Other\n>`,
   );
   xml = fillEmpty(xml, "NumberCountry", a.phoneCountryCode, "><PhoneNumbers\n><Phone\n>");
-  xml = fillNested(
-    xml,
-    "IntlNumber",
-    intlPhone,
-    "><PhoneNumbers\n><Phone\n>",
-  );
+  xml = fillNested(xml, "IntlNumber", intlPhone, "><PhoneNumbers\n><Phone\n>");
   xml = fillEmpty(xml, "ActualNumber", intlPhone, "><PhoneNumbers\n><Phone\n>");
   xml = fillEmpty(xml, "Email", a.email, "><FaxEmail\n>");
 
@@ -415,32 +807,98 @@ export function buildFilledForm1(template: string, a: Imm1294Answers): string {
   xml = fillEmpty(xml, "amount", a.tuitionAmount, "><tuition\n>");
   xml = fillNested(xml, "Funds", a.availableFunds, "><expensesPaid\n>");
   xml = fillEmpty(xml, "expensesPaidBy", a.funds, "><expensesPaid\n>");
+  if (a.funds === "Other" && a.fundsOtherPerson) {
+    xml = fillEmpty(xml, "Other", a.fundsOtherPerson, "><expensesPaid\n>");
+  }
+  if (a.caqNumber) {
+    xml = fillEmpty(xml, "CertNum", a.caqNumber, "><CAQ\n>");
+    if (a.caqExpiryYear) {
+      xml = fillEmpty(
+        xml,
+        "CertExpiry",
+        isoDate(a.caqExpiryYear, a.caqExpiryMonth || "", a.caqExpiryDay || ""),
+        "><CAQ\n>",
+      );
+    }
+  }
+  if (a.palNumber) {
+    xml = fillEmpty(xml, "DocNum", a.palNumber, "><PAL\n>");
+    if (a.palExpiryYear) {
+      xml = fillEmpty(
+        xml,
+        "DocExpiry",
+        isoDate(a.palExpiryYear, a.palExpiryMonth || "", a.palExpiryDay || ""),
+        "><PAL\n>",
+      );
+    }
+  }
 
   xml = fillEmpty(xml, "EducationIndicator", a.educationIndicator);
+  if (a.educationIndicator === "Y" && a.educationRow) {
+    const e = a.educationRow;
+    xml = fillEmpty(xml, "FromYear", e.fromYear, "><Edu_Row1\n>");
+    xml = fillEmpty(xml, "FromMonth", e.fromMonth, "><Edu_Row1\n>");
+    xml = fillEmpty(xml, "ToYear", e.toYear, "><Edu_Row1\n>");
+    xml = fillEmpty(xml, "ToMonth", e.toMonth, "><Edu_Row1\n>");
+    xml = fillEmpty(xml, "FieldOfStudy", e.fieldOfStudy, "><Edu_Row1\n>");
+    xml = fillEmpty(xml, "School", e.school, "><Edu_Row1\n>");
+    xml = fillEmpty(xml, "CityTown", e.city, "><Edu_Row1\n>");
+    xml = fillNested(xml, "Pays", e.country, "><Edu_Row1\n>");
+    if (e.provinceState) {
+      xml = fillEmpty(xml, "ProvState", e.provinceState, "><Edu_Row1\n>");
+    }
+  }
 
-  xml = fillEmpty(xml, "FromYear", a.occupationFromYear, "><OccupationRow1\n>");
-  xml = fillEmpty(xml, "FromMonth", a.occupationFromMonth, "><OccupationRow1\n>");
-  xml = fillNested(xml, "Occupation", a.occupation, "><OccupationRow1\n>");
-  xml = fillEmpty(xml, "Employer", a.employer, "><OccupationRow1\n>");
-  xml = fillNested(xml, "CityTown", a.occupationCity, "><OccupationRow1\n>");
-  xml = fillNested(xml, "Pays", a.occupationCountry, "><OccupationRow1\n>");
+  const jobMarkers = [
+    "><OccupationRow1\n>",
+    "><OccupationRow2\n>",
+    "><OccupationRow3\n>",
+  ];
+  jobs.slice(0, 3).forEach((job, i) => {
+    const after = jobMarkers[i];
+    xml = fillEmpty(xml, "FromYear", job.fromYear, after);
+    xml = fillEmpty(xml, "FromMonth", job.fromMonth, after);
+    if (job.toYear) xml = fillEmpty(xml, "ToYear", job.toYear, after);
+    if (job.toMonth) xml = fillEmpty(xml, "ToMonth", job.toMonth, after);
+    xml = fillNested(xml, "Occupation", job.occupation, after);
+    xml = fillEmpty(xml, "Employer", job.employer, after);
+    xml = fillNested(xml, "CityTown", job.city, after);
+    xml = fillNested(xml, "Pays", job.country, after);
+    if (job.provinceState) {
+      xml = fillEmpty(xml, "ProvState", job.provinceState, after);
+    }
+  });
 
-  // Background / security questions (Page4) — two Choice nodes under BackgroundInfo.
   xml = xml.replace(
     /<BackgroundInfo\n><Choice\n\/><Choice\n\/>/,
     `<BackgroundInfo\n><Choice\n>${a.bgTb}</Choice\n><Choice\n>${a.bgDisorder}</Choice\n>`,
   );
+  if ((a.bgTb === "Y" || a.bgDisorder === "Y") && a.bgMedicalDetails) {
+    xml = fillEmpty(xml, "MedicalDetails", a.bgMedicalDetails);
+  }
   xml = fillEmpty(xml, "VisaChoice1", a.bgOverstay);
   xml = fillEmpty(xml, "VisaChoice2", a.bgRefused);
   xml = fillEmpty(xml, "VisaChoice3", a.bgClaimAsylum);
+  if (
+    (a.bgOverstay === "Y" || a.bgRefused === "Y" || a.bgClaimAsylum === "Y") &&
+    a.bgRefusedDetails
+  ) {
+    xml = fillEmpty(xml, "refusedDetails", a.bgRefusedDetails);
+  }
   xml = xml.replace(
     /<BackgroundInfo3\n><Choice\n\/>/,
     `<BackgroundInfo3\n><Choice\n>${a.bgCrime}</Choice\n>`,
   );
+  if (a.bgCrime === "Y" && a.bgCrimeDetails) {
+    xml = fillEmpty(xml, "Details", a.bgCrimeDetails, "><BackgroundInfo3\n>");
+  }
   xml = xml.replace(
     /<Military\n><Choice\n\/>/,
     `<Military\n><Choice\n>${a.bgMilitary}</Choice\n>`,
   );
+  if (a.bgMilitary === "Y" && a.bgMilitaryDetails) {
+    xml = fillEmpty(xml, "militaryServiceDetails", a.bgMilitaryDetails);
+  }
   xml = xml.replace(
     /<Occupation\n><Choice\n\/>/,
     `<Occupation\n><Choice\n>${a.bgViolence}</Choice\n>`,
@@ -545,7 +1003,15 @@ function findStreamSpan(
   objNum: number,
 ): { dictStart: number; streamStart: number; streamEnd: number; endobj: number } {
   const header = new TextEncoder().encode(`${objNum} 0 obj`);
-  const dictStart = indexOfBytes(pdf, header);
+  // Prefer the last occurrence (incremental updates append a replacement object).
+  let dictStart = -1;
+  let from = 0;
+  while (true) {
+    const idx = indexOfBytes(pdf, header, from);
+    if (idx < 0) break;
+    dictStart = idx;
+    from = idx + header.length;
+  }
   if (dictStart < 0) throw new Error(`PDF object ${objNum} not found`);
 
   const streamKw = indexOfBytes(pdf, "stream", dictStart);
@@ -599,7 +1065,8 @@ function parseTrailerMeta(pdf: Uint8Array): {
   return { size, root, info, encrypt, id };
 }
 
-async function extractDatasetsXml(pdf: Uint8Array): Promise<string> {
+/** Decrypt and inflate the XFA datasets XML (latest incremental revision). */
+export async function extractDatasetsXml(pdf: Uint8Array): Promise<string> {
   const span = findStreamSpan(pdf, DATASETS_OBJ);
   const encrypted = pdf.subarray(span.streamStart, span.streamEnd);
   const okey = objectKey(FILE_ENCRYPTION_KEY, DATASETS_OBJ, DATASETS_GEN);

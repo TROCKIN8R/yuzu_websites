@@ -311,6 +311,182 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
   const occupationFromYear = digits(raw.occupationFromYear, 4) || "2022";
   const occupationFromMonth = digits(raw.occupationFromMonth, 2).padStart(2, "0") || "09";
 
+  const previousCor = parseYn(raw.previousCor, "N");
+  const sameAsCor = parseYn(raw.sameAsCor, "Y");
+  const previouslyMarried = parseYn(raw.previouslyMarried, "N");
+  const educationIndicator = parseYn(raw.educationIndicator, "N");
+  const sameAsMailing = parseYn(raw.sameAsMailing, "Y");
+  const hasAlias = parseYn(raw.hasAlias, "N");
+  const hasNatId = parseYn(raw.hasNatId, "N");
+  const hasUsCard = parseYn(raw.hasUsCard, "N");
+
+  const need = (cond: boolean, label: string, value: string) => {
+    if (cond && !value) return `Missing required field: ${label}`;
+    return "";
+  };
+
+  const parseCor = (prefix: string) => ({
+    country: cleanText(raw[`${prefix}Country`]),
+    status: cleanText(raw[`${prefix}Status`], 2),
+    other: cleanText(raw[`${prefix}Other`], 80),
+    fromYear: digits(raw[`${prefix}FromYear`], 4),
+    fromMonth: digits(raw[`${prefix}FromMonth`], 2).padStart(2, "0"),
+    fromDay: digits(raw[`${prefix}FromDay`], 2).padStart(2, "0"),
+    toYear: digits(raw[`${prefix}ToYear`], 4),
+    toMonth: digits(raw[`${prefix}ToMonth`], 2).padStart(2, "0"),
+    toDay: digits(raw[`${prefix}ToDay`], 2).padStart(2, "0"),
+  });
+
+  const previousCorRows = [];
+  if (previousCor === "Y") {
+    const row1 = parseCor("pcor1");
+    let err = need(true, "previous country 1", row1.country) ||
+      need(true, "previous status 1", row1.status) ||
+      need(true, "previous from date 1", row1.fromYear) ||
+      need(true, "previous to date 1", row1.toYear);
+    if (err) return { ok: false, error: err };
+    previousCorRows.push(row1);
+    const row2Country = cleanText(raw.pcor2Country);
+    if (row2Country) {
+      const row2 = parseCor("pcor2");
+      err = need(true, "previous status 2", row2.status) ||
+        need(true, "previous from date 2", row2.fromYear) ||
+        need(true, "previous to date 2", row2.toYear);
+      if (err) return { ok: false, error: err };
+      previousCorRows.push(row2);
+    }
+  }
+
+  let cwaRow: ReturnType<typeof parseCor> | undefined;
+  if (sameAsCor === "N") {
+    cwaRow = parseCor("cwa");
+    const err = need(true, "country where applying", cwaRow.country) ||
+      need(true, "status where applying", cwaRow.status) ||
+      need(true, "from date where applying", cwaRow.fromYear) ||
+      need(true, "to date where applying", cwaRow.toYear);
+    if (err) return { ok: false, error: err };
+  }
+
+  if (hasAlias === "Y") {
+    const err = need(true, "alias family name", cleanText(raw.aliasFamilyName)) ||
+      need(true, "alias given name", cleanText(raw.aliasGivenName));
+    if (err) return { ok: false, error: err };
+  }
+
+  const temporaryStatus = ["03", "04", "05", "06"].includes(currentStatus);
+  if (temporaryStatus) {
+    const err = need(true, "current status from date", digits(raw.corFromYear, 4)) ||
+      need(true, "current status to date", digits(raw.corToYear, 4));
+    if (err) return { ok: false, error: err };
+  }
+  if (currentStatus === "06") {
+    const err = need(true, "other status description", cleanText(raw.corOther, 80));
+    if (err) return { ok: false, error: err };
+  }
+
+  if (maritalStatus === "01" || maritalStatus === "03") {
+    const err = need(true, "spouse family name", cleanText(raw.spouseFamilyName)) ||
+      need(true, "marriage date", digits(raw.marriageYear, 4));
+    if (err) return { ok: false, error: err };
+  }
+
+  if (previouslyMarried === "Y") {
+    const err = need(true, "previous spouse family name", cleanText(raw.prevSpouseFamilyName)) ||
+      need(true, "previous relationship type", cleanText(raw.prevSpouseRelationship, 2)) ||
+      need(true, "previous spouse DOB", digits(raw.prevSpouseDobYear, 4));
+    if (err) return { ok: false, error: err };
+  }
+
+  if (sameAsMailing === "N") {
+    const err = need(true, "residential street", cleanText(raw.resStreetName)) ||
+      need(true, "residential city", cleanText(raw.resCity)) ||
+      need(true, "residential country", cleanText(raw.resCountry)) ||
+      need(true, "residential postal code", cleanText(raw.resPostalCode, 20));
+    if (err) return { ok: false, error: err };
+  }
+
+  if (funds === "Other") {
+    const err = need(true, "other person paying expenses", cleanText(raw.fundsOtherPerson));
+    if (err) return { ok: false, error: err };
+  }
+
+  if (educationIndicator === "Y") {
+    const err = need(true, "prior school", cleanText(raw.eduSchool)) ||
+      need(true, "prior field of study", cleanText(raw.eduField)) ||
+      need(true, "prior school country", cleanText(raw.eduCountry));
+    if (err) return { ok: false, error: err };
+  }
+
+  if (hasNatId === "Y") {
+    const err = need(true, "national ID number", cleanText(raw.natIdNumber, 40)) ||
+      need(true, "national ID country", cleanText(raw.natIdCountry));
+    if (err) return { ok: false, error: err };
+  }
+
+  if (hasUsCard === "Y") {
+    const err = need(true, "US card number", cleanText(raw.usCardNumber, 40));
+    if (err) return { ok: false, error: err };
+  }
+
+  const bgTb = parseYn(raw.bgTb, "N");
+  const bgDisorder = parseYn(raw.bgDisorder, "N");
+  const bgOverstay = parseYn(raw.bgOverstay, "N");
+  const bgRefused = parseYn(raw.bgRefused, "N");
+  const bgClaimAsylum = parseYn(raw.bgClaimAsylum, "N");
+  const bgCrime = parseYn(raw.bgCrime, "N");
+  const bgMilitary = parseYn(raw.bgMilitary, "N");
+  if ((bgTb === "Y" || bgDisorder === "Y") && !cleanText(raw.bgMedicalDetails, 500)) {
+    return { ok: false, error: "Describe the medical/TB details." };
+  }
+  if ((bgOverstay === "Y" || bgRefused === "Y" || bgClaimAsylum === "Y") &&
+    !cleanText(raw.bgRefusedDetails, 500)) {
+    return { ok: false, error: "Describe the immigration history details." };
+  }
+  if (bgCrime === "Y" && !cleanText(raw.bgCrimeDetails, 500)) {
+    return { ok: false, error: "Describe the criminal history details." };
+  }
+  if (bgMilitary === "Y" && !cleanText(raw.bgMilitaryDetails, 500)) {
+    return { ok: false, error: "Describe the military/service details." };
+  }
+
+  const jobs = [{
+    fromYear: occupationFromYear,
+    fromMonth: occupationFromMonth,
+    toYear: digits(raw.occupationToYear, 4) || undefined,
+    toMonth: digits(raw.occupationToMonth, 2).padStart(2, "0") || undefined,
+    occupation: required[21][1],
+    employer: required[22][1],
+    city: cleanText(raw.occupationCity) || required[11][1],
+    country: cleanText(raw.occupationCountry) || required[5][1],
+    provinceState: cleanText(raw.occupationProvince, 40) || undefined,
+  }];
+  if (cleanText(raw.job2Occupation)) {
+    jobs.push({
+      fromYear: digits(raw.job2FromYear, 4) || occupationFromYear,
+      fromMonth: digits(raw.job2FromMonth, 2).padStart(2, "0") || "01",
+      toYear: digits(raw.job2ToYear, 4) || undefined,
+      toMonth: digits(raw.job2ToMonth, 2).padStart(2, "0") || undefined,
+      occupation: cleanText(raw.job2Occupation),
+      employer: cleanText(raw.job2Employer) || "Employer",
+      city: cleanText(raw.job2City) || required[11][1],
+      country: cleanText(raw.job2Country) || required[5][1],
+      provinceState: cleanText(raw.job2Province, 40) || undefined,
+    });
+  }
+  if (cleanText(raw.job3Occupation)) {
+    jobs.push({
+      fromYear: digits(raw.job3FromYear, 4) || occupationFromYear,
+      fromMonth: digits(raw.job3FromMonth, 2).padStart(2, "0") || "01",
+      toYear: digits(raw.job3ToYear, 4) || undefined,
+      toMonth: digits(raw.job3ToMonth, 2).padStart(2, "0") || undefined,
+      occupation: cleanText(raw.job3Occupation),
+      employer: cleanText(raw.job3Employer) || "Employer",
+      city: cleanText(raw.job3City) || required[11][1],
+      country: cleanText(raw.job3Country) || required[5][1],
+      provinceState: cleanText(raw.job3Province, 40) || undefined,
+    });
+  }
+
   const answers: Imm1294Answers = {
     email,
     familyName: required[0][1],
@@ -323,11 +499,58 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
     placeBirthCountry: required[3][1],
     citizenship: required[4][1],
     maritalStatus,
+    spouseFamilyName: cleanText(raw.spouseFamilyName) || undefined,
+    spouseGivenName: cleanText(raw.spouseGivenName) || undefined,
+    marriageYear: digits(raw.marriageYear, 4) || undefined,
+    marriageMonth: digits(raw.marriageMonth, 2).padStart(2, "0") || undefined,
+    marriageDay: digits(raw.marriageDay, 2).padStart(2, "0") || undefined,
     currentCountry: required[5][1],
     currentStatus,
-    previousCor: parseYn(raw.previousCor, "N"),
-    sameAsCor: parseYn(raw.sameAsCor, "Y"),
-    previouslyMarried: parseYn(raw.previouslyMarried, "N"),
+    corFromYear: digits(raw.corFromYear, 4) || undefined,
+    corFromMonth: digits(raw.corFromMonth, 2).padStart(2, "0") || undefined,
+    corFromDay: digits(raw.corFromDay, 2).padStart(2, "0") || undefined,
+    corToYear: digits(raw.corToYear, 4) || undefined,
+    corToMonth: digits(raw.corToMonth, 2).padStart(2, "0") || undefined,
+    corToDay: digits(raw.corToDay, 2).padStart(2, "0") || undefined,
+    corOther: cleanText(raw.corOther, 80) || undefined,
+    previousCor,
+    previousCorRows,
+    sameAsCor,
+    cwaRow,
+    previouslyMarried,
+    prevSpouse: previouslyMarried === "Y"
+      ? {
+        familyName: cleanText(raw.prevSpouseFamilyName),
+        givenName: cleanText(raw.prevSpouseGivenName),
+        dobYear: digits(raw.prevSpouseDobYear, 4),
+        dobMonth: digits(raw.prevSpouseDobMonth, 2).padStart(2, "0"),
+        dobDay: digits(raw.prevSpouseDobDay, 2).padStart(2, "0"),
+        relationshipType: cleanText(raw.prevSpouseRelationship, 2),
+        fromYear: digits(raw.prevSpouseFromYear, 4),
+        fromMonth: digits(raw.prevSpouseFromMonth, 2).padStart(2, "0"),
+        fromDay: digits(raw.prevSpouseFromDay, 2).padStart(2, "0"),
+        toYear: digits(raw.prevSpouseToYear, 4),
+        toMonth: digits(raw.prevSpouseToMonth, 2).padStart(2, "0"),
+        toDay: digits(raw.prevSpouseToDay, 2).padStart(2, "0"),
+      }
+      : undefined,
+    hasAlias,
+    aliasFamilyName: cleanText(raw.aliasFamilyName) || undefined,
+    aliasGivenName: cleanText(raw.aliasGivenName) || undefined,
+    hasNatId,
+    natIdNumber: cleanText(raw.natIdNumber, 40) || undefined,
+    natIdCountry: cleanText(raw.natIdCountry) || undefined,
+    natIdIssueYear: digits(raw.natIdIssueYear, 4) || undefined,
+    natIdIssueMonth: digits(raw.natIdIssueMonth, 2).padStart(2, "0") || undefined,
+    natIdIssueDay: digits(raw.natIdIssueDay, 2).padStart(2, "0") || undefined,
+    natIdExpiryYear: digits(raw.natIdExpiryYear, 4) || undefined,
+    natIdExpiryMonth: digits(raw.natIdExpiryMonth, 2).padStart(2, "0") || undefined,
+    natIdExpiryDay: digits(raw.natIdExpiryDay, 2).padStart(2, "0") || undefined,
+    hasUsCard,
+    usCardNumber: cleanText(raw.usCardNumber, 40) || undefined,
+    usCardExpiryYear: digits(raw.usCardExpiryYear, 4) || undefined,
+    usCardExpiryMonth: digits(raw.usCardExpiryMonth, 2).padStart(2, "0") || undefined,
+    usCardExpiryDay: digits(raw.usCardExpiryDay, 2).padStart(2, "0") || undefined,
     passportNumber: required[6][1],
     passportCountry: required[7][1],
     passportIssueYear,
@@ -346,7 +569,18 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
     country: required[12][1],
     provinceState: cleanText(raw.provinceState, 40),
     postalCode: required[13][1],
-    sameAsMailing: parseYn(raw.sameAsMailing, "Y"),
+    sameAsMailing,
+    residential: sameAsMailing === "N"
+      ? {
+        streetNum: cleanText(raw.resStreetNum, 20) || "1",
+        streetName: cleanText(raw.resStreetName),
+        city: cleanText(raw.resCity),
+        country: cleanText(raw.resCountry),
+        provinceState: cleanText(raw.resProvinceState, 40) || undefined,
+        postalCode: cleanText(raw.resPostalCode, 20),
+        aptUnit: cleanText(raw.resAptUnit, 20) || undefined,
+      }
+      : undefined,
     phone: required[14][1],
     phoneType,
     phoneCountryCode,
@@ -366,20 +600,41 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
     tuitionAmount: required[19][1],
     availableFunds: required[20][1],
     funds: funds as Imm1294Answers["funds"],
-    educationIndicator: parseYn(raw.educationIndicator, "N"),
-    occupation: required[21][1],
-    employer: required[22][1],
-    occupationCity: cleanText(raw.occupationCity) || required[11][1],
-    occupationCountry: cleanText(raw.occupationCountry) || required[5][1],
-    occupationFromYear,
-    occupationFromMonth,
-    bgTb: parseYn(raw.bgTb, "N"),
-    bgDisorder: parseYn(raw.bgDisorder, "N"),
-    bgOverstay: parseYn(raw.bgOverstay, "N"),
-    bgRefused: parseYn(raw.bgRefused, "N"),
-    bgClaimAsylum: parseYn(raw.bgClaimAsylum, "N"),
-    bgCrime: parseYn(raw.bgCrime, "N"),
-    bgMilitary: parseYn(raw.bgMilitary, "N"),
+    fundsOtherPerson: cleanText(raw.fundsOtherPerson) || undefined,
+    caqNumber: cleanText(raw.caqNumber, 40) || undefined,
+    caqExpiryYear: digits(raw.caqExpiryYear, 4) || undefined,
+    caqExpiryMonth: digits(raw.caqExpiryMonth, 2).padStart(2, "0") || undefined,
+    caqExpiryDay: digits(raw.caqExpiryDay, 2).padStart(2, "0") || undefined,
+    palNumber: cleanText(raw.palNumber, 40) || undefined,
+    palExpiryYear: digits(raw.palExpiryYear, 4) || undefined,
+    palExpiryMonth: digits(raw.palExpiryMonth, 2).padStart(2, "0") || undefined,
+    palExpiryDay: digits(raw.palExpiryDay, 2).padStart(2, "0") || undefined,
+    educationIndicator,
+    educationRow: educationIndicator === "Y"
+      ? {
+        fromYear: digits(raw.eduFromYear, 4) || "2018",
+        fromMonth: digits(raw.eduFromMonth, 2).padStart(2, "0") || "09",
+        toYear: digits(raw.eduToYear, 4) || "2022",
+        toMonth: digits(raw.eduToMonth, 2).padStart(2, "0") || "06",
+        fieldOfStudy: cleanText(raw.eduField),
+        school: cleanText(raw.eduSchool),
+        city: cleanText(raw.eduCity) || required[11][1],
+        country: cleanText(raw.eduCountry),
+        provinceState: cleanText(raw.eduProvince, 40) || undefined,
+      }
+      : undefined,
+    jobs,
+    bgTb,
+    bgDisorder,
+    bgMedicalDetails: cleanText(raw.bgMedicalDetails, 500) || undefined,
+    bgOverstay,
+    bgRefused,
+    bgClaimAsylum,
+    bgRefusedDetails: cleanText(raw.bgRefusedDetails, 500) || undefined,
+    bgCrime,
+    bgCrimeDetails: cleanText(raw.bgCrimeDetails, 500) || undefined,
+    bgMilitary,
+    bgMilitaryDetails: cleanText(raw.bgMilitaryDetails, 500) || undefined,
     bgViolence: parseYn(raw.bgViolence, "N"),
     bgWitness: parseYn(raw.bgWitness, "N"),
     cicContactConsent: parseYn(raw.cicContactConsent, "N"),
