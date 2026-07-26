@@ -20,6 +20,154 @@
 
     const actionButtons = [submitBtn, downloadBtn].filter(Boolean);
 
+    function lov() {
+        return window.IMM1294_LOV || {};
+    }
+
+    function fillSelectOptions(select, rows, {
+        placeholder = 'Select…',
+        selected = '',
+        allowEmpty = false,
+        emptyLabel = 'Select…',
+    } = {}) {
+        if (!(select instanceof HTMLSelectElement)) return;
+        const keep = selected || select.dataset.immDefault || select.value || '';
+        select.innerHTML = '';
+        const ph = document.createElement('option');
+        ph.value = '';
+        ph.textContent = allowEmpty ? emptyLabel : placeholder;
+        if (!allowEmpty) ph.disabled = true;
+        select.appendChild(ph);
+        for (const row of rows) {
+            const opt = document.createElement('option');
+            opt.value = row.value;
+            opt.textContent = row.label;
+            select.appendChild(opt);
+        }
+        if (keep && [...select.options].some((o) => o.value === keep)) {
+            select.value = keep;
+        } else if (!allowEmpty && keep) {
+            select.selectedIndex = 0;
+        }
+    }
+
+    function languageRows() {
+        const data = lov();
+        const all = Array.isArray(data.languages) ? data.languages : [];
+        const preferred = new Set(data.preferredLanguageCodes || []);
+        const top = all.filter((r) => preferred.has(r.value));
+        const rest = all.filter((r) => !preferred.has(r.value));
+        // Keep preferred order from preferredLanguageCodes
+        const order = [...preferred];
+        top.sort((a, b) => order.indexOf(a.value) - order.indexOf(b.value));
+        return [...top, ...rest];
+    }
+
+    function populateLovSelects(root = form) {
+        const data = lov();
+        const countries = Array.isArray(data.countries) ? data.countries : [];
+        root.querySelectorAll('select[data-imm-lov="country"]').forEach((select) => {
+            fillSelectOptions(select, countries, {
+                placeholder: 'Select country…',
+                allowEmpty: !select.required && !select.hasAttribute('data-imm-required'),
+                emptyLabel: 'Select country…',
+                selected: select.dataset.immDefault || select.value,
+            });
+        });
+        const langs = languageRows();
+        root.querySelectorAll('select[data-imm-lov="language"]').forEach((select) => {
+            fillSelectOptions(select, langs, {
+                placeholder: 'Select language…',
+                selected: select.dataset.immDefault || select.value,
+            });
+        });
+    }
+
+    function provinceOptionsForCountry(countryCode) {
+        const data = lov();
+        if (countryCode === data.canadaCode) return data.caProvinces || [];
+        if (countryCode === data.usaCode) return data.usStates || [];
+        return null;
+    }
+
+    function activeProvinceControl(wrap) {
+        if (!(wrap instanceof HTMLElement)) return null;
+        const lovEl = wrap.querySelector('[data-imm-province-mode="lov"]');
+        const textEl = wrap.querySelector('[data-imm-province-mode="text"]');
+        if (lovEl instanceof HTMLSelectElement && !lovEl.disabled && !lovEl.hidden) return lovEl;
+        if (textEl instanceof HTMLInputElement && !textEl.disabled && !textEl.hidden) return textEl;
+        return textEl || lovEl;
+    }
+
+    function syncProvinceWrap(wrap) {
+        if (!(wrap instanceof HTMLElement)) return;
+        const name = wrap.dataset.immName || '';
+        const lovEl = wrap.querySelector('[data-imm-province-mode="lov"]');
+        const textEl = wrap.querySelector('[data-imm-province-mode="text"]');
+        if (!(lovEl instanceof HTMLSelectElement) || !(textEl instanceof HTMLInputElement)) return;
+
+        const branchHidden = wrap.closest('[data-imm-show][hidden]');
+        let countryCode = '';
+        if (wrap.dataset.immCountryRef) {
+            countryCode = document.getElementById(wrap.dataset.immCountryRef)?.value || '';
+        } else if (wrap.dataset.immProvinceForJob) {
+            const card = wrap.closest('.imm-job-card');
+            countryCode = card?.querySelector(`[data-job="${wrap.dataset.immProvinceForJob}"]`)?.value || '';
+        }
+
+        const options = provinceOptionsForCountry(countryCode);
+        const useLov = Array.isArray(options);
+        const prev = (!lovEl.disabled && !lovEl.hidden ? lovEl.value : '') ||
+            (!textEl.disabled && !textEl.hidden ? textEl.value : '') ||
+            textEl.value ||
+            lovEl.value ||
+            '';
+
+        if (name) {
+            lovEl.removeAttribute('name');
+            textEl.removeAttribute('name');
+            if (wrap.dataset.immProvinceForJob) {
+                // job fields use data-job, not name
+            }
+        }
+
+        if (branchHidden) {
+            lovEl.hidden = true;
+            lovEl.disabled = true;
+            textEl.hidden = true;
+            textEl.disabled = true;
+            return;
+        }
+
+        if (useLov) {
+            fillSelectOptions(lovEl, options, {
+                placeholder: 'Select…',
+                allowEmpty: true,
+                emptyLabel: 'Select…',
+                selected: prev,
+            });
+            lovEl.hidden = false;
+            lovEl.disabled = false;
+            textEl.hidden = true;
+            textEl.disabled = true;
+            textEl.value = '';
+            if (name) lovEl.name = name;
+            if (prev && [...lovEl.options].some((o) => o.value === prev)) lovEl.value = prev;
+        } else {
+            lovEl.hidden = true;
+            lovEl.disabled = true;
+            lovEl.value = '';
+            textEl.hidden = false;
+            textEl.disabled = false;
+            if (name) textEl.name = name;
+            if (prev && !options) textEl.value = prev;
+        }
+    }
+
+    function syncProvinces() {
+        form.querySelectorAll('[data-imm-province-wrap]').forEach(syncProvinceWrap);
+    }
+
     function populateDialCodes() {
         const select = document.getElementById('imm-phoneCountryCode');
         if (!(select instanceof HTMLSelectElement)) return;
@@ -141,6 +289,8 @@
         panel.querySelectorAll('input, select, textarea').forEach((input) => {
             if (!(input instanceof HTMLInputElement || input instanceof HTMLSelectElement ||
                 input instanceof HTMLTextAreaElement)) return;
+            // Province LOV/text pair is owned by syncProvinces()
+            if (input.hasAttribute('data-imm-province-mode')) return;
             if (!input.dataset.immReqBase) {
                 input.dataset.immReqBase = input.required ? '1' : '0';
             }
@@ -180,6 +330,7 @@
 
         syncJobChrome();
         syncPcorChrome();
+        syncProvinces();
     }
 
     function jobCards() {
@@ -322,20 +473,42 @@
         if (!(node instanceof HTMLElement)) return;
 
         const set = (key, value) => {
+            if (value == null) return;
+            if (key === 'provinceState') {
+                const wrap = node.querySelector('[data-imm-province-wrap]');
+                const text = wrap?.querySelector('[data-imm-province-mode="text"]');
+                const lovEl = wrap?.querySelector('[data-imm-province-mode="lov"]');
+                if (text instanceof HTMLInputElement) text.value = value;
+                if (lovEl instanceof HTMLSelectElement) lovEl.dataset.immDefault = value;
+                return;
+            }
             const input = node.querySelector(`[data-job="${key}"]`);
-            if (input instanceof HTMLInputElement && value != null) input.value = value;
+            if (input instanceof HTMLInputElement || input instanceof HTMLSelectElement) {
+                if (input instanceof HTMLSelectElement && input.hasAttribute('data-imm-lov')) {
+                    input.dataset.immDefault = value;
+                }
+                input.value = value;
+            }
         };
+        const countrySelect = node.querySelector('[data-job="country"]');
+        if (countrySelect instanceof HTMLSelectElement) {
+            countrySelect.dataset.immDefault = defaults.country ?? '022';
+        }
+        populateLovSelects(node);
         set('occupation', defaults.occupation ?? '');
         set('employer', defaults.employer ?? '');
         set('city', defaults.city ?? '');
-        set('country', defaults.country ?? '');
         set('provinceState', defaults.provinceState ?? '');
         set('from', defaults.from ?? '');
         set('to', defaults.to ?? '');
+        if (countrySelect instanceof HTMLSelectElement) {
+            countrySelect.value = defaults.country ?? '022';
+        }
 
         bindJobCard(node);
         jobList.appendChild(node);
         syncJobChrome();
+        syncProvinceWrap(node.querySelector('[data-imm-province-wrap]'));
     }
 
     function bindJobCard(card) {
@@ -350,8 +523,15 @@
     function collectJobs() {
         return jobCards().map((card) => {
             const val = (key) => {
+                if (key === 'provinceState') {
+                    const active = activeProvinceControl(card.querySelector('[data-imm-province-wrap]'));
+                    return active ? String(active.value || '').trim() : '';
+                }
                 const input = card.querySelector(`[data-job="${key}"]`);
-                return input instanceof HTMLInputElement ? input.value.trim() : '';
+                if (input instanceof HTMLInputElement || input instanceof HTMLSelectElement) {
+                    return input.value.trim();
+                }
+                return '';
             };
             const from = splitMonth(val('from'));
             const to = splitMonth(val('to'));
@@ -726,10 +906,11 @@
                     occupation: 'Student',
                     employer: 'Universite Lyon',
                     city: 'Lyon',
-                    country: 'France',
+                    country: '022',
                     from: '2022-09',
                 });
             }
+            populateLovSelects();
             syncBranches();
             resetCaptcha();
         } catch (error) {
@@ -762,18 +943,19 @@
     document.getElementById('imm-add-job')?.addEventListener('click', () => {
         addJob({
             city: fieldValue('city') || 'Paris',
-            country: fieldValue('currentCountry') || 'France',
+            country: fieldValue('currentCountry') || '022',
         });
     });
 
     populateDialCodes();
+    populateLovSelects();
 
     // Seed sample job (current activity — no end date)
     addJob({
         occupation: 'Student',
         employer: 'Universite Lyon',
         city: 'Lyon',
-        country: 'France',
+        country: '022',
         from: '2022-09',
     });
     enableSortable(pcorList, '[data-pcor-slot]');
