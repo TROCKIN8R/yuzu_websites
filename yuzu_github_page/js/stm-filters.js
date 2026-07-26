@@ -3,7 +3,6 @@
  */
 window.StmFilters = (function createStmFilters() {
   const LOAD_PROFILES = [
-    { id: "all", label: "All loads", occupancy: null },
     { id: "light", label: "Light", occupancy: [0, 1] },
     { id: "moderate", label: "Moderate", occupancy: [2] },
     { id: "busy", label: "Busy", occupancy: [3, 4, 5] },
@@ -11,7 +10,6 @@ window.StmFilters = (function createStmFilters() {
   ];
 
   const SPEED_BANDS = [
-    { id: "all", label: "All speeds" },
     { id: "slow", label: "Slow (<10 km/h)" },
     { id: "cruising", label: "Cruising (10–30)" },
     { id: "fast", label: "Fast (>30 km/h)" },
@@ -19,7 +17,6 @@ window.StmFilters = (function createStmFilters() {
   ];
 
   const DELAY_STATES = [
-    { id: "all", label: "All delays" },
     { id: "on_time", label: "On time" },
     { id: "minor", label: "1–2 min late" },
     { id: "late", label: "2+ min late" },
@@ -27,14 +24,12 @@ window.StmFilters = (function createStmFilters() {
   ];
 
   const ALERT_FILTERS = [
-    { id: "all", label: "All lines" },
     { id: "has_alert", label: "Lines with alerts" },
     { id: "detour", label: "Detours" },
     { id: "delay", label: "Delay notices" }
   ];
 
   const FRESHNESS_FILTERS = [
-    { id: "all", label: "All positions" },
     { id: "fresh", label: "Fresh (<2 min)" },
     { id: "stale", label: "Stale (>2 min)" }
   ];
@@ -43,6 +38,13 @@ window.StmFilters = (function createStmFilters() {
     { id: "load", label: "Colour by load" },
     { id: "delay", label: "Colour by delay" }
   ];
+
+  function asSet(value) {
+    if (value instanceof Set) return value;
+    if (Array.isArray(value)) return new Set(value);
+    if (value == null || value === "all" || value === "") return new Set();
+    return new Set([value]);
+  }
 
   const LOAD_COLORS = {
     light: "#7CB342",
@@ -61,11 +63,11 @@ window.StmFilters = (function createStmFilters() {
   function defaultState() {
     return {
       lines: new Set(),
-      load: "all",
-      speed: "all",
-      delay: "all",
-      alertFilter: "all",
-      freshness: "all",
+      load: new Set(),
+      speed: new Set(),
+      delay: new Set(),
+      alertFilter: new Set(),
+      freshness: new Set(),
       colorMode: "load",
       lineSearch: "",
       direction: "all",
@@ -91,33 +93,36 @@ window.StmFilters = (function createStmFilters() {
     return Number.isFinite(speed) && speed >= threshold;
   }
 
-  function matchesLoad(vehicle, loadId) {
-    const profile = LOAD_PROFILES.find((item) => item.id === loadId) || LOAD_PROFILES[0];
-    if (!profile.occupancy) return true;
-    const code = vehicle?.occupancy ?? null;
-    return profile.occupancy.some((value) => value === code);
+  function matchesLoad(vehicle, loadFilter) {
+    const selected = asSet(loadFilter);
+    if (!selected.size) return true;
+    return selected.has(getLoadProfile(vehicle));
   }
 
-  function matchesSpeed(vehicle, speedId) {
-    if (speedId === "all") return true;
-    return (vehicle?.speedBand || "unknown") === speedId;
+  function matchesSpeed(vehicle, speedFilter) {
+    const selected = asSet(speedFilter);
+    if (!selected.size) return true;
+    return selected.has(vehicle?.speedBand || "unknown");
   }
 
-  function matchesDelay(vehicle, delayId) {
-    if (delayId === "all") return true;
-    if (vehicle?.isMetro) return delayId === "unknown";
-    return (vehicle?.delayStatus || "unknown") === delayId;
+  function matchesDelay(vehicle, delayFilter) {
+    const selected = asSet(delayFilter);
+    if (!selected.size) return true;
+    if (vehicle?.isMetro) return selected.has("unknown");
+    return selected.has(vehicle?.delayStatus || "unknown");
   }
 
-  function matchesFreshness(vehicle, freshnessId) {
-    if (freshnessId === "all") return true;
-    if (freshnessId === "fresh") return !vehicle?.isStale;
-    return Boolean(vehicle?.isStale);
+  function matchesFreshness(vehicle, freshnessFilter) {
+    const selected = asSet(freshnessFilter);
+    if (!selected.size) return true;
+    const band = vehicle?.isStale ? "stale" : "fresh";
+    return selected.has(band);
   }
 
   function matchesLine(vehicle, selectedLines) {
-    if (!selectedLines.size) return true;
-    return selectedLines.has(normalizeRouteId(vehicle?.routeId));
+    const selected = asSet(selectedLines);
+    if (!selected.size) return true;
+    return selected.has(normalizeRouteId(vehicle?.routeId));
   }
 
   function categorizeAlert(alert) {
@@ -128,30 +133,37 @@ window.StmFilters = (function createStmFilters() {
   }
 
   function routeHasMatchingAlert(alerts, routeId, alertFilter) {
-    if (alertFilter === "all") return true;
+    const selected = asSet(alertFilter);
+    if (!selected.size) return true;
     const routeAlerts = alertsForRoute(alerts, routeId);
     if (!routeAlerts.length) return false;
-    if (alertFilter === "has_alert") return true;
-    return routeAlerts.some((alert) => categorizeAlert(alert) === alertFilter);
+    if (selected.has("has_alert")) return true;
+    return routeAlerts.some((alert) => selected.has(categorizeAlert(alert)));
   }
 
   function apply(vehicles, state, options = {}) {
     const { alerts = [], includeMetro = true } = options;
     let list = vehicles || [];
+    const alertFilter = asSet(state.alertFilter);
+    const lines = asSet(state.lines);
 
     if (!includeMetro) {
       list = list.filter((vehicle) => !vehicle.isMetro);
     }
 
-    if (state.linesWithAlertsOnly || (state.alertFilter !== "all" && !state.lines.size)) {
+    if (state.linesWithAlertsOnly || (alertFilter.size && !lines.size)) {
       list = list.filter((vehicle) => {
         const routeId = normalizeRouteId(vehicle.routeId);
-        return routeHasMatchingAlert(alerts, routeId, state.linesWithAlertsOnly ? "has_alert" : state.alertFilter);
+        return routeHasMatchingAlert(
+          alerts,
+          routeId,
+          state.linesWithAlertsOnly ? "has_alert" : alertFilter
+        );
       });
     }
 
     return list.filter((vehicle) =>
-      matchesLine(vehicle, state.lines)
+      matchesLine(vehicle, lines)
       && matchesLoad(vehicle, state.load)
       && matchesSpeed(vehicle, state.speed)
       && matchesDelay(vehicle, state.delay)
@@ -160,7 +172,7 @@ window.StmFilters = (function createStmFilters() {
   }
 
   function buildRouteIndex(vehicles, options = {}) {
-    const { alerts = [], meta = null, alertFilter = "all" } = options;
+    const { alerts = [], meta = null, alertFilter = new Set() } = options;
     const counts = new Map();
 
     (vehicles || []).forEach((vehicle) => {

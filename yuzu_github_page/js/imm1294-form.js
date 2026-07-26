@@ -20,6 +20,27 @@
 
     const actionButtons = [submitBtn, downloadBtn].filter(Boolean);
 
+    function populateDialCodes() {
+        const select = document.getElementById('imm-phoneCountryCode');
+        if (!(select instanceof HTMLSelectElement)) return;
+        const codes = Array.isArray(window.IMM1294_DIAL_CODES) ? window.IMM1294_DIAL_CODES : [];
+        const current = select.value || '33';
+        select.innerHTML = '';
+        for (const row of codes) {
+            const opt = document.createElement('option');
+            opt.value = row.code;
+            opt.textContent = `+${row.code} · ${row.label.replace(/\s*\(\+\d+\)\s*$/, '')}`;
+            select.appendChild(opt);
+        }
+        if (![...select.options].some((o) => o.value === current)) {
+            const opt = document.createElement('option');
+            opt.value = current;
+            opt.textContent = `+${current}`;
+            select.appendChild(opt);
+        }
+        select.value = current;
+    }
+
     function setMessage(message, type) {
         if (!statusEl) return;
         statusEl.textContent = message;
@@ -744,6 +765,8 @@
             country: fieldValue('currentCountry') || 'France',
         });
     });
+
+    populateDialCodes();
 
     // Seed sample job (current activity — no end date)
     addJob({
