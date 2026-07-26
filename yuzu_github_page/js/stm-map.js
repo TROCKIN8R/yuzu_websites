@@ -117,16 +117,30 @@ window.StmMap = (function createStmMap() {
       : load;
     const headway = headways?.routes?.[routeId]?.avgHeadwayMin || vehicle.avgHeadwayMin;
 
+    if (vehicle.isMetro) {
+      return `
+        <div class="stm-popup">
+          <strong>${escapeHtml(route)}</strong>
+          <div>${vehicle.isEstimated ? "Metro train · estimated position" : "Metro train"}</div>
+          ${vehicle.headsign ? `<div>${escapeHtml(vehicle.headsign)}</div>` : ""}
+          ${headway ? `<div>Scheduled avg headway: ${headway} min</div>` : ""}
+          ${vehicle.isEstimated
+            ? `<div class="stm-popup__hint">Demo guess from headway spacing · not live GPS</div>`
+            : ""}
+        </div>
+      `;
+    }
+
     return `
       <div class="stm-popup">
         <strong>${escapeHtml(route)}</strong>
-        <div>${vehicle.isMetro ? "Metro train" : `Vehicle ${escapeHtml(vehicle.id || "—")}`}</div>
+        <div>Vehicle ${escapeHtml(vehicle.id || "—")}</div>
         <div>Load: ${escapeHtml(occupancy)}</div>
         <div>Delay: ${escapeHtml(formatDelay(vehicle.delay))}</div>
         <div>${vehicle.isStale ? "Stale position" : "Fresh position"} · ${formatAge(vehicle.ageSec)}</div>
-        <div>${formatSpeed(vehicle.speed)} · ${vehicle.isMetro ? "Metro" : filters?.isMoving?.(vehicle) ? "In motion" : "Stopped"}</div>
+        <div>${formatSpeed(vehicle.speed)} · ${filters?.isMoving?.(vehicle) ? "In motion" : "Stopped"}</div>
         ${headway ? `<div>Scheduled avg headway: ${headway} min</div>` : ""}
-        ${vehicle.isMetro ? "" : `<div class="stm-popup__hint">Click to show line path</div>`}
+        <div class="stm-popup__hint">Click to show line path</div>
       </div>
     `;
   }

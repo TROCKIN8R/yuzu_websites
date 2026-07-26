@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STM Live Transit | BI Demo · Yuzu.solutions</title>
-    <meta name="description" content="Live STM bus and metro positions, delays, occupancy, and service alerts — powered by GTFS-RT and API i3 via a secure Supabase proxy.">
+    <meta name="description" content="Live STM bus positions, delays, occupancy, and service alerts — plus demo métro trains estimated from scheduled headways — powered by GTFS-RT and API i3 via a secure Supabase proxy.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Yuzu.solutions">
     <meta property="og:title" content="STM Live Transit | BI Demo">
@@ -50,7 +50,7 @@
     <header class="stm-hero stm-hero--compact">
         <p class="stm-hero-eyebrow">Live BI demo · STM Montréal</p>
         <h1>Real-time transit, governed end to end</h1>
-        <p>Bus and metro positions from GTFS-RT, delays from trip updates, service alerts from API i3, and scheduled headways from GTFS static — all sliceable in one dashboard.</p>
+        <p>Live bus positions from GTFS-RT, service alerts from API i3, and métro trains estimated from scheduled headways for demo — all sliceable in one dashboard.</p>
         <p class="stm-hero-links">
             <a href="../services/bi-dashboard-delivery.html">BI delivery service</a>
         </p>
@@ -119,7 +119,7 @@
                     <span><i style="background:#9E9E9E"></i> Unknown</span>
                 </div>
                 <div class="stm-map-legend stm-map-legend--routes" aria-hidden="true">
-                    <span><i style="background:#00B300;border-radius:2px;width:0.85rem;height:0.2rem"></i> Metro (always on)</span>
+                    <span><i style="background:#00B300;border-radius:2px;width:0.85rem;height:0.2rem"></i> Metro (headway estimate)</span>
                     <span><i style="background:#1565C0;border-radius:2px;width:0.85rem;height:0.2rem"></i> Bus path</span>
                     <span><i style="background:#ECEFF1;border:1px solid #546E7A"></i> Stop</span>
                     <span><i style="background:#FFEBEE;border:1px solid #C62828"></i> Alert stop</span>
@@ -140,6 +140,7 @@
 
             <p class="stm-footnote">
                 Data © <a href="https://www.stm.info/fr/a-propos/developpeurs" target="_blank" rel="noopener noreferrer">STM</a> ·
+                Métro markers are demo estimates from scheduled headways (not live GPS) ·
                 API key stored in Supabase Edge Function secrets (<code>STM_API_KEY</code>)
             </p>
         </section>
@@ -157,6 +158,7 @@
 <script src="../js/stm-enrich.js"></script>
 <script src="../js/stm-filters.js"></script>
 <script src="../js/stm-routes.js"></script>
+<script src="../js/stm-metro-sim.js"></script>
 <script src="../js/stm-map.js"></script>
 <script src="../js/stm-dashboard.js"></script>
 <script src="../js/nav.js"></script>

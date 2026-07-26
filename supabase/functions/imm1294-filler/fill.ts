@@ -144,13 +144,49 @@ export type Imm1294Answers = {
 };
 
 /** Empty-user AESV2 file key for the shipped imm1294f.pdf (revision 4). */
-const FILE_ENCRYPTION_KEY = hexToBytes(
+const FILE_ENCRYPTION_KEY_F = hexToBytes(
   "813b737c96381da7a399b2160a659510",
 );
+const FILE_ENCRYPTION_KEY_E = hexToBytes(
+  "876ab7974ce3a29b6d4aaccf68512f0c",
+);
 
-/** XFA datasets EmbeddedFile object in imm1294f.pdf */
-const DATASETS_OBJ = 113;
+/** XFA datasets EmbeddedFile object numbers */
+const DATASETS_OBJ_F = 113;
+const DATASETS_OBJ_E = 114;
 const DATASETS_GEN = 0;
+
+export type Imm1294CryptoMeta = {
+  fileKeyHex: string;
+  datasetsObj: number;
+  datasetsGen?: number;
+};
+
+function resolveCryptoMeta(
+  blankPdf: Uint8Array,
+  override?: Imm1294CryptoMeta,
+): { fileKey: Uint8Array; datasetsObj: number; datasetsGen: number } {
+  if (override?.fileKeyHex) {
+    return {
+      fileKey: hexToBytes(override.fileKeyHex),
+      datasetsObj: override.datasetsObj,
+      datasetsGen: override.datasetsGen ?? 0,
+    };
+  }
+  // English blank is larger; French is the historical default in this function.
+  if (blankPdf.byteLength >= 840_000) {
+    return {
+      fileKey: FILE_ENCRYPTION_KEY_E,
+      datasetsObj: DATASETS_OBJ_E,
+      datasetsGen: DATASETS_GEN,
+    };
+  }
+  return {
+    fileKey: FILE_ENCRYPTION_KEY_F,
+    datasetsObj: DATASETS_OBJ_F,
+    datasetsGen: DATASETS_GEN,
+  };
+}
 
 const PROVINCE_LIC: Record<string, string> = {
   AB: "09",
@@ -1013,12 +1049,16 @@ function findStreamSpan(
 ): { dictStart: number; streamStart: number; streamEnd: number; endobj: number } {
   const header = new TextEncoder().encode(`${objNum} 0 obj`);
   // Prefer the last occurrence (incremental updates append a replacement object).
+  // Require a non-digit before the object number so "8 0 obj" ≠ match inside "18 0 obj".
   let dictStart = -1;
   let from = 0;
   while (true) {
     const idx = indexOfBytes(pdf, header, from);
     if (idx < 0) break;
-    dictStart = idx;
+    const prev = idx > 0 ? pdf[idx - 1] : 0;
+    if (prev < 0x30 || prev > 0x39) {
+      dictStart = idx;
+    }
     from = idx + header.length;
   }
   if (dictStart < 0) throw new Error(`PDF object ${objNum} not found`);
@@ -1082,10 +1122,14 @@ function be3(n: number): Uint8Array {
 }
 
 /** Decrypt and inflate the XFA datasets XML (latest incremental revision). */
-export async function extractDatasetsXml(pdf: Uint8Array): Promise<string> {
-  const span = findStreamSpan(pdf, DATASETS_OBJ);
+export async function extractDatasetsXml(
+  pdf: Uint8Array,
+  crypto?: Imm1294CryptoMeta,
+): Promise<string> {
+  const { fileKey, datasetsObj, datasetsGen } = resolveCryptoMeta(pdf, crypto);
+  const span = findStreamSpan(pdf, datasetsObj);
   const encrypted = pdf.subarray(span.streamStart, span.streamEnd);
-  const okey = objectKey(FILE_ENCRYPTION_KEY, DATASETS_OBJ, DATASETS_GEN);
+  const okey = objectKey(fileKey, datasetsObj, datasetsGen);
   const compressed = await aesDecryptCbc(okey, encrypted);
   const xmlBytes = pako.inflate(compressed);
   return new TextDecoder("utf-8").decode(xmlBytes);
@@ -1115,13 +1159,15 @@ function patchForm1(datasetsXml: string, answers: Imm1294Answers): string {
 export async function fillImm1294Pdf(
   blankPdf: Uint8Array,
   answers: Imm1294Answers,
+  crypto?: Imm1294CryptoMeta,
 ): Promise<Uint8Array> {
+  const { fileKey, datasetsObj, datasetsGen } = resolveCryptoMeta(blankPdf, crypto);
   const normalized = normalizeAnswers(answers);
-  const datasetsXml = await extractDatasetsXml(blankPdf);
+  const datasetsXml = await extractDatasetsXml(blankPdf, crypto);
   const patchedXml = patchForm1(datasetsXml, normalized);
   const xmlBytes = new TextEncoder().encode(patchedXml);
   const compressed = pako.deflate(xmlBytes);
-  const okey = objectKey(FILE_ENCRYPTION_KEY, DATASETS_OBJ, DATASETS_GEN);
+  const okey = objectKey(fileKey, datasetsObj, datasetsGen);
   const streamBytes = await aesEncryptCbc(okey, compressed);
 
   const prev = parseLastStartXref(blankPdf);
@@ -1131,7 +1177,7 @@ export async function fillImm1294Pdf(
   // Match IRCC's compact EmbeddedFile dict style (single-line, padded Length).
   const lengthField = String(streamBytes.length).padStart(10, " ");
   const header = new TextEncoder().encode(
-    `${DATASETS_OBJ} 0 obj\n` +
+    `${datasetsObj} 0 obj\n` +
       `<</Filter[/FlateDecode]/Length${lengthField}/Type/EmbeddedFile>>stream\n`,
   );
   const footer = new TextEncoder().encode("\nendstream\nendobj\n");
@@ -1163,7 +1209,7 @@ export async function fillImm1294Pdf(
     `${xrefObjNum} 0 obj\n` +
       `<</Length${xrefLenField}/Type/XRef/Root ${meta.root}/Info ${meta.info}` +
       `/Encrypt ${meta.encrypt}/ID${meta.id}/Size ${meta.size + 1}` +
-      `/Prev ${prev}/Index[${DATASETS_OBJ} 1]/W[1 3 1]` +
+      `/Prev ${prev}/Index[${datasetsObj} 1]/W[1 3 1]` +
       `/DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode>>` +
       `stream\n`,
   );
@@ -1208,5 +1254,5 @@ export async function fillImm1294Pdf(
 
 /** @deprecated kept for diagnostics */
 export function debugFileKeyHex(): string {
-  return bytesToHex(FILE_ENCRYPTION_KEY);
+  return bytesToHex(FILE_ENCRYPTION_KEY_F);
 }

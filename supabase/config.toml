@@ -12,3 +12,6 @@ verify_jwt = false
 
 [functions.imm1294-filler]
 verify_jwt = false
+
+[functions.study-permit-kit]
+verify_jwt = false

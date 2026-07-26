@@ -1,0 +1,86 @@
+{
+  "imm1294e": {
+    "fileKeyHex": "876ab7974ce3a29b6d4aaccf68512f0c",
+    "datasetsObj": 114,
+    "datasetsGen": 0,
+    "bytes": 852223
+  },
+  "imm1294f": {
+    "fileKeyHex": "813b737c96381da7a399b2160a659510",
+    "datasetsObj": 113,
+    "datasetsGen": 0,
+    "bytes": 804108
+  },
+  "imm5409e": {
+    "fileKeyHex": "b4029171725d09cab168f6297f5e16d6",
+    "datasetsObj": 8,
+    "datasetsGen": 0,
+    "bytes": 1467134
+  },
+  "imm5409f": {
+    "fileKeyHex": "c13178e38ef31d9af874434746640045",
+    "datasetsObj": 8,
+    "datasetsGen": 0,
+    "bytes": 1612470
+  },
+  "imm5475e": {
+    "fileKeyHex": "5e08abd1893e4257c8be46c38f5f2201",
+    "datasetsObj": 76,
+    "datasetsGen": 0,
+    "bytes": 2278549
+  },
+  "imm5475f": {
+    "fileKeyHex": "cb1b15b40c5f875d9d3dfd49cf7f0d85",
+    "datasetsObj": 76,
+    "datasetsGen": 0,
+    "bytes": 2783501
+  },
+  "imm5476e": {
+    "fileKeyHex": "aed995eb4cb4fe773632cdfc7b638981",
+    "datasetsObj": 48,
+    "datasetsGen": 0,
+    "bytes": 2016187
+  },
+  "imm5476f": {
+    "fileKeyHex": "8008c20ca0bc6a9f13549f18b8a806b9",
+    "datasetsObj": 48,
+    "datasetsGen": 0,
+    "bytes": 2183892
+  },
+  "imm5483e": {
+    "fileKeyHex": "5728c9ae6ac7c2d6d6cff57725663967",
+    "datasetsObj": 39,
+    "datasetsGen": 0,
+    "bytes": 1050534
+  },
+  "imm5483f": {
+    "fileKeyHex": "06bb386f1c23f9ffb69f0ec68f42b6e7",
+    "datasetsObj": 42,
+    "datasetsGen": 0,
+    "bytes": 1051552
+  },
+  "imm5646e": {
+    "fileKeyHex": "78d199ff200f81212a96513e9e8a3f8c",
+    "datasetsObj": 77,
+    "datasetsGen": 0,
+    "bytes": 2925587
+  },
+  "imm5646f": {
+    "fileKeyHex": "9a1666a5e187833cc769891f06c2db92",
+    "datasetsObj": 77,
+    "datasetsGen": 0,
+    "bytes": 3082898
+  },
+  "imm5707e": {
+    "fileKeyHex": "38b95c30f178c804980dedc27b0d67a5",
+    "datasetsObj": 77,
+    "datasetsGen": 0,
+    "bytes": 2366133
+  },
+  "imm5707f": {
+    "fileKeyHex": "1d53a3b1d278cc72ab2770c95d375c20",
+    "datasetsObj": 77,
+    "datasetsGen": 0,
+    "bytes": 2446196
+  }
+}

@@ -65,3 +65,8 @@ jobs:
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_AUTOMATION }}
         run: supabase functions deploy imm1294-filler --project-ref mwgbeolcgigvpufjmodz
+
+      - name: Deploy study-permit-kit
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_AUTOMATION }}
+        run: supabase functions deploy study-permit-kit --project-ref mwgbeolcgigvpufjmodz
