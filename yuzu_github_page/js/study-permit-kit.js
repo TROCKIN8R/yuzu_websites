@@ -461,5 +461,7 @@
     downloadBtn?.addEventListener('click', () => handleFill('download'));
 
     populateLov();
+    applySituationSideEffects();
+    syncExtras();
     goToStep(0);
 })();
