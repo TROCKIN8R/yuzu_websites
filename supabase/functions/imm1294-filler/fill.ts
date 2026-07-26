@@ -1107,9 +1107,10 @@ function patchForm1(datasetsXml: string, answers: Imm1294Answers): string {
  * Fill the certified IMM 1294 PDF via encrypted incremental update.
  * `blankPdf` must be the original IRCC file (imm1294f.pdf), not a rewritten blank.
  *
- * Uses an encrypted /XRef stream (same style as IRCC's own incremental update)
- * rather than a classic `xref` table — Acrobat often "repairs" hybrid classic
- * appends and then reports "signature byte range is invalid".
+ * Appends a replacement datasets object plus an /XRef stream. Important: IRCC's
+ * own XRef streams are stored *unencrypted* (raw Flate) even though the file uses
+ * AESV2 for EmbeddedFile streams. Encrypting the XRef stream makes Acrobat fail
+ * to parse it, "repair" the PDF, and report an invalid signature byte range.
  */
 export async function fillImm1294Pdf(
   blankPdf: Uint8Array,
@@ -1148,25 +1149,31 @@ export async function fillImm1294Pdf(
   xrefBin[0] = 1;
   xrefBin.set(be3(objOffset), 1);
   xrefBin[4] = 0;
-  const xrefFlate = pako.deflate(xrefBin);
-  const xrefKey = objectKey(FILE_ENCRYPTION_KEY, xrefObjNum, 0);
-  const xrefStream = await aesEncryptCbc(xrefKey, xrefFlate);
-  const xrefLenField = String(xrefStream.length).padStart(8, " ");
+
+  // PNG predictor 12 (Up), Columns=5 — same as IRCC obj 125.
+  // Row = predictor_byte(2=Up) + 5 bytes; first row Up-from-zeros = identity.
+  const predicted = new Uint8Array(6);
+  predicted[0] = 2;
+  predicted.set(xrefBin, 1);
+  const xrefFlate = pako.deflate(predicted);
+  // Intentionally NOT AES-encrypted — matches IRCC XRef streams.
+  const xrefLenField = String(xrefFlate.length).padStart(7, " ");
 
   const xrefHeader = new TextEncoder().encode(
     `${xrefObjNum} 0 obj\n` +
       `<</Length${xrefLenField}/Type/XRef/Root ${meta.root}/Info ${meta.info}` +
       `/Encrypt ${meta.encrypt}/ID${meta.id}/Size ${meta.size + 1}` +
-      `/Prev ${prev}/Index[${DATASETS_OBJ} 1]/W[1 3 1]/Filter/FlateDecode>>` +
+      `/Prev ${prev}/Index[${DATASETS_OBJ} 1]/W[1 3 1]` +
+      `/DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode>>` +
       `stream\n`,
   );
   const xrefFooter = new TextEncoder().encode("\nendstream\nendobj\n");
   const xrefBody = new Uint8Array(
-    xrefHeader.length + xrefStream.length + xrefFooter.length,
+    xrefHeader.length + xrefFlate.length + xrefFooter.length,
   );
   xrefBody.set(xrefHeader, 0);
-  xrefBody.set(xrefStream, xrefHeader.length);
-  xrefBody.set(xrefFooter, xrefHeader.length + xrefStream.length);
+  xrefBody.set(xrefFlate, xrefHeader.length);
+  xrefBody.set(xrefFooter, xrefHeader.length + xrefFlate.length);
 
   const tail = new TextEncoder().encode(
     `startxref\n${xrefOffset}\n%%EOF\n`,
@@ -1188,6 +1195,12 @@ export async function fillImm1294Pdf(
   const marked = new TextDecoder("latin1").decode(out.subarray(xrefOffset, xrefOffset + 12));
   if (!marked.startsWith(`${xrefObjNum} 0 obj`)) {
     throw new Error(`startxref mismatch: expected obj ${xrefObjNum} at ${xrefOffset}`);
+  }
+  // XRef stream must look like raw zlib (IRCC style), not AES
+  const streamKw = indexOfBytes(out, "stream\n", xrefOffset);
+  const sig = out.subarray(streamKw + 7, streamKw + 9);
+  if (sig[0] !== 0x78) {
+    throw new Error("XRef stream is not raw Flate (Acrobat requires unencrypted XRef)");
   }
 
   return out;
