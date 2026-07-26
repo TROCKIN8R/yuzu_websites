@@ -15,6 +15,7 @@
     mapLegendDelay: document.getElementById("stmMapLegendDelay"),
     refreshBtn: document.getElementById("stmRefreshBtn"),
     clearFiltersBtn: document.getElementById("stmClearFiltersBtn"),
+    lineSlicers: document.getElementById("stmLineSlicers"),
     loadSlicers: document.getElementById("stmLoadSlicers"),
     speedSlicers: document.getElementById("stmSpeedSlicers"),
     delaySlicers: document.getElementById("stmDelaySlicers"),
@@ -43,6 +44,11 @@
   let focusLine = null;
   let focusVehicleId = null;
   let routeLoadToken = 0;
+  const dropdownUi = {
+    openId: null,
+    search: Object.create(null),
+    caret: null
+  };
 
   function setStatus(message, tone) {
     if (!els.status) return;
@@ -62,18 +68,36 @@
       .replace(/>/g, "&gt;");
   }
 
+  function setHasValues(value) {
+    return value instanceof Set ? value.size > 0 : Boolean(value && value !== "all");
+  }
+
   function activeFilterCount() {
     let count = 0;
     if (filterState.lines.size) count += 1;
-    if (filterState.load !== "all") count += 1;
-    if (filterState.speed !== "all") count += 1;
-    if (filterState.delay !== "all") count += 1;
-    if (filterState.alertFilter !== "all") count += 1;
-    if (filterState.freshness !== "all") count += 1;
+    if (setHasValues(filterState.load)) count += 1;
+    if (setHasValues(filterState.speed)) count += 1;
+    if (setHasValues(filterState.delay)) count += 1;
+    if (setHasValues(filterState.alertFilter)) count += 1;
+    if (setHasValues(filterState.freshness)) count += 1;
     if (filterState.colorMode !== "load") count += 1;
     if (filterState.accessibleOnly) count += 1;
     if (filterState.direction !== "all") count += 1;
     return count;
+  }
+
+  function toggleSetValue(set, id) {
+    if (set.has(id)) set.delete(id);
+    else set.add(id);
+  }
+
+  function summarizeSelection(items, selectedSet, allLabel = "All") {
+    if (!selectedSet.size) return allLabel;
+    if (selectedSet.size === 1) {
+      const id = [...selectedSet][0];
+      return items.find((item) => item.id === id)?.label || id;
+    }
+    return `${selectedSet.size} selected`;
   }
 
   function getVehiclesForLineChart() {
@@ -173,26 +197,6 @@
     `).join("");
   }
 
-  function renderChipGroup(container, items, activeId, onSelect, options = {}) {
-    if (!container) return;
-    const { multi = false, activeSet = null } = options;
-
-    container.innerHTML = items.map((item) => {
-      const active = multi ? activeSet?.has(item.id) : activeId === item.id;
-      const count = item.count != null ? `<span class="stm-chip__count">${formatNum(item.count)}</span>` : "";
-      return `
-        <button type="button" class="stm-chip${active ? " stm-chip--active" : ""}" data-id="${escapeHtml(item.id)}" aria-pressed="${active}">
-          ${escapeHtml(item.label)}${count}
-        </button>`;
-    }).join("");
-
-    container.onclick = (event) => {
-      const button = event.target.closest(".stm-chip");
-      if (!button) return;
-      onSelect(button.dataset.id);
-    };
-  }
-
   function countBy(items, keyFn) {
     const counts = {};
     items.forEach((item) => {
@@ -202,74 +206,242 @@
     return counts;
   }
 
-  function renderLoadSlicers() {
-    const counts = countBy(rawVehicles.filter((v) => !v.isMetro), (v) => filtersApi.getLoadProfile(v));
-    renderChipGroup(
-      els.loadSlicers,
-      filtersApi.LOAD_PROFILES.map((profile) => ({
-        ...profile,
-        count: profile.id === "all" ? rawVehicles.filter((v) => !v.isMetro).length : counts[profile.id] || 0
+  function renderDropdown(container, config) {
+    if (!container) return;
+
+    const {
+      id,
+      label,
+      items,
+      selectedSet = null,
+      selectedId = null,
+      multi = true,
+      allLabel = "All",
+      onToggle,
+      onSelect
+    } = config;
+
+    const searchable = items.length > 5;
+    const query = String(dropdownUi.search[id] || "").trim().toLowerCase();
+    const isOpen = dropdownUi.openId === id;
+    const visibleItems = searchable && query
+      ? items.filter((item) =>
+        String(item.label || "").toLowerCase().includes(query)
+        || String(item.id || "").toLowerCase().includes(query)
+      )
+      : items;
+
+    const summary = multi
+      ? summarizeSelection(items, selectedSet || new Set(), allLabel)
+      : (items.find((item) => item.id === selectedId)?.label || allLabel);
+    const active = multi ? Boolean(selectedSet?.size) : selectedId === "delay";
+    const activeCount = multi ? (selectedSet?.size || 0) : 0;
+
+    container.className = `stm-filter-dd${isOpen ? " stm-filter-dd--open" : ""}${active ? " stm-filter-dd--active" : ""}`;
+    container.innerHTML = `
+      <button type="button" class="stm-filter-dd__trigger" aria-haspopup="listbox" aria-expanded="${isOpen}" data-dd-trigger="${escapeHtml(id)}">
+        <span class="stm-filter-dd__label">${escapeHtml(label)}</span>
+        <span class="stm-filter-dd__value">${escapeHtml(summary)}${activeCount > 1 ? ` (${activeCount})` : ""}</span>
+        <span class="stm-filter-dd__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="stm-filter-dd__panel" role="listbox" ${multi ? 'aria-multiselectable="true"' : ""} ${isOpen ? "" : "hidden"}>
+        ${searchable ? `
+          <div class="stm-filter-dd__search">
+            <input type="search" class="stm-filter-dd__search-input" data-dd-search="${escapeHtml(id)}" placeholder="Search…" value="${escapeHtml(dropdownUi.search[id] || "")}" aria-label="Search ${escapeHtml(label)}">
+          </div>` : ""}
+        <div class="stm-filter-dd__options">
+          ${visibleItems.length ? visibleItems.map((item) => {
+            const checked = multi
+              ? selectedSet?.has(item.id)
+              : selectedId === item.id;
+            const count = item.count != null
+              ? `<span class="stm-filter-dd__count">${formatNum(item.count)}</span>`
+              : "";
+            return `
+              <label class="stm-filter-dd__option${checked ? " stm-filter-dd__option--checked" : ""}">
+                <input type="${multi ? "checkbox" : "radio"}" name="stm-dd-${escapeHtml(id)}" value="${escapeHtml(item.id)}" ${checked ? "checked" : ""} data-dd-option="${escapeHtml(id)}">
+                <span class="stm-filter-dd__option-label">${escapeHtml(item.label)}</span>
+                ${count}
+              </label>`;
+          }).join("") : `<p class="stm-filter-dd__empty">No matches</p>`}
+        </div>
+        ${multi ? `
+          <div class="stm-filter-dd__footer">
+            <button type="button" class="stm-filter-dd__clear" data-dd-clear="${escapeHtml(id)}" ${selectedSet?.size ? "" : "disabled"}>Clear</button>
+          </div>` : ""}
+      </div>
+    `;
+
+    container.addEventListener("click", (event) => event.stopPropagation());
+
+    container.querySelector("[data-dd-trigger]")?.addEventListener("click", () => {
+      dropdownUi.openId = dropdownUi.openId === id ? null : id;
+      renderFilterDropdowns();
+    });
+
+    container.querySelector("[data-dd-search]")?.addEventListener("input", (event) => {
+      dropdownUi.search[id] = event.target.value;
+      dropdownUi.caret = {
+        id,
+        start: event.target.selectionStart,
+        end: event.target.selectionEnd
+      };
+      renderFilterDropdowns();
+    });
+
+    container.querySelectorAll("[data-dd-option]").forEach((input) => {
+      input.addEventListener("change", () => {
+        if (multi) onToggle?.(input.value);
+        else onSelect?.(input.value);
+        renderAll();
+      });
+    });
+
+    container.querySelector("[data-dd-clear]")?.addEventListener("click", () => {
+      selectedSet?.clear();
+      renderAll();
+    });
+
+    if (isOpen && searchable && dropdownUi.caret?.id === id) {
+      const caret = dropdownUi.caret;
+      dropdownUi.caret = null;
+      requestAnimationFrame(() => {
+        if (dropdownUi.openId !== id) return;
+        const live = container.querySelector("[data-dd-search]");
+        if (!live) return;
+        live.focus();
+        const max = live.value.length;
+        live.setSelectionRange(
+          Math.min(caret.start ?? max, max),
+          Math.min(caret.end ?? max, max)
+        );
+      });
+    }
+  }
+
+  function busVehicles() {
+    return rawVehicles.filter((vehicle) => !vehicle.isMetro);
+  }
+
+  function renderLineSlicers() {
+    const routes = filtersApi.buildRouteIndex(getVehiclesForLineChart(), {
+      alerts: rawAlerts,
+      meta: routeMeta,
+      alertFilter: filterState.alertFilter
+    });
+    renderDropdown(els.lineSlicers, {
+      id: "line",
+      label: "Lines",
+      allLabel: "All lines",
+      items: routes.map((route) => ({
+        id: route.routeId,
+        label: route.name ? `${route.routeId} · ${route.name}` : `Line ${route.routeId}`,
+        count: route.count
       })),
-      filterState.load,
-      (id) => { filterState.load = id; renderAll(); }
-    );
+      selectedSet: filterState.lines,
+      onToggle: (id) => {
+        toggleSetValue(filterState.lines, id);
+        if (filterState.lines.size) {
+          clearRouteFocus();
+          filterState.direction = "all";
+        }
+      }
+    });
+  }
+
+  function renderLoadSlicers() {
+    const counts = countBy(busVehicles(), (v) => filtersApi.getLoadProfile(v));
+    renderDropdown(els.loadSlicers, {
+      id: "load",
+      label: "Passenger load",
+      allLabel: "All loads",
+      items: filtersApi.LOAD_PROFILES.map((profile) => ({
+        ...profile,
+        count: counts[profile.id] || 0
+      })),
+      selectedSet: filterState.load,
+      onToggle: (id) => toggleSetValue(filterState.load, id)
+    });
   }
 
   function renderSpeedSlicers() {
-    const counts = countBy(rawVehicles.filter((v) => !v.isMetro), (v) => v.speedBand || "unknown");
-    renderChipGroup(
-      els.speedSlicers,
-      filtersApi.SPEED_BANDS.map((band) => ({
+    const counts = countBy(busVehicles(), (v) => v.speedBand || "unknown");
+    renderDropdown(els.speedSlicers, {
+      id: "speed",
+      label: "Speed band",
+      allLabel: "All speeds",
+      items: filtersApi.SPEED_BANDS.map((band) => ({
         ...band,
-        count: band.id === "all" ? rawVehicles.filter((v) => !v.isMetro).length : counts[band.id] || 0
+        count: counts[band.id] || 0
       })),
-      filterState.speed,
-      (id) => { filterState.speed = id; renderAll(); }
-    );
+      selectedSet: filterState.speed,
+      onToggle: (id) => toggleSetValue(filterState.speed, id)
+    });
   }
 
   function renderDelaySlicers() {
-    const counts = countBy(rawVehicles.filter((v) => !v.isMetro), (v) => v.delayStatus || "unknown");
-    renderChipGroup(
-      els.delaySlicers,
-      filtersApi.DELAY_STATES.map((state) => ({
+    const counts = countBy(busVehicles(), (v) => v.delayStatus || "unknown");
+    renderDropdown(els.delaySlicers, {
+      id: "delay",
+      label: "Delay status",
+      allLabel: "All delays",
+      items: filtersApi.DELAY_STATES.map((state) => ({
         ...state,
-        count: state.id === "all" ? rawVehicles.filter((v) => !v.isMetro).length : counts[state.id] || 0
+        count: counts[state.id] || 0
       })),
-      filterState.delay,
-      (id) => { filterState.delay = id; renderAll(); }
-    );
+      selectedSet: filterState.delay,
+      onToggle: (id) => toggleSetValue(filterState.delay, id)
+    });
   }
 
   function renderAlertSlicers() {
-    renderChipGroup(
-      els.alertSlicers,
-      filtersApi.ALERT_FILTERS,
-      filterState.alertFilter,
-      (id) => { filterState.alertFilter = id; renderAll(); }
-    );
+    renderDropdown(els.alertSlicers, {
+      id: "alert",
+      label: "Service alerts",
+      allLabel: "All lines",
+      items: filtersApi.ALERT_FILTERS,
+      selectedSet: filterState.alertFilter,
+      onToggle: (id) => toggleSetValue(filterState.alertFilter, id)
+    });
   }
 
   function renderFreshnessSlicers() {
-    const counts = countBy(rawVehicles.filter((v) => !v.isMetro), (v) => (v.isStale ? "stale" : "fresh"));
-    renderChipGroup(
-      els.freshnessSlicers,
-      filtersApi.FRESHNESS_FILTERS.map((item) => ({
+    const counts = countBy(busVehicles(), (v) => (v.isStale ? "stale" : "fresh"));
+    renderDropdown(els.freshnessSlicers, {
+      id: "freshness",
+      label: "Freshness",
+      allLabel: "All positions",
+      items: filtersApi.FRESHNESS_FILTERS.map((item) => ({
         ...item,
-        count: item.id === "all" ? rawVehicles.filter((v) => !v.isMetro).length : counts[item.id] || 0
+        count: counts[item.id] || 0
       })),
-      filterState.freshness,
-      (id) => { filterState.freshness = id; renderAll(); }
-    );
+      selectedSet: filterState.freshness,
+      onToggle: (id) => toggleSetValue(filterState.freshness, id)
+    });
   }
 
   function renderColorSlicers() {
-    renderChipGroup(
-      els.colorSlicers,
-      filtersApi.COLOR_MODES,
-      filterState.colorMode,
-      (id) => { filterState.colorMode = id; renderAll(); }
-    );
+    renderDropdown(els.colorSlicers, {
+      id: "color",
+      label: "Map colours",
+      multi: false,
+      selectedId: filterState.colorMode,
+      items: filtersApi.COLOR_MODES,
+      onSelect: (id) => {
+        filterState.colorMode = id;
+        dropdownUi.openId = null;
+      }
+    });
+  }
+
+  function renderFilterDropdowns() {
+    renderLineSlicers();
+    renderLoadSlicers();
+    renderSpeedSlicers();
+    renderDelaySlicers();
+    renderAlertSlicers();
+    renderFreshnessSlicers();
+    renderColorSlicers();
   }
 
   function renderDirectionSelect() {
@@ -366,24 +538,33 @@
     }).join("");
   }
 
+  function labelsForSet(items, selectedSet) {
+    return items
+      .filter((item) => selectedSet.has(item.id))
+      .map((item) => item.label);
+  }
+
   function renderFilterSummary(filtered) {
     if (!els.filterSummary) return;
 
     const parts = [];
     if (filterState.lines.size) {
-      parts.push(`Lines: ${[...filterState.lines].sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).join(", ")}`);
+      const lineIds = [...filterState.lines].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+      parts.push(lineIds.length <= 3
+        ? `Lines: ${lineIds.join(", ")}`
+        : `Lines: ${lineIds.length} selected`);
     }
-    ["load", "speed", "delay", "alertFilter", "freshness"].forEach((key) => {
-      if (filterState[key] === "all") return;
-      const lists = {
-        load: filtersApi.LOAD_PROFILES,
-        speed: filtersApi.SPEED_BANDS,
-        delay: filtersApi.DELAY_STATES,
-        alertFilter: filtersApi.ALERT_FILTERS,
-        freshness: filtersApi.FRESHNESS_FILTERS
-      };
-      const label = lists[key]?.find((item) => item.id === filterState[key])?.label;
-      if (label) parts.push(label);
+    const multiParts = [
+      ["load", filtersApi.LOAD_PROFILES],
+      ["speed", filtersApi.SPEED_BANDS],
+      ["delay", filtersApi.DELAY_STATES],
+      ["alertFilter", filtersApi.ALERT_FILTERS],
+      ["freshness", filtersApi.FRESHNESS_FILTERS]
+    ];
+    multiParts.forEach(([key, list]) => {
+      const selected = filterState[key];
+      if (!(selected instanceof Set) || !selected.size) return;
+      parts.push(...labelsForSet(list, selected));
     });
     if (filterState.colorMode === "delay") parts.push("Delay colours");
     if (filterState.accessibleOnly) parts.push("Accessible stops only");
@@ -516,12 +697,7 @@
     const filtered = getFilteredVehicles();
 
     renderKpis(filtered);
-    renderLoadSlicers();
-    renderSpeedSlicers();
-    renderDelaySlicers();
-    renderAlertSlicers();
-    renderFreshnessSlicers();
-    renderColorSlicers();
+    renderFilterDropdowns();
     renderDirectionSelect();
     renderFilterSummary(filtered);
     renderRouteChart();
@@ -536,6 +712,9 @@
 
   function clearFilters() {
     filterState = filtersApi.defaultState();
+    dropdownUi.openId = null;
+    dropdownUi.search = Object.create(null);
+    dropdownUi.caret = null;
     if (els.lineSearch) els.lineSearch.value = "";
     if (els.accessibleToggle) els.accessibleToggle.checked = false;
     clearRouteFocus();
@@ -624,7 +803,21 @@
     renderAll();
   });
 
+  document.addEventListener("click", (event) => {
+    if (!dropdownUi.openId) return;
+    if (event.target.closest(".stm-filter-dd")) return;
+    dropdownUi.openId = null;
+    renderFilterDropdowns();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !dropdownUi.openId) return;
+    dropdownUi.openId = null;
+    renderFilterDropdowns();
+  });
+
   mapApi?.init("stmLiveMap");
+  mapApi?.invalidate?.();
   mapApi?.setVehicleSelectHandler?.((vehicle) => {
     focusVehicleId = vehicle.id || null;
     mapApi?.setSelectedVehicle?.(focusVehicleId);
