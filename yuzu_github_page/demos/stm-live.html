@@ -129,22 +129,14 @@
                 <div id="stmLiveMap" class="stm-live-map" role="application" aria-label="Montreal live transit map"></div>
             </div>
 
-            <div class="stm-grid stm-grid--below-map">
-                <div class="stm-card">
-                    <h3>Top lines in view</h3>
-                    <div class="stm-line-tools">
-                        <input type="search" class="stm-line-search" id="stmLineSearch" placeholder="Search line number or name…" aria-label="Search bus line">
-                    </div>
-                    <div id="stmRouteChart" class="stm-route-chart"></div>
-                </div>
-                <div class="stm-card">
-                    <h3>Busiest lines by occupancy</h3>
-                    <div id="stmOccupancyChart" class="stm-route-chart"></div>
-                </div>
-            </div>
-
             <div class="stm-card stm-card--table">
-                <h3>Filtered vehicles</h3>
+                <div class="stm-table-head">
+                    <h3 id="stmTableTitle">Filtered buses</h3>
+                    <div class="stm-segmented" role="group" aria-label="Table granularity">
+                        <button type="button" class="stm-segmented__btn" id="stmTableGranularityBus" aria-pressed="true">Bus</button>
+                        <button type="button" class="stm-segmented__btn" id="stmTableGranularityLine" aria-pressed="false">Line</button>
+                    </div>
+                </div>
                 <div id="stmVehicleTable"></div>
             </div>
 

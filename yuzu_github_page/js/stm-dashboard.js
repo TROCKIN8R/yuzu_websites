@@ -24,10 +24,10 @@
     colorSlicers: document.getElementById("stmColorSlicers"),
     directionSelect: document.getElementById("stmDirectionSelect"),
     accessibleToggle: document.getElementById("stmAccessibleToggle"),
-    lineSearch: document.getElementById("stmLineSearch"),
-    routeChart: document.getElementById("stmRouteChart"),
-    occupancyChart: document.getElementById("stmOccupancyChart"),
     vehicleTable: document.getElementById("stmVehicleTable"),
+    tableTitle: document.getElementById("stmTableTitle"),
+    tableGranularityBus: document.getElementById("stmTableGranularityBus"),
+    tableGranularityLine: document.getElementById("stmTableGranularityLine"),
     filterSummary: document.getElementById("stmFilterSummary")
   };
 
@@ -44,11 +44,16 @@
   let focusLine = null;
   let focusVehicleId = null;
   let routeLoadToken = 0;
+  let tableGranularity = "bus";
+  let tableSort = { key: "line", dir: "desc" };
   const dropdownUi = {
     openId: null,
     search: Object.create(null),
     caret: null
   };
+
+  const LOAD_SORT_RANK = { busy: 3, moderate: 2, light: 1, unknown: 0 };
+  const DELAY_SORT_RANK = { late: 3, minor: 2, on_time: 1, unknown: 0 };
 
   function setStatus(message, tone) {
     if (!els.status) return;
@@ -112,10 +117,6 @@
       alerts: rawAlerts,
       includeMetro: true
     });
-  }
-
-  function getBusOnlyFiltered() {
-    return getFilteredVehicles().filter((vehicle) => !vehicle.isMetro);
   }
 
   function getLinesForRouteDisplay() {
@@ -466,78 +467,6 @@
     });
   }
 
-  function renderRouteChart() {
-    if (!els.routeChart) return;
-
-    const counts = filtersApi
-      .filterRoutesForSearch(
-        filtersApi.buildRouteIndex(getVehiclesForLineChart(), {
-          alerts: rawAlerts,
-          meta: routeMeta,
-          alertFilter: filterState.alertFilter
-        }),
-        filterState.lineSearch
-      )
-      .slice(0, 10);
-
-    if (!counts.length) {
-      els.routeChart.innerHTML = `<p class="stm-empty">${filterState.lineSearch.trim()
-        ? "No lines match your search."
-        : "No vehicles match the current slicers."}</p>`;
-      return;
-    }
-
-    const max = counts[0].count || 1;
-    els.routeChart.innerHTML = counts.map((route) => {
-      const active = filterState.lines.has(route.routeId);
-      const hasAlert = filtersApi.alertsForRoute(rawAlerts, route.routeId).length > 0;
-      const width = Math.max(8, Math.round((route.count / max) * 100));
-      const label = route.name ? `${route.routeId} · ${route.name}` : route.routeId;
-      return `
-        <button type="button" class="stm-bar-row${active ? " stm-bar-row--active" : ""}" data-route="${escapeHtml(route.routeId)}" aria-pressed="${active}">
-          <span class="stm-bar-row__label">${hasAlert ? "⚠ " : ""}Line ${escapeHtml(label)}</span>
-          <span class="stm-bar-row__track" aria-hidden="true"><span class="stm-bar-row__fill" style="width:${width}%"></span></span>
-          <span class="stm-bar-row__value">${formatNum(route.count)}</span>
-        </button>`;
-    }).join("");
-
-    els.routeChart.onclick = (event) => {
-      const row = event.target.closest(".stm-bar-row");
-      if (!row) return;
-      const routeId = row.dataset.route;
-      if (filterState.lines.has(routeId)) filterState.lines.delete(routeId);
-      else filterState.lines.add(routeId);
-      if (filterState.lines.size) {
-        clearRouteFocus();
-        filterState.direction = "all";
-      }
-      renderAll();
-    };
-  }
-
-  function renderOccupancyChart() {
-    if (!els.occupancyChart) return;
-
-    const ranking = enrichApi.buildOccupancyRanking(getBusOnlyFiltered());
-    if (!ranking.length) {
-      els.occupancyChart.innerHTML = `<p class="stm-empty">No occupancy data for current slicers.</p>`;
-      return;
-    }
-
-    const max = ranking[0].avgOccupancy || 1;
-    els.occupancyChart.innerHTML = ranking.map((row) => {
-      const width = Math.max(8, Math.round((row.avgOccupancy / max) * 100));
-      const name = routeMeta?.routes?.[row.routeId]?.name;
-      const label = name ? `${row.routeId} · ${name}` : row.routeId;
-      return `
-        <div class="stm-bar-row stm-bar-row--static">
-          <span class="stm-bar-row__label">Line ${escapeHtml(label)}</span>
-          <span class="stm-bar-row__track" aria-hidden="true"><span class="stm-bar-row__fill stm-bar-row__fill--busy" style="width:${width}%"></span></span>
-          <span class="stm-bar-row__value">${row.avgOccupancy.toFixed(1)}</span>
-        </div>`;
-    }).join("");
-  }
-
   function labelsForSet(items, selectedSet) {
     return items
       .filter((item) => selectedSet.has(item.id))
@@ -574,17 +503,162 @@
       : `${formatNum(filtered.length)} vehicles shown · metro lines always visible`;
   }
 
-  function renderVehicleTable(filtered) {
-    if (!els.vehicleTable) return;
+  function setTableGranularity(mode) {
+    if (mode !== "bus" && mode !== "line") return;
+    if (tableGranularity === mode) return;
+    tableGranularity = mode;
+    tableSort = {
+      key: mode === "line" ? "buses" : "line",
+      dir: "desc"
+    };
+    renderAll();
+  }
 
-    const rows = filtered
-      .filter((vehicle) => !vehicle.isMetro)
-      .slice()
-      .sort((a, b) => String(a.routeId).localeCompare(String(b.routeId), undefined, { numeric: true }))
-      .slice(0, 40);
+  function toggleTableSort(key) {
+    if (!key) return;
+    if (tableSort.key === key) {
+      tableSort = { key, dir: tableSort.dir === "desc" ? "asc" : "desc" };
+    } else {
+      tableSort = { key, dir: "desc" };
+    }
+    renderVehicleTable(getFilteredVehicles());
+    updateTableGranularityControls();
+  }
+
+  function compareSortValues(a, b, dir) {
+    const mul = dir === "asc" ? 1 : -1;
+    const aMissing = a == null || Number.isNaN(a);
+    const bMissing = b == null || Number.isNaN(b);
+    if (aMissing && bMissing) return 0;
+    if (aMissing) return 1;
+    if (bMissing) return -1;
+    if (typeof a === "number" && typeof b === "number") return (a - b) * mul;
+    return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" }) * mul;
+  }
+
+  function sortRows(rows, valueFor) {
+    return rows.slice().sort((left, right) => {
+      const primary = compareSortValues(valueFor(left), valueFor(right), tableSort.dir);
+      if (primary) return primary;
+      return compareSortValues(left.routeId, right.routeId, "asc");
+    });
+  }
+
+  function sortHeaderButton(key, label) {
+    const active = tableSort.key === key;
+    const ariaSort = !active ? "none" : (tableSort.dir === "asc" ? "ascending" : "descending");
+    const marker = !active ? "" : (tableSort.dir === "asc" ? " ↑" : " ↓");
+    return `
+      <th aria-sort="${ariaSort}">
+        <button type="button" class="stm-sort-btn${active ? " stm-sort-btn--active" : ""}" data-sort-key="${escapeHtml(key)}">
+          ${escapeHtml(label)}${marker}
+        </button>
+      </th>`;
+  }
+
+  function buildLineRows(buses) {
+    const groups = new Map();
+
+    buses.forEach((vehicle) => {
+      const routeId = String(vehicle.routeId || "").trim();
+      if (!routeId) return;
+      const current = groups.get(routeId) || {
+        routeId,
+        buses: 0,
+        loadScoreTotal: 0,
+        loadScoreCount: 0,
+        loadCounts: { light: 0, moderate: 0, busy: 0, unknown: 0 },
+        delayTotal: 0,
+        delayCount: 0,
+        delayRankTotal: 0,
+        delayStatusCounts: { on_time: 0, minor: 0, late: 0, unknown: 0 },
+        fresh: 0,
+        stale: 0,
+        speedTotal: 0,
+        speedCount: 0,
+        sampleVehicle: vehicle
+      };
+
+      current.buses += 1;
+      const load = filtersApi.getLoadProfile(vehicle);
+      current.loadCounts[load] = (current.loadCounts[load] || 0) + 1;
+      if (vehicle.occupancyScore != null) {
+        current.loadScoreTotal += vehicle.occupancyScore;
+        current.loadScoreCount += 1;
+      }
+
+      const delayStatus = vehicle.delayStatus || "unknown";
+      current.delayStatusCounts[delayStatus] = (current.delayStatusCounts[delayStatus] || 0) + 1;
+      current.delayRankTotal += DELAY_SORT_RANK[delayStatus] || 0;
+      if (vehicle.delay != null) {
+        current.delayTotal += Number(vehicle.delay);
+        current.delayCount += 1;
+      }
+
+      if (vehicle.isStale) current.stale += 1;
+      else current.fresh += 1;
+
+      if (vehicle.speed != null && Number.isFinite(Number(vehicle.speed))) {
+        current.speedTotal += Number(vehicle.speed);
+        current.speedCount += 1;
+      }
+
+      groups.set(routeId, current);
+    });
+
+    return [...groups.values()].map((row) => {
+      const dominantLoad = Object.entries(row.loadCounts)
+        .sort((a, b) => b[1] - a[1] || (LOAD_SORT_RANK[b[0]] || 0) - (LOAD_SORT_RANK[a[0]] || 0))[0]?.[0] || "unknown";
+      const dominantDelay = Object.entries(row.delayStatusCounts)
+        .sort((a, b) => b[1] - a[1] || (DELAY_SORT_RANK[b[0]] || 0) - (DELAY_SORT_RANK[a[0]] || 0))[0]?.[0] || "unknown";
+      const avgDelayMin = row.delayCount ? row.delayTotal / row.delayCount / 60 : null;
+      const avgSpeedKmh = row.speedCount ? (row.speedTotal / row.speedCount) * 3.6 : null;
+      const freshShare = row.buses ? row.fresh / row.buses : 0;
+      const routeName = routeMeta?.routes?.[row.routeId]?.name || "";
+
+      return {
+        ...row,
+        routeName,
+        loadProfile: dominantLoad,
+        delayStatus: dominantDelay,
+        avgDelayMin,
+        avgSpeedKmh,
+        freshShare,
+        avgLoadScore: row.loadScoreCount ? row.loadScoreTotal / row.loadScoreCount : LOAD_SORT_RANK[dominantLoad] || 0
+      };
+    });
+  }
+
+  function updateTableGranularityControls() {
+    const isBus = tableGranularity === "bus";
+    if (els.tableTitle) {
+      els.tableTitle.textContent = isBus ? "Filtered buses" : "Filtered lines";
+    }
+    if (els.tableGranularityBus) {
+      els.tableGranularityBus.setAttribute("aria-pressed", isBus ? "true" : "false");
+      els.tableGranularityBus.classList.toggle("stm-segmented__btn--active", isBus);
+    }
+    if (els.tableGranularityLine) {
+      els.tableGranularityLine.setAttribute("aria-pressed", isBus ? "false" : "true");
+      els.tableGranularityLine.classList.toggle("stm-segmented__btn--active", !isBus);
+    }
+  }
+
+  function renderBusTable(buses) {
+    const rows = sortRows(buses, (vehicle) => {
+      switch (tableSort.key) {
+        case "vehicle": return vehicle.id || "";
+        case "load": return LOAD_SORT_RANK[filtersApi.getLoadProfile(vehicle)] ?? 0;
+        case "delay": return vehicle.delay != null ? Number(vehicle.delay) : null;
+        case "freshness": return vehicle.isStale ? 0 : 1;
+        case "speed": return vehicle.speed != null ? Number(vehicle.speed) : null;
+        case "line":
+        default: return String(vehicle.routeId || "");
+      }
+    }).slice(0, 80);
 
     if (!rows.length) {
-      els.vehicleTable.innerHTML = `<p class="stm-empty">No buses to list for the current slicers.</p>`;
+      els.vehicleTable.innerHTML = `<p class="stm-empty">No buses to list for the current filters.</p>`;
       return;
     }
 
@@ -592,12 +666,12 @@
       <table class="stm-table stm-table--compact">
         <thead>
           <tr>
-            <th>Line</th>
-            <th>Vehicle</th>
-            <th>Load</th>
-            <th>Delay</th>
-            <th>Freshness</th>
-            <th>Speed</th>
+            ${sortHeaderButton("line", "Line")}
+            ${sortHeaderButton("vehicle", "Vehicle")}
+            ${sortHeaderButton("load", "Load")}
+            ${sortHeaderButton("delay", "Delay")}
+            ${sortHeaderButton("freshness", "Freshness")}
+            ${sortHeaderButton("speed", "Speed")}
           </tr>
         </thead>
         <tbody>
@@ -616,7 +690,7 @@
           }).join("")}
         </tbody>
       </table>
-      <p class="stm-table-hint">Click a row to show that bus line path, stops, alerts, and scheduled headway on the map.</p>`;
+      <p class="stm-table-hint">Click a column header to sort · click a row to show that bus line on the map.</p>`;
 
     const selectRow = (row) => {
       const vehicle = rows.find((item) => String(item.id) === row.dataset.vehicleId);
@@ -624,6 +698,11 @@
     };
 
     els.vehicleTable.onclick = (event) => {
+      const sortBtn = event.target.closest("[data-sort-key]");
+      if (sortBtn) {
+        toggleTableSort(sortBtn.dataset.sortKey);
+        return;
+      }
       const row = event.target.closest(".stm-table-row");
       if (row) selectRow(row);
     };
@@ -634,6 +713,92 @@
       event.preventDefault();
       selectRow(row);
     };
+  }
+
+  function renderLineTable(buses) {
+    const rows = sortRows(buildLineRows(buses), (row) => {
+      switch (tableSort.key) {
+        case "buses": return row.buses;
+        case "load": return row.avgLoadScore;
+        case "delay": return row.avgDelayMin;
+        case "freshness": return row.freshShare;
+        case "speed": return row.avgSpeedKmh;
+        case "line":
+        default: return String(row.routeId || "");
+      }
+    });
+
+    if (!rows.length) {
+      els.vehicleTable.innerHTML = `<p class="stm-empty">No lines to list for the current filters.</p>`;
+      return;
+    }
+
+    els.vehicleTable.innerHTML = `
+      <table class="stm-table stm-table--compact">
+        <thead>
+          <tr>
+            ${sortHeaderButton("line", "Line")}
+            ${sortHeaderButton("buses", "Buses")}
+            ${sortHeaderButton("load", "Load")}
+            ${sortHeaderButton("delay", "Avg delay")}
+            ${sortHeaderButton("freshness", "Freshness")}
+            ${sortHeaderButton("speed", "Avg speed")}
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((row) => {
+            const selected = focusLine && String(focusLine) === String(row.routeId) && !focusVehicleId;
+            const delayLabel = row.avgDelayMin != null ? `${row.avgDelayMin.toFixed(1)}m` : "—";
+            const freshLabel = `${Math.round(row.freshShare * 100)}% fresh`;
+            const speedLabel = row.avgSpeedKmh != null ? `${Math.round(row.avgSpeedKmh)} km/h` : "—";
+            return `
+            <tr class="stm-table-row${selected ? " stm-table-row--selected" : ""}" data-route-id="${escapeHtml(row.routeId || "")}" tabindex="0" role="button">
+              <td><strong>${escapeHtml(row.routeId || "—")}</strong>${row.routeName ? `<div class="stm-table-sub">${escapeHtml(row.routeName)}</div>` : ""}</td>
+              <td>${formatNum(row.buses)}</td>
+              <td><span class="stm-pill stm-pill--${row.loadProfile}">${escapeHtml(row.loadProfile)}</span></td>
+              <td><span class="stm-pill stm-pill--${row.delayStatus}">${delayLabel}</span></td>
+              <td>${freshLabel}<div class="stm-table-sub">${formatNum(row.fresh)} fresh · ${formatNum(row.stale)} stale</div></td>
+              <td>${speedLabel}</td>
+            </tr>`;
+          }).join("")}
+        </tbody>
+      </table>
+      <p class="stm-table-hint">Click a column header to sort · click a row to show that line path on the map.</p>`;
+
+    const selectRow = (row) => {
+      const routeId = row.dataset.routeId;
+      if (!routeId) return;
+      focusLine = routeId;
+      focusVehicleId = null;
+      mapApi?.setSelectedVehicle?.(null);
+      filterState.direction = "all";
+      renderAll();
+    };
+
+    els.vehicleTable.onclick = (event) => {
+      const sortBtn = event.target.closest("[data-sort-key]");
+      if (sortBtn) {
+        toggleTableSort(sortBtn.dataset.sortKey);
+        return;
+      }
+      const row = event.target.closest(".stm-table-row");
+      if (row) selectRow(row);
+    };
+    els.vehicleTable.onkeydown = (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const row = event.target.closest(".stm-table-row");
+      if (!row) return;
+      event.preventDefault();
+      selectRow(row);
+    };
+  }
+
+  function renderVehicleTable(filtered) {
+    if (!els.vehicleTable) return;
+    updateTableGranularityControls();
+    const buses = filtered.filter((vehicle) => !vehicle.isMetro);
+    if (tableGranularity === "line") renderLineTable(buses);
+    else renderBusTable(buses);
   }
 
   function updateMapLegend() {
@@ -700,8 +865,6 @@
     renderFilterDropdowns();
     renderDirectionSelect();
     renderFilterSummary(filtered);
-    renderRouteChart();
-    renderOccupancyChart();
     renderVehicleTable(filtered);
     void renderMap(filtered);
 
@@ -715,7 +878,6 @@
     dropdownUi.openId = null;
     dropdownUi.search = Object.create(null);
     dropdownUi.caret = null;
-    if (els.lineSearch) els.lineSearch.value = "";
     if (els.accessibleToggle) els.accessibleToggle.checked = false;
     clearRouteFocus();
     mapApi?.resetBounds?.();
@@ -790,10 +952,8 @@
 
   els.refreshBtn?.addEventListener("click", refresh);
   els.clearFiltersBtn?.addEventListener("click", clearFilters);
-  els.lineSearch?.addEventListener("input", (event) => {
-    filterState.lineSearch = event.target.value;
-    renderRouteChart();
-  });
+  els.tableGranularityBus?.addEventListener("click", () => setTableGranularity("bus"));
+  els.tableGranularityLine?.addEventListener("click", () => setTableGranularity("line"));
   els.directionSelect?.addEventListener("change", (event) => {
     filterState.direction = event.target.value;
     renderAll();
