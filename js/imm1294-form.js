@@ -5,12 +5,16 @@
     const downloadBtn = document.getElementById('imm1294Download');
     const turnstileMount = document.getElementById('imm1294Turnstile');
     const consentInput = document.getElementById('imm1294Consent');
+    const jobList = document.getElementById('imm-job-list');
+    const jobTemplate = document.getElementById('imm-job-template');
+    const pcorList = document.getElementById('imm-pcor-list');
     const config = window.IMM1294_CONFIG || {};
     const captchaRequired = Boolean((config.turnstile?.siteKey || '').trim());
+    const MAX_JOBS = 3;
     let turnstileWidgetId = null;
     let captchaPassed = false;
     let submitting = false;
-    let jobRowsVisible = 1;
+    let dragItem = null;
 
     if (!form || !submitBtn) return;
 
@@ -101,7 +105,6 @@
     }
 
     function matchShowRule(rule) {
-        // "field=A|B" or "field!=A"
         const m = /^([A-Za-z0-9_]+)(!?=)(.+)$/.exec(rule.trim());
         if (!m) return false;
         const [, name, op, raw] = m;
@@ -146,23 +149,6 @@
             setBranchVisible(panel, ok);
         });
 
-        // Job rows 2–3 driven by counter, not Yes/No
-        for (let n = 2; n <= 3; n += 1) {
-            const panel = form.querySelector(`[data-imm-job-row="${n}"]`);
-            if (panel instanceof HTMLElement) {
-                setBranchVisible(panel, jobRowsVisible >= n);
-            }
-        }
-
-        const addJobBtn = document.getElementById('imm-add-job');
-        if (addJobBtn instanceof HTMLButtonElement) {
-            addJobBtn.hidden = jobRowsVisible >= 3;
-        }
-        const removeJobBtn = document.getElementById('imm-remove-job');
-        if (removeJobBtn instanceof HTMLButtonElement) {
-            removeJobBtn.hidden = jobRowsVisible <= 1;
-        }
-
         const preferred = form.querySelector('#imm-preferredLang');
         if (preferred instanceof HTMLSelectElement) {
             const both = fieldValue('ableToCommunicate') === 'Both';
@@ -170,6 +156,200 @@
             preferred.required = both;
             preferred.disabled = !both;
         }
+
+        syncJobChrome();
+        syncPcorChrome();
+    }
+
+    function jobCards() {
+        return jobList ? [...jobList.querySelectorAll('.imm-job-card')] : [];
+    }
+
+    function pcorCards() {
+        return pcorList ? [...pcorList.querySelectorAll('[data-pcor-slot]')] : [];
+    }
+
+    function syncPcorChrome() {
+        pcorCards().forEach((card, index) => {
+            const label = card.querySelector('.imm-sortable-item__label');
+            if (label) {
+                label.textContent = index === 0
+                    ? 'Country 1 (required when Yes)'
+                    : 'Country 2 (optional)';
+            }
+            const status = card.querySelector('[data-pcor="status"]');
+            const otherWrap = card.querySelector('.imm-pcor-other');
+            const otherInput = card.querySelector('[data-pcor="other"]');
+            const showOther = status instanceof HTMLSelectElement && status.value === '06';
+            if (otherWrap instanceof HTMLElement) otherWrap.hidden = !showOther;
+            if (otherInput instanceof HTMLInputElement) {
+                otherInput.required = showOther && fieldValue('previousCor') === 'Y';
+                otherInput.disabled = !showOther;
+            }
+            const requiredAttrs = index === 0 && fieldValue('previousCor') === 'Y';
+            card.querySelectorAll('[data-pcor="country"], [data-pcor="status"], [data-pcor="from"], [data-pcor="to"]').forEach((el) => {
+                if (el instanceof HTMLInputElement || el instanceof HTMLSelectElement) {
+                    if (index === 0) el.required = requiredAttrs;
+                }
+            });
+        });
+    }
+
+    function enableSortable(listEl, itemSelector) {
+        if (!listEl) return;
+        listEl.querySelectorAll(itemSelector).forEach((card) => {
+            if (!(card instanceof HTMLElement) || card.dataset.sortBound === '1') return;
+            card.dataset.sortBound = '1';
+            card.addEventListener('dragstart', (event) => {
+                listEl._immDrag = card;
+                dragItem = card;
+                card.classList.add('imm-sortable-item--dragging');
+                if (event.dataTransfer) {
+                    event.dataTransfer.effectAllowed = 'move';
+                    event.dataTransfer.setData('text/plain', 'sort');
+                }
+            });
+            card.addEventListener('dragend', () => {
+                card.classList.remove('imm-sortable-item--dragging');
+                listEl.querySelectorAll('.imm-sortable-item--over').forEach((el) => {
+                    el.classList.remove('imm-sortable-item--over');
+                });
+                listEl._immDrag = null;
+                dragItem = null;
+                syncBranches();
+            });
+            card.addEventListener('dragover', (event) => {
+                event.preventDefault();
+                const active = listEl._immDrag;
+                if (!(active instanceof HTMLElement) || active === card) return;
+                card.classList.add('imm-sortable-item--over');
+                const items = [...listEl.querySelectorAll(itemSelector)];
+                const dragIndex = items.indexOf(active);
+                const overIndex = items.indexOf(card);
+                if (dragIndex < 0 || overIndex < 0) return;
+                if (dragIndex < overIndex) card.after(active);
+                else card.before(active);
+            });
+            card.addEventListener('dragleave', () => {
+                card.classList.remove('imm-sortable-item--over');
+            });
+            card.addEventListener('drop', (event) => {
+                event.preventDefault();
+                card.classList.remove('imm-sortable-item--over');
+                syncBranches();
+            });
+            card.querySelectorAll('input, select, textarea, button:not(.imm-drag-handle)').forEach((el) => {
+                el.addEventListener('mousedown', () => {
+                    card.draggable = false;
+                });
+                el.addEventListener('mouseup', () => {
+                    card.draggable = true;
+                });
+            });
+            card.querySelector('.imm-drag-handle')?.addEventListener('mousedown', () => {
+                card.draggable = true;
+            });
+        });
+    }
+
+    function collectPcorRows() {
+        return pcorCards().map((card) => {
+            const val = (key) => {
+                const el = card.querySelector(`[data-pcor="${key}"]`);
+                if (el instanceof HTMLInputElement || el instanceof HTMLSelectElement) {
+                    return el.value.trim();
+                }
+                return '';
+            };
+            const from = splitDate(val('from'));
+            const to = splitDate(val('to'));
+            return {
+                country: val('country'),
+                status: val('status'),
+                other: val('other'),
+                fromYear: from.year,
+                fromMonth: from.month,
+                fromDay: from.day,
+                toYear: to.year,
+                toMonth: to.month,
+                toDay: to.day,
+            };
+        });
+    }
+
+    function syncJobChrome() {
+        const cards = jobCards();
+        cards.forEach((card, index) => {
+            const label = card.querySelector('.imm-sortable-item__label');
+            if (label) {
+                label.textContent = index === 0
+                    ? 'Job 1 · most recent on PDF'
+                    : `Job ${index + 1}`;
+            }
+            const removeBtn = card.querySelector('.imm-remove-job');
+            if (removeBtn instanceof HTMLButtonElement) {
+                removeBtn.hidden = cards.length <= 1;
+            }
+        });
+        const addBtn = document.getElementById('imm-add-job');
+        if (addBtn instanceof HTMLButtonElement) {
+            addBtn.hidden = cards.length >= MAX_JOBS;
+        }
+    }
+
+    function addJob(defaults = {}) {
+        if (!jobList || !jobTemplate || jobCards().length >= MAX_JOBS) return;
+        const node = jobTemplate.content.firstElementChild.cloneNode(true);
+        if (!(node instanceof HTMLElement)) return;
+
+        const set = (key, value) => {
+            const input = node.querySelector(`[data-job="${key}"]`);
+            if (input instanceof HTMLInputElement && value != null) input.value = value;
+        };
+        set('occupation', defaults.occupation ?? '');
+        set('employer', defaults.employer ?? '');
+        set('city', defaults.city ?? '');
+        set('country', defaults.country ?? '');
+        set('provinceState', defaults.provinceState ?? '');
+        set('from', defaults.from ?? '');
+        set('to', defaults.to ?? '');
+
+        bindJobCard(node);
+        jobList.appendChild(node);
+        syncJobChrome();
+    }
+
+    function bindJobCard(card) {
+        card.querySelector('.imm-remove-job')?.addEventListener('click', () => {
+            if (jobCards().length <= 1) return;
+            card.remove();
+            syncJobChrome();
+        });
+        enableSortable(jobList, '.imm-job-card');
+    }
+
+    function collectJobs() {
+        return jobCards().map((card) => {
+            const val = (key) => {
+                const input = card.querySelector(`[data-job="${key}"]`);
+                return input instanceof HTMLInputElement ? input.value.trim() : '';
+            };
+            const from = splitMonth(val('from'));
+            const to = splitMonth(val('to'));
+            return {
+                occupation: val('occupation'),
+                employer: val('employer'),
+                city: val('city'),
+                country: val('country'),
+                provinceState: val('provinceState'),
+                fromYear: from.year,
+                fromMonth: from.month,
+                // Omit empty end dates entirely — never send "00"
+                ...(to.year && to.month
+                    ? { toYear: to.year, toMonth: to.month }
+                    : {}),
+            };
+        });
     }
 
     function splitDate(value) {
@@ -178,7 +358,9 @@
     }
 
     function splitMonth(value) {
-        const [y = '', m = ''] = String(value || '').split('-');
+        const raw = String(value || '').trim();
+        if (!raw) return { year: '', month: '' };
+        const [y = '', m = ''] = raw.split('-');
         return { year: y, month: m };
     }
 
@@ -193,15 +375,9 @@
         const passportExpiry = splitDate(data.get('passportExpiry'));
         const studyFrom = splitDate(data.get('studyFrom'));
         const studyTo = splitDate(data.get('studyTo'));
-        const occupationFrom = splitMonth(data.get('occupationFrom'));
-        const occupationTo = splitMonth(data.get('occupationTo'));
         const marriage = splitDate(data.get('marriageDate'));
         const corFrom = splitDate(data.get('corFrom'));
         const corTo = splitDate(data.get('corTo'));
-        const pcor1From = splitDate(data.get('pcor1From'));
-        const pcor1To = splitDate(data.get('pcor1To'));
-        const pcor2From = splitDate(data.get('pcor2From'));
-        const pcor2To = splitDate(data.get('pcor2To'));
         const cwaFrom = splitDate(data.get('cwaFrom'));
         const cwaTo = splitDate(data.get('cwaTo'));
         const prevSpouseDob = splitDate(data.get('prevSpouseDob'));
@@ -214,10 +390,11 @@
         const eduTo = splitMonth(data.get('eduTo'));
         const caqExpiry = splitDate(data.get('caqExpiry'));
         const palExpiry = splitDate(data.get('palExpiry'));
-        const job2From = splitMonth(data.get('job2From'));
-        const job2To = splitMonth(data.get('job2To'));
-        const job3From = splitMonth(data.get('job3From'));
-        const job3To = splitMonth(data.get('job3To'));
+        const jobs = collectJobs();
+        const first = jobs[0] || {};
+        const pcor = collectPcorRows();
+        const pcor1 = pcor[0] || {};
+        const pcor2 = pcor[1] || {};
 
         return {
             delivery,
@@ -250,24 +427,24 @@
             corToMonth: corTo.month,
             corToDay: corTo.day,
             previousCor: g(data, 'previousCor') || 'N',
-            pcor1Country: g(data, 'pcor1Country'),
-            pcor1Status: g(data, 'pcor1Status'),
-            pcor1Other: g(data, 'pcor1Other'),
-            pcor1FromYear: pcor1From.year,
-            pcor1FromMonth: pcor1From.month,
-            pcor1FromDay: pcor1From.day,
-            pcor1ToYear: pcor1To.year,
-            pcor1ToMonth: pcor1To.month,
-            pcor1ToDay: pcor1To.day,
-            pcor2Country: g(data, 'pcor2Country'),
-            pcor2Status: g(data, 'pcor2Status'),
-            pcor2Other: g(data, 'pcor2Other'),
-            pcor2FromYear: pcor2From.year,
-            pcor2FromMonth: pcor2From.month,
-            pcor2FromDay: pcor2From.day,
-            pcor2ToYear: pcor2To.year,
-            pcor2ToMonth: pcor2To.month,
-            pcor2ToDay: pcor2To.day,
+            pcor1Country: pcor1.country || '',
+            pcor1Status: pcor1.status || '',
+            pcor1Other: pcor1.other || '',
+            pcor1FromYear: pcor1.fromYear || '',
+            pcor1FromMonth: pcor1.fromMonth || '',
+            pcor1FromDay: pcor1.fromDay || '',
+            pcor1ToYear: pcor1.toYear || '',
+            pcor1ToMonth: pcor1.toMonth || '',
+            pcor1ToDay: pcor1.toDay || '',
+            pcor2Country: pcor2.country || '',
+            pcor2Status: pcor2.status || '',
+            pcor2Other: pcor2.other || '',
+            pcor2FromYear: pcor2.fromYear || '',
+            pcor2FromMonth: pcor2.fromMonth || '',
+            pcor2FromDay: pcor2.fromDay || '',
+            pcor2ToYear: pcor2.toYear || '',
+            pcor2ToMonth: pcor2.toMonth || '',
+            pcor2ToDay: pcor2.toDay || '',
             sameAsCor: g(data, 'sameAsCor') || 'Y',
             cwaCountry: g(data, 'cwaCountry'),
             cwaStatus: g(data, 'cwaStatus'),
@@ -369,33 +546,15 @@
             eduCity: g(data, 'eduCity'),
             eduCountry: g(data, 'eduCountry'),
             eduProvince: g(data, 'eduProvince'),
-            occupation: g(data, 'occupation'),
-            employer: g(data, 'employer'),
-            occupationCity: g(data, 'occupationCity'),
-            occupationCountry: g(data, 'occupationCountry'),
-            occupationProvince: g(data, 'occupationProvince'),
-            occupationFromYear: occupationFrom.year,
-            occupationFromMonth: occupationFrom.month,
-            occupationToYear: occupationTo.year,
-            occupationToMonth: occupationTo.month,
-            job2Occupation: jobRowsVisible >= 2 ? g(data, 'job2Occupation') : '',
-            job2Employer: g(data, 'job2Employer'),
-            job2City: g(data, 'job2City'),
-            job2Country: g(data, 'job2Country'),
-            job2Province: g(data, 'job2Province'),
-            job2FromYear: job2From.year,
-            job2FromMonth: job2From.month,
-            job2ToYear: job2To.year,
-            job2ToMonth: job2To.month,
-            job3Occupation: jobRowsVisible >= 3 ? g(data, 'job3Occupation') : '',
-            job3Employer: g(data, 'job3Employer'),
-            job3City: g(data, 'job3City'),
-            job3Country: g(data, 'job3Country'),
-            job3Province: g(data, 'job3Province'),
-            job3FromYear: job3From.year,
-            job3FromMonth: job3From.month,
-            job3ToYear: job3To.year,
-            job3ToMonth: job3To.month,
+            // Flat first-job fields kept for server fallback + required[] checks
+            occupation: first.occupation || '',
+            employer: first.employer || '',
+            occupationCity: first.city || '',
+            occupationCountry: first.country || '',
+            occupationProvince: first.provinceState || '',
+            occupationFromYear: first.fromYear || '',
+            occupationFromMonth: first.fromMonth || '',
+            jobs,
             bgTb: g(data, 'bgTb') || 'N',
             bgDisorder: g(data, 'bgDisorder') || 'N',
             bgMedicalDetails: g(data, 'bgMedicalDetails'),
@@ -421,6 +580,16 @@
         if (!form.checkValidity()) {
             form.reportValidity();
             return 'Please correct the highlighted fields.';
+        }
+        if (!payload.jobs?.length) return 'Add at least one employment / activity row.';
+        for (let i = 0; i < payload.jobs.length; i += 1) {
+            const job = payload.jobs[i];
+            if (!job.occupation || !job.employer || !job.fromYear || !job.fromMonth) {
+                return `Job ${i + 1}: fill occupation, employer, and start date.`;
+            }
+            if ((job.toYear && !job.toMonth) || (!job.toYear && job.toMonth)) {
+                return `Job ${i + 1}: enter both end year and month, or leave To blank if current.`;
+            }
         }
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
             return 'Enter a valid email address.';
@@ -532,7 +701,16 @@
                 'success'
             );
             form.reset();
-            jobRowsVisible = 1;
+            if (jobList) {
+                jobList.innerHTML = '';
+                addJob({
+                    occupation: 'Student',
+                    employer: 'Universite Lyon',
+                    city: 'Lyon',
+                    country: 'France',
+                    from: '2022-09',
+                });
+            }
             syncBranches();
             resetCaptcha();
         } catch (error) {
@@ -563,13 +741,21 @@
     form.addEventListener('input', syncBranches);
 
     document.getElementById('imm-add-job')?.addEventListener('click', () => {
-        jobRowsVisible = Math.min(3, jobRowsVisible + 1);
-        syncBranches();
+        addJob({
+            city: fieldValue('city') || 'Paris',
+            country: fieldValue('currentCountry') || 'France',
+        });
     });
-    document.getElementById('imm-remove-job')?.addEventListener('click', () => {
-        jobRowsVisible = Math.max(1, jobRowsVisible - 1);
-        syncBranches();
+
+    // Seed sample job (current activity — no end date)
+    addJob({
+        occupation: 'Student',
+        employer: 'Universite Lyon',
+        city: 'Lyon',
+        country: 'France',
+        from: '2022-09',
     });
+    enableSortable(pcorList, '[data-pcor-slot]');
 
     syncBranches();
 
