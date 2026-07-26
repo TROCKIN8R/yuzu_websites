@@ -375,21 +375,73 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
 
   const previousCorRows = [];
   if (previousCor === "Y") {
-    const row1 = parseCor("pcor1");
-    let err = need(true, "previous country 1", row1.country) ||
-      need(true, "previous status 1", row1.status) ||
-      need(true, "previous from date 1", row1.fromYear) ||
-      need(true, "previous to date 1", row1.toYear);
-    if (err) return { ok: false, error: err };
-    previousCorRows.push(row1);
-    const row2Country = cleanText(raw.pcor2Country);
-    if (row2Country) {
-      const row2 = parseCor("pcor2");
-      err = need(true, "previous status 2", row2.status) ||
-        need(true, "previous from date 2", row2.fromYear) ||
-        need(true, "previous to date 2", row2.toYear);
+    type CorIn = {
+      country?: unknown;
+      status?: unknown;
+      other?: unknown;
+      fromYear?: unknown;
+      fromMonth?: unknown;
+      fromDay?: unknown;
+      toYear?: unknown;
+      toMonth?: unknown;
+      toDay?: unknown;
+    };
+    const fromArray = Array.isArray(raw.previousCorRows)
+      ? (raw.previousCorRows as CorIn[]).slice(0, 2)
+      : [];
+    const rows: CorIn[] = fromArray.length
+      ? fromArray
+      : [
+        {
+          country: raw.pcor1Country,
+          status: raw.pcor1Status,
+          other: raw.pcor1Other,
+          fromYear: raw.pcor1FromYear,
+          fromMonth: raw.pcor1FromMonth,
+          fromDay: raw.pcor1FromDay,
+          toYear: raw.pcor1ToYear,
+          toMonth: raw.pcor1ToMonth,
+          toDay: raw.pcor1ToDay,
+        },
+        ...(cleanText(raw.pcor2Country)
+          ? [{
+            country: raw.pcor2Country,
+            status: raw.pcor2Status,
+            other: raw.pcor2Other,
+            fromYear: raw.pcor2FromYear,
+            fromMonth: raw.pcor2FromMonth,
+            fromDay: raw.pcor2FromDay,
+            toYear: raw.pcor2ToYear,
+            toMonth: raw.pcor2ToMonth,
+            toDay: raw.pcor2ToDay,
+          }]
+          : []),
+      ];
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      const country = cleanText(row.country);
+      if (!country && i > 0) continue;
+      const parsed = {
+        country,
+        status: cleanText(row.status, 2),
+        other: cleanText(row.other, 80),
+        fromYear: digits(row.fromYear, 4),
+        fromMonth: digits(row.fromMonth, 2).padStart(2, "0"),
+        fromDay: digits(row.fromDay, 2).padStart(2, "0"),
+        toYear: digits(row.toYear, 4),
+        toMonth: digits(row.toMonth, 2).padStart(2, "0"),
+        toDay: digits(row.toDay, 2).padStart(2, "0"),
+      };
+      const err = need(true, `previous country ${i + 1}`, parsed.country) ||
+        need(true, `previous status ${i + 1}`, parsed.status) ||
+        need(true, `previous from date ${i + 1}`, parsed.fromYear) ||
+        need(true, `previous to date ${i + 1}`, parsed.toYear);
       if (err) return { ok: false, error: err };
-      previousCorRows.push(row2);
+      previousCorRows.push(parsed);
+    }
+    if (!previousCorRows.length) {
+      return { ok: false, error: "Add at least one previous country of residence." };
     }
   }
 

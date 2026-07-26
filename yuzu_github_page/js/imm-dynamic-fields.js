@@ -9,6 +9,8 @@
  *     jobTemplateId: 'spk-job-template',
  *     addJobBtnId: 'spk-add-job',
  *     pcorListId: 'spk-pcor-list',
+ *     pcorTemplateId: 'spk-pcor-template',
+ *     addPcorBtnId: 'spk-add-pcor',
  *     phoneCountryCodeId: 'spk-phoneCountryCode',
  *     preferredLangId: 'spk-preferredLang',
  *     populateLovSelects: (root) => { ... },
@@ -18,6 +20,7 @@
  */
 (function initImmDynamicFields(global) {
     const MAX_JOBS = 3;
+    const MAX_PCOR = 2;
 
     function splitDate(value) {
         const [y = '', m = '', d = ''] = String(value || '').split('-');
@@ -40,9 +43,11 @@
         const jobList = document.getElementById(options.jobListId || 'imm-job-list');
         const jobTemplate = document.getElementById(options.jobTemplateId || 'imm-job-template');
         const pcorList = document.getElementById(options.pcorListId || 'imm-pcor-list');
+        const pcorTemplate = document.getElementById(options.pcorTemplateId || 'imm-pcor-template');
         const preferredLangId = options.preferredLangId || 'imm-preferredLang';
         const phoneCountryCodeId = options.phoneCountryCodeId || 'imm-phoneCountryCode';
         const addJobBtnId = options.addJobBtnId || 'imm-add-job';
+        const addPcorBtnId = options.addPcorBtnId || 'imm-add-pcor';
         const populateLovSelects = typeof options.populateLovSelects === 'function'
             ? options.populateLovSelects
             : () => {};
@@ -233,11 +238,16 @@
         }
 
         function syncPcorChrome() {
-            pcorCards().forEach((card, index) => {
+            if (fieldValue('previousCor') === 'Y' && pcorCards().length === 0) {
+                addPcor();
+                return;
+            }
+            const cards = pcorCards();
+            cards.forEach((card, index) => {
                 const label = card.querySelector('.imm-sortable-item__label');
                 if (label) {
                     label.textContent = String(index + 1);
-                    label.title = index === 0 ? 'Required when Yes' : 'Optional';
+                    label.title = index === 0 ? 'First on PDF' : `Country ${index + 1}`;
                 }
                 const status = card.querySelector('[data-pcor="status"]');
                 const otherWrap = card.querySelector('.imm-pcor-other');
@@ -248,13 +258,73 @@
                     otherInput.required = showOther && fieldValue('previousCor') === 'Y';
                     otherInput.disabled = !showOther;
                 }
-                const requiredAttrs = index === 0 && fieldValue('previousCor') === 'Y';
+                const requiredAttrs = fieldValue('previousCor') === 'Y';
                 card.querySelectorAll('[data-pcor="country"], [data-pcor="status"], [data-pcor="from"], [data-pcor="to"]').forEach((el) => {
                     if (el instanceof HTMLInputElement || el instanceof HTMLSelectElement) {
-                        if (index === 0) el.required = requiredAttrs;
+                        el.required = requiredAttrs;
                     }
                 });
+                const removeBtn = card.querySelector('.imm-remove-pcor');
+                if (removeBtn instanceof HTMLButtonElement) {
+                    removeBtn.hidden = cards.length <= 1;
+                }
             });
+            const addBtn = document.getElementById(addPcorBtnId);
+            if (addBtn instanceof HTMLButtonElement) {
+                addBtn.hidden = fieldValue('previousCor') !== 'Y' || cards.length >= MAX_PCOR;
+            }
+        }
+
+        function bindPcorCard(card) {
+            card.querySelector('.imm-remove-pcor')?.addEventListener('click', () => {
+                if (pcorCards().length <= 1) return;
+                card.remove();
+                syncPcorChrome();
+            });
+            enableSortable(pcorList, '[data-pcor-slot]');
+        }
+
+        function addPcor(defaults = {}) {
+            if (!pcorList || !pcorTemplate || pcorCards().length >= MAX_PCOR) return;
+            const node = pcorTemplate.content.firstElementChild.cloneNode(true);
+            if (!(node instanceof HTMLElement)) return;
+
+            const set = (key, value) => {
+                if (value == null || value === '') return;
+                const input = node.querySelector(`[data-pcor="${key}"]`);
+                if (input instanceof HTMLInputElement || input instanceof HTMLSelectElement) {
+                    if (input instanceof HTMLSelectElement && input.hasAttribute('data-imm-lov')) {
+                        input.dataset.immDefault = value;
+                    }
+                    input.value = value;
+                }
+            };
+
+            const countrySelect = node.querySelector('[data-pcor="country"]');
+            if (countrySelect instanceof HTMLSelectElement && defaults.country) {
+                countrySelect.dataset.immDefault = defaults.country;
+            }
+            populateLovSelects(node);
+            set('country', defaults.country ?? '');
+            set('status', defaults.status ?? '');
+            set('other', defaults.other ?? '');
+            set('from', defaults.from ?? '');
+            set('to', defaults.to ?? '');
+            if (countrySelect instanceof HTMLSelectElement && defaults.country) {
+                countrySelect.value = defaults.country;
+            }
+
+            bindPcorCard(node);
+            pcorList.appendChild(node);
+            syncPcorChrome();
+        }
+
+        function clearPcor() {
+            if (pcorList) pcorList.innerHTML = '';
+            const addBtn = document.getElementById(addPcorBtnId);
+            if (addBtn instanceof HTMLButtonElement) {
+                addBtn.hidden = fieldValue('previousCor') !== 'Y';
+            }
         }
 
         function syncJobChrome() {
@@ -481,6 +551,11 @@
             syncBranches();
         });
 
+        document.getElementById(addPcorBtnId)?.addEventListener('click', () => {
+            addPcor();
+            syncBranches();
+        });
+
         enableSortable(pcorList, '[data-pcor-slot]');
 
         return {
@@ -490,12 +565,15 @@
             addJob,
             clearJobs,
             collectJobs,
+            addPcor,
+            clearPcor,
             collectPcorRows,
             fieldValue,
             activeProvinceControl,
             splitDate,
             splitMonth,
             MAX_JOBS,
+            MAX_PCOR,
         };
     }
 

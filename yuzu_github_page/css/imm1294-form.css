@@ -400,12 +400,12 @@
     gap: 0.4rem 0.5rem;
 }
 
-.imm-table-row--pcor,
 .imm-table-row--cwa,
 .imm-table-row--edu {
     grid-template-columns: auto auto 1fr;
 }
 
+.imm-table-row--pcor,
 .imm-table-row--job {
     grid-template-columns: auto auto 1fr auto;
 }
@@ -417,7 +417,8 @@
 .imm-table-row .imm-drag-handle { grid-column: 1; grid-row: 1; }
 .imm-table-row .imm-sortable-item__label { grid-column: 2; grid-row: 1; align-self: center; }
 .imm-table-row .opp-field { grid-column: 1 / -1; }
-.imm-table-row--job .imm-remove-job { grid-column: 4; grid-row: 1; justify-self: end; align-self: center; }
+.imm-table-row--job .imm-remove-job,
+.imm-table-row--pcor .imm-remove-pcor { grid-column: 4; grid-row: 1; justify-self: end; align-self: center; }
 .imm-table-row .imm-pcor-other[hidden] { display: none !important; }
 
 @media (min-width: 960px) {
@@ -436,9 +437,12 @@
         white-space: nowrap;
     }
 
-    .imm-table-head--pcor,
     .imm-table-head--cwa {
         grid-template-columns: 1.75rem 1.25rem minmax(7rem, 1.3fr) minmax(6.5rem, 1fr) 7.75rem 7.75rem minmax(6rem, 1fr);
+    }
+
+    .imm-table-head--pcor {
+        grid-template-columns: 1.75rem 1.25rem minmax(7rem, 1.3fr) minmax(6.5rem, 1fr) 7.75rem 7.75rem minmax(6rem, 1fr) 3.75rem;
     }
 
     .imm-table-head--job {
@@ -459,9 +463,15 @@
             minmax(5rem, 0.8fr) minmax(5.5rem, 0.9fr) 5.5rem;
     }
 
-    .imm-table-row--pcor,
     .imm-table-row--cwa {
         grid-template-columns: 1.75rem 1.25rem minmax(7rem, 1.3fr) minmax(6.5rem, 1fr) 7.75rem 7.75rem minmax(6rem, 1fr);
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.35rem 0.6rem;
+    }
+
+    .imm-table-row--pcor {
+        grid-template-columns: 1.75rem 1.25rem minmax(7rem, 1.3fr) minmax(6.5rem, 1fr) 7.75rem 7.75rem minmax(6rem, 1fr) 3.75rem;
         align-items: center;
         gap: 0.35rem;
         padding: 0.35rem 0.6rem;
@@ -497,7 +507,8 @@
     .imm-table-row .imm-drag-handle,
     .imm-table-row .imm-sortable-item__label,
     .imm-table-row .opp-field,
-    .imm-table-row .imm-remove-job {
+    .imm-table-row .imm-remove-job,
+    .imm-table-row .imm-remove-pcor {
         grid-column: auto;
         grid-row: auto;
     }

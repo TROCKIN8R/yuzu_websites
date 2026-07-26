@@ -352,7 +352,7 @@
             </div>
             <div class="imm-branch" data-imm-show="previousCor=Y" hidden>
                 <h3 class="imm-branch__title">Previous countries of residence (up to 2)</h3>
-                <p class="imm-branch__hint">List each country from the last 5 years (other than your current residence). Drag a row to reorder.</p>
+                <p class="imm-branch__hint">List each country from the last 5 years (other than your current residence). Add, remove, or drag to reorder — row 1 is first on the PDF.</p>
                 <div class="imm-table-wrap">
                     <div class="imm-table-head imm-table-head--pcor" aria-hidden="true">
                         <span></span>
@@ -362,78 +362,50 @@
                         <span>From</span>
                         <span>To</span>
                         <span>Other</span>
+                        <span></span>
                     </div>
-                    <div id="spk-pcor-list" class="imm-sortable imm-sortable--table">
-                        <article class="imm-sortable-item imm-table-row imm-table-row--pcor" draggable="true" data-pcor-slot>
-                            <button type="button" class="imm-drag-handle" aria-label="Drag to reorder" title="Drag to reorder">⋮⋮</button>
-                            <span class="imm-sortable-item__label">1</span>
-                            <div class="opp-field">
-                                <label class="imm-field-label">Country</label>
-                                <select data-pcor="country" data-imm-lov="country" data-imm-required>
-                                    <option value="" selected disabled>Select country…</option>
-                                </select>
-                            </div>
-                            <div class="opp-field">
-                                <label class="imm-field-label">Status</label>
-                                <select data-pcor="status" data-imm-required>
-                                    <option value="" selected disabled>Select…</option>
-                                    <option value="01">Citizen</option>
-                                    <option value="02">Permanent resident</option>
-                                    <option value="03">Visitor</option>
-                                    <option value="04">Worker</option>
-                                    <option value="05">Student</option>
-                                    <option value="06">Other</option>
-                                </select>
-                            </div>
-                            <div class="opp-field">
-                                <label class="imm-field-label">From</label>
-                                <input data-pcor="from" type="date" data-imm-required value="">
-                            </div>
-                            <div class="opp-field">
-                                <label class="imm-field-label">To</label>
-                                <input data-pcor="to" type="date" data-imm-required value="">
-                            </div>
-                            <div class="opp-field imm-pcor-other" hidden>
-                                <label class="imm-field-label">Other status</label>
-                                <input data-pcor="other" type="text" maxlength="80" placeholder="If status is Other" value="">
-                            </div>
-                        </article>
-                        <article class="imm-sortable-item imm-table-row imm-table-row--pcor" draggable="true" data-pcor-slot>
-                            <button type="button" class="imm-drag-handle" aria-label="Drag to reorder" title="Drag to reorder">⋮⋮</button>
-                            <span class="imm-sortable-item__label">2</span>
-                            <div class="opp-field">
-                                <label class="imm-field-label">Country (optional)</label>
-                                <select data-pcor="country" data-imm-lov="country">
-                                    <option value="" selected>Select country…</option>
-                                </select>
-                            </div>
-                            <div class="opp-field">
-                                <label class="imm-field-label">Status</label>
-                                <select data-pcor="status">
-                                    <option value="" selected>Select…</option>
-                                    <option value="01">Citizen</option>
-                                    <option value="02">Permanent resident</option>
-                                    <option value="03">Visitor</option>
-                                    <option value="04">Worker</option>
-                                    <option value="05">Student</option>
-                                    <option value="06">Other</option>
-                                </select>
-                            </div>
-                            <div class="opp-field">
-                                <label class="imm-field-label">From</label>
-                                <input data-pcor="from" type="date" value="">
-                            </div>
-                            <div class="opp-field">
-                                <label class="imm-field-label">To</label>
-                                <input data-pcor="to" type="date" value="">
-                            </div>
-                            <div class="opp-field imm-pcor-other" hidden>
-                                <label class="imm-field-label">Other status</label>
-                                <input data-pcor="other" type="text" maxlength="80" placeholder="If status is Other" value="">
-                            </div>
-                        </article>
-                    </div>
+                    <div id="spk-pcor-list" class="imm-sortable imm-sortable--table" aria-label="Previous countries of residence"></div>
                 </div>
+                <div class="imm-job-actions">
+                    <button type="button" id="spk-add-pcor" class="imm-link-btn">+ Add country</button>
+                </div>
+                <template id="spk-pcor-template">
+                    <article class="imm-sortable-item imm-table-row imm-table-row--pcor imm-pcor-card" draggable="true" data-pcor-slot>
+                        <button type="button" class="imm-drag-handle" aria-label="Drag to reorder" title="Drag to reorder">⋮⋮</button>
+                        <span class="imm-sortable-item__label">1</span>
+                        <div class="opp-field">
+                            <label class="imm-field-label">Country</label>
+                            <select data-pcor="country" data-imm-lov="country" required>
+                                <option value="" selected disabled>Select country…</option>
+                            </select>
+                        </div>
+                        <div class="opp-field">
+                            <label class="imm-field-label">Status</label>
+                            <select data-pcor="status" required>
+                                <option value="" selected disabled>Select…</option>
+                                <option value="01">Citizen</option>
+                                <option value="02">Permanent resident</option>
+                                <option value="03">Visitor</option>
+                                <option value="04">Worker</option>
+                                <option value="05">Student</option>
+                                <option value="06">Other</option>
+                            </select>
+                        </div>
+                        <div class="opp-field">
+                            <label class="imm-field-label">From</label>
+                            <input data-pcor="from" type="date" required value="">
+                        </div>
+                        <div class="opp-field">
+                            <label class="imm-field-label">To</label>
+                            <input data-pcor="to" type="date" required value="">
+                        </div>
+                        <div class="opp-field imm-pcor-other" hidden>
+                            <label class="imm-field-label">Other status</label>
+                            <input data-pcor="other" type="text" maxlength="80" placeholder="If status is Other" value="">
+                        </div>
+                        <button type="button" class="imm-link-btn imm-remove-pcor" hidden>Remove</button>
+                    </article>
+                </template>
             </div>
             <div class="imm-branch" data-imm-show="sameAsCor=N" hidden>
                 <h3 class="imm-branch__title">Country where you are applying</h3>
