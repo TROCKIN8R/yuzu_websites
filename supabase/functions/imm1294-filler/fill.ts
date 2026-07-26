@@ -1048,7 +1048,9 @@ function findStreamSpan(
 }
 
 function parseLastStartXref(pdf: Uint8Array): number {
-  const text = new TextDecoder("latin1").decode(pdf);
+  // Only scan the file tail — encrypted streams can contain false "startxref" bytes.
+  const tailStart = Math.max(0, pdf.length - 4096);
+  const text = new TextDecoder("latin1").decode(pdf.subarray(tailStart));
   const matches = [...text.matchAll(/startxref\s+(\d+)/g)];
   if (!matches.length) throw new Error("startxref not found");
   return Number(matches[matches.length - 1][1]);
@@ -1067,11 +1069,16 @@ function parseTrailerMeta(pdf: Uint8Array): {
   const root = /\/Root\s+(\d+\s+\d+\s+R)/.exec(tail)?.[1];
   const info = /\/Info\s+(\d+\s+\d+\s+R)/.exec(tail)?.[1];
   const encrypt = /\/Encrypt\s+(\d+\s+\d+\s+R)/.exec(tail)?.[1];
-  const id = /\/ID\s*(\[[^\]]+\])/.exec(tail)?.[1];
+  // Keep IRCC's compact /ID[<a><b>] form (no spaces) — Acrobat is picky after repairs.
+  const id = /\/ID\s*(\[[^\]]+\])/.exec(tail)?.[1]?.replace(/\s+/g, "");
   if (!size || !root || !info || !encrypt || !id) {
     throw new Error("Could not parse PDF trailer metadata");
   }
   return { size, root, info, encrypt, id };
+}
+
+function be3(n: number): Uint8Array {
+  return new Uint8Array([(n >> 16) & 0xff, (n >> 8) & 0xff, n & 0xff]);
 }
 
 /** Decrypt and inflate the XFA datasets XML (latest incremental revision). */
@@ -1099,6 +1106,10 @@ function patchForm1(datasetsXml: string, answers: Imm1294Answers): string {
 /**
  * Fill the certified IMM 1294 PDF via encrypted incremental update.
  * `blankPdf` must be the original IRCC file (imm1294f.pdf), not a rewritten blank.
+ *
+ * Uses an encrypted /XRef stream (same style as IRCC's own incremental update)
+ * rather than a classic `xref` table — Acrobat often "repairs" hybrid classic
+ * appends and then reports "signature byte range is invalid".
  */
 export async function fillImm1294Pdf(
   blankPdf: Uint8Array,
@@ -1116,10 +1127,11 @@ export async function fillImm1294Pdf(
   const meta = parseTrailerMeta(blankPdf);
   const objOffset = blankPdf.length;
 
+  // Match IRCC's compact EmbeddedFile dict style (single-line, padded Length).
+  const lengthField = String(streamBytes.length).padStart(10, " ");
   const header = new TextEncoder().encode(
     `${DATASETS_OBJ} 0 obj\n` +
-      `<<\n/Filter [/FlateDecode]\n/Type /EmbeddedFile\n/Length ${streamBytes.length}\n>>\n` +
-      `stream\n`,
+      `<</Filter[/FlateDecode]/Length${lengthField}/Type/EmbeddedFile>>stream\n`,
   );
   const footer = new TextEncoder().encode("\nendstream\nendobj\n");
   const objBody = new Uint8Array(header.length + streamBytes.length + footer.length);
@@ -1127,32 +1139,55 @@ export async function fillImm1294Pdf(
   objBody.set(streamBytes, header.length);
   objBody.set(footer, header.length + streamBytes.length);
 
-  const xrefPos = objOffset + objBody.length;
-  const xref = new TextEncoder().encode(
-    `xref\n${DATASETS_OBJ} 1\n${objOffset.toString().padStart(10, "0")} 00000 n \n`,
+  // Next free object number becomes the XRef stream (Size was max+1).
+  const xrefObjNum = meta.size;
+  const xrefOffset = objOffset + objBody.length;
+
+  // W[1 3 1]: type(1=in-use) + 3-byte offset + 1-byte generation
+  const xrefBin = new Uint8Array(5);
+  xrefBin[0] = 1;
+  xrefBin.set(be3(objOffset), 1);
+  xrefBin[4] = 0;
+  const xrefFlate = pako.deflate(xrefBin);
+  const xrefKey = objectKey(FILE_ENCRYPTION_KEY, xrefObjNum, 0);
+  const xrefStream = await aesEncryptCbc(xrefKey, xrefFlate);
+  const xrefLenField = String(xrefStream.length).padStart(8, " ");
+
+  const xrefHeader = new TextEncoder().encode(
+    `${xrefObjNum} 0 obj\n` +
+      `<</Length${xrefLenField}/Type/XRef/Root ${meta.root}/Info ${meta.info}` +
+      `/Encrypt ${meta.encrypt}/ID${meta.id}/Size ${meta.size + 1}` +
+      `/Prev ${prev}/Index[${DATASETS_OBJ} 1]/W[1 3 1]/Filter/FlateDecode>>` +
+      `stream\n`,
   );
-  const trailer = new TextEncoder().encode(
-    `trailer\n<<\n` +
-      `/Size ${meta.size}\n` +
-      `/Root ${meta.root}\n` +
-      `/Info ${meta.info}\n` +
-      `/Encrypt ${meta.encrypt}\n` +
-      `/ID ${meta.id}\n` +
-      `/Prev ${prev}\n` +
-      `>>\nstartxref\n${xrefPos}\n%%EOF\n`,
+  const xrefFooter = new TextEncoder().encode("\nendstream\nendobj\n");
+  const xrefBody = new Uint8Array(
+    xrefHeader.length + xrefStream.length + xrefFooter.length,
+  );
+  xrefBody.set(xrefHeader, 0);
+  xrefBody.set(xrefStream, xrefHeader.length);
+  xrefBody.set(xrefFooter, xrefHeader.length + xrefStream.length);
+
+  const tail = new TextEncoder().encode(
+    `startxref\n${xrefOffset}\n%%EOF\n`,
   );
 
   const out = new Uint8Array(
-    blankPdf.length + objBody.length + xref.length + trailer.length,
+    blankPdf.length + objBody.length + xrefBody.length + tail.length,
   );
   out.set(blankPdf, 0);
   out.set(objBody, blankPdf.length);
-  out.set(xref, blankPdf.length + objBody.length);
-  out.set(trailer, blankPdf.length + objBody.length + xref.length);
+  out.set(xrefBody, blankPdf.length + objBody.length);
+  out.set(tail, blankPdf.length + objBody.length + xrefBody.length);
 
   // Sanity: original prefix (incl. IRCC signature) unchanged
-  for (let i = 0; i < Math.min(64, blankPdf.length); i++) {
+  for (let i = 0; i < blankPdf.length; i++) {
     if (out[i] !== blankPdf[i]) throw new Error("Incremental prefix corrupted");
+  }
+  // startxref must point at the XRef stream object we just wrote
+  const marked = new TextDecoder("latin1").decode(out.subarray(xrefOffset, xrefOffset + 12));
+  if (!marked.startsWith(`${xrefObjNum} 0 obj`)) {
+    throw new Error(`startxref mismatch: expected obj ${xrefObjNum} at ${xrefOffset}`);
   }
 
   return out;
