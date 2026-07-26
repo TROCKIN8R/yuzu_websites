@@ -1,0 +1,51 @@
+name: Sync IRCC study-permit forms
+
+on:
+  schedule:
+    # Weekly Monday 14:00 UTC — pick up IRCC kit refreshes
+    - cron: "0 14 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Sync latest blank templates (EN + FR)
+        id: sync
+        run: |
+          set -euo pipefail
+          python3 scripts/sync_ircc_forms.py
+          if git diff --quiet -- yuzu_github_page/assets/forms/ircc \
+            yuzu_github_page/assets/forms/imm1294f.pdf \
+            supabase/functions/imm1294-filler/imm1294f.pdf; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No IRCC form updates."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git diff --stat -- yuzu_github_page/assets/forms/ircc \
+              yuzu_github_page/assets/forms/imm1294f.pdf \
+              supabase/functions/imm1294-filler/imm1294f.pdf || true
+          fi
+
+      - name: Commit and push
+        if: steps.sync.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add \
+            yuzu_github_page/assets/forms/ircc \
+            yuzu_github_page/assets/forms/imm1294f.pdf \
+            supabase/functions/imm1294-filler/imm1294f.pdf
+          git commit -m "Sync latest IRCC study-permit blank form templates"
+          git push

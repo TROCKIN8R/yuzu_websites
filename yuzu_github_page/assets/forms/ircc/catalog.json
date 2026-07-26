@@ -1,0 +1,68 @@
+{
+  "description": "IRCC forms required for a study permit application (outside Canada). Synced by scripts/sync_ircc_forms.py.",
+  "kit": "study-permit-outside-canada",
+  "forms": [
+    {
+      "code": "imm1294",
+      "title_en": "Application for Study Permit Outside Canada",
+      "title_fr": "Demande de permis d'études à l'extérieur du Canada",
+      "required": true
+    },
+    {
+      "code": "imm5646",
+      "title_en": "Family Information",
+      "title_fr": "Renseignements familiaux",
+      "required": true
+    },
+    {
+      "code": "imm5483",
+      "title_en": "Document Checklist — Study Permit",
+      "title_fr": "Liste de contrôle des documents — Permis d'études",
+      "required": true
+    },
+    {
+      "code": "imm5476",
+      "title_en": "Use of a Representative",
+      "title_fr": "Recours à un représentant",
+      "required": false
+    },
+    {
+      "code": "imm5475",
+      "title_en": "Authority to Release Personal Information to a Designated Individual",
+      "title_fr": "Autorisation de communiquer des renseignements personnels à une personne désignée",
+      "required": false
+    },
+    {
+      "code": "imm5409",
+      "title_en": "Statutory Declaration of Common-law Union",
+      "title_fr": "Déclaration solennelle d'union de fait",
+      "required": false
+    },
+    {
+      "code": "imm5707",
+      "title_en": "Family Information (IMM 5707)",
+      "title_fr": "Renseignements familiaux (IMM 5707)",
+      "required": false
+    }
+  ],
+  "languages": [
+    {
+      "id": "e",
+      "label": "English",
+      "guide_url_template": "https://www.canada.ca/en/immigration-refugees-citizenship/services/application/application-forms-guides/{code}.html",
+      "pdf_url_template": "https://www.canada.ca/content/dam/ircc/documents/pdf/english/kits/forms/{code}/{date}/{code}e.pdf"
+    },
+    {
+      "id": "f",
+      "label": "French",
+      "guide_url_template": "https://www.canada.ca/fr/immigration-refugies-citoyennete/services/demande/formulaires-demande-guides/{code}.html",
+      "pdf_url_template": "https://www.canada.ca/content/dam/ircc/documents/pdf/francais/trousses/form/{code}/{date}/{code}f.pdf"
+    }
+  ],
+  "aliases": {
+    "imm1294f": [
+      "yuzu_github_page/assets/forms/imm1294f.pdf",
+      "supabase/functions/imm1294-filler/imm1294f.pdf"
+    ]
+  }
+}
