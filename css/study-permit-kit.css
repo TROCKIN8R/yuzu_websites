@@ -69,6 +69,28 @@
   color: #5c6567;
 }
 
+.spk-q-list {
+  display: grid;
+  gap: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+.spk-q-list .opp-field label {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  margin-bottom: 0.45rem;
+}
+
+.spk-q-list select {
+  max-width: 28rem;
+}
+
+.spk-confirm-note {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+  color: #5c6567;
+}
+
 .spk-nav {
   display: flex;
   flex-wrap: wrap;

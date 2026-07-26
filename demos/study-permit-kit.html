@@ -50,7 +50,7 @@
     <header class="imm-hero">
         <p class="imm-hero-eyebrow">Automation POC · Full IRCC study permit kit</p>
         <h1>One questionnaire. Every form you need.</h1>
-        <p>We ask routing questions first, pick the right IRCC forms, then fill them from a single shared set of answers — no retyping names, DOB, or addresses.</p>
+        <p>We ask about your situation first, confirm the IRCC forms that apply, then fill them from a single shared set of answers — no retyping names, DOB, or addresses.</p>
         <p class="imm-hero-links">
             <a href="../assets/forms/ircc/catalog.json" target="_blank" rel="noopener noreferrer">Form catalog</a>
             <span aria-hidden="true"> · </span>
@@ -61,28 +61,29 @@
     </header>
 
     <ol class="spk-steps" id="spkSteps" aria-label="Wizard steps">
-        <li data-step="0" aria-current="step"><span>1</span> Forms</li>
-        <li data-step="1"><span>2</span> You</li>
-        <li data-step="2"><span>3</span> Contact</li>
-        <li data-step="3"><span>4</span> Study</li>
-        <li data-step="4"><span>5</span> Passport</li>
-        <li data-step="5"><span>6</span> Extras</li>
-        <li data-step="6"><span>7</span> Deliver</li>
+        <li data-step="0" aria-current="step"><span>1</span> Situation</li>
+        <li data-step="1"><span>2</span> Confirm</li>
+        <li data-step="2"><span>3</span> You</li>
+        <li data-step="3"><span>4</span> Contact</li>
+        <li data-step="4"><span>5</span> Study</li>
+        <li data-step="5"><span>6</span> Passport</li>
+        <li data-step="6"><span>7</span> Extras</li>
+        <li data-step="7"><span>8</span> Deliver</li>
     </ol>
 
     <form class="imm-form opp-form" id="spkForm" novalidate>
-        <!-- Step 0: routing -->
+        <!-- Step 0: situation (no form codes) -->
         <section class="imm-section spk-step-panel" data-spk-step="0" aria-labelledby="spk-route">
             <header class="imm-section__head">
                 <span class="imm-section__num" aria-hidden="true">01</span>
                 <div class="imm-section__titles">
-                    <h2 id="spk-route">Which forms do you need?</h2>
-                    <p class="imm-section__lede">Answer a few yes/no questions. Required kit forms stay on; optional ones unlock from your situation.</p>
+                    <h2 id="spk-route">Tell us about your situation</h2>
+                    <p class="imm-section__lede">Plain questions only — we’ll figure out which IRCC forms apply, then show you the list to confirm.</p>
                 </div>
             </header>
             <div class="imm-line">
                 <div class="opp-field imm-w-md">
-                    <label for="spk-formLanguage">Form language</label>
+                    <label for="spk-formLanguage">Preferred form language</label>
                     <select id="spk-formLanguage" name="formLanguage" required>
                         <option value="e" selected>English</option>
                         <option value="f">French</option>
@@ -93,48 +94,62 @@
                     <input id="spk-email" name="email" type="email" required maxlength="254" autocomplete="email" value="you@example.com">
                 </div>
             </div>
-            <div class="imm-line">
-                <div class="opp-field imm-yn">
-                    <label for="spk-hasRepresentative">Using a representative / consultant?</label>
+            <div class="spk-q-list">
+                <div class="opp-field">
+                    <label for="spk-hasRepresentative">Will a lawyer, immigration consultant (RCIC), or other advisor prepare or submit this application for you?</label>
                     <select id="spk-hasRepresentative" name="hasRepresentative" required>
-                        <option value="N" selected>No</option>
-                        <option value="Y">Yes → IMM 5476</option>
+                        <option value="N" selected>No — I’m applying myself</option>
+                        <option value="Y">Yes — someone else will represent me</option>
                     </select>
                 </div>
-                <div class="opp-field imm-yn">
-                    <label for="spk-hasDesignee">Authorize someone to ask about your file?</label>
+                <div class="opp-field">
+                    <label for="spk-hasDesignee">Do you want a friend or family member (who is not your official representative) to be able to ask IRCC about your application?</label>
                     <select id="spk-hasDesignee" name="hasDesignee" required>
                         <option value="N" selected>No</option>
-                        <option value="Y">Yes → IMM 5475</option>
+                        <option value="Y">Yes</option>
                     </select>
                 </div>
-            </div>
-            <div class="imm-line">
-                <div class="opp-field imm-yn">
-                    <label for="spk-isCommonLaw">In a common-law relationship?</label>
+                <div class="opp-field">
+                    <label for="spk-isCommonLaw">Are you living with a partner in a common-law relationship (together for at least 12 months), and not married?</label>
                     <select id="spk-isCommonLaw" name="isCommonLaw" required>
                         <option value="N" selected>No</option>
-                        <option value="Y">Yes → IMM 5409</option>
+                        <option value="Y">Yes</option>
                     </select>
                 </div>
-                <div class="opp-field imm-yn">
-                    <label for="spk-includeImm5707">Also include IMM 5707 family form?</label>
+                <div class="opp-field">
+                    <label for="spk-includeImm5707">Besides parents and a spouse or partner, do you also need to declare other family members who already live in Canada (for example siblings or children who are citizens or permanent residents)?</label>
                     <select id="spk-includeImm5707" name="includeImm5707" required>
-                        <option value="N" selected>No (use IMM 5646 only)</option>
-                        <option value="Y">Yes → add IMM 5707</option>
+                        <option value="N" selected>No</option>
+                        <option value="Y">Yes</option>
                     </select>
                 </div>
-            </div>
-            <div>
-                <p class="imm-section__lede" style="margin-top:1rem">Selected package</p>
-                <div class="spk-form-list" id="spkFormList" aria-live="polite"></div>
             </div>
         </section>
 
-        <!-- Step 1: identity -->
-        <section class="imm-section spk-step-panel" data-spk-step="1" hidden aria-labelledby="spk-you">
+        <!-- Step 1: confirm derived forms -->
+        <section class="imm-section spk-step-panel" data-spk-step="1" hidden aria-labelledby="spk-confirm">
             <header class="imm-section__head">
                 <span class="imm-section__num" aria-hidden="true">02</span>
+                <div class="imm-section__titles">
+                    <h2 id="spk-confirm">Confirm your form package</h2>
+                    <p class="imm-section__lede">Based on your answers, we’ll fill these IRCC forms from one shared questionnaire.</p>
+                </div>
+            </header>
+            <div class="spk-form-list" id="spkFormList" aria-live="polite"></div>
+            <p class="spk-confirm-note" id="spkConfirmNote"></p>
+            <div class="opp-field opp-field--consent" style="margin-top:1.25rem">
+                <label class="opp-consent">
+                    <input id="spkFormsConfirm" name="formsConfirmed" type="checkbox" value="yes" required>
+                    <span>I confirm this list matches my situation. Continue to the shared questionnaire.</span>
+                </label>
+            </div>
+            <p class="imm-note">Need to change something? Use <strong>Back</strong> to update your situation answers — the list will refresh.</p>
+        </section>
+
+        <!-- Step 2: identity -->
+        <section class="imm-section spk-step-panel" data-spk-step="2" hidden aria-labelledby="spk-you">
+            <header class="imm-section__head">
+                <span class="imm-section__num" aria-hidden="true">03</span>
                 <div class="imm-section__titles">
                     <h2 id="spk-you">About you</h2>
                     <p class="imm-section__lede">Shared once across every selected form.</p>
@@ -232,9 +247,9 @@
         </section>
 
         <!-- Step 2: contact -->
-        <section class="imm-section spk-step-panel" data-spk-step="2" hidden aria-labelledby="spk-contact">
+        <section class="imm-section spk-step-panel" data-spk-step="3" hidden aria-labelledby="spk-contact">
             <header class="imm-section__head">
-                <span class="imm-section__num" aria-hidden="true">03</span>
+                <span class="imm-section__num" aria-hidden="true">04</span>
                 <div class="imm-section__titles">
                     <h2 id="spk-contact">Contact &amp; address</h2>
                     <p class="imm-section__lede">Mailing address and phone reused on every form that needs them.</p>
@@ -281,9 +296,9 @@
         </section>
 
         <!-- Step 3: study -->
-        <section class="imm-section spk-step-panel" data-spk-step="3" hidden aria-labelledby="spk-study">
+        <section class="imm-section spk-step-panel" data-spk-step="4" hidden aria-labelledby="spk-study">
             <header class="imm-section__head">
-                <span class="imm-section__num" aria-hidden="true">04</span>
+                <span class="imm-section__num" aria-hidden="true">05</span>
                 <div class="imm-section__titles">
                     <h2 id="spk-study">Study details</h2>
                     <p class="imm-section__lede">Feeds IMM 1294 (and checklist context).</p>
@@ -378,9 +393,9 @@
         </section>
 
         <!-- Step 4: passport -->
-        <section class="imm-section spk-step-panel" data-spk-step="4" hidden aria-labelledby="spk-passport">
+        <section class="imm-section spk-step-panel" data-spk-step="5" hidden aria-labelledby="spk-passport">
             <header class="imm-section__head">
-                <span class="imm-section__num" aria-hidden="true">05</span>
+                <span class="imm-section__num" aria-hidden="true">06</span>
                 <div class="imm-section__titles">
                     <h2 id="spk-passport">Passport</h2>
                     <p class="imm-section__lede">Travel document details for IMM 1294.</p>
@@ -409,9 +424,9 @@
         </section>
 
         <!-- Step 5: conditional extras -->
-        <section class="imm-section spk-step-panel" data-spk-step="5" hidden aria-labelledby="spk-extras">
+        <section class="imm-section spk-step-panel" data-spk-step="6" hidden aria-labelledby="spk-extras">
             <header class="imm-section__head">
-                <span class="imm-section__num" aria-hidden="true">06</span>
+                <span class="imm-section__num" aria-hidden="true">07</span>
                 <div class="imm-section__titles">
                     <h2 id="spk-extras">Situation-specific details</h2>
                     <p class="imm-section__lede">Only the sections matching your form selection appear.</p>
@@ -504,9 +519,9 @@
         </section>
 
         <!-- Step 6: deliver -->
-        <section class="imm-section spk-step-panel" data-spk-step="6" hidden aria-labelledby="spk-deliver">
+        <section class="imm-section spk-step-panel" data-spk-step="7" hidden aria-labelledby="spk-deliver">
             <header class="imm-section__head">
-                <span class="imm-section__num" aria-hidden="true">07</span>
+                <span class="imm-section__num" aria-hidden="true">08</span>
                 <div class="imm-section__titles">
                     <h2 id="spk-deliver">Review &amp; deliver</h2>
                     <p class="imm-section__lede">We fill every selected form once, then package them as a ZIP.</p>

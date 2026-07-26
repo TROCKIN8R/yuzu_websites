@@ -6,9 +6,11 @@
     const nextBtn = document.getElementById('spkNext');
     const backBtn = document.getElementById('spkBack');
     const consentInput = document.getElementById('spkConsent');
+    const formsConfirmInput = document.getElementById('spkFormsConfirm');
     const turnstileMount = document.getElementById('spkTurnstile');
     const formList = document.getElementById('spkFormList');
     const formListFinal = document.getElementById('spkFormListFinal');
+    const confirmNote = document.getElementById('spkConfirmNote');
     const reviewEl = document.getElementById('spkReview');
     const stepsNav = document.getElementById('spkSteps');
     const config = window.STUDY_PERMIT_KIT_CONFIG || {};
@@ -16,7 +18,9 @@
     const captchaRequired = Boolean((config.turnstile?.siteKey || '').trim());
 
     let step = 0;
-    const STEP_COUNT = 7;
+    const STEP_COUNT = 8;
+    const STEP_CONFIRM = 1;
+    const STEP_EXTRAS = 6;
     let turnstileWidgetId = null;
     let captchaPassed = false;
     let submitting = false;
@@ -56,13 +60,26 @@
         target.innerHTML = '';
         for (const code of forms) {
             const meta = formMeta[code] || { title: code.toUpperCase(), required: false };
+            const reason = meta.why
+                || (meta.required ? 'Always included for this kit.' : 'Included from your situation answers.');
             const item = document.createElement('div');
             item.className = 'spk-form-item is-on';
             item.innerHTML =
                 `<span class="spk-code">${code.toUpperCase()}</span>` +
                 `<div><strong>${meta.title || code}</strong>` +
-                `<p>${meta.required ? 'Always included' : 'Included from your answers'}</p></div>`;
+                `<p>${reason}</p></div>`;
             target.appendChild(item);
+        }
+    }
+
+    function refreshConfirmStep() {
+        const forms = selectFormsLocal();
+        renderFormList(formList, forms);
+        if (confirmNote) {
+            const optional = forms.filter((code) => !(formMeta[code] || {}).required);
+            confirmNote.textContent = optional.length
+                ? `Core kit (3 forms) plus ${optional.length} situation-specific form${optional.length === 1 ? '' : 's'}.`
+                : 'Core kit only — no optional forms from your answers.';
         }
     }
 
@@ -216,6 +233,14 @@
         return true;
     }
 
+    function applySituationSideEffects() {
+        const data = new FormData(form);
+        const ms = form.elements.maritalStatus;
+        if (ms && yn(g(data, 'isCommonLaw')) && ms.value === '02') {
+            ms.value = '03';
+        }
+    }
+
     function renderReview() {
         const data = new FormData(form);
         const forms = selectFormsLocal();
@@ -246,8 +271,12 @@
             });
         }
         if (backBtn) backBtn.hidden = step === 0;
-        if (nextBtn) nextBtn.hidden = step === STEP_COUNT - 1;
-        if (step === 5) syncExtras();
+        if (nextBtn) {
+            nextBtn.hidden = step === STEP_COUNT - 1;
+            nextBtn.textContent = step === STEP_CONFIRM ? 'Confirm & continue' : 'Continue';
+        }
+        if (step === STEP_CONFIRM) refreshConfirmStep();
+        if (step === STEP_EXTRAS) syncExtras();
         if (step === STEP_COUNT - 1) {
             renderReview();
             mountTurnstile();
@@ -405,25 +434,21 @@
         }
     }
 
-    function refreshSelection() {
-        const forms = selectFormsLocal();
-        renderFormList(formList, forms);
-        if (g(new FormData(form), 'isCommonLaw') && form.elements.maritalStatus) {
-            // soft hint only when common-law selected and still on single
-            const ms = form.elements.maritalStatus;
-            if (yn(g(new FormData(form), 'isCommonLaw')) && ms.value === '02') {
-                ms.value = '03';
-            }
-        }
+    function onSituationChange() {
+        // Situation changed — require re-confirm on the next step.
+        if (formsConfirmInput) formsConfirmInput.checked = false;
+        applySituationSideEffects();
+        if (step === STEP_CONFIRM) refreshConfirmStep();
         syncExtras();
     }
 
     ['hasRepresentative', 'hasDesignee', 'isCommonLaw', 'includeImm5707'].forEach((name) => {
-        form.elements[name]?.addEventListener('change', refreshSelection);
+        form.elements[name]?.addEventListener('change', onSituationChange);
     });
 
     nextBtn.addEventListener('click', () => {
         if (!validateCurrentStep()) return;
+        if (step === 0) applySituationSideEffects();
         goToStep(step + 1);
     });
     backBtn?.addEventListener('click', () => goToStep(step - 1));
@@ -436,6 +461,5 @@
     downloadBtn?.addEventListener('click', () => handleFill('download'));
 
     populateLov();
-    refreshSelection();
     goToStep(0);
 })();
