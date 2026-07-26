@@ -8,9 +8,11 @@
     const jobList = document.getElementById('imm-job-list');
     const jobTemplate = document.getElementById('imm-job-template');
     const pcorList = document.getElementById('imm-pcor-list');
+    const pcorTemplate = document.getElementById('imm-pcor-template');
     const config = window.IMM1294_CONFIG || {};
     const captchaRequired = Boolean((config.turnstile?.siteKey || '').trim());
     const MAX_JOBS = 3;
+    const MAX_PCOR = 2;
     let turnstileWidgetId = null;
     let captchaPassed = false;
     let submitting = false;
@@ -342,11 +344,16 @@
     }
 
     function syncPcorChrome() {
-        pcorCards().forEach((card, index) => {
+        if (fieldValue('previousCor') === 'Y' && pcorCards().length === 0) {
+            addPcor();
+            return;
+        }
+        const cards = pcorCards();
+        cards.forEach((card, index) => {
             const label = card.querySelector('.imm-sortable-item__label');
             if (label) {
                 label.textContent = String(index + 1);
-                label.title = index === 0 ? 'Required when Yes' : 'Optional';
+                label.title = index === 0 ? 'First on PDF' : `Country ${index + 1}`;
             }
             const status = card.querySelector('[data-pcor="status"]');
             const otherWrap = card.querySelector('.imm-pcor-other');
@@ -357,13 +364,65 @@
                 otherInput.required = showOther && fieldValue('previousCor') === 'Y';
                 otherInput.disabled = !showOther;
             }
-            const requiredAttrs = index === 0 && fieldValue('previousCor') === 'Y';
+            const requiredAttrs = fieldValue('previousCor') === 'Y';
             card.querySelectorAll('[data-pcor="country"], [data-pcor="status"], [data-pcor="from"], [data-pcor="to"]').forEach((el) => {
                 if (el instanceof HTMLInputElement || el instanceof HTMLSelectElement) {
-                    if (index === 0) el.required = requiredAttrs;
+                    el.required = requiredAttrs;
                 }
             });
+            const removeBtn = card.querySelector('.imm-remove-pcor');
+            if (removeBtn instanceof HTMLButtonElement) {
+                removeBtn.hidden = cards.length <= 1;
+            }
         });
+        const addBtn = document.getElementById('imm-add-pcor');
+        if (addBtn instanceof HTMLButtonElement) {
+            addBtn.hidden = fieldValue('previousCor') !== 'Y' || cards.length >= MAX_PCOR;
+        }
+    }
+
+    function bindPcorCard(card) {
+        card.querySelector('.imm-remove-pcor')?.addEventListener('click', () => {
+            if (pcorCards().length <= 1) return;
+            card.remove();
+            syncPcorChrome();
+        });
+        enableSortable(pcorList, '[data-pcor-slot]');
+    }
+
+    function addPcor(defaults = {}) {
+        if (!pcorList || !pcorTemplate || pcorCards().length >= MAX_PCOR) return;
+        const node = pcorTemplate.content.firstElementChild.cloneNode(true);
+        if (!(node instanceof HTMLElement)) return;
+
+        const set = (key, value) => {
+            if (value == null || value === '') return;
+            const input = node.querySelector(`[data-pcor="${key}"]`);
+            if (input instanceof HTMLInputElement || input instanceof HTMLSelectElement) {
+                if (input instanceof HTMLSelectElement && input.hasAttribute('data-imm-lov')) {
+                    input.dataset.immDefault = value;
+                }
+                input.value = value;
+            }
+        };
+
+        const countrySelect = node.querySelector('[data-pcor="country"]');
+        if (countrySelect instanceof HTMLSelectElement && defaults.country) {
+            countrySelect.dataset.immDefault = defaults.country;
+        }
+        populateLovSelects(node);
+        set('country', defaults.country ?? '');
+        set('status', defaults.status ?? '');
+        set('other', defaults.other ?? '');
+        set('from', defaults.from ?? '');
+        set('to', defaults.to ?? '');
+        if (countrySelect instanceof HTMLSelectElement && defaults.country) {
+            countrySelect.value = defaults.country;
+        }
+
+        bindPcorCard(node);
+        pcorList.appendChild(node);
+        syncPcorChrome();
     }
 
     function enableSortable(listEl, itemSelector) {
@@ -945,6 +1004,11 @@
             city: fieldValue('city') || 'Paris',
             country: fieldValue('currentCountry') || '022',
         });
+    });
+
+    document.getElementById('imm-add-pcor')?.addEventListener('click', () => {
+        addPcor();
+        syncBranches();
     });
 
     populateDialCodes();

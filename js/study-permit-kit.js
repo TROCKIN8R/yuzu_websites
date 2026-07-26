@@ -64,6 +64,8 @@
             jobTemplateId: 'spk-job-template',
             addJobBtnId: 'spk-add-job',
             pcorListId: 'spk-pcor-list',
+            pcorTemplateId: 'spk-pcor-template',
+            addPcorBtnId: 'spk-add-pcor',
             phoneCountryCodeId: 'spk-phoneCountryCode',
             preferredLangId: 'spk-preferredLang',
             populateLovSelects,
@@ -331,45 +333,33 @@
         }
 
         if (dyn && Array.isArray(draft.previousCorRows) && draft.previousCorRows.length) {
-            const cards = form.querySelectorAll('#spk-pcor-list [data-pcor-slot]');
-            draft.previousCorRows.slice(0, cards.length).forEach((row, index) => {
-                const card = cards[index];
-                if (!card) return;
-                const set = (key, value) => {
-                    const el = card.querySelector(`[data-pcor="${key}"]`);
-                    if (el instanceof HTMLInputElement || el instanceof HTMLSelectElement) {
-                        if (el instanceof HTMLSelectElement && el.hasAttribute('data-imm-lov')) {
-                            el.dataset.immDefault = value || '';
-                        }
-                        el.value = value || '';
-                    }
-                };
-                set('country', row.country);
-                set('status', row.status);
-                set('other', row.other);
-                if (row.fromYear) {
-                    set('from', joinDate(row.fromYear, row.fromMonth, row.fromDay));
-                }
-                if (row.toYear) {
-                    set('to', joinDate(row.toYear, row.toMonth, row.toDay));
-                }
+            dyn.clearPcor();
+            for (const row of draft.previousCorRows.slice(0, dyn.MAX_PCOR || 2)) {
+                dyn.addPcor({
+                    country: row.country || '',
+                    status: row.status || '',
+                    other: row.other || '',
+                    from: joinDate(row.fromYear, row.fromMonth, row.fromDay),
+                    to: joinDate(row.toYear, row.toMonth, row.toDay),
+                });
+            }
+        } else if (draft.pcor1Country && dyn) {
+            dyn.clearPcor();
+            dyn.addPcor({
+                country: draft.pcor1Country,
+                status: draft.pcor1Status,
+                other: draft.pcor1Other,
+                from: joinDate(draft.pcor1FromYear, draft.pcor1FromMonth, draft.pcor1FromDay),
+                to: joinDate(draft.pcor1ToYear, draft.pcor1ToMonth, draft.pcor1ToDay),
             });
-        } else if (draft.pcor1Country) {
-            const card = form.querySelector('#spk-pcor-list [data-pcor-slot]');
-            if (card) {
-                const set = (key, value) => {
-                    const el = card.querySelector(`[data-pcor="${key}"]`);
-                    if (el instanceof HTMLInputElement || el instanceof HTMLSelectElement) {
-                        el.value = value || '';
-                    }
-                };
-                set('country', draft.pcor1Country);
-                set('status', draft.pcor1Status);
-                set('other', draft.pcor1Other);
-                const from = joinDate(draft.pcor1FromYear, draft.pcor1FromMonth, draft.pcor1FromDay);
-                const to = joinDate(draft.pcor1ToYear, draft.pcor1ToMonth, draft.pcor1ToDay);
-                if (from) set('from', from);
-                if (to) set('to', to);
+            if (draft.pcor2Country) {
+                dyn.addPcor({
+                    country: draft.pcor2Country,
+                    status: draft.pcor2Status,
+                    other: draft.pcor2Other,
+                    from: joinDate(draft.pcor2FromYear, draft.pcor2FromMonth, draft.pcor2FromDay),
+                    to: joinDate(draft.pcor2ToYear, draft.pcor2ToMonth, draft.pcor2ToDay),
+                });
             }
         }
 
