@@ -96,6 +96,7 @@
   flex-wrap: wrap;
   gap: 0.75rem;
   justify-content: space-between;
+  align-items: center;
   margin-top: 1.5rem;
   padding-top: 1.25rem;
   border-top: 1px solid #e8e9ea;
@@ -103,6 +104,72 @@
 
 .spk-nav .opp-submit {
   min-width: 9rem;
+}
+
+.spk-nav__right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+.spk-resume-panel {
+  margin: 0 0 1.5rem;
+  padding: 1.15rem 1.25rem 1.25rem;
+  border-radius: 16px;
+  background: rgba(45, 52, 54, 0.03);
+  border: 1px solid #e8e9ea;
+}
+
+.spk-resume-panel__head h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #2d3436;
+}
+
+.spk-resume-panel__head p {
+  margin: 0.35rem 0 0.9rem;
+  font-size: 0.9rem;
+  color: #5c6567;
+}
+
+.spk-resume-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.spk-save-banner {
+  margin: 0 0 1.25rem;
+  padding: 1.15rem 1.25rem;
+  border-radius: 16px;
+  background: #fef6da;
+  border: 1px solid rgba(248, 198, 7, 0.55);
+}
+
+.spk-save-banner__title {
+  margin: 0 0 0.35rem;
+  font-weight: 800;
+  color: #2d3436;
+}
+
+.spk-save-banner__code {
+  margin: 0.65rem 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #bc9605;
+  word-break: break-all;
+}
+
+.spk-save-banner__meta {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: #5c6567;
 }
 
 .spk-review {

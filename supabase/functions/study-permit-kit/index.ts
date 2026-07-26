@@ -7,6 +7,13 @@ import {
   zipFilledForms,
   type FilledForm,
 } from "./fill_kit.ts";
+import {
+  DRAFT_TTL_DAYS,
+  loadDraft,
+  normalizeDob,
+  normalizePassport,
+  saveDraft,
+} from "./drafts.ts";
 import { type KitAnswers, selectForms } from "./patchers.ts";
 
 const ALLOWED_ORIGIN_PATTERNS = [
@@ -159,6 +166,24 @@ async function enforceRateLimits(
   return { ok: true, error: "" };
 }
 
+async function enforceDraftRateLimits(
+  supabase: SupabaseClient,
+  remoteIp: string | undefined,
+  action: string,
+) {
+  const ipLimit = Number(Deno.env.get("STUDY_KIT_DRAFT_IP_LIMIT") || "20");
+  const ipWindowMinutes = Number(Deno.env.get("STUDY_KIT_DRAFT_IP_WINDOW_MIN") || "60");
+  if (!remoteIp) return { ok: true, error: "" };
+
+  const ipBucket = `studykit-draft:${action}:ip:${await sha256(remoteIp)}`;
+  const ipHits = await countRecentHits(supabase, ipBucket, ipWindowMinutes);
+  if (ipHits >= ipLimit) {
+    return { ok: false, error: "Too many save/resume attempts from this network. Try again later." };
+  }
+  await recordRateEvent(supabase, ipBucket);
+  return { ok: true, error: "" };
+}
+
 async function verifyTurnstile(token: string, remoteIp?: string) {
   const secret = Deno.env.get("TURNSTILE_SECRET_KEY")?.trim();
   if (!secret) {
@@ -250,14 +275,45 @@ function validateKit(raw: Record<string, unknown>): { ok: true; answers: KitAnsw
     ? raw.imm1294 as Record<string, unknown>
     : {};
 
-  // Flatten common study/passport fields into imm1294 extras for the filler.
+  // Flatten IMM 1294 questionnaire fields (including dynamic branches) into imm1294 bag.
   for (const key of [
     "passportNumber", "passportCountry", "passportIssueYear", "passportIssueMonth", "passportIssueDay",
     "passportExpiryYear", "passportExpiryMonth", "passportExpiryDay",
     "schoolName", "studyLevel", "fieldOfStudy", "schoolProvince", "schoolCity", "schoolAddress", "dli",
     "studyFromYear", "studyFromMonth", "studyFromDay", "studyToYear", "studyToMonth", "studyToDay",
-    "tuitionAmount", "availableFunds", "funds", "nativeLang", "ableToCommunicate", "preferredLang",
-    "maritalStatus", "currentCountry", "currentStatus", "occupation", "employer",
+    "tuitionAmount", "availableFunds", "funds", "fundsOtherPerson",
+    "caqNumber", "caqExpiryYear", "caqExpiryMonth", "caqExpiryDay",
+    "palNumber", "palExpiryYear", "palExpiryMonth", "palExpiryDay",
+    "nativeLang", "ableToCommunicate", "preferredLang", "langTest",
+    "maritalStatus", "spouseFamilyName", "spouseGivenName", "marriageYear", "marriageMonth", "marriageDay",
+    "currentCountry", "currentStatus", "corOther",
+    "corFromYear", "corFromMonth", "corFromDay", "corToYear", "corToMonth", "corToDay",
+    "previousCor", "previousCorRows",
+    "pcor1Country", "pcor1Status", "pcor1Other", "pcor1FromYear", "pcor1FromMonth", "pcor1FromDay",
+    "pcor1ToYear", "pcor1ToMonth", "pcor1ToDay",
+    "pcor2Country", "pcor2Status", "pcor2Other", "pcor2FromYear", "pcor2FromMonth", "pcor2FromDay",
+    "pcor2ToYear", "pcor2ToMonth", "pcor2ToDay",
+    "sameAsCor", "cwaCountry", "cwaStatus", "cwaOther",
+    "cwaFromYear", "cwaFromMonth", "cwaFromDay", "cwaToYear", "cwaToMonth", "cwaToDay",
+    "previouslyMarried", "prevSpouseFamilyName", "prevSpouseGivenName", "prevSpouseRelationship",
+    "prevSpouseDobYear", "prevSpouseDobMonth", "prevSpouseDobDay",
+    "prevSpouseFromYear", "prevSpouseFromMonth", "prevSpouseFromDay",
+    "prevSpouseToYear", "prevSpouseToMonth", "prevSpouseToDay",
+    "hasAlias", "aliasFamilyName", "aliasGivenName",
+    "hasNatId", "natIdNumber", "natIdCountry",
+    "natIdIssueYear", "natIdIssueMonth", "natIdIssueDay",
+    "natIdExpiryYear", "natIdExpiryMonth", "natIdExpiryDay",
+    "hasUsCard", "usCardNumber", "usCardExpiryYear", "usCardExpiryMonth", "usCardExpiryDay",
+    "sameAsMailing", "resStreetNum", "resStreetName", "resAptUnit", "resCity", "resCountry",
+    "resProvinceState", "resPostalCode",
+    "phoneType", "educationIndicator",
+    "eduFromYear", "eduFromMonth", "eduToYear", "eduToMonth",
+    "eduField", "eduSchool", "eduCity", "eduCountry", "eduProvince",
+    "occupation", "employer", "occupationCity", "occupationCountry", "occupationProvince",
+    "occupationFromYear", "occupationFromMonth", "jobs",
+    "bgTb", "bgDisorder", "bgMedicalDetails", "bgOverstay", "bgRefused", "bgClaimAsylum",
+    "bgRefusedDetails", "bgCrime", "bgCrimeDetails", "bgMilitary", "bgMilitaryDetails",
+    "bgViolence", "bgWitness", "cicContactConsent", "serviceIn",
   ]) {
     if (raw[key] !== undefined && imm1294[key] === undefined) {
       imm1294[key] = raw[key];
@@ -454,6 +510,11 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: "Invalid request" }, 400, origin);
   }
 
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")?.trim();
+  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")?.trim();
+  const remoteIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+    || req.headers.get("x-real-ip")?.trim();
+
   // Preview which forms would be selected (no captcha / no fill).
   if (payload.action === "select-forms") {
     const forms = selectForms({
@@ -465,13 +526,75 @@ Deno.serve(async (req) => {
     return jsonResponse({ ok: true, forms }, 200, origin);
   }
 
+  // Save / resume drafts (rate-limited; no captcha — mid-wizard save).
+  if (payload.action === "save-draft" || payload.action === "load-draft") {
+    if (!supabaseUrl || !serviceRoleKey) {
+      return jsonResponse({ error: "Server misconfigured" }, 500, origin);
+    }
+    const supabase = createClient(supabaseUrl, serviceRoleKey);
+    const draftLimit = await enforceDraftRateLimits(supabase, remoteIp, payload.action);
+    if (!draftLimit.ok) {
+      return jsonResponse({ error: draftLimit.error }, 429, origin);
+    }
+
+    if (payload.action === "save-draft") {
+      const draftPayload = (payload.draft && typeof payload.draft === "object")
+        ? payload.draft as Record<string, unknown>
+        : payload;
+      const dob = normalizeDob(
+        digits(draftPayload.dobYear, 4),
+        digits(draftPayload.dobMonth, 2),
+        digits(draftPayload.dobDay, 2),
+      ) || cleanText(payload.dob, 10);
+      const passport = normalizePassport(
+        cleanText(draftPayload.passportNumber || payload.passportNumber, 40),
+      );
+      const step = Number(payload.step ?? draftPayload.step ?? 0);
+      const result = await saveDraft(supabase, {
+        step,
+        payload: draftPayload,
+        dob: /^\d{4}-\d{2}-\d{2}$/.test(dob) ? dob : "",
+        passport,
+      });
+      if (!result.ok) {
+        return jsonResponse({ error: result.error }, 400, origin);
+      }
+      return jsonResponse({
+        ok: true,
+        code: result.code,
+        expiresAt: result.expiresAt,
+        validDays: DRAFT_TTL_DAYS,
+      }, 200, origin);
+    }
+
+    const dob = cleanText(payload.dob, 10)
+      || normalizeDob(
+        digits(payload.dobYear, 4),
+        digits(payload.dobMonth, 2),
+        digits(payload.dobDay, 2),
+      )
+      || "";
+    const result = await loadDraft(supabase, {
+      code: cleanText(payload.code, 40),
+      dob: /^\d{4}-\d{2}-\d{2}$/.test(dob) ? dob : "",
+      passport: cleanText(payload.passportNumber, 40),
+    });
+    if (!result.ok) {
+      return jsonResponse({ error: result.error }, 404, origin);
+    }
+    return jsonResponse({
+      ok: true,
+      step: result.draft.step,
+      draft: result.draft.payload,
+      expiresAt: result.draft.expires_at,
+    }, 200, origin);
+  }
+
   if (payload.consent !== true) {
     return jsonResponse({ error: "Consent is required" }, 400, origin);
   }
 
   const captchaToken = cleanText(payload.captchaToken, 2048);
-  const remoteIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
-    || req.headers.get("x-real-ip")?.trim();
 
   const captcha = await verifyTurnstile(captchaToken, remoteIp);
   if (!captcha.ok) {
@@ -483,8 +606,6 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: validated.error }, 400, origin);
   }
 
-  const supabaseUrl = Deno.env.get("SUPABASE_URL")?.trim();
-  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")?.trim();
   if (!supabaseUrl || !serviceRoleKey) {
     return jsonResponse({ error: "Server misconfigured" }, 500, origin);
   }
