@@ -173,9 +173,8 @@
         pcorCards().forEach((card, index) => {
             const label = card.querySelector('.imm-sortable-item__label');
             if (label) {
-                label.textContent = index === 0
-                    ? 'Country 1 (required when Yes)'
-                    : 'Country 2 (optional)';
+                label.textContent = String(index + 1);
+                label.title = index === 0 ? 'Required when Yes' : 'Optional';
             }
             const status = card.querySelector('[data-pcor="status"]');
             const otherWrap = card.querySelector('.imm-pcor-other');
@@ -282,9 +281,8 @@
         cards.forEach((card, index) => {
             const label = card.querySelector('.imm-sortable-item__label');
             if (label) {
-                label.textContent = index === 0
-                    ? 'Job 1 · most recent on PDF'
-                    : `Job ${index + 1}`;
+                label.textContent = String(index + 1);
+                label.title = index === 0 ? 'Most recent on PDF' : `Job ${index + 1}`;
             }
             const removeBtn = card.querySelector('.imm-remove-job');
             if (removeBtn instanceof HTMLButtonElement) {
