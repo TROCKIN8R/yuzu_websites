@@ -5,6 +5,7 @@
   const routesApi = window.StmRoutes;
   const filtersApi = window.StmFilters;
   const enrichApi = window.StmEnrich;
+  const metroSim = window.StmMetroSim;
   if (!root || !data || !filtersApi || !enrichApi) return;
 
   const els = {
@@ -32,8 +33,10 @@
   };
 
   let refreshTimer = null;
+  let metroAnimTimer = null;
   let filterState = filtersApi.defaultState();
   let rawVehicles = [];
+  let busVehiclesRaw = [];
   let rawAlerts = [];
   let routeMeta = null;
   let routeHeadways = null;
@@ -126,7 +129,23 @@
   }
 
   function markerColor(vehicle) {
+    if (vehicle?.isMetro && vehicle.routeColor) return vehicle.routeColor;
     return filtersApi.vehicleMarkerColor(vehicle, filterState.colorMode);
+  }
+
+  function rebuildVehicleList(nowMs = Date.now()) {
+    const estimated = metroSim && metroData
+      ? metroSim.simulate(metroData, routeHeadways, nowMs)
+      : [];
+    rawVehicles = busVehiclesRaw.concat(estimated);
+  }
+
+  function tickMetroPositions() {
+    if (!metroData || !metroSim || isFetching) return;
+    rebuildVehicleList();
+    const filtered = getFilteredVehicles();
+    renderKpis(filtered);
+    void renderMap(filtered);
   }
 
   function focusVehicle(vehicle) {
@@ -844,12 +863,12 @@
       mapApi?.clearRoutes?.();
     }
 
-    if (els.mapCaption) {
+      if (els.mapCaption) {
       const metros = filtered.filter((vehicle) => vehicle.isMetro).length;
       const buses = filtered.filter((vehicle) => !vehicle.isMetro).length;
       const lineHint = linesToShow.length ? ` · bus path ${linesToShow.join(", ")}` : "";
       els.mapCaption.textContent = plotted
-        ? `${formatNum(buses)} buses · ${formatNum(metros)} metro trains${lineHint} · ${filterState.colorMode === "delay" ? "colour = delay" : "colour = load"}`
+        ? `${formatNum(buses)} buses · ${formatNum(metros)} metro trains (headway estimate)${lineHint} · ${filterState.colorMode === "delay" ? "colour = delay" : "colour = load"}`
         : linesToShow.length
           ? `Showing line path for ${linesToShow.join(", ")}`
           : "No vehicles match the current slicers · metro lines remain visible";
@@ -896,6 +915,7 @@
     routeMeta = meta;
     routeHeadways = headways;
     if (metroData) mapApi?.plotMetroLines?.(metroData);
+    rebuildVehicleList();
   }
 
   async function refresh() {
@@ -922,11 +942,12 @@
       rawAlerts = servicePayload?.serviceStatus?.alerts || [];
       fetchedAt = vehiclePayload.fetchedAt || servicePayload.fetchedAt;
 
-      rawVehicles = enrichApi.enrichVehicles(vehiclePayload.vehicles || [], {
+      busVehiclesRaw = enrichApi.enrichVehicles(vehiclePayload.vehicles || [], {
         tripUpdates: tripPayload.tripUpdates || [],
         meta: routeMeta
-      });
+      }).filter((vehicle) => !vehicle.isMetro);
 
+      rebuildVehicleList();
       renderAll();
 
       const timeLabel = fetchedAt
@@ -948,6 +969,8 @@
   function scheduleRefresh() {
     clearInterval(refreshTimer);
     refreshTimer = window.setInterval(refresh, data.config().refreshMs || 30000);
+    clearInterval(metroAnimTimer);
+    metroAnimTimer = window.setInterval(tickMetroPositions, 3000);
   }
 
   els.refreshBtn?.addEventListener("click", refresh);
@@ -996,6 +1019,11 @@
     focusVehicle(vehicle);
   });
 
-  loadStaticData().then(refresh);
+  loadStaticData()
+    .then(() => {
+      if (rawVehicles.length) renderAll();
+      return refresh();
+    })
+    .catch(() => {});
   scheduleRefresh();
 })();

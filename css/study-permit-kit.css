@@ -1,0 +1,100 @@
+/* Study permit kit wizard — extends IMM form look */
+.spk-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.25rem 0 1.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.spk-steps li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #8a9194;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(45, 52, 54, 0.04);
+}
+
+.spk-steps li[aria-current="step"] {
+  color: #2d3436;
+  background: #fef6da;
+  box-shadow: inset 0 0 0 1px #f8c607;
+}
+
+.spk-steps li.is-done {
+  color: #5c6567;
+}
+
+.spk-step-panel[hidden] {
+  display: none !important;
+}
+
+.spk-form-list {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0.75rem 0 0;
+}
+
+.spk-form-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 12px;
+  background: rgba(45, 52, 54, 0.03);
+  border: 1px solid transparent;
+}
+
+.spk-form-item.is-on {
+  background: #fef6da;
+  border-color: rgba(248, 198, 7, 0.45);
+}
+
+.spk-form-item .spk-code {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #bc9605;
+  min-width: 4.5rem;
+}
+
+.spk-form-item p {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: #5c6567;
+}
+
+.spk-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #e8e9ea;
+}
+
+.spk-nav .opp-submit {
+  min-width: 9rem;
+}
+
+.spk-review {
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+}
+
+.spk-review dt {
+  font-weight: 700;
+  color: #2d3436;
+}
+
+.spk-review dd {
+  margin: 0 0 0.6rem;
+  color: #5c6567;
+}
