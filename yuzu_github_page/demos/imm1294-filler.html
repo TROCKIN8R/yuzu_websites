@@ -49,7 +49,7 @@
     <header class="imm-hero">
         <p class="imm-hero-eyebrow">Automation POC · IRCC IMM 1294</p>
         <h1>Study permit form, filled for you</h1>
-        <p>Sample applicant is prefilled — edit freely. Related fields share a line; multi-entry history uses compact tables.</p>
+        <p>Sample applicant is prefilled. Country, language, and Canada/U.S. province fields use the same IRCC lists as the PDF — no free-typed inventing.</p>
         <p class="imm-hero-links">
             <a href="../assets/forms/imm1294f.pdf" target="_blank" rel="noopener noreferrer">Blank IMM 1294 PDF</a>
             <span aria-hidden="true"> · </span>
@@ -59,7 +59,7 @@
 
     <form class="imm-form opp-form" id="imm1294Form" novalidate>
         <section class="imm-section" aria-labelledby="imm-delivery">
-            <h2 id="imm-delivery">Delivery</h2>
+            <header class="imm-section__head"><span class="imm-section__num" aria-hidden="true">01</span><div class="imm-section__titles"><h2 id="imm-delivery">Delivery</h2><p class="imm-section__lede">Where we send the filled PDF.</p></div></header>
             <div class="imm-line">
                 <div class="opp-field imm-grow-lg">
                     <label for="imm-email">Email</label>
@@ -76,7 +76,7 @@
         </section>
 
         <section class="imm-section" aria-labelledby="imm-personal">
-            <h2 id="imm-personal">Personal details</h2>
+            <header class="imm-section__head"><span class="imm-section__num" aria-hidden="true">02</span><div class="imm-section__titles"><h2 id="imm-personal">Personal details</h2><p class="imm-section__lede">Identity, birth, citizenship, and residence status.</p></div></header>
             <div class="imm-line">
                 <div class="opp-field imm-grow">
                     <label for="imm-familyName">Family name</label>
@@ -126,11 +126,15 @@
                 </div>
                 <div class="opp-field imm-w-md">
                     <label for="imm-placeBirthCountry">Country of birth</label>
-                    <input id="imm-placeBirthCountry" name="placeBirthCountry" type="text" required maxlength="120" placeholder="e.g. France" value="France">
+                    <select id="imm-placeBirthCountry" name="placeBirthCountry" required data-imm-lov="country" data-imm-default="022">
+                        <option value="" disabled>Select country…</option>
+                    </select>
                 </div>
                 <div class="opp-field imm-w-md">
                     <label for="imm-citizenship">Citizenship</label>
-                    <input id="imm-citizenship" name="citizenship" type="text" required maxlength="120" placeholder="e.g. France" value="France">
+                    <select id="imm-citizenship" name="citizenship" required data-imm-lov="country" data-imm-default="022">
+                        <option value="" disabled>Select country…</option>
+                    </select>
                 </div>
                 <div class="opp-field imm-w-md">
                     <label for="imm-maritalStatus">Marital status</label>
@@ -167,7 +171,9 @@
             <div class="imm-line">
                 <div class="opp-field imm-grow">
                     <label for="imm-currentCountry">Country of residence</label>
-                    <input id="imm-currentCountry" name="currentCountry" type="text" required maxlength="120" value="France">
+                    <select id="imm-currentCountry" name="currentCountry" required data-imm-lov="country" data-imm-default="022">
+                        <option value="" disabled>Select country…</option>
+                    </select>
                 </div>
                 <div class="opp-field imm-w-md">
                     <label for="imm-currentStatus">Status there</label>
@@ -244,7 +250,9 @@
                             <span class="imm-sortable-item__label">1</span>
                             <div class="opp-field">
                                 <label class="imm-field-label">Country</label>
-                                <input data-pcor="country" type="text" maxlength="120" data-imm-required placeholder="e.g. Spain" value="">
+                                <select data-pcor="country" data-imm-lov="country" data-imm-required>
+                                    <option value="" selected disabled>Select country…</option>
+                                </select>
                             </div>
                             <div class="opp-field">
                                 <label class="imm-field-label">Status</label>
@@ -276,7 +284,9 @@
                             <span class="imm-sortable-item__label">2</span>
                             <div class="opp-field">
                                 <label class="imm-field-label">Country (optional)</label>
-                                <input data-pcor="country" type="text" maxlength="120" placeholder="Optional" value="">
+                                <select data-pcor="country" data-imm-lov="country">
+                                    <option value="" selected>Select country…</option>
+                                </select>
                             </div>
                             <div class="opp-field">
                                 <label class="imm-field-label">Status</label>
@@ -324,7 +334,9 @@
                             <span class="imm-sortable-item__label">1</span>
                             <div class="opp-field">
                                 <label class="imm-field-label" for="imm-cwaCountry">Country</label>
-                                <input id="imm-cwaCountry" name="cwaCountry" type="text" maxlength="120" data-imm-required value="">
+                                <select id="imm-cwaCountry" name="cwaCountry" data-imm-lov="country" data-imm-required>
+                                    <option value="" selected disabled>Select country…</option>
+                                </select>
                             </div>
                             <div class="opp-field">
                                 <label class="imm-field-label" for="imm-cwaStatus">Status</label>
@@ -390,7 +402,7 @@
         </section>
 
         <section class="imm-section" aria-labelledby="imm-passport">
-            <h2 id="imm-passport">Passport &amp; languages</h2>
+            <header class="imm-section__head"><span class="imm-section__num" aria-hidden="true">03</span><div class="imm-section__titles"><h2 id="imm-passport">Passport &amp; languages</h2><p class="imm-section__lede">Travel document and language preferences.</p></div></header>
             <div class="imm-line">
                 <div class="opp-field imm-w-lg">
                     <label for="imm-passportNumber">Passport number</label>
@@ -398,7 +410,9 @@
                 </div>
                 <div class="opp-field imm-grow">
                     <label for="imm-passportCountry">Country of issue</label>
-                    <input id="imm-passportCountry" name="passportCountry" type="text" required maxlength="120" value="France">
+                    <select id="imm-passportCountry" name="passportCountry" required data-imm-lov="country" data-imm-default="022">
+                        <option value="" disabled>Select country…</option>
+                    </select>
                 </div>
                 <div class="opp-field imm-w-md">
                     <label for="imm-passportIssue">Issue date</label>
@@ -412,7 +426,9 @@
             <div class="imm-line">
                 <div class="opp-field imm-w-md">
                     <label for="imm-nativeLang">Native language</label>
-                    <input id="imm-nativeLang" name="nativeLang" type="text" required maxlength="80" placeholder="e.g. French" value="French">
+                    <select id="imm-nativeLang" name="nativeLang" required data-imm-lov="language" data-imm-default="002">
+                        <option value="" disabled>Select language…</option>
+                    </select>
                 </div>
                 <div class="opp-field imm-w-lg">
                     <label for="imm-ableToCommunicate">English / French ability</label>
@@ -461,7 +477,9 @@
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="imm-natIdCountry">Country of issue</label>
-                        <input id="imm-natIdCountry" name="natIdCountry" type="text" maxlength="120" data-imm-required value="">
+                        <select id="imm-natIdCountry" name="natIdCountry" data-imm-lov="country" data-imm-required>
+                            <option value="" selected disabled>Select country…</option>
+                        </select>
                     </div>
                     <div class="opp-field imm-w-md">
                         <label for="imm-natIdIssue">Issue</label>
@@ -488,7 +506,7 @@
         </section>
 
         <section class="imm-section" aria-labelledby="imm-contact">
-            <h2 id="imm-contact">Mailing address &amp; phone</h2>
+            <header class="imm-section__head"><span class="imm-section__num" aria-hidden="true">04</span><div class="imm-section__titles"><h2 id="imm-contact">Mailing address &amp; phone</h2><p class="imm-section__lede">Where IRCC can reach you.</p></div></header>
             <div class="imm-line">
                 <div class="opp-field imm-w-xs">
                     <label for="imm-streetNum">No.</label>
@@ -506,11 +524,18 @@
                 </div>
                 <div class="opp-field imm-w-md">
                     <label for="imm-provinceState">Province / state</label>
-                    <input id="imm-provinceState" name="provinceState" type="text" maxlength="80" autocomplete="address-level1" value="Ile-de-France">
+                    <div data-imm-province-wrap data-imm-country-ref="imm-country" data-imm-name="provinceState">
+                        <select id="imm-provinceState" data-imm-province-mode="lov" hidden disabled>
+                            <option value="">Select…</option>
+                        </select>
+                        <input id="imm-provinceStateText" name="provinceState" data-imm-province-mode="text" type="text" maxlength="80" autocomplete="address-level1" value="Ile-de-France" placeholder="Region / state if any">
+                    </div>
                 </div>
                 <div class="opp-field imm-w-md">
                     <label for="imm-country">Country</label>
-                    <input id="imm-country" name="country" type="text" required maxlength="120" autocomplete="country-name" value="France">
+                    <select id="imm-country" name="country" required data-imm-lov="country" data-imm-default="022" autocomplete="country-name">
+                        <option value="" disabled>Select country…</option>
+                    </select>
                 </div>
                 <div class="opp-field imm-w-sm">
                     <label for="imm-postalCode">Postal code</label>
@@ -558,11 +583,18 @@
                             </div>
                             <div class="opp-field">
                                 <label class="imm-field-label" for="imm-resProvinceState">Prov</label>
-                                <input id="imm-resProvinceState" name="resProvinceState" type="text" maxlength="80" value="">
+                                <div data-imm-province-wrap data-imm-country-ref="imm-resCountry" data-imm-name="resProvinceState">
+                                    <select id="imm-resProvinceState" data-imm-province-mode="lov" hidden disabled>
+                                        <option value="">Select…</option>
+                                    </select>
+                                    <input id="imm-resProvinceStateText" name="resProvinceState" data-imm-province-mode="text" type="text" maxlength="80" value="" placeholder="If applicable">
+                                </div>
                             </div>
                             <div class="opp-field">
                                 <label class="imm-field-label" for="imm-resCountry">Country</label>
-                                <input id="imm-resCountry" name="resCountry" type="text" maxlength="120" data-imm-required value="">
+                                <select id="imm-resCountry" name="resCountry" data-imm-lov="country" data-imm-required>
+                                    <option value="" selected disabled>Select country…</option>
+                                </select>
                             </div>
                             <div class="opp-field">
                                 <label class="imm-field-label" for="imm-resPostalCode">Postal</label>
@@ -593,7 +625,7 @@
         </section>
 
         <section class="imm-section" aria-labelledby="imm-study">
-            <h2 id="imm-study">Study in Canada</h2>
+            <header class="imm-section__head"><span class="imm-section__num" aria-hidden="true">05</span><div class="imm-section__titles"><h2 id="imm-study">Study in Canada</h2><p class="imm-section__lede">School, program, dates, and funds.</p></div></header>
             <div class="imm-line">
                 <div class="opp-field imm-grow-lg">
                     <label for="imm-schoolName">School name</label>
@@ -780,11 +812,18 @@
                             </div>
                             <div class="opp-field">
                                 <label class="imm-field-label" for="imm-eduCountry">Country</label>
-                                <input id="imm-eduCountry" name="eduCountry" type="text" maxlength="120" data-imm-required value="">
+                                <select id="imm-eduCountry" name="eduCountry" data-imm-lov="country" data-imm-required>
+                                    <option value="" selected disabled>Select country…</option>
+                                </select>
                             </div>
                             <div class="opp-field">
                                 <label class="imm-field-label" for="imm-eduProvince">Prov</label>
-                                <input id="imm-eduProvince" name="eduProvince" type="text" maxlength="80" value="">
+                                <div data-imm-province-wrap data-imm-country-ref="imm-eduCountry" data-imm-name="eduProvince">
+                                    <select id="imm-eduProvince" data-imm-province-mode="lov" hidden disabled>
+                                        <option value="">Select…</option>
+                                    </select>
+                                    <input id="imm-eduProvinceText" name="eduProvince" data-imm-province-mode="text" type="text" maxlength="80" value="" placeholder="If applicable">
+                                </div>
                             </div>
                         </article>
                     </div>
@@ -793,7 +832,7 @@
         </section>
 
         <section class="imm-section" aria-labelledby="imm-work">
-            <h2 id="imm-work">Employment / activity history</h2>
+            <header class="imm-section__head"><span class="imm-section__num" aria-hidden="true">06</span><div class="imm-section__titles"><h2 id="imm-work">Employment / activity history</h2><p class="imm-section__lede">Most recent activity first — drag to reorder.</p></div></header>
             <p>Up to 3 rows. Drag to reorder — row 1 is most recent on the PDF. Leave To blank if current.</p>
             <div class="imm-table-wrap">
                 <div class="imm-table-head imm-table-head--job" aria-hidden="true">
@@ -831,11 +870,16 @@
                     </div>
                     <div class="opp-field">
                         <label class="imm-field-label">Country</label>
-                        <input data-job="country" type="text" required maxlength="80" value="">
+                        <select data-job="country" required data-imm-lov="country">
+                            <option value="" selected disabled>Select…</option>
+                        </select>
                     </div>
-                    <div class="opp-field">
+                    <div class="opp-field" data-imm-province-wrap data-imm-province-for-job="country" data-imm-name="provinceState">
                         <label class="imm-field-label">Province / state</label>
-                        <input data-job="provinceState" type="text" maxlength="80" value="">
+                        <select data-job="provinceState" data-imm-province-mode="lov" hidden disabled>
+                            <option value="">Select…</option>
+                        </select>
+                        <input data-job="provinceState" data-imm-province-mode="text" type="text" maxlength="80" value="" placeholder="If applicable">
                     </div>
                     <div class="opp-field">
                         <label class="imm-field-label">From</label>
@@ -851,7 +895,7 @@
         </section>
 
         <section class="imm-section" aria-labelledby="imm-bg">
-            <h2 id="imm-bg">Background questions</h2>
+            <header class="imm-section__head"><span class="imm-section__num" aria-hidden="true">07</span><div class="imm-section__titles"><h2 id="imm-bg">Background questions</h2><p class="imm-section__lede">IRCC yes/no questions — details appear only if needed.</p></div></header>
             <div class="imm-line">
                 <div class="opp-field imm-yn">
                     <label for="imm-bgTb">TB (2 yrs)?</label>
@@ -953,6 +997,7 @@
 <script src="../js/site.js"></script>
 <script src="../js/imm1294-config.js"></script>
 <script src="../js/imm1294-dial-codes.js"></script>
+<script src="../js/imm1294-lov.js"></script>
 <script src="../js/imm1294-form.js"></script>
 </body>
 </html>
