@@ -208,6 +208,42 @@ function parseYn(raw: unknown, fallback: "Y" | "N" = "N"): "Y" | "N" {
   return fallback;
 }
 
+/** Optional MM — never emit "00" (empty padStart), which fails IRCC Valider. */
+function optionalMonth(raw: unknown): string | undefined {
+  const d = digits(raw, 2);
+  if (!d) return undefined;
+  const m = d.padStart(2, "0");
+  const n = Number(m);
+  if (n < 1 || n > 12) return undefined;
+  return m;
+}
+
+function optionalYear(raw: unknown): string | undefined {
+  const d = digits(raw, 4);
+  return d.length === 4 ? d : undefined;
+}
+
+function optionalDay(raw: unknown): string | undefined {
+  const d = digits(raw, 2);
+  if (!d) return undefined;
+  const day = d.padStart(2, "0");
+  const n = Number(day);
+  if (n < 1 || n > 31) return undefined;
+  return day;
+}
+
+/** IRCC: To year/month are both optional, but if either is set both are required. */
+function optionalYearMonth(
+  yearRaw: unknown,
+  monthRaw: unknown,
+): { year?: string; month?: string; error?: string } {
+  const year = optionalYear(yearRaw);
+  const month = optionalMonth(monthRaw);
+  if (year && month) return { year, month };
+  if (!year && !month) return {};
+  return { error: "Employment end date needs both year and month (or leave both blank if current)." };
+}
+
 function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm1294Answers } | { ok: false; error: string } {
   const email = cleanText(raw.email, EMAIL_MAX_LENGTH).toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -449,42 +485,95 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
     return { ok: false, error: "Describe the military/service details." };
   }
 
-  const jobs = [{
-    fromYear: occupationFromYear,
-    fromMonth: occupationFromMonth,
-    toYear: digits(raw.occupationToYear, 4) || undefined,
-    toMonth: digits(raw.occupationToMonth, 2).padStart(2, "0") || undefined,
-    occupation: required[21][1],
-    employer: required[22][1],
-    city: cleanText(raw.occupationCity) || required[11][1],
-    country: cleanText(raw.occupationCountry) || required[5][1],
-    provinceState: cleanText(raw.occupationProvince, 40) || undefined,
-  }];
-  if (cleanText(raw.job2Occupation)) {
+  type JobIn = {
+    fromYear?: unknown;
+    fromMonth?: unknown;
+    toYear?: unknown;
+    toMonth?: unknown;
+    occupation?: unknown;
+    employer?: unknown;
+    city?: unknown;
+    country?: unknown;
+    provinceState?: unknown;
+  };
+
+  const jobsFromArray = Array.isArray(raw.jobs)
+    ? (raw.jobs as JobIn[]).slice(0, 3)
+    : [];
+
+  const flatJobs: JobIn[] = jobsFromArray.length
+    ? jobsFromArray
+    : [
+      {
+        fromYear: occupationFromYear,
+        fromMonth: occupationFromMonth,
+        toYear: raw.occupationToYear,
+        toMonth: raw.occupationToMonth,
+        occupation: required[21][1],
+        employer: required[22][1],
+        city: cleanText(raw.occupationCity) || required[11][1],
+        country: cleanText(raw.occupationCountry) || required[5][1],
+        provinceState: cleanText(raw.occupationProvince, 40) || undefined,
+      },
+      ...(cleanText(raw.job2Occupation)
+        ? [{
+          fromYear: raw.job2FromYear,
+          fromMonth: raw.job2FromMonth,
+          toYear: raw.job2ToYear,
+          toMonth: raw.job2ToMonth,
+          occupation: raw.job2Occupation,
+          employer: raw.job2Employer,
+          city: raw.job2City,
+          country: raw.job2Country,
+          provinceState: raw.job2Province,
+        }]
+        : []),
+      ...(cleanText(raw.job3Occupation)
+        ? [{
+          fromYear: raw.job3FromYear,
+          fromMonth: raw.job3FromMonth,
+          toYear: raw.job3ToYear,
+          toMonth: raw.job3ToMonth,
+          occupation: raw.job3Occupation,
+          employer: raw.job3Employer,
+          city: raw.job3City,
+          country: raw.job3Country,
+          provinceState: raw.job3Province,
+        }]
+        : []),
+    ];
+
+  const jobs = [];
+  for (let i = 0; i < flatJobs.length; i++) {
+    const row = flatJobs[i];
+    const occupation = cleanText(row.occupation) || (i === 0 ? required[21][1] : "");
+    if (!occupation && i > 0) continue;
+    if (!occupation) {
+      return { ok: false, error: "Missing required field: occupation" };
+    }
+    const fromYear = optionalYear(row.fromYear) || (i === 0 ? occupationFromYear : "");
+    const fromMonth = optionalMonth(row.fromMonth) ||
+      (i === 0 ? (occupationFromMonth || undefined) : undefined) ||
+      "01";
+    if (!fromYear) {
+      return { ok: false, error: `Job ${i + 1}: enter a start year.` };
+    }
+    const to = optionalYearMonth(row.toYear, row.toMonth);
+    if (to.error) return { ok: false, error: `Job ${i + 1}: ${to.error}` };
     jobs.push({
-      fromYear: digits(raw.job2FromYear, 4) || occupationFromYear,
-      fromMonth: digits(raw.job2FromMonth, 2).padStart(2, "0") || "01",
-      toYear: digits(raw.job2ToYear, 4) || undefined,
-      toMonth: digits(raw.job2ToMonth, 2).padStart(2, "0") || undefined,
-      occupation: cleanText(raw.job2Occupation),
-      employer: cleanText(raw.job2Employer) || "Employer",
-      city: cleanText(raw.job2City) || required[11][1],
-      country: cleanText(raw.job2Country) || required[5][1],
-      provinceState: cleanText(raw.job2Province, 40) || undefined,
+      fromYear,
+      fromMonth,
+      toYear: to.year,
+      toMonth: to.month,
+      occupation,
+      employer: cleanText(row.employer) || (i === 0 ? required[22][1] : "Employer"),
+      city: cleanText(row.city) || required[11][1],
+      country: cleanText(row.country) || required[5][1],
+      provinceState: cleanText(row.provinceState, 40) || undefined,
     });
   }
-  if (cleanText(raw.job3Occupation)) {
-    jobs.push({
-      fromYear: digits(raw.job3FromYear, 4) || occupationFromYear,
-      fromMonth: digits(raw.job3FromMonth, 2).padStart(2, "0") || "01",
-      toYear: digits(raw.job3ToYear, 4) || undefined,
-      toMonth: digits(raw.job3ToMonth, 2).padStart(2, "0") || undefined,
-      occupation: cleanText(raw.job3Occupation),
-      employer: cleanText(raw.job3Employer) || "Employer",
-      city: cleanText(raw.job3City) || required[11][1],
-      country: cleanText(raw.job3Country) || required[5][1],
-      provinceState: cleanText(raw.job3Province, 40) || undefined,
-    });
+  if (!jobs.length) {
+    return { ok: false, error: "Add at least one employment / activity row." };
   }
 
   const answers: Imm1294Answers = {
@@ -501,17 +590,17 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
     maritalStatus,
     spouseFamilyName: cleanText(raw.spouseFamilyName) || undefined,
     spouseGivenName: cleanText(raw.spouseGivenName) || undefined,
-    marriageYear: digits(raw.marriageYear, 4) || undefined,
-    marriageMonth: digits(raw.marriageMonth, 2).padStart(2, "0") || undefined,
-    marriageDay: digits(raw.marriageDay, 2).padStart(2, "0") || undefined,
+    marriageYear: optionalYear(raw.marriageYear),
+    marriageMonth: optionalMonth(raw.marriageMonth),
+    marriageDay: optionalDay(raw.marriageDay),
     currentCountry: required[5][1],
     currentStatus,
-    corFromYear: digits(raw.corFromYear, 4) || undefined,
-    corFromMonth: digits(raw.corFromMonth, 2).padStart(2, "0") || undefined,
-    corFromDay: digits(raw.corFromDay, 2).padStart(2, "0") || undefined,
-    corToYear: digits(raw.corToYear, 4) || undefined,
-    corToMonth: digits(raw.corToMonth, 2).padStart(2, "0") || undefined,
-    corToDay: digits(raw.corToDay, 2).padStart(2, "0") || undefined,
+    corFromYear: optionalYear(raw.corFromYear),
+    corFromMonth: optionalMonth(raw.corFromMonth),
+    corFromDay: optionalDay(raw.corFromDay),
+    corToYear: optionalYear(raw.corToYear),
+    corToMonth: optionalMonth(raw.corToMonth),
+    corToDay: optionalDay(raw.corToDay),
     corOther: cleanText(raw.corOther, 80) || undefined,
     previousCor,
     previousCorRows,
@@ -541,16 +630,16 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
     natIdNumber: cleanText(raw.natIdNumber, 40) || undefined,
     natIdCountry: cleanText(raw.natIdCountry) || undefined,
     natIdIssueYear: digits(raw.natIdIssueYear, 4) || undefined,
-    natIdIssueMonth: digits(raw.natIdIssueMonth, 2).padStart(2, "0") || undefined,
-    natIdIssueDay: digits(raw.natIdIssueDay, 2).padStart(2, "0") || undefined,
-    natIdExpiryYear: digits(raw.natIdExpiryYear, 4) || undefined,
-    natIdExpiryMonth: digits(raw.natIdExpiryMonth, 2).padStart(2, "0") || undefined,
-    natIdExpiryDay: digits(raw.natIdExpiryDay, 2).padStart(2, "0") || undefined,
+    natIdIssueMonth: optionalMonth(raw.natIdIssueMonth),
+    natIdIssueDay: optionalDay(raw.natIdIssueDay),
+    natIdExpiryYear: optionalYear(raw.natIdExpiryYear),
+    natIdExpiryMonth: optionalMonth(raw.natIdExpiryMonth),
+    natIdExpiryDay: optionalDay(raw.natIdExpiryDay),
     hasUsCard,
     usCardNumber: cleanText(raw.usCardNumber, 40) || undefined,
-    usCardExpiryYear: digits(raw.usCardExpiryYear, 4) || undefined,
-    usCardExpiryMonth: digits(raw.usCardExpiryMonth, 2).padStart(2, "0") || undefined,
-    usCardExpiryDay: digits(raw.usCardExpiryDay, 2).padStart(2, "0") || undefined,
+    usCardExpiryYear: optionalYear(raw.usCardExpiryYear),
+    usCardExpiryMonth: optionalMonth(raw.usCardExpiryMonth),
+    usCardExpiryDay: optionalDay(raw.usCardExpiryDay),
     passportNumber: required[6][1],
     passportCountry: required[7][1],
     passportIssueYear,
@@ -603,12 +692,12 @@ function validateAnswers(raw: Record<string, unknown>): { ok: true; answers: Imm
     fundsOtherPerson: cleanText(raw.fundsOtherPerson) || undefined,
     caqNumber: cleanText(raw.caqNumber, 40) || undefined,
     caqExpiryYear: digits(raw.caqExpiryYear, 4) || undefined,
-    caqExpiryMonth: digits(raw.caqExpiryMonth, 2).padStart(2, "0") || undefined,
-    caqExpiryDay: digits(raw.caqExpiryDay, 2).padStart(2, "0") || undefined,
+    caqExpiryMonth: optionalMonth(raw.caqExpiryMonth),
+    caqExpiryDay: optionalDay(raw.caqExpiryDay),
     palNumber: cleanText(raw.palNumber, 40) || undefined,
-    palExpiryYear: digits(raw.palExpiryYear, 4) || undefined,
-    palExpiryMonth: digits(raw.palExpiryMonth, 2).padStart(2, "0") || undefined,
-    palExpiryDay: digits(raw.palExpiryDay, 2).padStart(2, "0") || undefined,
+    palExpiryYear: optionalYear(raw.palExpiryYear),
+    palExpiryMonth: optionalMonth(raw.palExpiryMonth),
+    palExpiryDay: optionalDay(raw.palExpiryDay),
     educationIndicator,
     educationRow: educationIndicator === "Y"
       ? {

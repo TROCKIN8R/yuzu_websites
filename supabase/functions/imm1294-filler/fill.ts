@@ -363,11 +363,20 @@ function normalizeJob(job: JobRow): JobRow {
       provinceState = asciiSafe(job.provinceState);
     }
   }
+  const fromMonth = job.fromMonth.padStart(2, "0");
+  let toYear = job.toYear?.trim() || undefined;
+  let toMonth = job.toMonth?.trim() ? job.toMonth.padStart(2, "0") : undefined;
+  const toMonthNum = toMonth ? Number(toMonth) : NaN;
+  // Valider rejects "00" and requires both To fields together (or neither).
+  if (!toYear || !toMonth || toMonthNum < 1 || toMonthNum > 12) {
+    toYear = undefined;
+    toMonth = undefined;
+  }
   return {
     fromYear: job.fromYear,
-    fromMonth: job.fromMonth.padStart(2, "0"),
-    toYear: job.toYear || undefined,
-    toMonth: job.toMonth ? job.toMonth.padStart(2, "0") : undefined,
+    fromMonth,
+    toYear,
+    toMonth,
     occupation: asciiSafe(job.occupation),
     employer: asciiSafe(job.employer),
     city: asciiSafe(job.city),
