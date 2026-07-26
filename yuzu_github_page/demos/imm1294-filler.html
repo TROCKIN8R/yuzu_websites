@@ -45,7 +45,7 @@
     </div>
 </nav>
 
-<main class="flex-1 w-[94%] max-w-3xl mx-auto px-0 py-8 md:py-12">
+<main class="flex-1 w-[94%] max-w-6xl mx-auto px-0 py-8 md:py-12">
     <header class="imm-hero">
         <p class="imm-hero-eyebrow">Automation POC · IRCC IMM 1294</p>
         <h1>Study permit form, filled for you</h1>
@@ -231,20 +231,27 @@
             </div>
             <div class="imm-branch" data-imm-show="previousCor=Y" hidden>
                 <h3 class="imm-branch__title">Previous countries of residence (up to 2)</h3>
-                <p class="imm-branch__hint">List each country you lived in during the last 5 years (other than your current country of residence). Drag a card to change order.</p>
-                <div id="imm-pcor-list" class="imm-sortable">
-                    <article class="imm-sortable-item" draggable="true" data-pcor-slot>
-                        <div class="imm-sortable-item__bar">
+                <p class="imm-branch__hint">List each country from the last 5 years (other than your current residence). Drag a row to reorder.</p>
+                <div class="imm-table-wrap">
+                    <div class="imm-table-head imm-table-head--pcor" aria-hidden="true">
+                        <span></span>
+                        <span>#</span>
+                        <span>Country</span>
+                        <span>Status</span>
+                        <span>From</span>
+                        <span>To</span>
+                        <span>Other</span>
+                    </div>
+                    <div id="imm-pcor-list" class="imm-sortable imm-sortable--table">
+                        <article class="imm-sortable-item imm-table-row imm-table-row--pcor" draggable="true" data-pcor-slot>
                             <button type="button" class="imm-drag-handle" aria-label="Drag to reorder" title="Drag to reorder">⋮⋮</button>
-                            <span class="imm-sortable-item__label">Country slot</span>
-                        </div>
-                        <div class="imm-grid imm-grid--2">
+                            <span class="imm-sortable-item__label">1</span>
                             <div class="opp-field">
-                                <label>Country</label>
+                                <label class="imm-field-label">Country</label>
                                 <input data-pcor="country" type="text" maxlength="120" data-imm-required placeholder="e.g. Spain" value="">
                             </div>
                             <div class="opp-field">
-                                <label>Status</label>
+                                <label class="imm-field-label">Status</label>
                                 <select data-pcor="status" data-imm-required>
                                     <option value="" selected disabled>Select…</option>
                                     <option value="01">Citizen</option>
@@ -256,31 +263,27 @@
                                 </select>
                             </div>
                             <div class="opp-field">
-                                <label>From</label>
+                                <label class="imm-field-label">From</label>
                                 <input data-pcor="from" type="date" data-imm-required value="">
                             </div>
                             <div class="opp-field">
-                                <label>To</label>
+                                <label class="imm-field-label">To</label>
                                 <input data-pcor="to" type="date" data-imm-required value="">
                             </div>
                             <div class="opp-field imm-pcor-other" hidden>
-                                <label>Describe other status</label>
-                                <input data-pcor="other" type="text" maxlength="80" value="">
+                                <label class="imm-field-label">Other status</label>
+                                <input data-pcor="other" type="text" maxlength="80" placeholder="If status is Other" value="">
                             </div>
-                        </div>
-                    </article>
-                    <article class="imm-sortable-item" draggable="true" data-pcor-slot>
-                        <div class="imm-sortable-item__bar">
+                        </article>
+                        <article class="imm-sortable-item imm-table-row imm-table-row--pcor" draggable="true" data-pcor-slot>
                             <button type="button" class="imm-drag-handle" aria-label="Drag to reorder" title="Drag to reorder">⋮⋮</button>
-                            <span class="imm-sortable-item__label">Country slot</span>
-                        </div>
-                        <div class="imm-grid imm-grid--2">
+                            <span class="imm-sortable-item__label">2</span>
                             <div class="opp-field">
-                                <label>Country (optional)</label>
-                                <input data-pcor="country" type="text" maxlength="120" placeholder="Leave blank if none" value="">
+                                <label class="imm-field-label">Country (optional)</label>
+                                <input data-pcor="country" type="text" maxlength="120" placeholder="Optional" value="">
                             </div>
                             <div class="opp-field">
-                                <label>Status</label>
+                                <label class="imm-field-label">Status</label>
                                 <select data-pcor="status">
                                     <option value="" selected>Select…</option>
                                     <option value="01">Citizen</option>
@@ -292,19 +295,19 @@
                                 </select>
                             </div>
                             <div class="opp-field">
-                                <label>From</label>
+                                <label class="imm-field-label">From</label>
                                 <input data-pcor="from" type="date" value="">
                             </div>
                             <div class="opp-field">
-                                <label>To</label>
+                                <label class="imm-field-label">To</label>
                                 <input data-pcor="to" type="date" value="">
                             </div>
                             <div class="opp-field imm-pcor-other" hidden>
-                                <label>Describe other status</label>
-                                <input data-pcor="other" type="text" maxlength="80" value="">
+                                <label class="imm-field-label">Other status</label>
+                                <input data-pcor="other" type="text" maxlength="80" placeholder="If status is Other" value="">
                             </div>
-                        </div>
-                    </article>
+                        </article>
+                    </div>
                 </div>
             </div>
             <div class="imm-branch" data-imm-show="sameAsCor=N" hidden>
@@ -747,48 +750,58 @@
 
         <section class="imm-section" aria-labelledby="imm-work">
             <h2 id="imm-work">Employment / activity history</h2>
-            <p>At least one row is required (up to 3). Drag the handle to change order — the first row is written as the most recent on the PDF. Leave “To” blank for a current job.</p>
-            <div id="imm-job-list" class="imm-sortable" aria-label="Employment rows"></div>
+            <p>Up to 3 rows. Drag to reorder — row 1 is most recent on the PDF. Leave To blank if current.</p>
+            <div class="imm-table-wrap">
+                <div class="imm-table-head imm-table-head--job" aria-hidden="true">
+                    <span></span>
+                    <span>#</span>
+                    <span>Occupation</span>
+                    <span>Employer / school</span>
+                    <span>City</span>
+                    <span>Country</span>
+                    <span>Prov / state</span>
+                    <span>From</span>
+                    <span>To</span>
+                    <span></span>
+                </div>
+                <div id="imm-job-list" class="imm-sortable imm-sortable--table" aria-label="Employment rows"></div>
+            </div>
             <div class="imm-job-actions">
                 <button type="button" id="imm-add-job" class="imm-link-btn">+ Add job</button>
             </div>
             <template id="imm-job-template">
-                <article class="imm-sortable-item imm-job-card" draggable="true">
-                    <div class="imm-sortable-item__bar">
-                        <button type="button" class="imm-drag-handle" aria-label="Drag to reorder" title="Drag to reorder">⋮⋮</button>
-                        <span class="imm-sortable-item__label">Job</span>
-                        <button type="button" class="imm-link-btn imm-remove-job" hidden>Remove</button>
+                <article class="imm-sortable-item imm-table-row imm-table-row--job imm-job-card" draggable="true">
+                    <button type="button" class="imm-drag-handle" aria-label="Drag to reorder" title="Drag to reorder">⋮⋮</button>
+                    <span class="imm-sortable-item__label">1</span>
+                    <div class="opp-field">
+                        <label class="imm-field-label">Occupation</label>
+                        <input data-job="occupation" type="text" required maxlength="80" value="">
                     </div>
-                    <div class="imm-grid imm-grid--2">
-                        <div class="opp-field">
-                            <label>Occupation / activity</label>
-                            <input data-job="occupation" type="text" required maxlength="80" value="">
-                        </div>
-                        <div class="opp-field">
-                            <label>Employer / school</label>
-                            <input data-job="employer" type="text" required maxlength="120" value="">
-                        </div>
-                        <div class="opp-field">
-                            <label>City</label>
-                            <input data-job="city" type="text" required maxlength="80" value="">
-                        </div>
-                        <div class="opp-field">
-                            <label>Country</label>
-                            <input data-job="country" type="text" required maxlength="80" value="">
-                        </div>
-                        <div class="opp-field">
-                            <label>Province / state</label>
-                            <input data-job="provinceState" type="text" maxlength="80" value="">
-                        </div>
-                        <div class="opp-field">
-                            <label>From</label>
-                            <input data-job="from" type="month" required value="">
-                        </div>
-                        <div class="opp-field">
-                            <label>To (blank if current)</label>
-                            <input data-job="to" type="month" value="">
-                        </div>
+                    <div class="opp-field">
+                        <label class="imm-field-label">Employer / school</label>
+                        <input data-job="employer" type="text" required maxlength="120" value="">
                     </div>
+                    <div class="opp-field">
+                        <label class="imm-field-label">City</label>
+                        <input data-job="city" type="text" required maxlength="80" value="">
+                    </div>
+                    <div class="opp-field">
+                        <label class="imm-field-label">Country</label>
+                        <input data-job="country" type="text" required maxlength="80" value="">
+                    </div>
+                    <div class="opp-field">
+                        <label class="imm-field-label">Province / state</label>
+                        <input data-job="provinceState" type="text" maxlength="80" value="">
+                    </div>
+                    <div class="opp-field">
+                        <label class="imm-field-label">From</label>
+                        <input data-job="from" type="month" required value="">
+                    </div>
+                    <div class="opp-field">
+                        <label class="imm-field-label">To</label>
+                        <input data-job="to" type="month" value="" placeholder="">
+                    </div>
+                    <button type="button" class="imm-link-btn imm-remove-job" hidden>Remove</button>
                 </article>
             </template>
         </section>
