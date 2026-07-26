@@ -50,7 +50,7 @@
     <header class="imm-hero">
         <p class="imm-hero-eyebrow">Automation POC · Full IRCC study permit kit</p>
         <h1>One questionnaire. Every form you need.</h1>
-        <p>We ask about your situation first, confirm the IRCC forms that apply, then fill them from a single shared set of answers — no retyping names, DOB, or addresses.</p>
+        <p>Sample applicant Marie Claire Dupont is prefilled so you can click through. We ask about your situation first, confirm the IRCC forms that apply, then fill them from one shared questionnaire.</p>
         <p class="imm-hero-links">
             <a href="../assets/forms/ircc/catalog.json" target="_blank" rel="noopener noreferrer">Form catalog</a>
             <span aria-hidden="true"> · </span>
@@ -98,29 +98,29 @@
                 <div class="opp-field">
                     <label for="spk-hasRepresentative">Will a lawyer, immigration consultant (RCIC), or other advisor prepare or submit this application for you?</label>
                     <select id="spk-hasRepresentative" name="hasRepresentative" required>
-                        <option value="N" selected>No — I’m applying myself</option>
-                        <option value="Y">Yes — someone else will represent me</option>
+                        <option value="N">No — I’m applying myself</option>
+                        <option value="Y" selected>Yes — someone else will represent me</option>
                     </select>
                 </div>
                 <div class="opp-field">
                     <label for="spk-hasDesignee">Do you want a friend or family member (who is not your official representative) to be able to ask IRCC about your application?</label>
                     <select id="spk-hasDesignee" name="hasDesignee" required>
-                        <option value="N" selected>No</option>
-                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                        <option value="Y" selected>Yes</option>
                     </select>
                 </div>
                 <div class="opp-field">
                     <label for="spk-isCommonLaw">Are you living with a partner in a common-law relationship (together for at least 12 months), and not married?</label>
                     <select id="spk-isCommonLaw" name="isCommonLaw" required>
-                        <option value="N" selected>No</option>
-                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                        <option value="Y" selected>Yes</option>
                     </select>
                 </div>
                 <div class="opp-field">
                     <label for="spk-includeImm5707">Besides parents and a spouse or partner, do you also need to declare other family members who already live in Canada (for example siblings or children who are citizens or permanent residents)?</label>
                     <select id="spk-includeImm5707" name="includeImm5707" required>
-                        <option value="N" selected>No</option>
-                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                        <option value="Y" selected>Yes</option>
                     </select>
                 </div>
             </div>
@@ -139,7 +139,7 @@
             <p class="spk-confirm-note" id="spkConfirmNote"></p>
             <div class="opp-field opp-field--consent" style="margin-top:1.25rem">
                 <label class="opp-consent">
-                    <input id="spkFormsConfirm" name="formsConfirmed" type="checkbox" value="yes" required>
+                    <input id="spkFormsConfirm" name="formsConfirmed" type="checkbox" value="yes" required checked>
                     <span>I confirm this list matches my situation. Continue to the shared questionnaire.</span>
                 </label>
             </div>
@@ -176,11 +176,11 @@
             <div class="imm-line">
                 <div class="opp-field imm-w-md">
                     <label for="spk-dob">Date of birth</label>
-                    <input id="spk-dob" name="dob" type="date" required value="2001-03-14">
+                    <input id="spk-dob" name="dob" type="date" required value="1998-04-12">
                 </div>
                 <div class="opp-field imm-grow">
                     <label for="spk-placeBirthCity">City of birth</label>
-                    <input id="spk-placeBirthCity" name="placeBirthCity" required maxlength="120" value="Paris">
+                    <input id="spk-placeBirthCity" name="placeBirthCity" required maxlength="120" value="Lyon">
                 </div>
                 <div class="opp-field imm-grow">
                     <label for="spk-placeBirthCountry">Country of birth</label>
@@ -195,9 +195,9 @@
                 <div class="opp-field imm-grow">
                     <label for="spk-maritalStatus">Marital status</label>
                     <select id="spk-maritalStatus" name="maritalStatus" required>
-                        <option value="02" selected>Single</option>
+                        <option value="02">Single</option>
                         <option value="01">Married</option>
-                        <option value="03">Common-law</option>
+                        <option value="03" selected>Common-law</option>
                         <option value="04">Divorced</option>
                         <option value="05">Separated</option>
                         <option value="06">Widowed</option>
@@ -262,17 +262,17 @@
                 </div>
                 <div class="opp-field imm-grow">
                     <label for="spk-streetName">Street name</label>
-                    <input id="spk-streetName" name="streetName" required maxlength="120" value="Rue de Rivoli">
+                    <input id="spk-streetName" name="streetName" required maxlength="120" value="Rue de la République">
                 </div>
             </div>
             <div class="imm-line">
                 <div class="opp-field imm-grow">
                     <label for="spk-city">City</label>
-                    <input id="spk-city" name="city" required maxlength="120" value="Paris">
+                    <input id="spk-city" name="city" required maxlength="120" value="Lyon">
                 </div>
                 <div class="opp-field imm-grow">
                     <label for="spk-provinceState">Province / state</label>
-                    <input id="spk-provinceState" name="provinceState" maxlength="40" value="">
+                    <input id="spk-provinceState" name="provinceState" maxlength="40" value="Auvergne-Rhône-Alpes">
                 </div>
                 <div class="opp-field imm-grow">
                     <label for="spk-country">Country</label>
@@ -280,7 +280,7 @@
                 </div>
                 <div class="opp-field imm-w-md">
                     <label for="spk-postalCode">Postal code</label>
-                    <input id="spk-postalCode" name="postalCode" required maxlength="20" value="75001">
+                    <input id="spk-postalCode" name="postalCode" required maxlength="20" value="69002">
                 </div>
             </div>
             <div class="imm-line">
@@ -438,33 +438,33 @@
                 <div class="imm-line">
                     <div class="opp-field imm-grow">
                         <label for="spk-repFamilyName">Rep. family name</label>
-                        <input id="spk-repFamilyName" name="repFamilyName" maxlength="120">
+                        <input id="spk-repFamilyName" name="repFamilyName" maxlength="120" value="Martin">
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="spk-repGivenName">Rep. given name</label>
-                        <input id="spk-repGivenName" name="repGivenName" maxlength="120">
+                        <input id="spk-repGivenName" name="repGivenName" maxlength="120" value="Paul">
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="spk-repOrganization">Organization</label>
-                        <input id="spk-repOrganization" name="repOrganization" maxlength="120">
+                        <input id="spk-repOrganization" name="repOrganization" maxlength="120" value="Yuzu Demo Advisors">
                     </div>
                 </div>
                 <div class="imm-line">
                     <div class="opp-field imm-grow">
                         <label for="spk-repEmail">Rep. email</label>
-                        <input id="spk-repEmail" name="repEmail" type="email" maxlength="254">
+                        <input id="spk-repEmail" name="repEmail" type="email" maxlength="254" value="rep@example.com">
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="spk-repPhone">Rep. phone</label>
-                        <input id="spk-repPhone" name="repPhone" maxlength="40">
+                        <input id="spk-repPhone" name="repPhone" maxlength="40" value="5145550100">
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="spk-repCity">City</label>
-                        <input id="spk-repCity" name="repCity" maxlength="120">
+                        <input id="spk-repCity" name="repCity" maxlength="120" value="Montreal">
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="spk-repCountry">Country</label>
-                        <select id="spk-repCountry" name="repCountry" data-imm-lov="country" data-imm-default="022"></select>
+                        <select id="spk-repCountry" name="repCountry" data-imm-lov="country" data-imm-default="511"></select>
                     </div>
                 </div>
             </div>
@@ -474,15 +474,15 @@
                 <div class="imm-line">
                     <div class="opp-field imm-grow">
                         <label for="spk-designeeFamilyName">Family name</label>
-                        <input id="spk-designeeFamilyName" name="designeeFamilyName" maxlength="120">
+                        <input id="spk-designeeFamilyName" name="designeeFamilyName" maxlength="120" value="Bernard">
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="spk-designeeGivenName">Given name</label>
-                        <input id="spk-designeeGivenName" name="designeeGivenName" maxlength="120">
+                        <input id="spk-designeeGivenName" name="designeeGivenName" maxlength="120" value="Luc">
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="spk-designeeRelationship">Relationship</label>
-                        <input id="spk-designeeRelationship" name="designeeRelationship" maxlength="80" placeholder="e.g. Sibling">
+                        <input id="spk-designeeRelationship" name="designeeRelationship" maxlength="80" placeholder="e.g. Sibling" value="Sibling">
                     </div>
                 </div>
             </div>
@@ -492,21 +492,21 @@
                 <div class="imm-line">
                     <div class="opp-field imm-grow">
                         <label for="spk-partnerFamilyName">Partner family name</label>
-                        <input id="spk-partnerFamilyName" name="partnerFamilyName" maxlength="120">
+                        <input id="spk-partnerFamilyName" name="partnerFamilyName" maxlength="120" value="Leroy">
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="spk-partnerGivenName">Partner given name</label>
-                        <input id="spk-partnerGivenName" name="partnerGivenName" maxlength="120">
+                        <input id="spk-partnerGivenName" name="partnerGivenName" maxlength="120" value="Alex">
                     </div>
                     <div class="opp-field imm-w-sm">
                         <label for="spk-yearsTogether">Years together</label>
-                        <input id="spk-yearsTogether" name="yearsTogether" maxlength="10" value="2">
+                        <input id="spk-yearsTogether" name="yearsTogether" maxlength="10" value="3">
                     </div>
                 </div>
                 <div class="imm-line">
                     <div class="opp-field imm-grow">
                         <label for="spk-commonLawCity">City where you live together</label>
-                        <input id="spk-commonLawCity" name="commonLawCity" maxlength="120">
+                        <input id="spk-commonLawCity" name="commonLawCity" maxlength="120" value="Lyon">
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="spk-commonLawCountry">Country</label>
@@ -533,7 +533,7 @@
             <div class="imm-actions" style="margin-top:1.5rem">
                 <div class="opp-field opp-field--consent">
                     <label class="opp-consent">
-                        <input id="spkConsent" name="consent" type="checkbox" value="yes" required>
+                        <input id="spkConsent" name="consent" type="checkbox" value="yes" required checked>
                         <span>I understand this is a demo kit, not an official IRCC filing. I agree to generate the filled PDFs (download or email).</span>
                     </label>
                 </div>

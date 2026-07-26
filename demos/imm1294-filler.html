@@ -49,7 +49,7 @@
     <header class="imm-hero">
         <p class="imm-hero-eyebrow">Automation POC · IRCC IMM 1294</p>
         <h1>Study permit form, filled for you</h1>
-        <p>Sample applicant is prefilled. Country, language, and Canada/U.S. province fields use the same IRCC lists as the PDF — no free-typed inventing.</p>
+        <p>Sample applicant Marie Claire Dupont is fully prefilled — complete the captcha and download or email. Country, language, and Canada/U.S. province fields use IRCC lists.</p>
         <p class="imm-hero-links">
             <a href="../assets/forms/imm1294f.pdf" target="_blank" rel="noopener noreferrer">Blank IMM 1294 PDF</a>
             <span aria-hidden="true"> · </span>
@@ -98,11 +98,11 @@
                 <div class="imm-line">
                     <div class="opp-field imm-grow">
                         <label for="imm-aliasFamilyName">Alias family name</label>
-                        <input id="imm-aliasFamilyName" name="aliasFamilyName" type="text" maxlength="120" data-imm-required value="">
+                        <input id="imm-aliasFamilyName" name="aliasFamilyName" type="text" maxlength="120" data-imm-required value="Martin">
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="imm-aliasGivenName">Alias given name(s)</label>
-                        <input id="imm-aliasGivenName" name="aliasGivenName" type="text" maxlength="120" data-imm-required value="">
+                        <input id="imm-aliasGivenName" name="aliasGivenName" type="text" maxlength="120" data-imm-required value="Claire">
                     </div>
                 </div>
             </div>
@@ -156,15 +156,15 @@
                 <div class="imm-line">
                     <div class="opp-field imm-grow">
                         <label for="imm-spouseFamilyName">Spouse family name</label>
-                        <input id="imm-spouseFamilyName" name="spouseFamilyName" type="text" maxlength="120" data-imm-required value="">
+                        <input id="imm-spouseFamilyName" name="spouseFamilyName" type="text" maxlength="120" data-imm-required value="Leroy">
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="imm-spouseGivenName">Spouse given name(s)</label>
-                        <input id="imm-spouseGivenName" name="spouseGivenName" type="text" maxlength="120" value="">
+                        <input id="imm-spouseGivenName" name="spouseGivenName" type="text" maxlength="120" value="Alex">
                     </div>
                     <div class="opp-field imm-w-md">
                         <label for="imm-marriageDate">Marriage / union date</label>
-                        <input id="imm-marriageDate" name="marriageDate" type="date" data-imm-required value="">
+                        <input id="imm-marriageDate" name="marriageDate" type="date" data-imm-required value="2022-06-01">
                     </div>
                 </div>
             </div>
@@ -371,31 +371,31 @@
                 <div class="imm-line">
                     <div class="opp-field imm-grow">
                         <label for="imm-prevSpouseFamilyName">Family name</label>
-                        <input id="imm-prevSpouseFamilyName" name="prevSpouseFamilyName" type="text" maxlength="120" data-imm-required value="">
+                        <input id="imm-prevSpouseFamilyName" name="prevSpouseFamilyName" type="text" maxlength="120" data-imm-required value="Moreau">
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="imm-prevSpouseGivenName">Given name(s)</label>
-                        <input id="imm-prevSpouseGivenName" name="prevSpouseGivenName" type="text" maxlength="120" value="">
+                        <input id="imm-prevSpouseGivenName" name="prevSpouseGivenName" type="text" maxlength="120" value="Thomas">
                     </div>
                     <div class="opp-field imm-w-md">
                         <label for="imm-prevSpouseDob">Date of birth</label>
-                        <input id="imm-prevSpouseDob" name="prevSpouseDob" type="date" data-imm-required value="">
+                        <input id="imm-prevSpouseDob" name="prevSpouseDob" type="date" data-imm-required value="1996-08-20">
                     </div>
                     <div class="opp-field imm-w-md">
                         <label for="imm-prevSpouseRelationship">Relationship</label>
                         <select id="imm-prevSpouseRelationship" name="prevSpouseRelationship" data-imm-required>
-                            <option value="" selected disabled>Select…</option>
-                            <option value="01">Married</option>
+                            <option value="" disabled>Select…</option>
+                            <option value="01" selected>Married</option>
                             <option value="03">Common-law</option>
                         </select>
                     </div>
                     <div class="opp-field imm-w-md">
                         <label for="imm-prevSpouseFrom">From</label>
-                        <input id="imm-prevSpouseFrom" name="prevSpouseFrom" type="date" data-imm-required value="">
+                        <input id="imm-prevSpouseFrom" name="prevSpouseFrom" type="date" data-imm-required value="2018-05-01">
                     </div>
                     <div class="opp-field imm-w-md">
                         <label for="imm-prevSpouseTo">To</label>
-                        <input id="imm-prevSpouseTo" name="prevSpouseTo" type="date" data-imm-required value="">
+                        <input id="imm-prevSpouseTo" name="prevSpouseTo" type="date" data-imm-required value="2020-11-15">
                     </div>
                 </div>
             </div>
@@ -748,7 +748,7 @@
                 <div class="imm-line">
                     <div class="opp-field imm-grow">
                         <label for="imm-fundsOtherPerson">Who pays expenses?</label>
-                        <input id="imm-fundsOtherPerson" name="fundsOtherPerson" type="text" maxlength="120" data-imm-required placeholder="Name of person or organization" value="">
+                        <input id="imm-fundsOtherPerson" name="fundsOtherPerson" type="text" maxlength="120" data-imm-required placeholder="Name of person or organization" value="Dupont Family Trust">
                     </div>
                 </div>
             </div>
@@ -800,20 +800,20 @@
                             </div>
                             <div class="opp-field">
                                 <label class="imm-field-label" for="imm-eduField">Field</label>
-                                <input id="imm-eduField" name="eduField" type="text" maxlength="120" data-imm-required value="">
+                                <input id="imm-eduField" name="eduField" type="text" maxlength="120" data-imm-required value="Business Administration">
                             </div>
                             <div class="opp-field">
                                 <label class="imm-field-label" for="imm-eduSchool">School</label>
-                                <input id="imm-eduSchool" name="eduSchool" type="text" maxlength="160" data-imm-required value="">
+                                <input id="imm-eduSchool" name="eduSchool" type="text" maxlength="160" data-imm-required value="Universite Lyon">
                             </div>
                             <div class="opp-field">
                                 <label class="imm-field-label" for="imm-eduCity">City</label>
-                                <input id="imm-eduCity" name="eduCity" type="text" maxlength="120" data-imm-required value="">
+                                <input id="imm-eduCity" name="eduCity" type="text" maxlength="120" data-imm-required value="Lyon">
                             </div>
                             <div class="opp-field">
                                 <label class="imm-field-label" for="imm-eduCountry">Country</label>
-                                <select id="imm-eduCountry" name="eduCountry" data-imm-lov="country" data-imm-required>
-                                    <option value="" selected disabled>Select country…</option>
+                                <select id="imm-eduCountry" name="eduCountry" data-imm-lov="country" data-imm-default="022" data-imm-required>
+                                    <option value="" disabled>Select country…</option>
                                 </select>
                             </div>
                             <div class="opp-field">
@@ -969,7 +969,7 @@
         <div class="imm-actions">
             <div class="opp-field opp-field--consent">
                 <label class="opp-consent">
-                    <input id="imm1294Consent" name="consent" type="checkbox" value="yes" required>
+                    <input id="imm1294Consent" name="consent" type="checkbox" value="yes" required checked>
                     <span>I understand this is a demo and the filled IMM 1294 is not an official IRCC filing. I agree to generate the PDF (download or email).</span>
                 </label>
             </div>
