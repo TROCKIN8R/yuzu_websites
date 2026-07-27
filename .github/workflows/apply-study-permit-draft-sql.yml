@@ -1,0 +1,49 @@
+name: Apply study-permit draft SQL
+on:
+  workflow_dispatch:
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create table + revoke public access
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_AUTOMATION }}
+          PROJECT_REF: mwgbeolcgigvpufjmodz
+        run: |
+          set -euo pipefail
+          apply_sql() {
+            local file="$1"
+            echo "Applying $file ..."
+            python3 - <<'PY'
+          import json, os, urllib.error, urllib.request, pathlib, sys
+          path = pathlib.Path(os.environ["SQL_FILE"])
+          sql = path.read_text()
+          req = urllib.request.Request(
+              f"https://api.supabase.com/v1/projects/{os.environ['PROJECT_REF']}/database/query",
+              data=json.dumps({"query": sql}).encode(),
+              headers={
+                  "Authorization": f"Bearer {os.environ['SUPABASE_ACCESS_TOKEN']}",
+                  "Content-Type": "application/json",
+              },
+              method="POST",
+          )
+          try:
+              with urllib.request.urlopen(req) as resp:
+                  body = resp.read().decode()
+                  print(body[:2000] if body else "OK (empty body)")
+          except urllib.error.HTTPError as e:
+              print(e.read().decode(), file=sys.stderr)
+              raise
+          PY
+          }
+          export SQL_FILE=scripts/supabase_study_permit_drafts.sql
+          apply_sql "$SQL_FILE"
+          export SQL_FILE=scripts/supabase_revoke_study_permit_drafts.sql
+          apply_sql "$SQL_FILE"
+          echo "Verifying table..."
+          export SQL_FILE=/tmp/verify.sql
+          cat > /tmp/verify.sql <<'SQL'
+          select to_regclass('public.study_permit_drafts') as table_name;
+          SQL
+          apply_sql /tmp/verify.sql
