@@ -240,9 +240,9 @@ function validateKit(raw: Record<string, unknown>): { ok: true; answers: KitAnsw
   const hasRepresentative = parseBool(raw.hasRepresentative);
   const hasDesignee = parseBool(raw.hasDesignee);
   const isCommonLaw = parseBool(raw.isCommonLaw);
-  const includeImm5707 = parseBool(raw.includeImm5707);
+  const needsCustodian = parseBool(raw.needsCustodian) || parseBool(raw.includeImm5646);
 
-  let forms = selectForms({ hasRepresentative, hasDesignee, isCommonLaw, includeImm5707 });
+  let forms = selectForms({ hasRepresentative, hasDesignee, isCommonLaw, needsCustodian });
   if (Array.isArray(raw.forms) && raw.forms.length) {
     forms = resolveForms({
       email,
@@ -256,17 +256,48 @@ function validateKit(raw: Record<string, unknown>): { ok: true; answers: KitAnsw
       hasRepresentative,
       hasDesignee,
       isCommonLaw,
+      needsCustodian,
     });
   }
 
-  if (hasRepresentative && !cleanText(raw.repFamilyName)) {
-    return { ok: false, error: "Enter your representative’s family name." };
+  if (!cleanText(raw.parent1FamilyName) || !cleanText(raw.parent1GivenName)) {
+    return { ok: false, error: "Enter parent / guardian 1 family name and given name (required for IMM 5707)." };
   }
-  if (hasDesignee && !cleanText(raw.designeeFamilyName)) {
-    return { ok: false, error: "Enter the designated individual’s family name." };
+  if (!cleanText(raw.parent2FamilyName) || !cleanText(raw.parent2GivenName)) {
+    return { ok: false, error: "Enter parent / guardian 2 family name and given name (required for IMM 5707)." };
   }
-  if (isCommonLaw && !cleanText(raw.partnerFamilyName)) {
-    return { ok: false, error: "Enter your common-law partner’s family name." };
+
+  if (hasRepresentative) {
+    if (!cleanText(raw.repFamilyName) || !cleanText(raw.repGivenName)) {
+      return { ok: false, error: "Enter your representative’s family and given names." };
+    }
+    if (!cleanText(raw.repEmail, EMAIL_MAX_LENGTH)) {
+      return { ok: false, error: "Enter your representative’s email." };
+    }
+  }
+  if (hasDesignee) {
+    if (!cleanText(raw.designeeFamilyName) || !cleanText(raw.designeeGivenName)) {
+      return { ok: false, error: "Enter the designated individual’s family and given names." };
+    }
+    if (!cleanText(raw.designeeRelationship)) {
+      return { ok: false, error: "Enter the designated individual’s relationship to you." };
+    }
+  }
+  if (isCommonLaw) {
+    if (!cleanText(raw.partnerFamilyName) || !cleanText(raw.partnerGivenName)) {
+      return { ok: false, error: "Enter your common-law partner’s family and given names." };
+    }
+    if (!cleanText(raw.yearsTogether, 10)) {
+      return { ok: false, error: "Enter how many years you have lived together." };
+    }
+  }
+  if (needsCustodian) {
+    if (!cleanText(raw.custodianFamilyName) || !cleanText(raw.custodianGivenName)) {
+      return { ok: false, error: "Enter the custodian’s family and given names (IMM 5646)." };
+    }
+    if (!cleanText(raw.custodianAddress, 200)) {
+      return { ok: false, error: "Enter the custodian’s address in Canada." };
+    }
   }
 
   const imm1294 = (raw.imm1294 && typeof raw.imm1294 === "object")
@@ -331,6 +362,8 @@ function validateKit(raw: Record<string, unknown>): { ok: true; answers: KitAnsw
     citizenship: cleanText(raw.citizenship) || undefined,
     placeBirthCountry: cleanText(raw.placeBirthCountry) || undefined,
     placeBirthCity: cleanText(raw.placeBirthCity) || undefined,
+    maritalStatus: cleanText(raw.maritalStatus, 2) || undefined,
+    occupation: cleanText(raw.occupation) || undefined,
     emailContact: cleanText(raw.emailContact || email, EMAIL_MAX_LENGTH) || undefined,
     phone: cleanText(raw.phone, 40) || undefined,
     phoneCountryCode: digits(raw.phoneCountryCode, 4) || undefined,
@@ -340,17 +373,42 @@ function validateKit(raw: Record<string, unknown>): { ok: true; answers: KitAnsw
     provinceState: cleanText(raw.provinceState, 40) || undefined,
     country: cleanText(raw.country) || undefined,
     postalCode: cleanText(raw.postalCode, 20) || undefined,
+    schoolName: cleanText(raw.schoolName) || undefined,
+    schoolAddress: cleanText(raw.schoolAddress, 200) || undefined,
     imm1294,
     parent1FamilyName: cleanText(raw.parent1FamilyName) || undefined,
     parent1GivenName: cleanText(raw.parent1GivenName) || undefined,
+    parent1Dob: cleanText(raw.parent1Dob, 20) || undefined,
+    parent1Cob: cleanText(raw.parent1Cob) || undefined,
+    parent1Address: cleanText(raw.parent1Address, 200) || undefined,
+    parent1MaritalStatus: cleanText(raw.parent1MaritalStatus, 2) || undefined,
+    parent1Occupation: cleanText(raw.parent1Occupation) || undefined,
+    parent1Telephone: cleanText(raw.parent1Telephone, 40) || undefined,
     parent2FamilyName: cleanText(raw.parent2FamilyName) || undefined,
     parent2GivenName: cleanText(raw.parent2GivenName) || undefined,
+    parent2Dob: cleanText(raw.parent2Dob, 20) || undefined,
+    parent2Cob: cleanText(raw.parent2Cob) || undefined,
+    parent2Address: cleanText(raw.parent2Address, 200) || undefined,
+    parent2MaritalStatus: cleanText(raw.parent2MaritalStatus, 2) || undefined,
+    parent2Occupation: cleanText(raw.parent2Occupation) || undefined,
+    parent2Telephone: cleanText(raw.parent2Telephone, 40) || undefined,
+    spouseFamilyName: cleanText(raw.spouseFamilyName) || undefined,
+    spouseGivenName: cleanText(raw.spouseGivenName) || undefined,
+    spouseDob: cleanText(raw.spouseDob, 20) || undefined,
+    spouseCob: cleanText(raw.spouseCob) || undefined,
+    spouseAddress: cleanText(raw.spouseAddress, 200) || undefined,
+    spouseOccupation: cleanText(raw.spouseOccupation) || undefined,
+    spouseAccompanying: parseBool(raw.spouseAccompanying),
     hasRepresentative,
     repFamilyName: cleanText(raw.repFamilyName) || undefined,
     repGivenName: cleanText(raw.repGivenName) || undefined,
     repOrganization: cleanText(raw.repOrganization) || undefined,
     repEmail: cleanText(raw.repEmail, EMAIL_MAX_LENGTH) || undefined,
     repPhone: cleanText(raw.repPhone, 40) || undefined,
+    repPhoneCountryCode: digits(raw.repPhoneCountryCode, 4) || undefined,
+    repMembershipId: cleanText(raw.repMembershipId, 40) || undefined,
+    repStreetNum: cleanText(raw.repStreetNum, 20) || undefined,
+    repStreetName: cleanText(raw.repStreetName) || undefined,
     repCity: cleanText(raw.repCity) || undefined,
     repProvince: cleanText(raw.repProvince, 40) || undefined,
     repCountry: cleanText(raw.repCountry) || undefined,
@@ -360,13 +418,20 @@ function validateKit(raw: Record<string, unknown>): { ok: true; answers: KitAnsw
     designeeGivenName: cleanText(raw.designeeGivenName) || undefined,
     designeeRelationship: cleanText(raw.designeeRelationship) || undefined,
     isCommonLaw,
-    includeImm5707,
+    needsCustodian,
     partnerGivenName: cleanText(raw.partnerGivenName) || undefined,
     partnerFamilyName: cleanText(raw.partnerFamilyName) || undefined,
     yearsTogether: cleanText(raw.yearsTogether, 10) || undefined,
     commonLawCity: cleanText(raw.commonLawCity) || undefined,
     commonLawProvince: cleanText(raw.commonLawProvince, 40) || undefined,
     commonLawCountry: cleanText(raw.commonLawCountry) || undefined,
+    commonLawStart: cleanText(raw.commonLawStart, 20) || undefined,
+    custodianFamilyName: cleanText(raw.custodianFamilyName) || undefined,
+    custodianGivenName: cleanText(raw.custodianGivenName) || undefined,
+    custodianDob: cleanText(raw.custodianDob, 20) || undefined,
+    custodianStatus: cleanText(raw.custodianStatus, 40) || undefined,
+    custodianAddress: cleanText(raw.custodianAddress, 200) || undefined,
+    custodianTelephone: cleanText(raw.custodianTelephone, 40) || undefined,
   };
 
   return { ok: true, answers };
@@ -519,7 +584,7 @@ Deno.serve(async (req) => {
       hasRepresentative: parseBool(payload.hasRepresentative),
       hasDesignee: parseBool(payload.hasDesignee),
       isCommonLaw: parseBool(payload.isCommonLaw),
-      includeImm5707: parseBool(payload.includeImm5707),
+      needsCustodian: parseBool(payload.needsCustodian) || parseBool(payload.includeImm5646),
     });
     return jsonResponse({ ok: true, forms }, 200, origin);
   }
