@@ -43,7 +43,7 @@
 ><CurrentCOR
 ><Row1 xfa:dataNode="dataGroup"
 /><Row2
-><Pays
+><Country
 /><Status
 /><Other
 /><FromDate
@@ -62,14 +62,14 @@
 /><PreviousCOR
 ><Row1 xfa:dataNode="dataGroup"
 /><Row2
-><Pays
+><Country
 /><Status
 /><Other
 /><FromDate
 /><ToDate
 /></Row2
 ><Row3
-><Pays
+><Country
 /><Status
 /><Other
 /><FromDate
@@ -96,7 +96,7 @@
 /><CountryWhereApplying
 ><Row1 xfa:dataNode="dataGroup"
 /><Row2
-><Pays
+><Country
 /><Status
 /><Other
 /><FromDate
@@ -246,9 +246,9 @@
 ><CityTow
 ><CityTown
 /></CityTow
-><Pays
-><Pays
-/></Pays
+><Country
+><Country
+/></Country
 ><ProvinceState
 ><ProvinceState
 /></ProvinceState
@@ -273,9 +273,9 @@
 /></CityTown
 ></ResidentialAddressRow1
 ><ResidentialAddressRow2
-><Pays
-><Pays
-/></Pays
+><Country
+><Country
+/></Country
 ><ProvinceState
 ><ProvinceState
 /></ProvinceState
@@ -408,9 +408,9 @@
 /><ToYear
 /><ToMonth
 /><CityTown
-/><Pays
-><Pays
-/></Pays
+/><Country
+><Country
+/></Country
 ><ProvState
 /></Edu_Row1
 ></Education
@@ -428,9 +428,9 @@
 /><CityTown
 ><CityTown
 /></CityTown
-><Pays
-><Pays
-/></Pays
+><Country
+><Country
+/></Country
 ><ProvState
 /></OccupationRow1
 ><OccupationRow2
@@ -445,9 +445,9 @@
 /><CityTown
 ><CityTown
 /></CityTown
-><Pays
-><Pays
-/></Pays
+><Country
+><Country
+/></Country
 ><ProvState
 /></OccupationRow2
 ><OccupationRow3
@@ -462,9 +462,9 @@
 /><CityTown
 ><CityTown
 /></CityTown
-><Pays
-><Pays
-/></Pays
+><Country
+><Country
+/></Country
 ><ProvState
 /></OccupationRow3
 ></Occupation

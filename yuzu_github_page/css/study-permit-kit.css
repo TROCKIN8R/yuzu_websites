@@ -333,8 +333,8 @@
 
 .spk-q-list {
   display: grid;
-  gap: 1.1rem;
-  margin-top: 0.5rem;
+  gap: 1.35rem;
+  margin-top: 0.25rem;
 }
 
 .spk-q-list .opp-field label {
@@ -345,6 +345,20 @@
 
 .spk-q-list select {
   max-width: 28rem;
+}
+
+.spk-extra.imm-block[hidden] {
+  display: none !important;
+}
+
+.spk-extra.imm-block {
+  margin-bottom: 1.65rem;
+}
+
+.spk-extra .imm-block__title {
+  font-size: 0.78rem;
+  color: #2d3436;
+  letter-spacing: 0.04em;
 }
 
 .spk-confirm-note {

@@ -360,8 +360,9 @@ function corRowXml(row: CorRow): string {
   const other = row.other
     ? `<Other\n>${esc(row.other)}</Other\n>`
     : `<Other\n/>`;
+  // Live IRCC blank uses <Country>, not the older <Pays> template name.
   return (
-    `<Pays\n>${esc(row.country)}</Pays\n>` +
+    `<Country\n>${esc(row.country)}</Country\n>` +
     `<Status\n>${esc(row.status)}</Status\n>` +
     other +
     `<FromDate\n>${esc(from)}</FromDate\n>` +
@@ -605,7 +606,7 @@ export function buildFilledForm1(template: string, a: Imm1294Answers): string {
   xml = fillEmpty(xml, "PlaceBirthCity", a.placeBirthCity);
   xml = fillEmpty(xml, "PlaceBirthCountry", a.placeBirthCountry);
   xml = fillNested(xml, "Citizenship", a.citizenship);
-  xml = fillEmpty(xml, "Pays", a.currentCountry, "><CurrentCOR\n>");
+  xml = fillEmpty(xml, "Country", a.currentCountry, "><CurrentCOR\n>");
   xml = fillEmpty(xml, "Status", a.currentStatus, "><CurrentCOR\n>");
   if (a.corOther) {
     xml = fillEmpty(xml, "Other", a.corOther, "><CurrentCOR\n>");
@@ -658,7 +659,7 @@ export function buildFilledForm1(template: string, a: Imm1294Answers): string {
       }</PCRDatesR2\n>`;
     } else {
       prev +=
-        `<Row3\n><Pays\n/><Status\n/><Other\n/><FromDate\n/><ToDate\n/></Row3\n></PreviousCOR\n>`;
+        `<Row3\n><Country\n/><Status\n/><Other\n/><FromDate\n/><ToDate\n/></Row3\n></PreviousCOR\n>`;
       prev += `<PCRDatesR1\n>${
         datesXml(
           r1.fromYear,
@@ -802,7 +803,7 @@ export function buildFilledForm1(template: string, a: Imm1294Answers): string {
   xml = fillNested(xml, "StreetNum", a.streetNum, "><AddressRow1\n>");
   xml = fillNested(xml, "Streetname", a.streetName, "><AddressRow1\n>");
   xml = fillEmpty(xml, "CityTown", a.city, "><CityTow\n>");
-  xml = fillNested(xml, "Pays", a.country, "><AddressRow2\n>");
+  xml = fillNested(xml, "Country", a.country, "><AddressRow2\n>");
   if (a.provinceState) {
     xml = fillNested(xml, "ProvinceState", a.provinceState, "><AddressRow2\n>");
   }
@@ -818,7 +819,7 @@ export function buildFilledForm1(template: string, a: Imm1294Answers): string {
     // Residential uses <StreetName><Streetname/></StreetName> (not nested Streetname/Streetname).
     xml = fillEmpty(xml, "Streetname", r.streetName, "><ResidentialAddressRow1\n>");
     xml = fillNested(xml, "CityTown", r.city, "><ResidentialAddressRow1\n>");
-    xml = fillNested(xml, "Pays", r.country, "><ResidentialAddressRow2\n>");
+    xml = fillNested(xml, "Country", r.country, "><ResidentialAddressRow2\n>");
     if (r.provinceState) {
       xml = fillNested(
         xml,
@@ -888,7 +889,7 @@ export function buildFilledForm1(template: string, a: Imm1294Answers): string {
     xml = fillEmpty(xml, "FieldOfStudy", e.fieldOfStudy, "><Edu_Row1\n>");
     xml = fillEmpty(xml, "School", e.school, "><Edu_Row1\n>");
     xml = fillEmpty(xml, "CityTown", e.city, "><Edu_Row1\n>");
-    xml = fillNested(xml, "Pays", e.country, "><Edu_Row1\n>");
+    xml = fillNested(xml, "Country", e.country, "><Edu_Row1\n>");
     if (e.provinceState) {
       xml = fillEmpty(xml, "ProvState", e.provinceState, "><Edu_Row1\n>");
     }
@@ -908,7 +909,7 @@ export function buildFilledForm1(template: string, a: Imm1294Answers): string {
     xml = fillNested(xml, "Occupation", job.occupation, after);
     xml = fillEmpty(xml, "Employer", job.employer, after);
     xml = fillNested(xml, "CityTown", job.city, after);
-    xml = fillNested(xml, "Pays", job.country, after);
+    xml = fillNested(xml, "Country", job.country, after);
     if (job.provinceState) {
       xml = fillEmpty(xml, "ProvState", job.provinceState, after);
     }
