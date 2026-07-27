@@ -739,10 +739,13 @@
     background: var(--paper-200);
 }
 
+/* Beat .opp-field label / input from site.css so chips stay centered */
+.imm-form .opp-field .imm-seg__opt,
 .imm-seg__opt {
     position: relative;
-    display: grid;
-    place-items: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     box-sizing: border-box;
     margin: 0;
     height: var(--imm-seg-opt-h);
@@ -765,20 +768,31 @@
         box-shadow var(--duration-fast, 200ms) var(--ease-default, ease);
 }
 
+.imm-form .opp-field .imm-seg__opt input[type="radio"],
 .imm-seg__opt input {
     position: absolute;
     inset: 0;
+    z-index: 1;
     width: 100%;
     height: 100%;
     margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    box-shadow: none;
     opacity: 0;
     cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
 }
 
 .imm-seg__opt span {
     display: block;
     line-height: 1;
-    transform: translateY(0.5px); /* optical vertical center */
+    position: relative;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .imm-seg__opt:hover {
