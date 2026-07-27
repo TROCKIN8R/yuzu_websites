@@ -1,7 +1,7 @@
 /**
  * Save / resume helpers for study-permit kit drafts.
  *
- * - Resume code, DOB, and passport are stored as peppered SHA-256 hashes only.
+ * - Resume code + family name (last name) are stored as peppered SHA-256 hashes only.
  * - Form payload is AES-256-GCM encrypted (STUDY_KIT_DRAFT_ENCRYPTION_KEY).
  * - Table access is service-role only (RLS + REVOKE); Edge Function decrypts on resume.
  */
@@ -20,21 +20,16 @@ type EncryptedEnvelope = {
   data: string;
 };
 
-export function normalizePassport(raw: string): string {
+/** Normalize last name for resume matching (case-insensitive, accents folded lightly). */
+export function normalizeFamilyName(raw: string): string {
   return String(raw || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
     .toUpperCase()
-    .replace(/[^A-Z0-9]/g, "")
-    .slice(0, 40);
-}
-
-export function normalizeDob(year: string, month: string, day: string): string | null {
-  const y = String(year || "").replace(/\D/g, "").slice(0, 4);
-  const m = String(month || "").replace(/\D/g, "").padStart(2, "0").slice(-2);
-  const d = String(day || "").replace(/\D/g, "").padStart(2, "0").slice(-2);
-  if (y.length !== 4 || Number(m) < 1 || Number(m) > 12 || Number(d) < 1 || Number(d) > 31) {
-    return null;
-  }
-  return `${y}-${m}-${d}`;
+    .replace(/[^A-Z0-9'\-\s]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 120);
 }
 
 export function normalizeResumeCode(raw: string): string {
@@ -113,15 +108,13 @@ async function hashWithPepper(kind: string, value: string): Promise<string> {
 
 export async function hashResumeSecrets(input: {
   code: string;
-  dob: string;
-  passport: string;
-}): Promise<{ codeHash: string; dobHash: string; passportHash: string }> {
+  familyName: string;
+}): Promise<{ codeHash: string; familyNameHash: string }> {
   const code = normalizeResumeCode(input.code);
-  const passport = normalizePassport(input.passport);
+  const familyName = normalizeFamilyName(input.familyName);
   return {
     codeHash: await hashWithPepper("code", code),
-    dobHash: await hashWithPepper("dob", input.dob),
-    passportHash: await hashWithPepper("passport", passport),
+    familyNameHash: await hashWithPepper("familyName", familyName),
   };
 }
 
@@ -202,23 +195,19 @@ export async function saveDraft(
   input: {
     step: number;
     payload: Record<string, unknown>;
-    dob: string;
-    passport: string;
+    familyName: string;
   },
 ): Promise<{ ok: true; code: string; expiresAt: string } | { ok: false; error: string }> {
-  const passport = normalizePassport(input.passport);
-  if (!passport || passport.length < 5) {
-    return { ok: false, error: "Enter a passport number before saving (needed to resume later)." };
-  }
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(input.dob)) {
-    return { ok: false, error: "Enter your date of birth before saving (needed to resume later)." };
+  const familyName = normalizeFamilyName(input.familyName);
+  if (!familyName || familyName.length < 2) {
+    return { ok: false, error: "Enter your family name (last name) before saving — it’s needed to resume later." };
   }
 
   const code = generateResumeCode();
-  let hashes: { codeHash: string; dobHash: string; passportHash: string };
+  let hashes: { codeHash: string; familyNameHash: string };
   let encrypted: EncryptedEnvelope;
   try {
-    hashes = await hashResumeSecrets({ code, dob: input.dob, passport });
+    hashes = await hashResumeSecrets({ code, familyName });
     const { captchaToken: _c, consent: _consent, delivery: _d, ...safePayload } = input.payload;
     encrypted = await encryptPayload({ ...safePayload, formsConfirmed: true });
   } catch (error) {
@@ -236,8 +225,7 @@ export async function saveDraft(
 
   const { error } = await supabase.from("study_permit_drafts").insert({
     code_hash: hashes.codeHash,
-    dob_hash: hashes.dobHash,
-    passport_hash: hashes.passportHash,
+    family_name_hash: hashes.familyNameHash,
     step,
     payload: encrypted,
     expires_at: expiresAt,
@@ -245,7 +233,26 @@ export async function saveDraft(
   });
 
   if (error) {
-    console.error("Draft save failed:", error.message);
+    console.error("Draft save failed:", error.message, error.code || "");
+    const msg = String(error.message || "").toLowerCase();
+    if (
+      msg.includes("could not find the table") ||
+      msg.includes("schema cache") ||
+      msg.includes("does not exist") ||
+      error.code === "42P01" ||
+      error.code === "PGRST205"
+    ) {
+      return {
+        ok: false,
+        error: "Draft storage is not set up yet. Run scripts/supabase_study_permit_drafts.sql (then the revoke script) in the Supabase SQL Editor.",
+      };
+    }
+    if (msg.includes("family_name_hash") || msg.includes("column")) {
+      return {
+        ok: false,
+        error: "Draft storage needs a schema update. Run scripts/supabase_study_permit_drafts_family_name.sql in the Supabase SQL Editor.",
+      };
+    }
     return { ok: false, error: "Could not save your progress. Try again shortly." };
   }
 
@@ -256,29 +263,21 @@ export async function loadDraft(
   supabase: SupabaseClient,
   input: {
     code: string;
-    dob: string;
-    passport: string;
+    familyName: string;
   },
 ): Promise<{ ok: true; draft: DraftRecord } | { ok: false; error: string }> {
-  const passport = normalizePassport(input.passport);
-  if (!passport || passport.length < 5) {
-    return { ok: false, error: "Enter the passport number used when you saved." };
-  }
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(input.dob)) {
-    return { ok: false, error: "Enter the date of birth used when you saved." };
+  const familyName = normalizeFamilyName(input.familyName);
+  if (!familyName || familyName.length < 2) {
+    return { ok: false, error: "Enter the family name (last name) used when you saved." };
   }
   const code = normalizeResumeCode(input.code);
   if (code.length < 8) {
     return { ok: false, error: "Enter your resume code (for example YUZU-XXXX-XXXX)." };
   }
 
-  let hashes: { codeHash: string; dobHash: string; passportHash: string };
+  let hashes: { codeHash: string; familyNameHash: string };
   try {
-    hashes = await hashResumeSecrets({
-      code,
-      dob: input.dob,
-      passport,
-    });
+    hashes = await hashResumeSecrets({ code, familyName });
   } catch (error) {
     console.error("Draft crypto misconfigured:", error instanceof Error ? error.message : error);
     return {
@@ -291,19 +290,25 @@ export async function loadDraft(
     .from("study_permit_drafts")
     .select("id, step, payload, expires_at")
     .eq("code_hash", hashes.codeHash)
-    .eq("dob_hash", hashes.dobHash)
-    .eq("passport_hash", hashes.passportHash)
+    .eq("family_name_hash", hashes.familyNameHash)
     .gt("expires_at", new Date().toISOString())
     .maybeSingle();
 
   if (error) {
     console.error("Draft load failed:", error.message);
+    const msg = String(error.message || "").toLowerCase();
+    if (msg.includes("family_name_hash") || msg.includes("column")) {
+      return {
+        ok: false,
+        error: "Draft storage needs a schema update. Run scripts/supabase_study_permit_drafts_family_name.sql in the Supabase SQL Editor.",
+      };
+    }
     return { ok: false, error: "Could not look up your draft. Try again shortly." };
   }
   if (!data) {
     return {
       ok: false,
-      error: "No matching draft found. Check the code, birth date, and passport number — or the code may have expired (30 days).",
+      error: "No matching draft found. Check the code and family name — or the code may have expired (30 days).",
     };
   }
 

@@ -1,33 +1,405 @@
-/* Study permit kit wizard — extends IMM form look */
-.spk-steps {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 1.25rem 0 1.75rem;
-  padding: 0;
-  list-style: none;
+/* Study permit kit — production-style landing + sticky progress */
+
+.spk-hero {
+  margin: 0 0 1.75rem;
+  max-width: 42rem;
 }
 
-.spk-steps li {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
+.spk-hero-eyebrow {
+  margin: 0 0 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #bc9605;
+}
+
+.spk-hero h1 {
+  margin: 0 0 0.65rem;
+  font-size: clamp(1.65rem, 3vw, 2.15rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: #2d3436;
+}
+
+.spk-hero p {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: #5c6567;
+}
+
+/* —— Landing —— */
+.spk-landing {
+  margin-bottom: 1rem;
+}
+
+.spk-landing__intro h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #2d3436;
+}
+
+.spk-landing__intro p {
+  margin: 0 0 1.25rem;
+  color: #5c6567;
+  font-size: 0.95rem;
+}
+
+.spk-landing__grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 900px) {
+  .spk-landing__grid {
+    grid-template-columns: minmax(12rem, 15rem) 1fr;
+    align-items: start;
+    gap: 1.75rem;
+  }
+}
+
+.spk-journey {
+  padding: 1rem 1.1rem;
+  border-radius: 16px;
+  background: rgba(45, 52, 54, 0.03);
+  border: 1px solid #e8e9ea;
+}
+
+.spk-journey__label {
+  margin: 0 0 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #8a9194;
+}
+
+.spk-journey__meter {
+  height: 0.35rem;
+  border-radius: 999px;
+  background: #e8e9ea;
+  overflow: hidden;
+  margin-bottom: 0.4rem;
+}
+
+.spk-journey__meter-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f8c607, #e0a800);
+}
+
+.spk-journey__hint {
+  margin: 0 0 0.85rem;
   font-size: 0.78rem;
   font-weight: 600;
   color: #8a9194;
-  padding: 0.35rem 0.7rem;
-  border-radius: 999px;
-  background: rgba(45, 52, 54, 0.04);
 }
 
-.spk-steps li[aria-current="step"] {
+.spk-journey__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.spk-journey__list li {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #5c6567;
+}
+
+.spk-journey__list li span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: #fff;
+  border: 1px solid #e0e3e4;
+  color: #8a9194;
+  flex-shrink: 0;
+}
+
+.spk-landing__actions {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 700px) {
+  .spk-landing__actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.spk-landing-card {
+  padding: 1.25rem 1.3rem 1.35rem;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #e8e9ea;
+  box-shadow: 0 1px 0 rgba(45, 52, 54, 0.04);
+}
+
+.spk-landing-card--primary {
+  background: linear-gradient(165deg, #fffef8 0%, #fef6da 100%);
+  border-color: rgba(248, 198, 7, 0.45);
+}
+
+.spk-landing-card h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #2d3436;
+}
+
+.spk-landing-card > p {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: #5c6567;
+}
+
+.spk-landing-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+.spk-landing[hidden],
+.spk-wizard[hidden] {
+  display: none !important;
+}
+
+/* —— Wizard shell —— */
+.spk-wizard {
+  display: block;
+}
+
+/* Desktop sticky vertical rail — only when progress is active */
+.spk-rail {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  .spk-wizard--with-progress {
+    display: grid;
+    grid-template-columns: minmax(11.5rem, 14rem) minmax(0, 1fr);
+    gap: 1.75rem 2rem;
+    align-items: start;
+  }
+
+  .spk-wizard--with-progress .spk-rail {
+    display: block;
+    position: sticky;
+    top: 5.75rem;
+    align-self: start;
+    max-height: calc(100vh - 6.5rem);
+    overflow-y: auto;
+    padding: 1rem 0.85rem 1.1rem;
+    border-radius: 16px;
+    background: rgba(45, 52, 54, 0.03);
+    border: 1px solid #e8e9ea;
+  }
+}
+
+.spk-rail__title {
+  margin: 0 0 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #8a9194;
+}
+
+.spk-rail__meter {
+  height: 0.35rem;
+  border-radius: 999px;
+  background: #e8e9ea;
+  overflow: hidden;
+  margin-bottom: 0.4rem;
+}
+
+.spk-rail__meter-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f8c607, #e0a800);
+  transition: width 0.25s ease;
+}
+
+.spk-rail__pct {
+  margin: 0 0 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #5c6567;
+}
+
+.spk-rail__steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.15rem;
+  position: relative;
+}
+
+.spk-rail__steps::before {
+  content: "";
+  position: absolute;
+  left: 0.82rem;
+  top: 0.7rem;
+  bottom: 0.7rem;
+  width: 2px;
+  background: #e0e3e4;
+  z-index: 0;
+}
+
+.spk-rail__steps li {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+}
+
+.spk-rail__steps button {
+  appearance: none;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.65rem 1fr;
+  gap: 0.55rem;
+  align-items: center;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 0.4rem 0.35rem;
+  border-radius: 0.55rem;
+  cursor: default;
+  color: #8a9194;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.spk-rail__steps button .spk-rail__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  background: #fff;
+  border: 2px solid #e0e3e4;
+  color: #8a9194;
+}
+
+.spk-rail__steps li.is-current button {
   color: #2d3436;
   background: #fef6da;
-  box-shadow: inset 0 0 0 1px #f8c607;
+  cursor: default;
 }
 
-.spk-steps li.is-done {
+.spk-rail__steps li.is-current button .spk-rail__num {
+  border-color: #f8c607;
+  background: #f8c607;
+  color: #2d3436;
+}
+
+.spk-rail__steps li.is-done button {
+  color: #2d3436;
+  cursor: pointer;
+}
+
+.spk-rail__steps li.is-done button .spk-rail__num {
+  border-color: #2d3436;
+  background: #2d3436;
+  color: #fff;
+}
+
+.spk-rail__steps li.is-done button:hover {
+  background: rgba(45, 52, 54, 0.06);
+}
+
+.spk-rail__steps li.is-reachable:not(.is-current):not(.is-done) button {
+  cursor: pointer;
   color: #5c6567;
+}
+
+.spk-rail__steps li.is-reachable:not(.is-current):not(.is-done) button:hover {
+  background: rgba(45, 52, 54, 0.05);
+}
+
+.spk-rail__steps li.is-locked button {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Mobile top progress — only after situation is completed */
+.spk-mobile-progress {
+  display: none;
+  margin: 0 0 1.15rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: rgba(45, 52, 54, 0.03);
+  border: 1px solid #e8e9ea;
+  position: sticky;
+  top: 4.75rem;
+  z-index: 20;
+  backdrop-filter: blur(8px);
+}
+
+.spk-wizard--with-progress .spk-mobile-progress {
+  display: block;
+}
+
+@media (min-width: 960px) {
+  .spk-wizard--with-progress .spk-mobile-progress {
+    display: none;
+  }
+}
+
+.spk-mobile-progress__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #2d3436;
+}
+
+.spk-mobile-progress__meta span:last-child {
+  font-weight: 600;
+  color: #8a9194;
+  font-size: 0.75rem;
+}
+
+.spk-mobile-progress__bar {
+  height: 0.35rem;
+  border-radius: 999px;
+  background: #e8e9ea;
+  overflow: hidden;
+}
+
+.spk-mobile-progress__fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #f8c607, #e0a800);
+  transition: width 0.25s ease;
 }
 
 .spk-step-panel[hidden] {
@@ -111,35 +483,7 @@
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-left: auto;
-}
-
-.spk-resume-panel {
-  margin: 0 0 1.5rem;
-  padding: 1.15rem 1.25rem 1.25rem;
-  border-radius: 16px;
-  background: rgba(45, 52, 54, 0.03);
-  border: 1px solid #e8e9ea;
-}
-
-.spk-resume-panel__head h2 {
-  margin: 0;
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #2d3436;
-}
-
-.spk-resume-panel__head p {
-  margin: 0.35rem 0 0.9rem;
-  font-size: 0.9rem;
-  color: #5c6567;
-}
-
-.spk-resume-panel__actions {
-  display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem;
-  margin-top: 0.75rem;
 }
 
 .spk-save-banner {

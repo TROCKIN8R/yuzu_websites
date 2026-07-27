@@ -21,15 +21,37 @@
     const confirmNote = document.getElementById('spkConfirmNote');
     const reviewEl = document.getElementById('spkReview');
     const stepsNav = document.getElementById('spkSteps');
+    const landingEl = document.getElementById('spkLanding');
+    const wizardEl = document.getElementById('spkWizard');
+    const startBtn = document.getElementById('spkStartBtn');
+    const railMeter = document.getElementById('spkRailMeter');
+    const railPct = document.getElementById('spkRailPct');
+    const mobileStepLabel = document.getElementById('spkMobileStepLabel');
+    const mobileStepCount = document.getElementById('spkMobileStepCount');
+    const mobileFill = document.getElementById('spkMobileFill');
     const config = window.STUDY_PERMIT_KIT_CONFIG || {};
     const formMeta = config.forms || {};
     const captchaRequired = Boolean((config.turnstile?.siteKey || '').trim());
 
     let step = 0;
+    let maxReachedStep = 0;
+    let wizardOpen = false;
     const STEP_COUNT = 10;
     const STEP_CONFIRM = 1;
+    const STEP_ABOUT = 2;
     const STEP_EXTRAS = 8;
-    const STEP_PASSPORT = 5;
+    const STEP_LABELS = [
+        'Situation',
+        'Confirm forms',
+        'About you',
+        'Contact',
+        'Study',
+        'Passport',
+        'Work history',
+        'Background',
+        'Extras',
+        'Review & deliver',
+    ];
     let turnstileWidgetId = null;
     let captchaPassed = false;
     let submitting = false;
@@ -376,12 +398,13 @@
         const target = Number.isFinite(Number(resumeStep))
             ? Math.max(0, Math.min(STEP_COUNT - 1, Number(resumeStep)))
             : step;
-        goToStep(target);
+        maxReachedStep = Math.max(maxReachedStep, target);
+        openWizard(target);
     }
 
     async function postKitAction(body) {
         const { base, anonKey, kitFunction } = apiBase();
-        if (!base || !anonKey) throw new Error('Demo config is missing.');
+        if (!base || !anonKey) throw new Error('Configuration is missing. Please refresh and try again.');
         const response = await fetch(`${base}/functions/v1/${kitFunction}`, {
             method: 'POST',
             headers: {
@@ -400,12 +423,17 @@
 
     async function handleSaveDraft() {
         if (draftBusy) return;
+        if (step < STEP_ABOUT) {
+            showSideStatus(saveStatusEl, 'Save becomes available on the About you step.', true);
+            return;
+        }
         const payload = collectPayload('download');
-        if (!payload.dobYear || !payload.passportNumber) {
-            // Jump toward identity / passport if needed
-            if (!payload.dobYear) goToStep(2);
-            else if (!payload.passportNumber) goToStep(STEP_PASSPORT);
-            showSideStatus(saveStatusEl, 'Fill date of birth and passport number before saving — they unlock your resume code later.', true);
+        const familyName = String(payload.familyName || '').trim();
+        if (!familyName) {
+            goToStep(STEP_ABOUT);
+            showSideStatus(saveStatusEl, 'Enter your family name (last name) before saving — it’s needed to resume later.', true);
+            const familyInput = document.getElementById('spk-familyName');
+            familyInput?.focus();
             return;
         }
 
@@ -427,7 +455,7 @@
                             year: 'numeric', month: 'short', day: 'numeric',
                         })
                         : '30 days from now';
-                    saveMetaEl.textContent = `Expires ${expires}. Resume with this code + your birth date + passport number.`;
+                    saveMetaEl.textContent = `Expires ${expires}. Resume with this code + your family name (last name).`;
                 }
                 saveBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
@@ -441,17 +469,16 @@
             showSideStatus(saveStatusEl, error instanceof Error ? error.message : String(error), true);
         } finally {
             draftBusy = false;
-            if (saveBtn) saveBtn.disabled = false;
+            updateSaveButton();
         }
     }
 
     async function handleResumeDraft() {
         if (draftBusy) return;
         const code = document.getElementById('spk-resume-code')?.value?.trim() || '';
-        const dob = document.getElementById('spk-resume-dob')?.value?.trim() || '';
-        const passportNumber = document.getElementById('spk-resume-passport')?.value?.trim() || '';
-        if (!code || !dob || !passportNumber) {
-            showSideStatus(resumeStatusEl, 'Enter resume code, date of birth, and passport number.', true);
+        const familyName = document.getElementById('spk-resume-familyName')?.value?.trim() || '';
+        if (!code || !familyName) {
+            showSideStatus(resumeStatusEl, 'Enter resume code and family name (last name).', true);
             return;
         }
 
@@ -462,11 +489,10 @@
             const result = await postKitAction({
                 action: 'load-draft',
                 code,
-                dob,
-                passportNumber,
+                familyName,
             });
             applyDraftPayload(result.draft || {}, result.step);
-            showSideStatus(resumeStatusEl, 'Draft restored. Continue where you left off.', false);
+            showSideStatus(saveStatusEl, 'Draft restored. Continue where you left off.', false);
             if (saveBanner) saveBanner.hidden = true;
         } catch (error) {
             showSideStatus(resumeStatusEl, error instanceof Error ? error.message : String(error), true);
@@ -474,6 +500,13 @@
             draftBusy = false;
             if (resumeBtn) resumeBtn.disabled = false;
         }
+    }
+
+    function updateSaveButton() {
+        if (!saveBtn) return;
+        const available = wizardOpen && step >= STEP_ABOUT && !draftBusy;
+        saveBtn.hidden = !available;
+        saveBtn.disabled = draftBusy || !available;
     }
 
     function updateActionButtons() {
@@ -584,19 +617,85 @@
         renderFormList(formListFinal, forms);
     }
 
+    function progressPct() {
+        // Count completed steps (left behind) toward 100% on the final step.
+        if (STEP_COUNT <= 1) return 100;
+        return Math.round((step / (STEP_COUNT - 1)) * 100);
+    }
+
+    function renderStepsNav() {
+        if (!stepsNav) return;
+        stepsNav.innerHTML = '';
+        STEP_LABELS.forEach((label, index) => {
+            const li = document.createElement('li');
+            li.setAttribute('data-step', String(index));
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.innerHTML = `<span class="spk-rail__num" aria-hidden="true">${index + 1}</span><span>${label}</span>`;
+            btn.addEventListener('click', () => {
+                if (index === step) return;
+                if (index > maxReachedStep) return;
+                // Jumping back to a completed / already-reached step
+                goToStep(index);
+            });
+            li.appendChild(btn);
+            stepsNav.appendChild(li);
+        });
+        updateStepsNav();
+    }
+
+    function updateStepsNav() {
+        if (!stepsNav) return;
+        stepsNav.querySelectorAll('li').forEach((li) => {
+            const n = Number(li.getAttribute('data-step'));
+            const isCurrent = n === step;
+            const isDone = n < step;
+            const isReachable = n <= maxReachedStep;
+            li.classList.toggle('is-current', isCurrent);
+            li.classList.toggle('is-done', isDone);
+            li.classList.toggle('is-reachable', isReachable && !isCurrent);
+            li.classList.toggle('is-locked', !isReachable);
+            if (isCurrent) li.setAttribute('aria-current', 'step');
+            else li.removeAttribute('aria-current');
+            const btn = li.querySelector('button');
+            if (btn) {
+                btn.disabled = !isReachable || isCurrent;
+                btn.setAttribute('aria-label', `${STEP_LABELS[n]}${isDone ? ' (completed)' : isCurrent ? ' (current)' : ''}`);
+            }
+        });
+
+        const pct = progressPct();
+        if (railMeter) railMeter.style.width = `${pct}%`;
+        if (railPct) railPct.textContent = `${pct}% complete`;
+        if (mobileStepLabel) mobileStepLabel.textContent = STEP_LABELS[step] || '';
+        if (mobileStepCount) mobileStepCount.textContent = `Step ${step + 1} of ${STEP_COUNT}`;
+        if (mobileFill) mobileFill.style.width = `${pct}%`;
+    }
+
+    function openWizard(targetStep = 0) {
+        wizardOpen = true;
+        if (landingEl) landingEl.hidden = true;
+        if (wizardEl) wizardEl.hidden = false;
+        goToStep(targetStep);
+        const focusRoot = wizardEl || form;
+        focusRoot?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function syncProgressVisibility() {
+        // Sticky progress appears once Situation has been completed (or resumed past it).
+        const showProgress = wizardOpen && maxReachedStep > 0;
+        wizardEl?.classList.toggle('spk-wizard--with-progress', showProgress);
+    }
+
     function goToStep(next) {
         step = Math.max(0, Math.min(STEP_COUNT - 1, next));
+        maxReachedStep = Math.max(maxReachedStep, step);
         form.querySelectorAll('.spk-step-panel').forEach((panel) => {
             const n = Number(panel.getAttribute('data-spk-step'));
             panel.hidden = n !== step;
         });
-        if (stepsNav) {
-            stepsNav.querySelectorAll('li').forEach((li) => {
-                const n = Number(li.getAttribute('data-step'));
-                li.toggleAttribute('aria-current', n === step);
-                li.classList.toggle('is-done', n < step);
-            });
-        }
+        syncProgressVisibility();
+        updateStepsNav();
         if (backBtn) backBtn.hidden = step === 0;
         if (nextBtn) {
             nextBtn.hidden = step === STEP_COUNT - 1;
@@ -610,7 +709,11 @@
         }
         dyn?.syncBranches();
         updateActionButtons();
-        window.scrollTo({ top: form.offsetTop - 80, behavior: 'smooth' });
+        updateSaveButton();
+        if (wizardOpen) {
+            const anchor = document.getElementById('spkMobileProgress') || form;
+            window.scrollTo({ top: Math.max(0, (anchor?.offsetTop || 0) - 72), behavior: 'smooth' });
+        }
     }
 
     function collectPayload(delivery) {
@@ -873,7 +976,7 @@
         const anonKey = config.supabase?.anonKey || '';
         const kitFunction = config.supabase?.kitFunction || 'study-permit-kit';
         if (!base || !anonKey) {
-            showStatus('Demo config is missing.', true);
+            showStatus('Configuration is missing. Please refresh and try again.', true);
             return;
         }
 
@@ -933,6 +1036,10 @@
         form.elements[name]?.addEventListener('change', onSituationChange);
     });
 
+    startBtn?.addEventListener('click', () => {
+        maxReachedStep = 0;
+        openWizard(0);
+    });
     nextBtn.addEventListener('click', () => {
         if (!validateCurrentStep()) return;
         if (step === 0) applySituationSideEffects();
@@ -965,18 +1072,20 @@
     dyn?.populateDialCodes();
     if (dyn) {
         dyn.clearJobs();
-        dyn.addJob({
-            occupation: 'Student',
-            employer: 'Universite Lyon',
-            city: 'Lyon',
-            country: '022',
-            from: '2022-09',
-        });
+        dyn.addJob();
     }
     applySituationSideEffects();
     syncExtras();
     dyn?.syncBranches();
-    goToStep(0);
+    renderStepsNav();
+    // Stay on landing until Start or Resume. Keep panels ready at step 0.
+    form.querySelectorAll('.spk-step-panel').forEach((panel) => {
+        const n = Number(panel.getAttribute('data-spk-step'));
+        panel.hidden = n !== 0;
+    });
+    if (backBtn) backBtn.hidden = true;
+    updateActionButtons();
+    updateSaveButton();
 
     try {
         const remembered = sessionStorage.getItem('spkResumeCode');

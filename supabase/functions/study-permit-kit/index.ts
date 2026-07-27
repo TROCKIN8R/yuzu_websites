@@ -10,8 +10,6 @@ import {
 import {
   DRAFT_TTL_DAYS,
   loadDraft,
-  normalizeDob,
-  normalizePassport,
   saveDraft,
 } from "./drafts.ts";
 import { type KitAnswers, selectForms } from "./patchers.ts";
@@ -541,20 +539,15 @@ Deno.serve(async (req) => {
       const draftPayload = (payload.draft && typeof payload.draft === "object")
         ? payload.draft as Record<string, unknown>
         : payload;
-      const dob = normalizeDob(
-        digits(draftPayload.dobYear, 4),
-        digits(draftPayload.dobMonth, 2),
-        digits(draftPayload.dobDay, 2),
-      ) || cleanText(payload.dob, 10);
-      const passport = normalizePassport(
-        cleanText(draftPayload.passportNumber || payload.passportNumber, 40),
+      const familyName = cleanText(
+        draftPayload.familyName || payload.familyName,
+        120,
       );
       const step = Number(payload.step ?? draftPayload.step ?? 0);
       const result = await saveDraft(supabase, {
         step,
         payload: draftPayload,
-        dob: /^\d{4}-\d{2}-\d{2}$/.test(dob) ? dob : "",
-        passport,
+        familyName,
       });
       if (!result.ok) {
         return jsonResponse({ error: result.error }, 400, origin);
@@ -567,17 +560,9 @@ Deno.serve(async (req) => {
       }, 200, origin);
     }
 
-    const dob = cleanText(payload.dob, 10)
-      || normalizeDob(
-        digits(payload.dobYear, 4),
-        digits(payload.dobMonth, 2),
-        digits(payload.dobDay, 2),
-      )
-      || "";
     const result = await loadDraft(supabase, {
       code: cleanText(payload.code, 40),
-      dob: /^\d{4}-\d{2}-\d{2}$/.test(dob) ? dob : "",
-      passport: cleanText(payload.passportNumber, 40),
+      familyName: cleanText(payload.familyName, 120),
     });
     if (!result.ok) {
       return jsonResponse({ error: result.error }, 404, origin);
