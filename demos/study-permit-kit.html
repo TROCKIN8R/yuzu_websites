@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Permit Kit Auto-Fill Demo | Yuzu.solutions</title>
-    <meta name="description" content="Answer routing questions once, we select the right IRCC study-permit forms, fill them from shared answers, and let you download a ZIP or email the kit.">
+    <title>Study Permit Application Kit | Yuzu.solutions</title>
+    <meta name="description" content="Answer a short set of questions once. We select the IRCC study-permit forms you need, fill them from your answers, and deliver a ZIP you can download or receive by email.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Yuzu.solutions">
-    <meta property="og:title" content="Study Permit Kit Auto-Fill Demo | Yuzu.solutions">
+    <meta property="og:title" content="Study Permit Application Kit | Yuzu.solutions">
     <meta property="og:url" content="https://yuzu.solutions/demos/study-permit-kit.html">
     <meta property="og:image" content="https://yuzu.solutions/assets/og-image.png">
     <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -37,76 +37,111 @@
         <div class="nav-bar-center hidden md:flex">
             <div class="nav-pill-group">
                 <a href="../services/ai-automation.html" class="nav-pill-item">AI &amp; Automation</a>
-                <a href="./imm1294-filler.html" class="nav-pill-item">IMM 1294 only</a>
+                <a href="./imm1294-filler.html" class="nav-pill-item">IMM 1294</a>
             </div>
         </div>
         <div class="nav-bar-right flex items-center gap-2">
-            <a href="../services/ai-automation.html" class="hidden sm:inline-flex text-sm font-semibold text-stone-600 hover:text-stone-900">← Back to Automation</a>
+            <a href="../services/ai-automation.html" class="hidden sm:inline-flex text-sm font-semibold text-stone-600 hover:text-stone-900">← Automation</a>
         </div>
     </div>
 </nav>
 
-<main class="flex-1 w-[94%] max-w-5xl mx-auto px-0 py-6 md:py-8">
-    <header class="imm-hero">
-        <p class="imm-hero-eyebrow">Automation POC · Full IRCC study permit kit</p>
-        <h1>One questionnaire. Every form you need.</h1>
-        <p>Sample applicant Marie Claire Dupont is prefilled so you can click through. We ask about your situation first, confirm the IRCC forms that apply, then fill them from one shared questionnaire.</p>
-        <p class="imm-hero-links">
-            <a href="../assets/forms/ircc/catalog.json" target="_blank" rel="noopener noreferrer">Form catalog</a>
-            <span aria-hidden="true"> · </span>
-            <a href="./imm1294-filler.html">IMM 1294-only demo</a>
-            <span aria-hidden="true"> · </span>
-            <a href="../services/ai-automation.html">AI &amp; Automation</a>
-        </p>
+<main class="flex-1 w-[94%] max-w-6xl mx-auto px-0 py-6 md:py-8">
+    <header class="spk-hero">
+        <p class="spk-hero-eyebrow">Study permit kit</p>
+        <h1>Your IRCC forms, filled from one questionnaire</h1>
+        <p>Tell us about your situation, confirm the forms that apply, then complete a shared questionnaire. Download a ZIP or receive it by email — ready to open in Adobe Acrobat.</p>
     </header>
 
-    <ol class="spk-steps" id="spkSteps" aria-label="Wizard steps">
-        <li data-step="0" aria-current="step"><span>1</span> Situation</li>
-        <li data-step="1"><span>2</span> Confirm</li>
-        <li data-step="2"><span>3</span> You</li>
-        <li data-step="3"><span>4</span> Contact</li>
-        <li data-step="4"><span>5</span> Study</li>
-        <li data-step="5"><span>6</span> Passport</li>
-        <li data-step="6"><span>7</span> Work</li>
-        <li data-step="7"><span>8</span> Background</li>
-        <li data-step="8"><span>9</span> Extras</li>
-        <li data-step="9"><span>10</span> Deliver</li>
-    </ol>
-
-
-    <aside class="spk-resume-panel" aria-labelledby="spk-resume-title">
-        <div class="spk-resume-panel__head">
-            <h2 id="spk-resume-title">Resume a saved draft</h2>
-            <p>Enter your code, date of birth, and passport number to continue within 30 days.</p>
+    <!-- Landing: resume or start -->
+    <section class="spk-landing" id="spkLanding" aria-labelledby="spk-landing-title">
+        <div class="spk-landing__intro">
+            <h2 id="spk-landing-title">Get started</h2>
+            <p>Resume a saved application, or begin with a few situation questions.</p>
         </div>
-        <div class="imm-line">
-            <div class="opp-field imm-grow">
-                <label for="spk-resume-code">Resume code</label>
-                <input id="spk-resume-code" type="text" maxlength="20" autocomplete="off" placeholder="YUZU-XXXX-XXXX" spellcheck="false">
-            </div>
-            <div class="opp-field imm-w-md">
-                <label for="spk-resume-dob">Date of birth</label>
-                <input id="spk-resume-dob" type="date">
-            </div>
-            <div class="opp-field imm-grow">
-                <label for="spk-resume-passport">Passport number</label>
-                <input id="spk-resume-passport" type="text" maxlength="40" autocomplete="off">
+
+        <div class="spk-landing__grid">
+            <aside class="spk-journey" aria-label="Application steps overview">
+                <p class="spk-journey__label">Your path</p>
+                <div class="spk-journey__meter" aria-hidden="true">
+                    <div class="spk-journey__meter-fill"></div>
+                </div>
+                <p class="spk-journey__hint">10 steps · save from About you onward</p>
+                <ol class="spk-journey__list" id="spkJourneyPreview">
+                    <li><span>1</span> Situation</li>
+                    <li><span>2</span> Confirm forms</li>
+                    <li><span>3</span> About you</li>
+                    <li><span>4</span> Contact</li>
+                    <li><span>5</span> Study</li>
+                    <li><span>6</span> Passport</li>
+                    <li><span>7</span> Work history</li>
+                    <li><span>8</span> Background</li>
+                    <li><span>9</span> Extras</li>
+                    <li><span>10</span> Review &amp; deliver</li>
+                </ol>
+            </aside>
+
+            <div class="spk-landing__actions">
+                <div class="spk-landing-card" id="spkResumeCard">
+                    <h3>Resume a saved application</h3>
+                    <p>Enter your resume code and family name (last name). Codes stay valid for 30 days.</p>
+                    <div class="imm-line">
+                        <div class="opp-field imm-grow">
+                            <label for="spk-resume-code">Resume code</label>
+                            <input id="spk-resume-code" type="text" maxlength="20" autocomplete="off" placeholder="YUZU-XXXX-XXXX" spellcheck="false">
+                        </div>
+                    </div>
+                    <div class="imm-line">
+                        <div class="opp-field imm-grow">
+                            <label for="spk-resume-familyName">Family name</label>
+                            <input id="spk-resume-familyName" type="text" maxlength="120" autocomplete="family-name">
+                        </div>
+                    </div>
+                    <div class="spk-landing-card__actions">
+                        <button type="button" id="spkResumeBtn" class="opp-submit">Resume application</button>
+                        <p id="spkResumeStatus" class="opp-form-status" hidden></p>
+                    </div>
+                </div>
+
+                <div class="spk-landing-card spk-landing-card--primary">
+                    <h3>Start a new application</h3>
+                    <p>Answer a few situation questions. We’ll select the IRCC forms you need, then walk you through the rest.</p>
+                    <button type="button" id="spkStartBtn" class="opp-submit">Start with situation</button>
+                </div>
             </div>
         </div>
-        <div class="spk-resume-panel__actions">
-            <button type="button" id="spkResumeBtn" class="opp-submit opp-submit--secondary">Resume draft</button>
-            <p id="spkResumeStatus" class="opp-form-status" hidden></p>
-        </div>
-    </aside>
+    </section>
 
-    <div class="spk-save-banner" id="spkSaveBanner" hidden>
-        <p class="spk-save-banner__title">Draft saved</p>
-        <p class="spk-save-banner__code" id="spkSaveCode"></p>
-        <p class="spk-save-banner__meta" id="spkSaveMeta"></p>
-        <button type="button" id="spkCopyCode" class="opp-submit opp-submit--secondary">Copy code</button>
-    </div>
+    <!-- Wizard (hidden until start or resume) -->
+    <div class="spk-wizard" id="spkWizard" hidden>
+        <aside class="spk-rail" aria-label="Progress">
+            <p class="spk-rail__title">Progress</p>
+            <div class="spk-rail__meter" aria-hidden="true">
+                <div class="spk-rail__meter-fill" id="spkRailMeter"></div>
+            </div>
+            <p class="spk-rail__pct" id="spkRailPct">0% complete</p>
+            <ol class="spk-rail__steps" id="spkSteps"></ol>
+        </aside>
 
-    <form class="imm-form opp-form" id="spkForm" novalidate>
+        <div class="spk-wizard__main">
+            <div class="spk-mobile-progress" id="spkMobileProgress" aria-live="polite">
+                <div class="spk-mobile-progress__meta">
+                    <span id="spkMobileStepLabel">Situation</span>
+                    <span id="spkMobileStepCount">Step 1 of 10</span>
+                </div>
+                <div class="spk-mobile-progress__bar" aria-hidden="true">
+                    <div class="spk-mobile-progress__fill" id="spkMobileFill"></div>
+                </div>
+            </div>
+
+            <div class="spk-save-banner" id="spkSaveBanner" hidden>
+                <p class="spk-save-banner__title">Progress saved</p>
+                <p class="spk-save-banner__code" id="spkSaveCode"></p>
+                <p class="spk-save-banner__meta" id="spkSaveMeta"></p>
+                <button type="button" id="spkCopyCode" class="opp-submit opp-submit--secondary">Copy code</button>
+            </div>
+
+            <form class="imm-form opp-form" id="spkForm" novalidate>
         <!-- Step 0: situation (no form codes) -->
         <section class="imm-section spk-step-panel" data-spk-step="0" aria-labelledby="spk-route">
             <header class="imm-section__head">
@@ -126,36 +161,36 @@
                 </div>
                 <div class="opp-field imm-grow-lg">
                     <label for="spk-email">Email</label>
-                    <input id="spk-email" name="email" type="email" required maxlength="254" autocomplete="email" value="you@example.com">
+                    <input id="spk-email" name="email" type="email" required maxlength="254" autocomplete="email" placeholder="you@email.com">
                 </div>
             </div>
             <div class="spk-q-list">
                 <div class="opp-field">
                     <label for="spk-hasRepresentative">Will a lawyer, immigration consultant (RCIC), or other advisor prepare or submit this application for you?</label>
                     <select id="spk-hasRepresentative" name="hasRepresentative" required>
-                        <option value="N">No — I’m applying myself</option>
-                        <option value="Y" selected>Yes — someone else will represent me</option>
+                        <option value="N" selected>No — I’m applying myself</option>
+                        <option value="Y">Yes — someone else will represent me</option>
                     </select>
                 </div>
                 <div class="opp-field">
                     <label for="spk-hasDesignee">Do you want a friend or family member (who is not your official representative) to be able to ask IRCC about your application?</label>
                     <select id="spk-hasDesignee" name="hasDesignee" required>
-                        <option value="N">No</option>
-                        <option value="Y" selected>Yes</option>
+                        <option value="N" selected>No</option>
+                        <option value="Y">Yes</option>
                     </select>
                 </div>
                 <div class="opp-field">
                     <label for="spk-isCommonLaw">Are you living with a partner in a common-law relationship (together for at least 12 months), and not married?</label>
                     <select id="spk-isCommonLaw" name="isCommonLaw" required>
-                        <option value="N">No</option>
-                        <option value="Y" selected>Yes</option>
+                        <option value="N" selected>No</option>
+                        <option value="Y">Yes</option>
                     </select>
                 </div>
                 <div class="opp-field">
                     <label for="spk-includeImm5707">Besides parents and a spouse or partner, do you also need to declare other family members who already live in Canada (for example siblings or children who are citizens or permanent residents)?</label>
                     <select id="spk-includeImm5707" name="includeImm5707" required>
-                        <option value="N">No</option>
-                        <option value="Y" selected>Yes</option>
+                        <option value="N" selected>No</option>
+                        <option value="Y">Yes</option>
                     </select>
                 </div>
             </div>
@@ -174,7 +209,7 @@
             <p class="spk-confirm-note" id="spkConfirmNote"></p>
             <div class="opp-field opp-field--consent" style="margin-top:1.25rem">
                 <label class="opp-consent">
-                    <input id="spkFormsConfirm" name="formsConfirmed" type="checkbox" value="yes" required checked>
+                    <input id="spkFormsConfirm" name="formsConfirmed" type="checkbox" value="yes" required>
                     <span>I confirm this list matches my situation. Continue to the shared questionnaire.</span>
                 </label>
             </div>
@@ -193,11 +228,11 @@
             <div class="imm-line">
                 <div class="opp-field imm-grow">
                     <label for="spk-familyName">Family name</label>
-                    <input id="spk-familyName" name="familyName" required maxlength="120" autocomplete="family-name" value="Dupont">
+                    <input id="spk-familyName" name="familyName" required maxlength="120" autocomplete="family-name">
                 </div>
                 <div class="opp-field imm-grow">
                     <label for="spk-givenName">Given name(s)</label>
-                    <input id="spk-givenName" name="givenName" required maxlength="120" autocomplete="given-name" value="Marie Claire">
+                    <input id="spk-givenName" name="givenName" required maxlength="120" autocomplete="given-name">
                 </div>
                 <div class="opp-field imm-yn">
                     <label for="spk-hasAlias">Other name / alias?</label>
@@ -1181,16 +1216,16 @@
                 <div class="opp-field opp-field--consent">
                     <label class="opp-consent">
                         <input id="spkConsent" name="consent" type="checkbox" value="yes" required checked>
-                        <span>I understand this is a demo kit, not an official IRCC filing. I agree to generate the filled PDFs (download or email).</span>
+                        <span>I confirm my answers are accurate and I want to generate the filled PDFs (download or email). This is not an official IRCC submission.</span>
                     </label>
                 </div>
                 <div id="spkTurnstile" class="opp-turnstile" aria-label="Security check"></div>
                 <p id="spkFormStatus" class="opp-form-status" hidden></p>
                 <div class="imm-actions__buttons">
-                    <button type="submit" id="spkSubmit" class="opp-submit" disabled aria-disabled="true">Fill kit &amp; email ZIP</button>
+                    <button type="submit" id="spkSubmit" class="opp-submit" disabled aria-disabled="true">Email kit ZIP</button>
                     <button type="button" id="spkDownload" class="opp-submit opp-submit--secondary" disabled aria-disabled="true">Download ZIP</button>
                 </div>
-                <p class="imm-note">Open each PDF in Adobe Acrobat/Reader. IMM 1294 keeps IRCC certification; other kit forms use UR3-safe incremental fills. Demo data is rate-limited.</p>
+                <p class="imm-note">Open each PDF in Adobe Acrobat or Reader. IMM 1294 keeps IRCC certification; other kit forms use UR3-safe incremental fills.</p>
             </div>
         </section>
 
@@ -1198,11 +1233,13 @@
             <button type="button" id="spkBack" class="opp-submit opp-submit--secondary" hidden>Back</button>
             <div class="spk-nav__right">
                 <p id="spkSaveStatus" class="opp-form-status" hidden></p>
-                <button type="button" id="spkSave" class="opp-submit opp-submit--secondary">Save progress</button>
+                <button type="button" id="spkSave" class="opp-submit opp-submit--secondary" hidden>Save progress</button>
                 <button type="button" id="spkNext" class="opp-submit">Continue</button>
             </div>
         </div>
-    </form>
+            </form>
+        </div>
+    </div>
 </main>
 
 <footer class="site-footer site-footer--compact mt-auto">
