@@ -1,8 +1,27 @@
 /* Study permit kit — production-style landing + sticky progress */
 
+/* Entry (landing) composition — one column, not stranded in a wide canvas */
+.spk-entry {
+  width: 100%;
+  max-width: 40rem;
+}
+
+body:has(#spkLanding:not([hidden])) main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Keep a little air under the sticky nav; avoid a stranded top-left block */
+  padding-block: clamp(1rem, 5vh, 3rem);
+}
+
+body:has(#spkLanding:not([hidden])) .spk-entry {
+  margin-top: 0;
+}
+
 .spk-hero {
-  margin: 0 0 1.75rem;
-  max-width: var(--max-width-prose, 42rem);
+  margin: 0 0 0.25rem;
+  max-width: none;
 }
 
 .spk-hero-eyebrow {
@@ -23,7 +42,7 @@
 }
 
 .spk-hero-cta {
-  margin-top: 1.25rem;
+  margin-top: 1.35rem;
 }
 
 .spk-hero-cta[hidden] {
@@ -32,8 +51,29 @@
 
 /* —— Landing —— */
 .spk-landing {
-  margin-bottom: 1rem;
-  max-width: 28rem;
+  margin: 0 0 1rem;
+  max-width: none;
+  width: 100%;
+}
+
+.spk-landing-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin: 1.5rem 0 1.15rem;
+  color: var(--carbon-300);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.spk-landing-divider::before,
+.spk-landing-divider::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--carbon-100);
 }
 
 .spk-landing-card {
@@ -51,17 +91,48 @@
   color: var(--carbon-500);
 }
 
+.spk-landing-fields {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.spk-landing-fields .opp-field {
+  width: 100%;
+  max-width: none;
+}
+
+.spk-landing-fields .opp-field input {
+  width: 100%;
+}
+
 .spk-landing-card__actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem;
-  margin-top: 0.35rem;
+  margin-top: 1rem;
 }
 
 .spk-landing[hidden],
 .spk-wizard[hidden] {
   display: none !important;
+}
+
+/* When wizard is open, entry collapses to the page title only (left-aligned with form) */
+body:has(#spkWizard:not([hidden])) main {
+  align-items: stretch;
+  justify-content: flex-start;
+  padding-block: unset;
+}
+
+body:has(#spkWizard:not([hidden])) .spk-entry {
+  max-width: none;
+  margin-top: 0;
+}
+
+body:has(#spkWizard:not([hidden])) .spk-hero {
+  max-width: var(--max-width-prose, 42rem);
+  margin-bottom: 1.25rem;
 }
 
 /* —— Wizard shell —— */
@@ -346,16 +417,6 @@
 .spk-q-list .imm-seg {
   width: 9rem;
   min-width: 9rem;
-}
-
-.spk-landing-card .imm-line {
-  align-items: end;
-}
-
-.spk-landing-card .opp-field.imm-w-code,
-.spk-landing-card .opp-field.imm-w-lg {
-  flex: 1 1 12rem;
-  max-width: 18rem;
 }
 
 .spk-extra.imm-block[hidden] {
