@@ -1,0 +1,24 @@
+name: Fetch study-permit-kit logs
+on:
+  workflow_dispatch:
+jobs:
+  logs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tail edge logs
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_AUTOMATION }}
+          PROJECT_REF: mwgbeolcgigvpufjmodz
+        run: |
+          set -euo pipefail
+          START=$(date -u -d '30 minutes ago' +%Y-%m-%dT%H:%M:%SZ)
+          END=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          curl -sS -G "https://api.supabase.com/v1/projects/${PROJECT_REF}/analytics/endpoints/logs.all" \
+            -H "Authorization: Bearer ${SUPABASE_ACCESS_TOKEN}" \
+            --data-urlencode "iso_timestamp_start=${START}" \
+            --data-urlencode "iso_timestamp_end=${END}" \
+            --data-urlencode "sql=select id, timestamp, event_message from edge_logs where event_message like '%Draft%' or event_message like '%study%' order by timestamp desc limit 30" \
+            | head -c 8000
+          echo
+          echo "--- functions logs CLI ---"
+          npx --yes supabase@latest functions logs study-permit-kit --project-ref "$PROJECT_REF" --limit 50 || true
