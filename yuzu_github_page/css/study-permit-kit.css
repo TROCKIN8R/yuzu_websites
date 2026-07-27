@@ -22,20 +22,18 @@
   color: var(--carbon-500);
 }
 
+.spk-hero-cta {
+  margin-top: 1.25rem;
+}
+
+.spk-hero-cta[hidden] {
+  display: none !important;
+}
+
 /* —— Landing —— */
 .spk-landing {
   margin-bottom: 1rem;
-}
-
-.spk-landing__actions {
-  display: grid;
-  gap: 1rem;
-}
-
-@media (min-width: 700px) {
-  .spk-landing__actions {
-    grid-template-columns: 1fr 1fr;
-  }
+  max-width: 28rem;
 }
 
 .spk-landing-card {
@@ -44,11 +42,6 @@
   background: var(--paper-25);
   border: 1px solid var(--carbon-100);
   box-shadow: var(--shadow-sm);
-}
-
-.spk-landing-card--primary {
-  background: linear-gradient(165deg, var(--yuzu-25) 0%, var(--yuzu-100) 100%);
-  border-color: color-mix(in srgb, var(--yuzu-500) 45%, transparent);
 }
 
 .spk-landing-card h3 {
