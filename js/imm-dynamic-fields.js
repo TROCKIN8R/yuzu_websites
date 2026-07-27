@@ -530,12 +530,25 @@
                 setBranchVisible(panel, ok);
             });
 
-            const preferred = form.querySelector(`#${preferredLangId}`);
-            if (preferred instanceof HTMLSelectElement) {
+            const preferredEl = form.elements.namedItem('preferredLang');
+            if (preferredEl) {
                 const both = fieldValue('ableToCommunicate') === 'Both';
-                preferred.closest('.opp-field')?.toggleAttribute('hidden', !both);
-                preferred.required = both;
-                preferred.disabled = !both;
+                const wrap = (preferredEl instanceof RadioNodeList
+                    ? preferredEl[0]
+                    : preferredEl)?.closest?.('.opp-field');
+                wrap?.toggleAttribute('hidden', !both);
+                const radios = preferredEl instanceof RadioNodeList
+                    ? [...preferredEl]
+                    : [preferredEl];
+                radios.forEach((radio) => {
+                    if (!(radio instanceof HTMLInputElement)) return;
+                    radio.required = both;
+                    radio.disabled = !both;
+                });
+                if (preferredEl instanceof HTMLSelectElement) {
+                    preferredEl.required = both;
+                    preferredEl.disabled = !both;
+                }
             }
 
             syncJobChrome();

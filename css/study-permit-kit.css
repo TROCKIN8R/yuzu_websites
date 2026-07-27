@@ -337,14 +337,31 @@
   margin-top: 0.25rem;
 }
 
-.spk-q-list .opp-field label {
+.spk-q-list .opp-field > .imm-field-label,
+.spk-q-list .opp-field > label:not(.imm-seg__opt):not(.imm-radio-list__opt) {
   font-size: 0.95rem;
   line-height: 1.45;
   margin-bottom: 0.45rem;
+  color: #2d3436;
 }
 
-.spk-q-list select {
-  max-width: 28rem;
+.spk-q-list .imm-radio-list,
+.spk-q-list .imm-seg {
+  max-width: 32rem;
+}
+
+.spk-q-list .imm-seg {
+  width: auto;
+}
+
+.spk-landing-card .imm-line {
+  align-items: end;
+}
+
+.spk-landing-card .opp-field.imm-w-code,
+.spk-landing-card .opp-field.imm-w-lg {
+  flex: 1 1 12rem;
+  max-width: 18rem;
 }
 
 .spk-extra.imm-block[hidden] {
