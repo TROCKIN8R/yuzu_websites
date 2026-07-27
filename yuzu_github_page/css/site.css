@@ -2447,14 +2447,14 @@ html:has(.hero-fullscreen).nav-past-hero .nav-cta-desktop {
     display: grid;
     gap: var(--space-4);
 }
-.opp-field label {
+.opp-field > label {
     display: block;
     font-size: 0.875rem;
     font-weight: 700;
     color: var(--carbon-500);
     margin-bottom: 0.35rem;
 }
-.opp-field input {
+.opp-field input:not([type="radio"]):not([type="checkbox"]) {
     width: 100%;
     border: 1px solid var(--paper-400);
     border-radius: var(--radius-md);
@@ -2463,7 +2463,7 @@ html:has(.hero-fullscreen).nav-past-hero .nav-cta-desktop {
     background: var(--paper-50, #fff);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.opp-field input:focus {
+.opp-field input:not([type="radio"]):not([type="checkbox"]):focus {
     outline: none;
     border-color: var(--yuzu-500);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--yuzu-400) 25%, transparent);
