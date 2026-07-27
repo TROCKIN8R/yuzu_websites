@@ -699,8 +699,8 @@
     }
 
     function syncProgressVisibility() {
-        // Sticky progress appears from Confirm forms onward (not on Situation).
-        const showProgress = wizardOpen && step >= STEP_CONFIRM;
+        // Sticky progress appears from About you onward; Situation + Confirm are already done.
+        const showProgress = wizardOpen && step >= STEP_ABOUT;
         wizardEl?.classList.toggle('spk-wizard--with-progress', showProgress);
     }
 
