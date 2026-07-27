@@ -1,5 +1,5 @@
 /**
- * Study permit kit demo config (public keys only).
+ * Study permit kit config (public keys only).
  */
 window.STUDY_PERMIT_KIT_CONFIG = {
   supabase: {
@@ -16,10 +16,10 @@ window.STUDY_PERMIT_KIT_CONFIG = {
       required: true,
       why: "Required for every study permit application from outside Canada."
     },
-    imm5646: {
-      title: "IMM 5646 — Family information",
+    imm5707: {
+      title: "IMM 5707 — Family information",
       required: true,
-      why: "Standard family information form in the outside-Canada study permit kit."
+      why: "Required family information for temporary residence (study) applications."
     },
     imm5483: {
       title: "IMM 5483 — Document checklist",
@@ -41,10 +41,10 @@ window.STUDY_PERMIT_KIT_CONFIG = {
       required: false,
       why: "Included because you are in a common-law relationship."
     },
-    imm5707: {
-      title: "IMM 5707 — Family information (alternate)",
+    imm5646: {
+      title: "IMM 5646 — Custodianship declaration",
       required: false,
-      why: "Included because you need to declare additional family members living in Canada."
+      why: "Included because a custodian in Canada is required (typically for minors)."
     }
   }
 };

@@ -10,9 +10,9 @@
     },
     {
       "code": "imm5646",
-      "title_en": "Family Information",
-      "title_fr": "Renseignements familiaux",
-      "required": true
+      "title_en": "Custodianship Declaration for Minors Studying in Canada",
+      "title_fr": "Déclaration de tutelle pour mineurs qui étudient au Canada",
+      "required": false
     },
     {
       "code": "imm5483",
@@ -42,7 +42,7 @@
       "code": "imm5707",
       "title_en": "Family Information (IMM 5707)",
       "title_fr": "Renseignements familiaux (IMM 5707)",
-      "required": false
+      "required": true
     }
   ],
   "languages": [

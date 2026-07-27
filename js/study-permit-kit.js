@@ -112,11 +112,11 @@
 
     function selectFormsLocal() {
         const data = new FormData(form);
-        const forms = ['imm1294', 'imm5646', 'imm5483'];
+        const forms = ['imm1294', 'imm5707', 'imm5483'];
         if (yn(g(data, 'hasRepresentative'))) forms.push('imm5476');
         if (yn(g(data, 'hasDesignee'))) forms.push('imm5475');
         if (yn(g(data, 'isCommonLaw'))) forms.push('imm5409');
-        if (yn(g(data, 'includeImm5707'))) forms.push('imm5707');
+        if (yn(g(data, 'needsCustodian'))) forms.push('imm5646');
         return forms;
     }
 
@@ -156,12 +156,23 @@
             const show = forms.has(code);
             el.hidden = !show;
             if (show) any = true;
-            el.querySelectorAll('input, select').forEach((input) => {
-                if (show && (code === 'imm5476' && input.name === 'repFamilyName'
-                    || code === 'imm5475' && input.name === 'designeeFamilyName'
-                    || code === 'imm5409' && input.name === 'partnerFamilyName')) {
-                    input.required = true;
-                } else if (input.name.startsWith('rep') || input.name.startsWith('designee') || input.name.startsWith('partner') || input.name.startsWith('commonLaw') || input.name === 'yearsTogether') {
+            el.querySelectorAll('input, select, textarea').forEach((input) => {
+                const name = input.name || '';
+                const must = show && (
+                    (code === 'imm5476' && ['repFamilyName', 'repGivenName', 'repEmail'].includes(name))
+                    || (code === 'imm5475' && ['designeeFamilyName', 'designeeGivenName', 'designeeRelationship'].includes(name))
+                    || (code === 'imm5409' && ['partnerFamilyName', 'partnerGivenName', 'yearsTogether', 'commonLawCity', 'commonLawCountry'].includes(name))
+                    || (code === 'imm5646' && ['custodianFamilyName', 'custodianGivenName', 'custodianAddress'].includes(name))
+                );
+                if (must) input.required = true;
+                else if (
+                    name.startsWith('rep')
+                    || name.startsWith('designee')
+                    || name.startsWith('partner')
+                    || name.startsWith('commonLaw')
+                    || name.startsWith('custodian')
+                    || name === 'yearsTogether'
+                ) {
                     input.required = false;
                 }
             });
@@ -245,7 +256,7 @@
         if (!draft || typeof draft !== 'object') return;
 
         const ynKeys = [
-            'hasRepresentative', 'hasDesignee', 'isCommonLaw', 'includeImm5707',
+            'hasRepresentative', 'hasDesignee', 'isCommonLaw', 'needsCustodian',
             'hasAlias', 'previousCor', 'sameAsCor', 'previouslyMarried', 'sameAsMailing',
             'educationIndicator', 'hasNatId', 'hasUsCard', 'langTest',
             'bgTb', 'bgDisorder', 'bgOverstay', 'bgRefused', 'bgClaimAsylum',
@@ -265,7 +276,10 @@
             'nativeLang', 'ableToCommunicate', 'preferredLang', 'currentCountry', 'currentStatus',
             'corOther', 'cwaCountry', 'cwaStatus', 'cwaOther',
             'prevSpouseFamilyName', 'prevSpouseGivenName', 'prevSpouseRelationship',
-            'parent1FamilyName', 'parent1GivenName', 'parent2FamilyName', 'parent2GivenName',
+            'parent1FamilyName', 'parent1GivenName', 'parent1Dob', 'parent1Cob',
+            'parent1Occupation', 'parent1Address', 'parent1Telephone',
+            'parent2FamilyName', 'parent2GivenName', 'parent2Dob', 'parent2Cob',
+            'parent2Occupation', 'parent2Address', 'parent2Telephone',
             'streetNum', 'streetName', 'city', 'provinceState', 'country', 'postalCode',
             'resStreetNum', 'resStreetName', 'resAptUnit', 'resCity', 'resCountry',
             'resProvinceState', 'resPostalCode',
@@ -279,10 +293,13 @@
             'bgMedicalDetails', 'bgRefusedDetails', 'bgCrimeDetails', 'bgMilitaryDetails',
             'serviceIn',
             'repFamilyName', 'repGivenName', 'repOrganization', 'repEmail', 'repPhone',
+            'repPhoneCountryCode', 'repMembershipId', 'repStreetNum', 'repStreetName',
             'repCity', 'repProvince', 'repCountry', 'repPostalCode',
             'designeeFamilyName', 'designeeGivenName', 'designeeRelationship',
             'partnerFamilyName', 'partnerGivenName', 'yearsTogether',
-            'commonLawCity', 'commonLawProvince', 'commonLawCountry',
+            'commonLawCity', 'commonLawProvince', 'commonLawCountry', 'commonLawStart',
+            'custodianFamilyName', 'custodianGivenName', 'custodianDob', 'custodianStatus',
+            'custodianAddress', 'custodianTelephone',
         ];
         for (const key of textKeys) {
             if (draft[key] !== undefined && draft[key] !== null) {
@@ -596,8 +613,8 @@
     function applySituationSideEffects() {
         const data = new FormData(form);
         const ms = form.elements.maritalStatus;
-        if (ms && yn(g(data, 'isCommonLaw')) && ms.value === '02') {
-            ms.value = '03';
+        if (ms && yn(g(data, 'isCommonLaw'))) {
+            if (ms.value === '02' || !ms.value) ms.value = '03';
         }
     }
 
@@ -682,8 +699,8 @@
     }
 
     function syncProgressVisibility() {
-        // Sticky progress appears once Situation has been completed (or resumed past it).
-        const showProgress = wizardOpen && maxReachedStep > 0;
+        // Sticky progress appears from Confirm forms onward (not on Situation).
+        const showProgress = wizardOpen && step >= STEP_CONFIRM;
         wizardEl?.classList.toggle('spk-wizard--with-progress', showProgress);
     }
 
@@ -767,7 +784,7 @@
             hasRepresentative: yn(g(data, 'hasRepresentative')),
             hasDesignee: yn(g(data, 'hasDesignee')),
             isCommonLaw: yn(g(data, 'isCommonLaw')),
-            includeImm5707: yn(g(data, 'includeImm5707')),
+            needsCustodian: yn(g(data, 'needsCustodian')),
             familyName: g(data, 'familyName'),
             givenName: g(data, 'givenName'),
             hasAlias: g(data, 'hasAlias') || 'N',
@@ -844,8 +861,18 @@
             prevSpouseToDay: prevSpouseTo.day,
             parent1FamilyName: g(data, 'parent1FamilyName'),
             parent1GivenName: g(data, 'parent1GivenName'),
+            parent1Dob: g(data, 'parent1Dob'),
+            parent1Cob: g(data, 'parent1Cob'),
+            parent1Occupation: g(data, 'parent1Occupation'),
+            parent1Address: g(data, 'parent1Address'),
+            parent1Telephone: g(data, 'parent1Telephone'),
             parent2FamilyName: g(data, 'parent2FamilyName'),
             parent2GivenName: g(data, 'parent2GivenName'),
+            parent2Dob: g(data, 'parent2Dob'),
+            parent2Cob: g(data, 'parent2Cob'),
+            parent2Occupation: g(data, 'parent2Occupation'),
+            parent2Address: g(data, 'parent2Address'),
+            parent2Telephone: g(data, 'parent2Telephone'),
             streetNum: g(data, 'streetNum'),
             streetName: g(data, 'streetName'),
             city: g(data, 'city'),
@@ -948,8 +975,14 @@
             repOrganization: g(data, 'repOrganization'),
             repEmail: g(data, 'repEmail'),
             repPhone: g(data, 'repPhone'),
+            repPhoneCountryCode: g(data, 'repPhoneCountryCode'),
+            repMembershipId: g(data, 'repMembershipId'),
+            repStreetNum: g(data, 'repStreetNum'),
+            repStreetName: g(data, 'repStreetName'),
             repCity: g(data, 'repCity'),
+            repProvince: g(data, 'repProvince'),
             repCountry: g(data, 'repCountry'),
+            repPostalCode: g(data, 'repPostalCode'),
             designeeFamilyName: g(data, 'designeeFamilyName'),
             designeeGivenName: g(data, 'designeeGivenName'),
             designeeRelationship: g(data, 'designeeRelationship'),
@@ -957,7 +990,15 @@
             partnerGivenName: g(data, 'partnerGivenName'),
             yearsTogether: g(data, 'yearsTogether'),
             commonLawCity: g(data, 'commonLawCity'),
+            commonLawProvince: g(data, 'commonLawProvince'),
             commonLawCountry: g(data, 'commonLawCountry'),
+            commonLawStart: g(data, 'commonLawStart'),
+            custodianFamilyName: g(data, 'custodianFamilyName'),
+            custodianGivenName: g(data, 'custodianGivenName'),
+            custodianDob: g(data, 'custodianDob'),
+            custodianStatus: g(data, 'custodianStatus'),
+            custodianAddress: g(data, 'custodianAddress'),
+            custodianTelephone: g(data, 'custodianTelephone'),
         };
     }
 
@@ -1032,7 +1073,7 @@
         syncExtras();
     }
 
-    ['hasRepresentative', 'hasDesignee', 'isCommonLaw', 'includeImm5707'].forEach((name) => {
+    ['hasRepresentative', 'hasDesignee', 'isCommonLaw', 'needsCustodian'].forEach((name) => {
         form.elements[name]?.addEventListener('change', onSituationChange);
     });
 
@@ -1072,7 +1113,22 @@
     dyn?.populateDialCodes();
     if (dyn) {
         dyn.clearJobs();
-        dyn.addJob();
+        dyn.addJob({
+            occupation: 'Student',
+            employer: 'Universite Lyon',
+            city: 'Lyon',
+            country: '022',
+            from: '2022-09',
+        });
+        if (form.querySelector('[name="previousCor"]')?.value === 'Y') {
+            dyn.clearPcor();
+            dyn.addPcor({
+                country: '012',
+                status: '03',
+                from: '2021-01-15',
+                to: '2021-08-30',
+            });
+        }
     }
     applySituationSideEffects();
     syncExtras();

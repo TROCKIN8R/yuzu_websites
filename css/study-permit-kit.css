@@ -15,36 +15,16 @@
 }
 
 .spk-hero h1 {
-  margin: 0 0 0.65rem;
+  margin: 0;
   font-size: clamp(1.65rem, 3vw, 2.15rem);
   font-weight: 800;
   line-height: 1.2;
   color: #2d3436;
 }
 
-.spk-hero p {
-  margin: 0;
-  font-size: 1.02rem;
-  line-height: 1.55;
-  color: #5c6567;
-}
-
 /* —— Landing —— */
 .spk-landing {
   margin-bottom: 1rem;
-}
-
-.spk-landing__intro h2 {
-  margin: 0 0 0.35rem;
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: #2d3436;
-}
-
-.spk-landing__intro p {
-  margin: 0 0 1.25rem;
-  color: #5c6567;
-  font-size: 0.95rem;
 }
 
 .spk-landing__grid {
@@ -81,7 +61,7 @@
   border-radius: 999px;
   background: #e8e9ea;
   overflow: hidden;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.85rem;
 }
 
 .spk-journey__meter-fill {
@@ -89,13 +69,6 @@
   width: 0%;
   border-radius: inherit;
   background: linear-gradient(90deg, #f8c607, #e0a800);
-}
-
-.spk-journey__hint {
-  margin: 0 0 0.85rem;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #8a9194;
 }
 
 .spk-journey__list {
@@ -155,17 +128,10 @@
 }
 
 .spk-landing-card h3 {
-  margin: 0 0 0.4rem;
+  margin: 0 0 1rem;
   font-size: 1.05rem;
   font-weight: 800;
   color: #2d3436;
-}
-
-.spk-landing-card > p {
-  margin: 0 0 1rem;
-  font-size: 0.9rem;
-  line-height: 1.45;
-  color: #5c6567;
 }
 
 .spk-landing-card__actions {
