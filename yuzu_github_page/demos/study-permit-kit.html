@@ -58,13 +58,13 @@
             <div class="spk-landing-card" id="spkResumeCard">
                 <h3>Resume a saved application</h3>
                 <div class="imm-line">
-                    <div class="opp-field imm-grow">
+                    <div class="opp-field imm-w-code">
                         <label for="spk-resume-code">Resume code</label>
                         <input id="spk-resume-code" type="text" maxlength="20" autocomplete="off" placeholder="YUZU-XXXX-XXXX" spellcheck="false">
                     </div>
                 </div>
                 <div class="imm-line">
-                    <div class="opp-field imm-grow">
+                    <div class="opp-field imm-w-lg">
                         <label for="spk-resume-familyName">Family name</label>
                         <input id="spk-resume-familyName" type="text" maxlength="120" autocomplete="family-name">
                     </div>
@@ -125,13 +125,13 @@
                 <h3 class="imm-block__title">Contact preference</h3>
                 <div class="imm-line">
                     <div class="opp-field imm-w-md">
-                        <label for="spk-formLanguage">Preferred form language</label>
-                        <select id="spk-formLanguage" name="formLanguage" required>
-                            <option value="e" selected>English</option>
-                            <option value="f">French</option>
-                        </select>
+                        <span class="imm-field-label" id="spk-formLanguage-label">Preferred form language</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-formLanguage-label">
+                            <label class="imm-seg__opt"><input type="radio" name="formLanguage" value="e" required checked><span>English</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="formLanguage" value="f" required><span>French</span></label>
+                        </div>
                     </div>
-                    <div class="opp-field imm-grow-lg">
+                    <div class="opp-field imm-w-lg">
                         <label for="spk-email">Email</label>
                         <input id="spk-email" name="email" type="email" required maxlength="254" autocomplete="email" placeholder="you@email.com" value="you@example.com">
                     </div>
@@ -141,38 +141,38 @@
                 <h3 class="imm-block__title">Who’s involved</h3>
                 <p class="imm-block__hint">These answers only decide which optional IRCC forms to include.</p>
                 <div class="spk-q-list">
-                    <div class="opp-field">
-                        <label for="spk-hasRepresentative">Will a lawyer, immigration consultant (RCIC), or other advisor prepare or submit this application for you?</label>
-                        <select id="spk-hasRepresentative" name="hasRepresentative" required>
-                            <option value="N">No — I’m applying myself</option>
-                            <option value="Y" selected>Yes — someone else will represent me</option>
-                        </select>
+                    <div class="opp-field imm-q">
+                        <span class="imm-field-label" id="spk-hasRepresentative-label">Will a lawyer, immigration consultant (RCIC), or other advisor prepare or submit this application for you?</span>
+                        <div class="imm-radio-list" role="radiogroup" aria-labelledby="spk-hasRepresentative-label">
+                            <label class="imm-radio-list__opt"><input type="radio" name="hasRepresentative" value="N" required><span>No — I’m applying myself</span></label>
+                            <label class="imm-radio-list__opt"><input type="radio" name="hasRepresentative" value="Y" required checked><span>Yes — someone else will represent me</span></label>
+                        </div>
                     </div>
-                    <div class="opp-field">
-                        <label for="spk-hasDesignee">Do you want a friend or family member (who is not your official representative) to be able to ask IRCC about your application?</label>
-                        <select id="spk-hasDesignee" name="hasDesignee" required>
-                            <option value="N">No</option>
-                            <option value="Y" selected>Yes</option>
-                        </select>
+                    <div class="opp-field imm-q">
+                        <span class="imm-field-label" id="spk-hasDesignee-label">Do you want a friend or family member (who is not your official representative) to be able to ask IRCC about your application?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-hasDesignee-label">
+                            <label class="imm-seg__opt"><input type="radio" name="hasDesignee" value="N" required><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="hasDesignee" value="Y" required checked><span>Yes</span></label>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="imm-block">
                 <h3 class="imm-block__title">Family &amp; custody</h3>
                 <div class="spk-q-list">
-                    <div class="opp-field">
-                        <label for="spk-isCommonLaw">Are you living with a partner in a common-law relationship (together for at least 12 months), and not married?</label>
-                        <select id="spk-isCommonLaw" name="isCommonLaw" required>
-                            <option value="N">No</option>
-                            <option value="Y" selected>Yes</option>
-                        </select>
+                    <div class="opp-field imm-q">
+                        <span class="imm-field-label" id="spk-isCommonLaw-label">Are you living with a partner in a common-law relationship (together for at least 12 months), and not married?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-isCommonLaw-label">
+                            <label class="imm-seg__opt"><input type="radio" name="isCommonLaw" value="N" required><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="isCommonLaw" value="Y" required checked><span>Yes</span></label>
+                        </div>
                     </div>
-                    <div class="opp-field">
-                        <label for="spk-needsCustodian">Do you need a custodian in Canada (typically required if you are a minor studying without a parent or guardian)?</label>
-                        <select id="spk-needsCustodian" name="needsCustodian" required>
-                            <option value="N">No</option>
-                            <option value="Y" selected>Yes</option>
-                        </select>
+                    <div class="opp-field imm-q">
+                        <span class="imm-field-label" id="spk-needsCustodian-label">Do you need a custodian in Canada (typically required if you are a minor studying without a parent or guardian)?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-needsCustodian-label">
+                            <label class="imm-seg__opt"><input type="radio" name="needsCustodian" value="N" required><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="needsCustodian" value="Y" required checked><span>Yes</span></label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -221,20 +221,20 @@
                     </div>
                 </div>
                 <div class="imm-line">
-                    <div class="opp-field imm-yn">
-                        <label for="spk-sex">Sex</label>
-                        <select id="spk-sex" name="sex" required>
-                            <option value="Female" selected>Female</option>
-                            <option value="Male">Male</option>
-                            <option value="Unknown">Unknown</option>
-                        </select>
+                    <div class="opp-field imm-w-lg">
+                        <span class="imm-field-label" id="spk-sex-label">Sex</span>
+                        <div class="imm-seg imm-seg--wrap" role="radiogroup" aria-labelledby="spk-sex-label">
+                            <label class="imm-seg__opt"><input type="radio" name="sex" value="Female" required checked><span>Female</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="sex" value="Male" required><span>Male</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="sex" value="Unknown" required><span>Unknown</span></label>
+                        </div>
                     </div>
                     <div class="opp-field imm-yn">
-                        <label for="spk-hasAlias">Other name / alias?</label>
-                        <select id="spk-hasAlias" name="hasAlias" required>
-                            <option value="N">No</option>
-                            <option value="Y" selected>Yes</option>
-                        </select>
+                        <span class="imm-field-label" id="spk-hasAlias-label">Other name / alias?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-hasAlias-label">
+                            <label class="imm-seg__opt"><input type="radio" name="hasAlias" value="N" required><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="hasAlias" value="Y" required checked><span>Yes</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="imm-branch" data-imm-show="hasAlias=Y" hidden>
@@ -258,7 +258,7 @@
                         <label for="spk-dob">Date of birth</label>
                         <input id="spk-dob" name="dob" type="date" required value="1998-04-12">
                     </div>
-                    <div class="opp-field imm-grow">
+                    <div class="opp-field imm-w-lg">
                         <label for="spk-placeBirthCity">City of birth</label>
                         <input id="spk-placeBirthCity" name="placeBirthCity" required maxlength="120" value="Lyon">
                     </div>
@@ -278,7 +278,7 @@
             <div class="imm-block">
                 <h3 class="imm-block__title">Marital status</h3>
                 <div class="imm-line">
-                    <div class="opp-field imm-grow">
+                    <div class="opp-field imm-w-lg">
                         <label for="spk-maritalStatus">Current status</label>
                         <select id="spk-maritalStatus" name="maritalStatus" required>
                             <option value="02">Single</option>
@@ -290,11 +290,11 @@
                         </select>
                     </div>
                     <div class="opp-field imm-yn">
-                        <label for="spk-previouslyMarried">Previously married / common-law?</label>
-                        <select id="spk-previouslyMarried" name="previouslyMarried" required>
-                            <option value="N">No</option>
-                            <option value="Y" selected>Yes</option>
-                        </select>
+                        <span class="imm-field-label" id="spk-previouslyMarried-label">Previously married / common-law?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-previouslyMarried-label">
+                            <label class="imm-seg__opt"><input type="radio" name="previouslyMarried" value="N" required><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="previouslyMarried" value="Y" required checked><span>Yes</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="imm-branch" data-imm-show="maritalStatus=01|03" hidden>
@@ -359,13 +359,13 @@
                         <select id="spk-nativeLang" name="nativeLang" required data-imm-lov="language" data-imm-default="002"></select>
                     </div>
                     <div class="opp-field imm-grow">
-                        <label for="spk-ableToCommunicate">Able to communicate in</label>
-                        <select id="spk-ableToCommunicate" name="ableToCommunicate" required>
-                            <option value="Both" selected>English and French</option>
-                            <option value="English">English</option>
-                            <option value="French">French</option>
-                            <option value="Neither">Neither</option>
-                        </select>
+                        <span class="imm-field-label" id="spk-ableToCommunicate-label">Able to communicate in</span>
+                        <div class="imm-seg imm-seg--wrap" role="radiogroup" aria-labelledby="spk-ableToCommunicate-label">
+                            <label class="imm-seg__opt"><input type="radio" name="ableToCommunicate" value="Both" required checked><span>English &amp; French</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="ableToCommunicate" value="English" required><span>English</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="ableToCommunicate" value="French" required><span>French</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="ableToCommunicate" value="Neither" required><span>Neither</span></label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -377,7 +377,7 @@
                         <label for="spk-currentCountry">Country or territory</label>
                         <select id="spk-currentCountry" name="currentCountry" required data-imm-lov="country" data-imm-default="022"></select>
                     </div>
-                    <div class="opp-field imm-grow">
+                    <div class="opp-field imm-w-lg">
                         <label for="spk-currentStatus">Status there</label>
                         <select id="spk-currentStatus" name="currentStatus" required>
                             <option value="01" selected>Citizen</option>
@@ -411,18 +411,18 @@
                 </div>
                 <div class="imm-line">
                     <div class="opp-field imm-yn">
-                        <label for="spk-previousCor">Other countries (last 5 yrs)?</label>
-                        <select id="spk-previousCor" name="previousCor" required>
-                            <option value="N">No</option>
-                            <option value="Y" selected>Yes</option>
-                        </select>
+                        <span class="imm-field-label" id="spk-previousCor-label">Other countries (last 5 yrs)?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-previousCor-label">
+                            <label class="imm-seg__opt"><input type="radio" name="previousCor" value="N" required><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="previousCor" value="Y" required checked><span>Yes</span></label>
+                        </div>
                     </div>
                     <div class="opp-field imm-yn">
-                        <label for="spk-sameAsCor">Applying from residence country?</label>
-                        <select id="spk-sameAsCor" name="sameAsCor" required>
-                            <option value="Y" selected>Yes</option>
-                            <option value="N">No</option>
-                        </select>
+                        <span class="imm-field-label" id="spk-sameAsCor-label">Applying from residence country?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-sameAsCor-label">
+                            <label class="imm-seg__opt"><input type="radio" name="sameAsCor" value="Y" required checked><span>Yes</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="sameAsCor" value="N" required><span>No</span></label>
+                        </div>
                     </div>
                 </div>
             <div class="imm-branch" data-imm-show="previousCor=Y" hidden>
@@ -557,7 +557,7 @@
                         <label for="spk-parent1Cob">Country of birth</label>
                         <select id="spk-parent1Cob" name="parent1Cob" data-imm-lov="country" data-imm-default="022"></select>
                     </div>
-                    <div class="opp-field imm-grow">
+                    <div class="opp-field imm-w-lg">
                         <label for="spk-parent1Occupation">Occupation</label>
                         <input id="spk-parent1Occupation" name="parent1Occupation" maxlength="80" value="Engineer">
                     </div>
@@ -567,9 +567,9 @@
                         <label for="spk-parent1Address">Address</label>
                         <input id="spk-parent1Address" name="parent1Address" maxlength="200" value="10 Rue de la République, 69002 Lyon, France">
                     </div>
-                    <div class="opp-field imm-w-md">
+                    <div class="opp-field imm-w-phone">
                         <label for="spk-parent1Telephone">Telephone</label>
-                        <input id="spk-parent1Telephone" name="parent1Telephone" maxlength="40" value="33472112233">
+                        <input id="spk-parent1Telephone" name="parent1Telephone" type="tel" maxlength="40" value="33472112233">
                     </div>
                 </div>
                 <h4 class="imm-block__subtitle">Parent / guardian 2</h4>
@@ -592,7 +592,7 @@
                         <label for="spk-parent2Cob">Country of birth</label>
                         <select id="spk-parent2Cob" name="parent2Cob" data-imm-lov="country" data-imm-default="022"></select>
                     </div>
-                    <div class="opp-field imm-grow">
+                    <div class="opp-field imm-w-lg">
                         <label for="spk-parent2Occupation">Occupation</label>
                         <input id="spk-parent2Occupation" name="parent2Occupation" maxlength="80" value="Teacher">
                     </div>
@@ -602,9 +602,9 @@
                         <label for="spk-parent2Address">Address</label>
                         <input id="spk-parent2Address" name="parent2Address" maxlength="200" value="10 Rue de la République, 69002 Lyon, France">
                     </div>
-                    <div class="opp-field imm-w-md">
+                    <div class="opp-field imm-w-phone">
                         <label for="spk-parent2Telephone">Telephone</label>
-                        <input id="spk-parent2Telephone" name="parent2Telephone" maxlength="40" value="33472112234">
+                        <input id="spk-parent2Telephone" name="parent2Telephone" type="tel" maxlength="40" value="33472112234">
                     </div>
                 </div>
             </div>
@@ -669,11 +669,11 @@
                 </div>
                 <div class="imm-line">
                     <div class="opp-field imm-yn">
-                        <label for="spk-sameAsMailing">Same residential?</label>
-                        <select id="spk-sameAsMailing" name="sameAsMailing" required>
-                            <option value="Y" selected>Yes</option>
-                            <option value="N">No</option>
-                        </select>
+                        <span class="imm-field-label" id="spk-sameAsMailing-label">Same residential?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-sameAsMailing-label">
+                            <label class="imm-seg__opt"><input type="radio" name="sameAsMailing" value="Y" required checked><span>Yes</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="sameAsMailing" value="N" required><span>No</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="imm-branch" data-imm-show="sameAsMailing=N" hidden>
@@ -736,14 +736,14 @@
             <div class="imm-block">
                 <h3 class="imm-block__title">Phone</h3>
                 <div class="imm-line">
-                    <div class="opp-field imm-w-sm">
-                        <label for="spk-phoneType">Phone type</label>
-                        <select id="spk-phoneType" name="phoneType" required>
-                            <option value="02" selected>Cellular</option>
-                            <option value="01">Residence</option>
-                            <option value="03">Business</option>
-                            <option value="05">Other</option>
-                        </select>
+                    <div class="opp-field imm-w-lg">
+                        <span class="imm-field-label" id="spk-phoneType-label">Phone type</span>
+                        <div class="imm-seg imm-seg--wrap" role="radiogroup" aria-labelledby="spk-phoneType-label">
+                            <label class="imm-seg__opt"><input type="radio" name="phoneType" value="02" required checked><span>Cellular</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="phoneType" value="01" required><span>Residence</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="phoneType" value="03" required><span>Business</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="phoneType" value="05" required><span>Other</span></label>
+                        </div>
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="spk-phoneCountryCode">Country code &amp; number</label>
@@ -772,9 +772,9 @@
                         <label for="spk-schoolName">School name</label>
                         <input id="spk-schoolName" name="schoolName" required maxlength="120" value="University of Toronto">
                     </div>
-                    <div class="opp-field imm-w-md">
+                    <div class="opp-field imm-w-id">
                         <label for="spk-dli">DLI number</label>
-                        <input id="spk-dli" name="dli" required maxlength="40" value="O19332746152">
+                        <input id="spk-dli" name="dli" required maxlength="40" value="O19332746152" spellcheck="false">
                     </div>
                 </div>
                 <div class="imm-line">
@@ -829,7 +829,7 @@
                             <option value="YT">Yukon</option>
                         </select>
                     </div>
-                    <div class="opp-field imm-grow">
+                    <div class="opp-field imm-w-lg">
                         <label for="spk-schoolCity">School city</label>
                         <select id="spk-schoolCity" name="schoolCity" required>
                             <option value="Toronto" selected>Toronto</option>
@@ -845,16 +845,16 @@
                             <option value="Edmonton">Edmonton</option>
                         </select>
                     </div>
-                    <div class="opp-field imm-grow-lg">
+                    <div class="opp-field imm-grow">
                         <label for="spk-schoolAddress">School address</label>
                         <input id="spk-schoolAddress" name="schoolAddress" required value="27 King's College Circle">
                     </div>
                 </div>
                 <div class="imm-branch" data-imm-show="schoolProvince=QC" hidden>
                     <div class="imm-line">
-                        <div class="opp-field imm-w-lg">
+                        <div class="opp-field imm-w-id">
                             <label for="spk-caqNumber">CAQ number</label>
-                            <input id="spk-caqNumber" name="caqNumber" type="text" maxlength="40" data-imm-required value="CAQ-123456789">
+                            <input id="spk-caqNumber" name="caqNumber" type="text" maxlength="40" data-imm-required value="CAQ-123456789" spellcheck="false">
                         </div>
                         <div class="opp-field imm-w-md">
                             <label for="spk-caqExpiry">CAQ expiry</label>
@@ -862,9 +862,9 @@
                         </div>
                     </div>
                     <div class="imm-line">
-                        <div class="opp-field imm-w-lg">
+                        <div class="opp-field imm-w-id">
                             <label for="spk-palNumber">PAL number</label>
-                            <input id="spk-palNumber" name="palNumber" type="text" maxlength="40" data-imm-required value="PAL-987654321">
+                            <input id="spk-palNumber" name="palNumber" type="text" maxlength="40" data-imm-required value="PAL-987654321" spellcheck="false">
                         </div>
                         <div class="opp-field imm-w-md">
                             <label for="spk-palExpiry">PAL expiry</label>
@@ -886,21 +886,21 @@
                     </div>
                 </div>
                 <div class="imm-line">
-                    <div class="opp-field imm-w-md">
+                    <div class="opp-field imm-w-money">
                         <label for="spk-tuitionAmount">Tuition (CAD)</label>
-                        <input id="spk-tuitionAmount" name="tuitionAmount" required value="25000">
+                        <input id="spk-tuitionAmount" name="tuitionAmount" type="number" inputmode="numeric" min="0" step="1" required value="25000">
                     </div>
-                    <div class="opp-field imm-w-md">
+                    <div class="opp-field imm-w-money">
                         <label for="spk-availableFunds">Funds available</label>
-                        <input id="spk-availableFunds" name="availableFunds" required value="35000">
+                        <input id="spk-availableFunds" name="availableFunds" type="number" inputmode="numeric" min="0" step="1" required value="35000">
                     </div>
-                    <div class="opp-field imm-yn">
-                        <label for="spk-funds">Who pays?</label>
-                        <select id="spk-funds" name="funds" required>
-                            <option value="Parents" selected>Parents</option>
-                            <option value="Myself">Myself</option>
-                            <option value="Other">Other</option>
-                        </select>
+                    <div class="opp-field imm-w-lg">
+                        <span class="imm-field-label" id="spk-funds-label">Who pays?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-funds-label">
+                            <label class="imm-seg__opt"><input type="radio" name="funds" value="Parents" required checked><span>Parents</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="funds" value="Myself" required><span>Myself</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="funds" value="Other" required><span>Other</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="imm-branch" data-imm-show="funds=Other" hidden>
@@ -916,11 +916,11 @@
                 <h3 class="imm-block__title">Prior education</h3>
                 <div class="imm-line">
                     <div class="opp-field imm-yn">
-                        <label for="spk-educationIndicator">Prior post-secondary education?</label>
-                        <select id="spk-educationIndicator" name="educationIndicator" required>
-                            <option value="N">No</option>
-                            <option value="Y" selected>Yes</option>
-                        </select>
+                        <span class="imm-field-label" id="spk-educationIndicator-label">Prior post-secondary education?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-educationIndicator-label">
+                            <label class="imm-seg__opt"><input type="radio" name="educationIndicator" value="N" required><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="educationIndicator" value="Y" required checked><span>Yes</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="imm-branch" data-imm-show="educationIndicator=Y" hidden>
@@ -995,9 +995,9 @@
             <div class="imm-block">
                 <h3 class="imm-block__title">Travel document</h3>
                 <div class="imm-line">
-                    <div class="opp-field imm-grow">
+                    <div class="opp-field imm-w-id">
                         <label for="spk-passportNumber">Passport number</label>
-                        <input id="spk-passportNumber" name="passportNumber" required maxlength="40" value="12AB34567">
+                        <input id="spk-passportNumber" name="passportNumber" required maxlength="40" value="12AB34567" spellcheck="false">
                     </div>
                     <div class="opp-field imm-grow">
                         <label for="spk-passportCountry">Country of issue</label>
@@ -1019,41 +1019,41 @@
                 <h3 class="imm-block__title">Language &amp; other IDs</h3>
                 <div class="imm-line">
                     <div class="opp-field imm-w-md">
-                        <label for="spk-preferredLang">Preferred language</label>
-                        <select id="spk-preferredLang" name="preferredLang" required>
-                            <option value="English" selected>English</option>
-                            <option value="French">French</option>
-                        </select>
+                        <span class="imm-field-label" id="spk-preferredLang-label">Preferred language</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-preferredLang-label">
+                            <label class="imm-seg__opt"><input type="radio" name="preferredLang" value="English" required checked><span>English</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="preferredLang" value="French" required><span>French</span></label>
+                        </div>
                     </div>
                     <div class="opp-field imm-yn">
-                        <label for="spk-langTest">Language test?</label>
-                        <select id="spk-langTest" name="langTest" required>
-                            <option value="N" selected>No</option>
-                            <option value="Y">Yes</option>
-                        </select>
+                        <span class="imm-field-label" id="spk-langTest-label">Language test?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-langTest-label">
+                            <label class="imm-seg__opt"><input type="radio" name="langTest" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="langTest" value="Y" required><span>Yes</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="imm-line">
                     <div class="opp-field imm-yn">
-                        <label for="spk-hasNatId">National ID?</label>
-                        <select id="spk-hasNatId" name="hasNatId" required>
-                            <option value="N">No</option>
-                            <option value="Y" selected>Yes</option>
-                        </select>
+                        <span class="imm-field-label" id="spk-hasNatId-label">National ID?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-hasNatId-label">
+                            <label class="imm-seg__opt"><input type="radio" name="hasNatId" value="N" required><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="hasNatId" value="Y" required checked><span>Yes</span></label>
+                        </div>
                     </div>
                     <div class="opp-field imm-yn">
-                        <label for="spk-hasUsCard">U.S. PR card?</label>
-                        <select id="spk-hasUsCard" name="hasUsCard" required>
-                            <option value="N" selected>No</option>
-                            <option value="Y">Yes</option>
-                        </select>
+                        <span class="imm-field-label" id="spk-hasUsCard-label">U.S. PR card?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-hasUsCard-label">
+                            <label class="imm-seg__opt"><input type="radio" name="hasUsCard" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="hasUsCard" value="Y" required><span>Yes</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="imm-branch" data-imm-show="hasNatId=Y" hidden>
                     <div class="imm-line">
-                        <div class="opp-field imm-w-lg">
+                        <div class="opp-field imm-w-id">
                             <label for="spk-natIdNumber">Nat. ID number</label>
-                            <input id="spk-natIdNumber" name="natIdNumber" type="text" maxlength="40" data-imm-required value="FR123456789">
+                            <input id="spk-natIdNumber" name="natIdNumber" type="text" maxlength="40" data-imm-required value="FR123456789" spellcheck="false">
                         </div>
                         <div class="opp-field imm-grow">
                             <label for="spk-natIdCountry">Country of issue</label>
@@ -1075,9 +1075,9 @@
                 </div>
                 <div class="imm-branch" data-imm-show="hasUsCard=Y" hidden>
                     <div class="imm-line">
-                        <div class="opp-field imm-grow">
+                        <div class="opp-field imm-w-id">
                             <label for="spk-usCardNumber">U.S. card number</label>
-                            <input id="spk-usCardNumber" name="usCardNumber" type="text" maxlength="40" data-imm-required value="">
+                            <input id="spk-usCardNumber" name="usCardNumber" type="text" maxlength="40" data-imm-required value="" spellcheck="false">
                         </div>
                         <div class="opp-field imm-w-md">
                             <label for="spk-usCardExpiry">Expiry</label>
@@ -1175,12 +1175,18 @@
                 <h3 class="imm-block__title">Health</h3>
                 <div class="imm-yn-pair">
                     <div class="opp-field imm-yn">
-                        <label for="spk-bgTb">TB (last 2 years)?</label>
-                        <select id="spk-bgTb" name="bgTb" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                        <span class="imm-field-label" id="spk-bgTb-label">TB (last 2 years)?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-bgTb-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgTb" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgTb" value="Y" required><span>Yes</span></label>
+                        </div>
                     </div>
                     <div class="opp-field imm-yn">
-                        <label for="spk-bgDisorder">Serious health disorder?</label>
-                        <select id="spk-bgDisorder" name="bgDisorder" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                        <span class="imm-field-label" id="spk-bgDisorder-label">Serious health disorder?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-bgDisorder-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgDisorder" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgDisorder" value="Y" required><span>Yes</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="imm-branch" data-imm-show="bgTb=Y,bgDisorder=Y" data-imm-show-mode="any" hidden>
@@ -1195,16 +1201,25 @@
                 <h3 class="imm-block__title">Immigration history</h3>
                 <div class="imm-yn-pair">
                     <div class="opp-field imm-yn">
-                        <label for="spk-bgOverstay">Overstay / unauthorized?</label>
-                        <select id="spk-bgOverstay" name="bgOverstay" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                        <span class="imm-field-label" id="spk-bgOverstay-label">Overstay / unauthorized?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-bgOverstay-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgOverstay" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgOverstay" value="Y" required><span>Yes</span></label>
+                        </div>
                     </div>
                     <div class="opp-field imm-yn">
-                        <label for="spk-bgRefused">Visa refused?</label>
-                        <select id="spk-bgRefused" name="bgRefused" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                        <span class="imm-field-label" id="spk-bgRefused-label">Visa refused?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-bgRefused-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgRefused" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgRefused" value="Y" required><span>Yes</span></label>
+                        </div>
                     </div>
                     <div class="opp-field imm-yn">
-                        <label for="spk-bgClaimAsylum">Prior asylum claim?</label>
-                        <select id="spk-bgClaimAsylum" name="bgClaimAsylum" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                        <span class="imm-field-label" id="spk-bgClaimAsylum-label">Prior asylum claim?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-bgClaimAsylum-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgClaimAsylum" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgClaimAsylum" value="Y" required><span>Yes</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="imm-branch" data-imm-show="bgOverstay=Y,bgRefused=Y,bgClaimAsylum=Y" data-imm-show-mode="any" hidden>
@@ -1219,22 +1234,34 @@
                 <h3 class="imm-block__title">Security &amp; background</h3>
                 <div class="imm-yn-pair">
                     <div class="opp-field imm-yn">
-                        <label for="spk-bgCrime">Criminal history?</label>
-                        <select id="spk-bgCrime" name="bgCrime" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                        <span class="imm-field-label" id="spk-bgCrime-label">Criminal history?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-bgCrime-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgCrime" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgCrime" value="Y" required><span>Yes</span></label>
+                        </div>
                     </div>
                     <div class="opp-field imm-yn">
-                        <label for="spk-bgMilitary">Military / police?</label>
-                        <select id="spk-bgMilitary" name="bgMilitary" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                        <span class="imm-field-label" id="spk-bgMilitary-label">Military / police?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-bgMilitary-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgMilitary" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgMilitary" value="Y" required><span>Yes</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="imm-yn-pair">
                     <div class="opp-field imm-yn">
-                        <label for="spk-bgViolence">Violent group?</label>
-                        <select id="spk-bgViolence" name="bgViolence" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                        <span class="imm-field-label" id="spk-bgViolence-label">Violent group?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-bgViolence-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgViolence" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgViolence" value="Y" required><span>Yes</span></label>
+                        </div>
                     </div>
                     <div class="opp-field imm-yn">
-                        <label for="spk-bgWitness">Abuse / looting?</label>
-                        <select id="spk-bgWitness" name="bgWitness" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                        <span class="imm-field-label" id="spk-bgWitness-label">Abuse / looting?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-bgWitness-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgWitness" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgWitness" value="Y" required><span>Yes</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="imm-branch" data-imm-show="bgCrime=Y" hidden>
@@ -1255,8 +1282,11 @@
                 <h3 class="imm-block__title">Consent</h3>
                 <div class="imm-yn-pair">
                     <div class="opp-field imm-yn">
-                        <label for="spk-cicContactConsent">IRCC research contact?</label>
-                        <select id="spk-cicContactConsent" name="cicContactConsent" required><option value="N" selected>No</option><option value="Y">Yes</option></select>
+                        <span class="imm-field-label" id="spk-cicContactConsent-label">IRCC research contact?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="spk-cicContactConsent-label">
+                            <label class="imm-seg__opt"><input type="radio" name="cicContactConsent" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="cicContactConsent" value="Y" required><span>Yes</span></label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1290,9 +1320,9 @@
                         <label for="spk-repOrganization">Organization</label>
                         <input id="spk-repOrganization" name="repOrganization" maxlength="120" value="Yuzu Demo Advisors">
                     </div>
-                    <div class="opp-field imm-w-md">
+                    <div class="opp-field imm-w-id">
                         <label for="spk-repMembershipId">Membership ID</label>
-                        <input id="spk-repMembershipId" name="repMembershipId" maxlength="40" value="R123456">
+                        <input id="spk-repMembershipId" name="repMembershipId" maxlength="40" value="R123456" spellcheck="false">
                     </div>
                 </div>
                 <div class="imm-line">
@@ -1300,13 +1330,13 @@
                         <label for="spk-repEmail">Rep. email</label>
                         <input id="spk-repEmail" name="repEmail" type="email" maxlength="254" value="rep@example.com">
                     </div>
-                    <div class="opp-field imm-w-sm">
-                        <label for="spk-repPhoneCountryCode">Phone country code</label>
+                    <div class="opp-field imm-w-xs">
+                        <label for="spk-repPhoneCountryCode">Code</label>
                         <input id="spk-repPhoneCountryCode" name="repPhoneCountryCode" maxlength="6" value="1" inputmode="numeric">
                     </div>
-                    <div class="opp-field imm-grow">
+                    <div class="opp-field imm-w-phone">
                         <label for="spk-repPhone">Rep. phone</label>
-                        <input id="spk-repPhone" name="repPhone" maxlength="40" value="5145550100">
+                        <input id="spk-repPhone" name="repPhone" type="tel" maxlength="40" value="5145550100">
                     </div>
                 </div>
                 <div class="imm-table-wrap">
@@ -1365,7 +1395,7 @@
                     </div>
                 </div>
                 <div class="imm-line">
-                    <div class="opp-field imm-grow">
+                    <div class="opp-field imm-w-lg">
                         <label for="spk-designeeRelationship">Relationship</label>
                         <input id="spk-designeeRelationship" name="designeeRelationship" maxlength="80" placeholder="e.g. Sibling" value="Sibling">
                     </div>
@@ -1385,9 +1415,9 @@
                     </div>
                 </div>
                 <div class="imm-line">
-                    <div class="opp-field imm-w-sm">
+                    <div class="opp-field imm-w-xs">
                         <label for="spk-yearsTogether">Years together</label>
-                        <input id="spk-yearsTogether" name="yearsTogether" maxlength="10" value="3">
+                        <input id="spk-yearsTogether" name="yearsTogether" type="number" inputmode="numeric" min="0" max="99" maxlength="10" value="3">
                     </div>
                     <div class="opp-field imm-w-md">
                         <label for="spk-commonLawStart">Living together since</label>
@@ -1395,11 +1425,11 @@
                     </div>
                 </div>
                 <div class="imm-line">
-                    <div class="opp-field imm-grow">
+                    <div class="opp-field imm-w-lg">
                         <label for="spk-commonLawCity">City where you live together</label>
                         <input id="spk-commonLawCity" name="commonLawCity" maxlength="120" value="Lyon">
                     </div>
-                    <div class="opp-field imm-grow">
+                    <div class="opp-field imm-w-lg">
                         <label for="spk-commonLawProvince">Province / state</label>
                         <input id="spk-commonLawProvince" name="commonLawProvince" maxlength="40" value="Auvergne-Rhône-Alpes">
                     </div>
@@ -1427,12 +1457,12 @@
                         <label for="spk-custodianDob">Date of birth</label>
                         <input id="spk-custodianDob" name="custodianDob" type="date" value="1975-05-22">
                     </div>
-                    <div class="opp-field imm-grow">
-                        <label for="spk-custodianStatus">Status in Canada</label>
-                        <select id="spk-custodianStatus" name="custodianStatus">
-                            <option value="Canadian Citizen" selected>Canadian Citizen</option>
-                            <option value="Permanent Resident">Permanent Resident</option>
-                        </select>
+                    <div class="opp-field imm-w-lg">
+                        <span class="imm-field-label" id="spk-custodianStatus-label">Status in Canada</span>
+                        <div class="imm-seg imm-seg--wrap" role="radiogroup" aria-labelledby="spk-custodianStatus-label">
+                            <label class="imm-seg__opt"><input type="radio" name="custodianStatus" value="Canadian Citizen" checked><span>Citizen</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="custodianStatus" value="Permanent Resident"><span>Permanent resident</span></label>
+                        </div>
                     </div>
                 </div>
                 <div class="imm-line">
@@ -1440,9 +1470,9 @@
                         <label for="spk-custodianAddress">Address in Canada</label>
                         <input id="spk-custodianAddress" name="custodianAddress" maxlength="200" value="45 Avenue du Parc, Montreal, QC H2X1Y4">
                     </div>
-                    <div class="opp-field imm-w-md">
+                    <div class="opp-field imm-w-phone">
                         <label for="spk-custodianTelephone">Telephone</label>
-                        <input id="spk-custodianTelephone" name="custodianTelephone" maxlength="40" value="5145550199">
+                        <input id="spk-custodianTelephone" name="custodianTelephone" type="tel" maxlength="40" value="5145550199">
                     </div>
                 </div>
             </div>

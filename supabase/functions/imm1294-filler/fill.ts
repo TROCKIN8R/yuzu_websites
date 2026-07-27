@@ -787,7 +787,8 @@ export function buildFilledForm1(template: string, a: Imm1294Answers): string {
   if (a.ableToCommunicate === "Both") {
     xml = fillEmpty(xml, "lov", preferredLic, "><languages\n>");
   }
-  xml = fillEmpty(xml, "LangTestIndicator", a.langTest);
+  // Live IRCC blank uses <LanguageTest>, not the older <LangTestIndicator> name.
+  xml = fillEmpty(xml, "LanguageTest", a.langTest);
 
   xml = fillNested(xml, "PassportNum", a.passportNumber);
   xml = fillNested(xml, "CountryofIssue", a.passportCountry, "><Passport\n>");

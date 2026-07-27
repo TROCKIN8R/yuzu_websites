@@ -237,8 +237,14 @@
     function setFieldValue(name, value) {
         const el = form.elements[name];
         if (!el) return;
-        if (el instanceof RadioNodeList) {
-            // not used
+        if (el instanceof RadioNodeList || (el.length && el[0]?.type === 'radio')) {
+            const str = value == null ? '' : String(value);
+            const radios = el instanceof RadioNodeList ? [...el] : [...el];
+            radios.forEach((radio) => {
+                if (radio instanceof HTMLInputElement && radio.type === 'radio') {
+                    radio.checked = radio.value === str;
+                }
+            });
             return;
         }
         if (el.type === 'checkbox') {
@@ -1073,8 +1079,20 @@
         syncExtras();
     }
 
+    function onFieldChange(name, handler) {
+        const el = form.elements[name];
+        if (!el) return;
+        if (el instanceof RadioNodeList || (el.length && el[0]?.type === 'radio')) {
+            [...el].forEach((radio) => {
+                if (radio instanceof HTMLInputElement) radio.addEventListener('change', handler);
+            });
+            return;
+        }
+        el.addEventListener('change', handler);
+    }
+
     ['hasRepresentative', 'hasDesignee', 'isCommonLaw', 'needsCustodian'].forEach((name) => {
-        form.elements[name]?.addEventListener('change', onSituationChange);
+        onFieldChange(name, onSituationChange);
     });
 
     startBtn?.addEventListener('click', () => {
@@ -1120,7 +1138,7 @@
             country: '022',
             from: '2022-09',
         });
-        if (form.querySelector('[name="previousCor"]')?.value === 'Y') {
+        if (dyn.fieldValue('previousCor') === 'Y') {
             dyn.clearPcor();
             dyn.addPcor({
                 country: '012',

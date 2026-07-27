@@ -279,7 +279,7 @@
     line-height: 1.2;
 }
 
-.imm-form .opp-field input,
+.imm-form .opp-field input:not([type="radio"]):not([type="checkbox"]),
 .imm-form .opp-field select,
 .imm-form .opp-field textarea {
     width: 100%;
@@ -293,7 +293,7 @@
     color: var(--carbon-500);
 }
 
-.imm-section:nth-of-type(even) .opp-field input,
+.imm-section:nth-of-type(even) .opp-field input:not([type="radio"]):not([type="checkbox"]),
 .imm-section:nth-of-type(even) .opp-field select,
 .imm-section:nth-of-type(even) .opp-field textarea {
     border-color: #a8b0b3;
@@ -310,7 +310,7 @@
     resize: vertical;
 }
 
-.imm-form .opp-field input:focus,
+.imm-form .opp-field input:not([type="radio"]):not([type="checkbox"]):focus,
 .imm-form .opp-field select:focus,
 .imm-form .opp-field textarea:focus {
     outline: none;
@@ -715,4 +715,164 @@
     flex: 0 1 11.5rem;
     min-width: 9.5rem;
     max-width: 14rem;
+}
+
+/* Compact segmented radios (Yes/No, Sex, Language, etc.) */
+.imm-seg {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    padding: 0.2rem;
+    border-radius: 0.45rem;
+    background: rgba(45, 52, 54, 0.05);
+    border: 1px solid #d5d9db;
+    max-width: 100%;
+}
+
+.imm-seg__opt {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    min-height: calc(var(--imm-input-h, 2.35rem) - 0.4rem);
+    padding: 0.3rem 0.75rem;
+    border-radius: 0.3rem;
+    font-size: 0.84rem;
+    font-weight: 650;
+    line-height: 1.2;
+    color: #5c6567;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.imm-seg__opt input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.imm-seg__opt span {
+    pointer-events: none;
+}
+
+.imm-seg__opt:hover {
+    color: #2d3436;
+    background: rgba(255, 255, 255, 0.65);
+}
+
+.imm-seg__opt:has(input:checked) {
+    background: #fff;
+    color: #2d3436;
+    box-shadow: 0 1px 2px rgba(45, 52, 54, 0.1);
+}
+
+.imm-seg__opt:has(input:focus-visible) {
+    outline: 2px solid #f8c607;
+    outline-offset: 1px;
+}
+
+.imm-seg--wrap {
+    display: flex;
+}
+
+.imm-seg--wrap .imm-seg__opt {
+    flex: 1 1 auto;
+    text-align: center;
+}
+
+.imm-yn .imm-seg {
+    width: 100%;
+}
+
+.imm-yn .imm-seg__opt {
+    flex: 1 1 0;
+    min-width: 3.25rem;
+}
+
+/* Stacked radios for longer option labels */
+.imm-radio-list {
+    display: grid;
+    gap: 0.4rem;
+    max-width: 32rem;
+}
+
+.imm-radio-list__opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #d5d9db;
+    border-radius: 0.45rem;
+    background: #fff;
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #2d3436;
+    cursor: pointer;
+    transition: border-color 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+}
+
+.imm-radio-list__opt input {
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+    margin: 0.15rem 0 0;
+    accent-color: #bc9605;
+}
+
+.imm-radio-list__opt:hover {
+    border-color: #b8bfc2;
+}
+
+.imm-radio-list__opt:has(input:checked) {
+    border-color: rgba(248, 198, 7, 0.75);
+    background: #fef6da;
+    box-shadow: inset 0 0 0 1px rgba(248, 198, 7, 0.35);
+}
+
+.imm-radio-list__opt:has(input:focus-visible) {
+    outline: 2px solid #f8c607;
+    outline-offset: 1px;
+}
+
+.imm-q .imm-field-label,
+.imm-q > .imm-field-label,
+.opp-field.imm-q > span.imm-field-label {
+    display: block;
+    margin-bottom: 0.45rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #2d3436;
+    line-height: 1.45;
+}
+
+.imm-w-code {
+    flex: 0 1 12rem;
+    min-width: 10rem;
+    max-width: 14rem;
+}
+
+.imm-w-phone {
+    flex: 0 1 12rem;
+    min-width: 9rem;
+    max-width: 14rem;
+}
+
+.imm-w-id {
+    flex: 0 1 12rem;
+    min-width: 9rem;
+    max-width: 15rem;
+}
+
+.imm-w-money {
+    flex: 0 1 9rem;
+    min-width: 7.5rem;
+    max-width: 11rem;
 }
