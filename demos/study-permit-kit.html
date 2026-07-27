@@ -50,34 +50,28 @@
     <header class="spk-hero">
         <p class="spk-hero-eyebrow">Study permit kit</p>
         <h1>Your IRCC forms, filled from one questionnaire</h1>
+        <button type="button" id="spkStartBtn" class="opp-submit spk-hero-cta">Start a new application</button>
     </header>
 
-    <!-- Landing: resume or start -->
+    <!-- Landing: resume saved progress -->
     <section class="spk-landing" id="spkLanding" aria-label="Get started">
-        <div class="spk-landing__actions">
-            <div class="spk-landing-card" id="spkResumeCard">
-                <h3>Resume a saved application</h3>
-                <div class="imm-line">
-                    <div class="opp-field imm-w-code">
-                        <label for="spk-resume-code">Resume code</label>
-                        <input id="spk-resume-code" type="text" maxlength="20" autocomplete="off" placeholder="YUZU-XXXX-XXXX" spellcheck="false">
-                    </div>
-                </div>
-                <div class="imm-line">
-                    <div class="opp-field imm-w-lg">
-                        <label for="spk-resume-familyName">Family name</label>
-                        <input id="spk-resume-familyName" type="text" maxlength="120" autocomplete="family-name">
-                    </div>
-                </div>
-                <div class="spk-landing-card__actions">
-                    <button type="button" id="spkResumeBtn" class="opp-submit">Resume application</button>
-                    <p id="spkResumeStatus" class="opp-form-status" hidden></p>
+        <div class="spk-landing-card" id="spkResumeCard">
+            <h3>Resume a saved application</h3>
+            <div class="imm-line">
+                <div class="opp-field imm-w-code">
+                    <label for="spk-resume-code">Resume code</label>
+                    <input id="spk-resume-code" type="text" maxlength="20" autocomplete="off" placeholder="YUZU-XXXX-XXXX" spellcheck="false">
                 </div>
             </div>
-
-            <div class="spk-landing-card spk-landing-card--primary">
-                <h3>Start a new application</h3>
-                <button type="button" id="spkStartBtn" class="opp-submit">Start a new application</button>
+            <div class="imm-line">
+                <div class="opp-field imm-w-lg">
+                    <label for="spk-resume-familyName">Family name</label>
+                    <input id="spk-resume-familyName" type="text" maxlength="120" autocomplete="family-name">
+                </div>
+            </div>
+            <div class="spk-landing-card__actions">
+                <button type="button" id="spkResumeBtn" class="opp-submit">Resume application</button>
+                <p id="spkResumeStatus" class="opp-form-status" hidden></p>
             </div>
         </div>
     </section>

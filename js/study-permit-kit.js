@@ -698,6 +698,7 @@
     function openWizard(targetStep = 0) {
         wizardOpen = true;
         if (landingEl) landingEl.hidden = true;
+        if (startBtn) startBtn.hidden = true;
         if (wizardEl) wizardEl.hidden = false;
         goToStep(targetStep);
         const focusRoot = wizardEl || form;
