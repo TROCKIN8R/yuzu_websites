@@ -718,35 +718,46 @@
     max-width: 14rem;
 }
 
-/* Compact segmented radios (Yes/No, Sex, Language, etc.) */
+/* Segmented radios — equal cells, fixed height, centered label */
 .imm-seg {
-    display: inline-flex;
-    flex-wrap: wrap;
+    --imm-seg-pad: 0.2rem;
+    --imm-seg-gap: 0.2rem;
+    --imm-seg-opt-h: calc(var(--imm-input-h) - (var(--imm-seg-pad) * 2));
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
     align-items: stretch;
-    gap: 0.2rem;
     box-sizing: border-box;
-    min-height: var(--imm-input-h);
-    padding: 0.2rem;
-    border-radius: 0.45rem;
-    background: rgba(45, 52, 54, 0.05);
-    border: 1px solid #d5d9db;
+    width: max-content;
+    min-width: 7.5rem;
     max-width: 100%;
+    height: var(--imm-input-h);
+    padding: var(--imm-seg-pad);
+    gap: var(--imm-seg-gap);
+    border: 1px solid #d5d9db;
+    border-radius: 0.45rem;
+    background: #eef0f1;
 }
 
 .imm-seg__opt {
     position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
     box-sizing: border-box;
-    margin: 0 !important;
-    min-height: calc(var(--imm-input-h) - 0.4rem);
-    padding: 0 0.8rem;
+    margin: 0;
+    height: var(--imm-seg-opt-h);
+    min-height: var(--imm-seg-opt-h);
+    padding: 0 0.85rem;
+    border: 0;
     border-radius: 0.3rem;
-    font-size: 0.84rem !important;
-    font-weight: 600 !important;
-    line-height: 1 !important;
-    color: #5c6567 !important;
+    background: transparent;
+    color: #5c6567;
+    font-family: inherit;
+    font-size: 0.84rem;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
     cursor: pointer;
     user-select: none;
     transition: background 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
@@ -754,33 +765,29 @@
 
 .imm-seg__opt input {
     position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
     opacity: 0;
-    pointer-events: none;
+    cursor: pointer;
 }
 
 .imm-seg__opt span {
     display: block;
     line-height: 1;
-    pointer-events: none;
+    transform: translateY(0.5px); /* optical vertical center */
 }
 
 .imm-seg__opt:hover {
-    color: #2d3436 !important;
-    background: rgba(255, 255, 255, 0.65);
+    color: #2d3436;
+    background: rgba(255, 255, 255, 0.55);
 }
 
 .imm-seg__opt:has(input:checked) {
     background: #fff;
-    color: #2d3436 !important;
-    box-shadow: 0 1px 2px rgba(45, 52, 54, 0.1);
+    color: #2d3436;
+    box-shadow: 0 1px 2px rgba(45, 52, 54, 0.12);
 }
 
 .imm-seg__opt:has(input:focus-visible) {
@@ -789,66 +796,73 @@
 }
 
 .imm-seg--wrap {
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
     width: 100%;
     max-width: 28rem;
-}
-
-.imm-seg--wrap .imm-seg__opt {
-    flex: 1 1 0;
-    text-align: center;
+    min-width: 0;
 }
 
 .imm-yn .imm-seg {
     width: 100%;
+    min-width: 0;
 }
 
-.imm-yn .imm-seg__opt {
-    flex: 1 1 0;
-    min-width: 3.25rem;
-}
-
-/* Stacked radios for longer option labels */
+/* Longer choice lists */
 .imm-radio-list {
     display: grid;
-    gap: 0.4rem;
+    gap: 0.45rem;
     max-width: 32rem;
 }
 
 .imm-radio-list__opt {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1.1rem 1fr;
     align-items: center;
-    gap: 0.55rem;
-    margin: 0 !important;
-    padding: 0.65rem 0.75rem;
+    column-gap: 0.65rem;
+    margin: 0;
+    padding: 0.7rem 0.85rem;
     border: 1px solid #d5d9db;
-    border-radius: 0.45rem;
+    border-radius: 0.5rem;
     background: #fff;
-    font-size: 0.88rem !important;
-    font-weight: 600 !important;
-    line-height: 1.35 !important;
-    color: #2d3436 !important;
+    color: #2d3436;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.35;
     cursor: pointer;
     transition: border-color 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
 }
 
 .imm-radio-list__opt input {
-    flex: 0 0 auto;
-    width: 1rem;
-    height: 1rem;
+    appearance: none;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    width: 1.1rem;
+    height: 1.1rem;
     margin: 0;
-    accent-color: #bc9605;
+    border: 2px solid #b8bfc2;
+    border-radius: 50%;
+    background: #fff;
+    justify-self: center;
     pointer-events: none;
 }
 
 .imm-radio-list__opt:hover {
-    border-color: #b8bfc2;
+    border-color: #b0b6b9;
 }
 
 .imm-radio-list__opt:has(input:checked) {
-    border-color: rgba(248, 198, 7, 0.75);
+    border-color: #e0a800;
     background: #fef6da;
     box-shadow: inset 0 0 0 1px rgba(248, 198, 7, 0.35);
+}
+
+.imm-radio-list__opt:has(input:checked) input {
+    border-color: #bc9605;
+    background:
+        radial-gradient(circle at center, #bc9605 0 0.28rem, #fff 0.3rem);
 }
 
 .imm-radio-list__opt:has(input:focus-visible) {
