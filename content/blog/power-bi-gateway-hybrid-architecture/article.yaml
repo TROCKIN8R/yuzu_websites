@@ -8,7 +8,7 @@ description:
   fr: "Design de cluster, patterns d'identifiants et migration Fabric quand SQL, fichiers et SAP restent derrière un gateway."
   es: "Diseño de clúster, patrones de credenciales y migración Fabric cuando SQL, archivos y SAP siguen tras un gateway."
 publish_at: "2026-07-28T13:00:00Z"
-status: scheduled
+status: published
 author: Adrien Yvin
 category: workflows
 tags:
