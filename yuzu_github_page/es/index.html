@@ -616,24 +616,9 @@
             </header>
 
             <div class="automation-lab" id="automationLab">
-                <div class="automation-lab-tabs" role="tablist" aria-label="Automation demos">
-                    <div class="automation-picker" data-automation-tab="contracts">
-                        <button type="button" class="service-card automation-lab-tab active" role="tab" aria-selected="true" aria-expanded="false" data-automation-tab="contracts" id="automation-tab-contracts" aria-controls="automation-panel-contracts">
-                            <span class="service-card-icon" aria-hidden="true">✍️</span>
-                            <span class="service-card-body">
-                                <span class="service-card-title">Contract Router</span>
-                                <span class="service-card-tag automation-lab-tab-badge automation-lab-tab-badge--live">Live</span>
-                                <span class="automation-lab-cta">
-                                    <span class="automation-lab-cta-try automation-lab-cta-try--tap">Tap to try</span>
-                                    <span class="automation-lab-cta-try automation-lab-cta-try--click">Click to try</span>
-                                    <span class="automation-lab-cta-close automation-lab-cta-close--tap">Tap to close</span>
-                                </span>
-                            </span>
-                        </button>
-                        <div class="automation-detail-anchor" data-automation-tab="contracts" hidden aria-hidden="true"></div>
-                    </div>
-                    <div class="automation-picker" data-automation-tab="stm">
-                        <button type="button" class="service-card automation-lab-tab" role="tab" aria-selected="false" aria-expanded="false" data-automation-tab="stm" id="automation-tab-stm" aria-controls="automation-panel-stm">
+                                <div class="automation-lab-tabs" role="tablist" aria-label="Automation demos">
+<div class="automation-picker" data-automation-tab="stm">
+                        <button type="button" class="service-card automation-lab-tab active" role="tab" aria-selected="true" aria-expanded="false" data-automation-tab="stm" id="automation-tab-stm" aria-controls="automation-panel-stm">
                             <span class="service-card-icon" aria-hidden="true">🚌</span>
                             <span class="service-card-body">
                                 <span class="service-card-title">STM Live Dashboard</span>
@@ -647,7 +632,22 @@
                         </button>
                         <div class="automation-detail-anchor" data-automation-tab="stm" hidden aria-hidden="true"></div>
                     </div>
-                    <div class="automation-picker" data-automation-tab="immigration">
+<div class="automation-picker" data-automation-tab="contracts">
+                        <button type="button" class="service-card automation-lab-tab" role="tab" aria-selected="false" aria-expanded="false" data-automation-tab="contracts" id="automation-tab-contracts" aria-controls="automation-panel-contracts">
+                            <span class="service-card-icon" aria-hidden="true">✍️</span>
+                            <span class="service-card-body">
+                                <span class="service-card-title">Contract Router</span>
+                                <span class="service-card-tag automation-lab-tab-badge automation-lab-tab-badge--live">Live</span>
+                                <span class="automation-lab-cta">
+                                    <span class="automation-lab-cta-try automation-lab-cta-try--tap">Tap to try</span>
+                                    <span class="automation-lab-cta-try automation-lab-cta-try--click">Click to try</span>
+                                    <span class="automation-lab-cta-close automation-lab-cta-close--tap">Tap to close</span>
+                                </span>
+                            </span>
+                        </button>
+                        <div class="automation-detail-anchor" data-automation-tab="contracts" hidden aria-hidden="true"></div>
+                    </div>
+<div class="automation-picker" data-automation-tab="immigration">
                         <button type="button" class="service-card automation-lab-tab" role="tab" aria-selected="false" aria-expanded="false" data-automation-tab="immigration" id="automation-tab-immigration" aria-controls="automation-panel-immigration">
                             <span class="service-card-icon" aria-hidden="true">📦</span>
                             <span class="service-card-body">
@@ -665,7 +665,40 @@
                 </div>
 
                 <div class="automation-lab-panels" id="automationPanelsHost">
-                <div class="automation-lab-panel" data-automation-panel="contracts" id="automation-panel-contracts" role="tabpanel" aria-labelledby="automation-tab-contracts">
+<div class="automation-lab-panel" data-automation-panel="stm" id="automation-panel-stm" role="tabpanel" aria-labelledby="automation-tab-stm">
+                    <div class="automation-lab-panel-grid automation-lab-panel-grid--stm">
+                        <div class="automation-lab-copy">
+                            <h4 class="automation-lab-panel-title">STM Live Dashboard</h4>
+                            <p class="automation-lab-panel-desc">A real-time transit BI demo for Montréal’s STM: live bus positions from GTFS-RT, service alerts from API i3, and métro trains estimated from scheduled headways — all sliceable in one view.</p>
+                            <p class="automation-lab-panel-desc">Same pattern we ship for ops teams: a secure proxy, governed refresh, and a dashboard that stays readable under load. The embed below is the compact version; open the full page for every slicer and the vehicle table.</p>
+                            <ul class="automation-lab-steps">
+                                <li><strong>Ingest</strong>: GTFS-RT + service alerts via a Supabase Edge Function</li>
+                                <li><strong>Enrich</strong>: delay, load, and freshness bands on every vehicle</li>
+                                <li><strong>Slice</strong>: filter by line, delay, or map colour mode</li>
+                                <li><strong>Govern</strong>: API key stays server-side — never in the browser</li>
+                            </ul>
+                            <div class="automation-lab-actions">
+                                <a href="../demos/stm-live.html" class="automation-lab-link-btn">Open full dashboard →</a>
+                            </div>
+                        </div>
+                        <div class="automation-lab-embed opp-panel opp-panel--accent">
+                            <p class="automation-lab-form-label">Live preview</p>
+                            <div class="automation-lab-embed-frame">
+                                <iframe
+                                    id="stmMiniFrame"
+                                    title="STM Live compact dashboard"
+                                    loading="lazy"
+                                    data-src="../demos/stm-live-mini.html"
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    allow="fullscreen"
+                                ></iframe>
+                            </div>
+                            <p class="automation-lab-form-note">Compact embed · scroll the page, not the map. Full filters and table live on the dedicated demo page.</p>
+                        </div>
+                    </div>
+                </div>
+
+<div class="automation-lab-panel" data-automation-panel="contracts" id="automation-panel-contracts" role="tabpanel" aria-labelledby="automation-tab-contracts" hidden aria-hidden="true">
                     <div class="automation-lab-panel-grid">
                         <div class="automation-lab-copy">
                             <h4 class="automation-lab-panel-title">Contract Router</h4>
@@ -730,40 +763,7 @@
                     </div>
                 </div>
 
-                <div class="automation-lab-panel" data-automation-panel="stm" id="automation-panel-stm" role="tabpanel" aria-labelledby="automation-tab-stm" hidden aria-hidden="true">
-                    <div class="automation-lab-panel-grid">
-                        <div class="automation-lab-copy">
-                            <h4 class="automation-lab-panel-title">STM Live Dashboard</h4>
-                            <p class="automation-lab-panel-desc">A real-time transit BI demo for Montréal’s STM: live bus positions from GTFS-RT, service alerts from API i3, and métro trains estimated from scheduled headways — all sliceable in one view.</p>
-                            <p class="automation-lab-panel-desc">Same pattern we ship for ops teams: a secure proxy, governed refresh, and a dashboard that stays readable under load. The embed below is the compact version; open the full page for every slicer and the vehicle table.</p>
-                            <ul class="automation-lab-steps">
-                                <li><strong>Ingest</strong>: GTFS-RT + service alerts via a Supabase Edge Function</li>
-                                <li><strong>Enrich</strong>: delay, load, and freshness bands on every vehicle</li>
-                                <li><strong>Slice</strong>: filter by line, delay, or map colour mode</li>
-                                <li><strong>Govern</strong>: API key stays server-side — never in the browser</li>
-                            </ul>
-                            <div class="automation-lab-actions">
-                                <a href="../demos/stm-live.html" class="automation-lab-link-btn">Open full dashboard →</a>
-                            </div>
-                        </div>
-                        <div class="automation-lab-embed opp-panel opp-panel--accent">
-                            <p class="automation-lab-form-label">Live preview</p>
-                            <div class="automation-lab-embed-frame">
-                                <iframe
-                                    id="stmMiniFrame"
-                                    title="STM Live compact dashboard"
-                                    loading="lazy"
-                                    data-src="../demos/stm-live-mini.html"
-                                    referrerpolicy="no-referrer-when-downgrade"
-                                    allow="fullscreen"
-                                ></iframe>
-                            </div>
-                            <p class="automation-lab-form-note">Compact embed · scroll the page, not the map. Full filters and table live on the dedicated demo page.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="automation-lab-panel" data-automation-panel="immigration" id="automation-panel-immigration" role="tabpanel" aria-labelledby="automation-tab-immigration" hidden aria-hidden="true">
+<div class="automation-lab-panel" data-automation-panel="immigration" id="automation-panel-immigration" role="tabpanel" aria-labelledby="automation-tab-immigration" hidden aria-hidden="true">
                     <div class="automation-lab-panel-grid">
                         <div class="automation-lab-copy">
                             <h4 class="automation-lab-panel-title">Immigration workflow</h4>
@@ -795,6 +795,7 @@
                         </div>
                     </div>
                 </div>
+                
                 </div>
             </div>
         </div>

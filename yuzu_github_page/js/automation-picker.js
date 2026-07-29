@@ -4,7 +4,7 @@
     if (!lab || !panelHost) return;
 
     const mq = window.matchMedia('(max-width: 899px)');
-    const DEFAULT_TAB = 'contracts';
+    const DEFAULT_TAB = 'stm';
     let mobileOpenKey = null;
 
     function isMobile() {
