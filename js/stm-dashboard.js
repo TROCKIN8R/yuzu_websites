@@ -175,6 +175,7 @@
       ? new Date(fetchedAt).toLocaleTimeString("en-CA", { hour: "2-digit", minute: "2-digit" })
       : "—";
 
+    const isEmbed = document.body.classList.contains("stm-embed");
     const cards = [
       {
         label: "Vehicles in view",
@@ -206,7 +207,7 @@
         hint: activeFilterCount() ? `${activeFilterCount()} active slicer(s)` : "Auto-refresh every 30s",
         accent: "var(--yuzu-600)"
       }
-    ];
+    ].filter((_, index) => !isEmbed || index < 3);
 
     els.kpis.innerHTML = cards.map((card) => `
       <div class="stm-kpi" style="--kpi-accent:${card.accent || "var(--yuzu-500)"}">

@@ -1437,6 +1437,10 @@ html:has(.hero-fullscreen).nav-past-hero .nav-cta-desktop {
         grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
         align-items: start;
     }
+    .automation-lab-panel-grid--stm {
+        grid-template-columns: minmax(16rem, 0.72fr) minmax(0, 1.28fr);
+        align-items: stretch;
+    }
 }
 .automation-lab-panel-title {
     font-size: 1.15rem;
