@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STM Live Transit — compact embed · Yuzu.solutions</title>
+    <meta name="robots" content="noindex, follow">
+    <meta name="theme-color" content="#F9F9F9">
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/design-tokens.css">
+    <link rel="stylesheet" href="../css/stm-dashboard.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+</head>
+<body class="stm-embed">
+
+<div class="stm-dashboard stm-dashboard--embed" id="stmDashboard">
+    <div class="stm-dashboard-toolbar">
+        <div class="stm-dashboard-dots" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <span class="stm-dashboard-title">Yuzu · STM Live</span>
+        <button type="button" class="stm-btn" id="stmRefreshBtn">↻ Refresh</button>
+    </div>
+
+    <p class="stm-status stm-status--idle" id="stmStatus" hidden>Loading…</p>
+
+    <section class="stm-panel stm-panel--embed">
+        <div class="stm-kpi-row stm-kpi-row--embed" id="stmKpis"></div>
+
+        <div class="stm-filter-bar stm-filter-bar--embed" id="stmFilterBar">
+            <div class="stm-filter-dd" id="stmLineSlicers" data-filter="lines"></div>
+            <div class="stm-filter-dd" id="stmDelaySlicers" data-filter="delay"></div>
+            <div class="stm-filter-dd" id="stmColorSlicers" data-filter="color"></div>
+            <button type="button" class="stm-btn stm-btn--light" id="stmClearFiltersBtn" disabled>Clear</button>
+        </div>
+
+        <div class="stm-card stm-card--map stm-card--embed-map">
+            <div id="stmLiveMap" class="stm-live-map stm-live-map--embed" role="application" aria-label="Montreal live transit map"></div>
+        </div>
+
+        <p class="stm-map-caption stm-map-caption--embed" id="stmMapCaption">Waiting for vehicle positions…</p>
+    </section>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+    // Embedded in an iframe on the home page: never hijack the parent page scroll.
+    window.STM_MAP_OPTIONS = { scrollWheelZoom: false };
+</script>
+<script src="../js/stm-config.js"></script>
+<script src="../js/stm-config.local.js" onerror=""></script>
+<script src="../js/stm-data.js"></script>
+<script src="../js/stm-enrich.js"></script>
+<script src="../js/stm-filters.js"></script>
+<script src="../js/stm-routes.js"></script>
+<script src="../js/stm-metro-sim.js"></script>
+<script src="../js/stm-map.js"></script>
+<script src="../js/stm-dashboard.js"></script>
+</body>
+</html>

@@ -24,13 +24,13 @@ window.StmMap = (function createStmMap() {
     const el = document.getElementById(containerId);
     if (!el) return null;
 
-    map = L.map(el, {
+    map = L.map(el, Object.assign({
       center: [45.55, -73.62],
       zoom: 11,
       minZoom: 10,
       maxZoom: 16,
       scrollWheelZoom: true
-    });
+    }, window.STM_MAP_OPTIONS || {}));
 
     L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
       attribution: "&copy; OSM &copy; CARTO",

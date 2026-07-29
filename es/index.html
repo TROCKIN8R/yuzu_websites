@@ -612,28 +612,13 @@
             <header class="subsection-intro automation-lab-header">
                 <span class="subsection-eyebrow automation-lab-eyebrow">🤖 Try it yourself</span>
                 <h3 id="automation-lab-heading" class="subsection-title automation-lab-title">Test our automations</h3>
-                <p class="automation-lab-lead">Real flows we ship for clients, pick one, trigger it, watch it run in the open.</p>
+                <p class="automation-lab-lead">Real flows we ship for clients — pick one, trigger it, or open the full demo.</p>
             </header>
 
             <div class="automation-lab" id="automationLab">
                 <div class="automation-lab-tabs" role="tablist" aria-label="Automation demos">
-                    <div class="automation-picker" data-automation-tab="opportunity">
-                        <button type="button" class="service-card automation-lab-tab active" role="tab" aria-selected="true" aria-expanded="false" data-automation-tab="opportunity" id="automation-tab-opportunity" aria-controls="automation-panel-opportunity">
-                            <span class="service-card-icon" aria-hidden="true">📋</span>
-                            <span class="service-card-body">
-                                <span class="service-card-title">Opportunity Tracker</span>
-                                <span class="service-card-tag automation-lab-tab-badge automation-lab-tab-badge--live">Live</span>
-                                <span class="automation-lab-cta">
-                                    <span class="automation-lab-cta-try automation-lab-cta-try--tap">Tap to try</span>
-                                    <span class="automation-lab-cta-try automation-lab-cta-try--click">Click to try</span>
-                                    <span class="automation-lab-cta-close automation-lab-cta-close--tap">Tap to close</span>
-                                </span>
-                            </span>
-                        </button>
-                        <div class="automation-detail-anchor" data-automation-tab="opportunity" hidden aria-hidden="true"></div>
-                    </div>
                     <div class="automation-picker" data-automation-tab="contracts">
-                        <button type="button" class="service-card automation-lab-tab" role="tab" aria-selected="false" aria-expanded="false" data-automation-tab="contracts" id="automation-tab-contracts" aria-controls="automation-panel-contracts">
+                        <button type="button" class="service-card automation-lab-tab active" role="tab" aria-selected="true" aria-expanded="false" data-automation-tab="contracts" id="automation-tab-contracts" aria-controls="automation-panel-contracts">
                             <span class="service-card-icon" aria-hidden="true">✍️</span>
                             <span class="service-card-body">
                                 <span class="service-card-title">Contract Router</span>
@@ -647,11 +632,11 @@
                         </button>
                         <div class="automation-detail-anchor" data-automation-tab="contracts" hidden aria-hidden="true"></div>
                     </div>
-                    <div class="automation-picker" data-automation-tab="refresh">
-                        <button type="button" class="service-card automation-lab-tab" role="tab" aria-selected="false" aria-expanded="false" data-automation-tab="refresh" id="automation-tab-refresh" aria-controls="automation-panel-refresh">
-                            <span class="service-card-icon" aria-hidden="true">⏱️</span>
+                    <div class="automation-picker" data-automation-tab="stm">
+                        <button type="button" class="service-card automation-lab-tab" role="tab" aria-selected="false" aria-expanded="false" data-automation-tab="stm" id="automation-tab-stm" aria-controls="automation-panel-stm">
+                            <span class="service-card-icon" aria-hidden="true">🚌</span>
                             <span class="service-card-body">
-                                <span class="service-card-title">Refresh Watchdog</span>
+                                <span class="service-card-title">STM Live Dashboard</span>
                                 <span class="service-card-tag automation-lab-tab-badge automation-lab-tab-badge--live">Live</span>
                                 <span class="automation-lab-cta">
                                     <span class="automation-lab-cta-try automation-lab-cta-try--tap">Tap to try</span>
@@ -660,78 +645,27 @@
                                 </span>
                             </span>
                         </button>
-                        <div class="automation-detail-anchor" data-automation-tab="refresh" hidden aria-hidden="true"></div>
+                        <div class="automation-detail-anchor" data-automation-tab="stm" hidden aria-hidden="true"></div>
+                    </div>
+                    <div class="automation-picker" data-automation-tab="immigration">
+                        <button type="button" class="service-card automation-lab-tab" role="tab" aria-selected="false" aria-expanded="false" data-automation-tab="immigration" id="automation-tab-immigration" aria-controls="automation-panel-immigration">
+                            <span class="service-card-icon" aria-hidden="true">📦</span>
+                            <span class="service-card-body">
+                                <span class="service-card-title">Immigration Workflow</span>
+                                <span class="service-card-tag automation-lab-tab-badge automation-lab-tab-badge--live">Live</span>
+                                <span class="automation-lab-cta">
+                                    <span class="automation-lab-cta-try automation-lab-cta-try--tap">Tap to explore</span>
+                                    <span class="automation-lab-cta-try automation-lab-cta-try--click">Click to explore</span>
+                                    <span class="automation-lab-cta-close automation-lab-cta-close--tap">Tap to close</span>
+                                </span>
+                            </span>
+                        </button>
+                        <div class="automation-detail-anchor" data-automation-tab="immigration" hidden aria-hidden="true"></div>
                     </div>
                 </div>
 
                 <div class="automation-lab-panels" id="automationPanelsHost">
-                <div class="automation-lab-panel" data-automation-panel="opportunity" id="automation-panel-opportunity" role="tabpanel" aria-labelledby="automation-tab-opportunity">
-                    <div class="automation-lab-panel-grid">
-                        <div class="automation-lab-copy">
-                            <h4 class="automation-lab-panel-title">Transparent opportunity tracker</h4>
-                            <p class="automation-lab-panel-desc">A minimal hook (name and work email) kicks off a full intake pipeline. Here we write to a live Supabase table so you can see it work in the open, but the same trigger can route straight to your <strong>CRM</strong>, a <strong>SharePoint list</strong>, or any other lightweight tracker your team already uses.</p>
-                            <p class="automation-lab-panel-desc">From that hook, a notification can automatically ping the right salesperson. When you want more context without manual research, an <strong>AI agent</strong> can run a quick web search on the email domain and fill in basics: company size, industry, and primary product or service.</p>
-                            <ul class="automation-lab-steps">
-                                <li><strong>Capture</strong>: name + email from a two-field form</li>
-                                <li><strong>Route</strong>: CRM, SharePoint, Supabase, or your stack of choice</li>
-                                <li><strong>Notify</strong>: alert sales when a new lead lands</li>
-                                <li><strong>Follow up</strong>: automatic email with a Calendly link</li>
-                                <li><strong>Enrich</strong>: AI research from the email domain (size, industry, offering)</li>
-                                <li><strong>Demo</strong>: live public table below (names and emails masked)</li>
-                            </ul>
-                        </div>
-                        <div class="automation-lab-form-wrap opp-panel opp-panel--accent">
-                            <p class="automation-lab-form-label">Trigger it now</p>
-                            <form id="homeOpportunityForm" class="opp-form" novalidate>
-                                <div class="opp-field">
-                                    <label for="home-opp-name">Name</label>
-                                    <input id="home-opp-name" name="name" type="text" autocomplete="name" required maxlength="120" placeholder="Alex Morgan" value="Alex Morgan">
-                                </div>
-                                <div class="opp-field">
-                                    <label for="home-opp-email">Work email</label>
-                                    <input id="home-opp-email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="alex@company.com" value="alex@company.com">
-                                </div>
-                                <div class="opp-field opp-field--consent">
-                                    <label class="opp-consent" for="home-opp-consent">
-                                        <input id="home-opp-consent" name="consent" type="checkbox" value="yes" required>
-                                        <span>I agree to receive one follow-up email from Yuzu.solutions with a booking link. Names and emails are masked in the public demo table.</span>
-                                    </label>
-                                </div>
-                                <div id="home-opp-turnstile" class="opp-turnstile" aria-label="Security check"></div>
-                                <button type="submit" id="home-opp-submit" class="opp-submit" disabled aria-disabled="true">Run automation →</button>
-                                <p id="homeOpportunityFormStatus" class="opp-form-status" hidden></p>
-                            </form>
-
-                            <div class="opp-preview mt-6" aria-labelledby="home-opp-preview-heading">
-                                <div class="opp-toolbar">
-                                    <div>
-                                        <h4 id="home-opp-preview-heading" class="text-sm font-extrabold text-gray-900">Latest 5 submissions</h4>
-                                        <p id="homeOpportunityTableStatus" class="opp-status-msg mt-1">Loading…</p>
-                                    </div>
-                                </div>
-                                <div class="opp-table-wrap">
-                                    <table class="opp-table opp-table--compact">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">When</th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Company</th>
-                                                <th scope="col">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="homeOpportunityTableBody">
-                                            <tr class="opp-empty-row"><td colspan="4">Loading…</td></tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <p class="automation-lab-form-note">Names and emails are masked in the public table.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="automation-lab-panel" data-automation-panel="contracts" id="automation-panel-contracts" role="tabpanel" aria-labelledby="automation-tab-contracts" hidden aria-hidden="true">
+                <div class="automation-lab-panel" data-automation-panel="contracts" id="automation-panel-contracts" role="tabpanel" aria-labelledby="automation-tab-contracts">
                     <div class="automation-lab-panel-grid">
                         <div class="automation-lab-copy">
                             <h4 class="automation-lab-panel-title">Contract Router</h4>
@@ -796,75 +730,68 @@
                     </div>
                 </div>
 
-                <div class="automation-lab-panel" data-automation-panel="refresh" id="automation-panel-refresh" role="tabpanel" aria-labelledby="automation-tab-refresh" hidden aria-hidden="true">
+                <div class="automation-lab-panel" data-automation-panel="stm" id="automation-panel-stm" role="tabpanel" aria-labelledby="automation-tab-stm" hidden aria-hidden="true">
                     <div class="automation-lab-panel-grid">
                         <div class="automation-lab-copy">
-                            <h4 class="automation-lab-panel-title">Refresh Watchdog</h4>
-                            <p class="automation-lab-panel-desc">Monitor pipeline runtimes and alert the team when a refresh blows past its SLA. Inspired by a <strong>78-minute refresh we cut to 4</strong>, the same pattern now watches Fabric semantic models, lakehouse jobs, and incremental loads.</p>
-                            <p class="automation-lab-panel-desc">In production, breaches route to <strong>Slack</strong> or <strong>Teams</strong> with pipeline name, runtime, and owner. Here we write every run to a live Supabase table and send an inbox alert when the SLA is exceeded.</p>
+                            <h4 class="automation-lab-panel-title">STM Live Dashboard</h4>
+                            <p class="automation-lab-panel-desc">A real-time transit BI demo for Montréal’s STM: live bus positions from GTFS-RT, service alerts from API i3, and métro trains estimated from scheduled headways — all sliceable in one view.</p>
+                            <p class="automation-lab-panel-desc">Same pattern we ship for ops teams: a secure proxy, governed refresh, and a dashboard that stays readable under load. The embed below is the compact version; open the full page for every slicer and the vehicle table.</p>
                             <ul class="automation-lab-steps">
-                                <li><strong>Track</strong>: pipeline name, duration, and SLA threshold</li>
-                                <li><strong>Compare</strong>: flag runs that finish over the limit</li>
-                                <li><strong>Alert</strong>: ping Slack/Teams (demo uses email stand-in)</li>
-                                <li><strong>Demo</strong>: run a healthy refresh or simulate a breach below</li>
+                                <li><strong>Ingest</strong>: GTFS-RT + service alerts via a Supabase Edge Function</li>
+                                <li><strong>Enrich</strong>: delay, load, and freshness bands on every vehicle</li>
+                                <li><strong>Slice</strong>: filter by line, delay, or map colour mode</li>
+                                <li><strong>Govern</strong>: API key stays server-side — never in the browser</li>
                             </ul>
+                            <div class="automation-lab-actions">
+                                <a href="demos/stm-live.html" class="automation-lab-link-btn">Open full dashboard →</a>
+                            </div>
+                        </div>
+                        <div class="automation-lab-embed opp-panel opp-panel--accent">
+                            <p class="automation-lab-form-label">Live preview</p>
+                            <div class="automation-lab-embed-frame">
+                                <iframe
+                                    id="stmMiniFrame"
+                                    title="STM Live compact dashboard"
+                                    loading="lazy"
+                                    data-src="demos/stm-live-mini.html"
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    allow="fullscreen"
+                                ></iframe>
+                            </div>
+                            <p class="automation-lab-form-note">Compact embed · scroll the page, not the map. Full filters and table live on the dedicated demo page.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="automation-lab-panel" data-automation-panel="immigration" id="automation-panel-immigration" role="tabpanel" aria-labelledby="automation-tab-immigration" hidden aria-hidden="true">
+                    <div class="automation-lab-panel-grid">
+                        <div class="automation-lab-copy">
+                            <h4 class="automation-lab-panel-title">Immigration workflow</h4>
+                            <p class="automation-lab-panel-desc">A study-permit kit that turns one shared questionnaire into a complete IRCC form package — no copy-paste across PDFs. Answer plain-language questions about your situation, confirm the forms that apply, then fill once and download the filled PDFs.</p>
+                            <p class="automation-lab-panel-desc">Built as a document-automation pattern: branch on situation, reuse answers across forms, patch official PDFs server-side, and let applicants resume with a save code.</p>
+                            <ol class="automation-lab-flow">
+                                <li><strong>Situation</strong>: who is applying, who helps, which dependents are involved</li>
+                                <li><strong>Confirm package</strong>: derived IRCC form list you can review before continuing</li>
+                                <li><strong>Shared questionnaire</strong>: identity, contact, study, passport, work, background — asked once</li>
+                                <li><strong>Fill &amp; download</strong>: server patches official PDFs; resume anytime with a save code</li>
+                            </ol>
+                            <div class="automation-lab-chips" aria-label="Example IRCC forms covered">
+                                <span>IMM 1294</span>
+                                <span>IMM 5646</span>
+                                <span>IMM 5476</span>
+                                <span>IMM 5707</span>
+                                <span>IMM 5409</span>
+                                <span>IMM 5483</span>
+                            </div>
                         </div>
                         <div class="automation-lab-form-wrap opp-panel opp-panel--accent">
-                            <p class="automation-lab-form-label">Trigger it now</p>
-                            <form id="homeRefreshForm" class="opp-form" novalidate>
-                                <div class="opp-field">
-                                    <label for="home-refresh-pipeline">Pipeline</label>
-                                    <select id="home-refresh-pipeline" name="pipeline" required>
-                                        <option value="refresh_semantic_model">Semantic model refresh</option>
-                                        <option value="sales_dwh_incremental">Sales DWH incremental</option>
-                                        <option value="fabric_lakehouse_gold">Fabric lakehouse Gold layer</option>
-                                    </select>
-                                </div>
-                                <div class="opp-field">
-                                    <label for="home-refresh-sla">SLA (minutes)</label>
-                                    <input id="home-refresh-sla" name="sla" type="number" min="1" max="60" value="8" required>
-                                </div>
-                                <div id="home-refresh-turnstile" class="opp-turnstile" aria-label="Security check"></div>
-                                <div class="refresh-actions">
-                                    <button type="button" id="home-refresh-submit" class="opp-submit" disabled aria-disabled="true">Run healthy refresh →</button>
-                                    <button type="button" id="home-refresh-breach" class="opp-submit opp-submit--alert" disabled aria-disabled="true">Simulate SLA breach →</button>
-                                </div>
-                                <div id="homeRefreshProgress" class="refresh-progress" hidden>
-                                    <p id="homeRefreshProgressLabel" class="refresh-progress-label">Running pipeline refresh…</p>
-                                    <div class="refresh-progress-bar" aria-hidden="true">
-                                        <div id="homeRefreshProgressFill" class="refresh-progress-fill"></div>
-                                    </div>
-                                    <p id="homeRefreshProgressTimer" class="refresh-progress-timer">0m 00s</p>
-                                </div>
-                                <p id="homeRefreshFormStatus" class="opp-form-status" hidden></p>
-                            </form>
-
-                            <div class="opp-preview mt-6" aria-labelledby="home-refresh-preview-heading">
-                                <div class="opp-toolbar">
-                                    <div>
-                                        <h4 id="home-refresh-preview-heading" class="text-sm font-extrabold text-gray-900">Latest 5 runs</h4>
-                                        <p id="homeRefreshTableStatus" class="opp-status-msg mt-1">Loading…</p>
-                                    </div>
-                                </div>
-                                <div class="opp-table-wrap">
-                                    <table class="opp-table opp-table--compact">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">When</th>
-                                                <th scope="col">Pipeline</th>
-                                                <th scope="col">Duration</th>
-                                                <th scope="col">SLA</th>
-                                                <th scope="col">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="homeRefreshTableBody">
-                                            <tr class="opp-empty-row"><td colspan="5">Loading…</td></tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <p class="automation-lab-form-label">Try the full workflow</p>
+                            <p class="automation-lab-panel-desc" style="margin-top:0">The kit needs a full page — branching steps, progress rail, and PDF download don’t fit in this panel. Open the live demo to walk the questionnaire end to end.</p>
+                            <div class="automation-lab-actions">
+                                <a href="demos/study-permit-kit.html" class="automation-lab-link-btn">Open study permit kit →</a>
+                                <a href="demos/imm1294-filler.html" class="automation-lab-link-btn automation-lab-link-btn--ghost">IMM 1294 only →</a>
                             </div>
-
-                            <p class="automation-lab-form-note">SLA breaches send an alert email (Slack stand-in in this demo).</p>
+                            <p class="automation-lab-form-note">Demo / educational use — not legal advice. Always verify against current IRCC instructions before filing.</p>
                         </div>
                     </div>
                 </div>
@@ -1102,19 +1029,12 @@
 <script src="../js/services-picker.js"></script>
 <script src="../js/nav.js"></script>
 <script src="../js/hero-rotate.js"></script>
-<script src="../js/opportunities-config.js"></script>
-<script src="../js/opportunities-data.js"></script>
-<script src="../js/opportunities-table.js"></script>
 <script src="../js/contract-router-config.js"></script>
 <script src="../js/contract-router-data.js"></script>
 <script src="../js/contract-router-table.js"></script>
-<script src="../js/refresh-watchdog-config.js"></script>
-<script src="../js/refresh-watchdog-data.js"></script>
-<script src="../js/refresh-watchdog-table.js"></script>
 <script src="../js/automation-picker.js"></script>
-<script src="../js/automation-demos.js"></script>
 <script src="../js/contract-router-demo.js"></script>
-<script src="../js/refresh-watchdog-demo.js"></script>
+<script src="../js/stm-lab-embed.js"></script>
 <script>
     const svcDefs = `<defs>
         <linearGradient id="svcLemon" x1="0" y1="0" x2="1" y2="1">

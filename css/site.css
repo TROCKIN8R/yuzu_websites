@@ -1479,6 +1479,104 @@ html:has(.hero-fullscreen).nav-past-hero .nav-cta-desktop {
     color: var(--carbon-400);
     line-height: 1.5;
 }
+.automation-lab-actions {
+    margin-top: var(--space-5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+.automation-lab-link-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.3rem;
+    border-radius: var(--radius-full);
+    background: var(--yuzu-500);
+    color: #fff;
+    font-size: var(--text-sm);
+    font-weight: 800;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+.automation-lab-link-btn:hover {
+    background: var(--yuzu-600);
+    color: #fff;
+}
+.automation-lab-link-btn--ghost {
+    background: var(--paper-200);
+    color: var(--carbon-500);
+    border: 1px solid var(--paper-400);
+}
+.automation-lab-link-btn--ghost:hover {
+    background: var(--paper-300);
+    color: var(--carbon-500);
+}
+
+/* Embedded live dashboard (STM demo) */
+.automation-lab-embed { margin: 0; }
+.automation-lab-embed-frame {
+    margin-top: var(--space-4);
+    border: 1px solid var(--paper-300);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--paper-200);
+    height: clamp(340px, 46vh, 460px);
+}
+.automation-lab-embed-frame iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Walkthrough panel (no live form — links to the full demo) */
+.automation-lab-flow {
+    margin-top: var(--space-4);
+    display: grid;
+    gap: var(--space-3);
+    counter-reset: automation-flow;
+}
+.automation-lab-flow li {
+    position: relative;
+    padding-left: 2.25rem;
+    font-size: var(--text-sm);
+    color: var(--carbon-400);
+    line-height: 1.55;
+}
+.automation-lab-flow li::before {
+    counter-increment: automation-flow;
+    content: counter(automation-flow);
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: var(--radius-full);
+    background: var(--yuzu-200);
+    color: var(--yuzu-800);
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+.automation-lab-flow strong { color: var(--carbon-500); }
+.automation-lab-chips {
+    margin-top: var(--space-4);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+.automation-lab-chips span {
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-full);
+    background: var(--paper-200);
+    border: 1px solid var(--paper-300);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--carbon-400);
+}
 
 /* Refresh Watchdog demo */
 .opp-field select,
