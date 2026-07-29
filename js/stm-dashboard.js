@@ -32,9 +32,16 @@
     filterSummary: document.getElementById("stmFilterSummary")
   };
 
+  function createDefaultFilterState() {
+    const state = filtersApi.defaultState();
+    const defaultLine = String(window.STM_EMBED_DEFAULT_LINE || "").trim();
+    if (defaultLine) state.lines.add(defaultLine);
+    return state;
+  }
+
   let refreshTimer = null;
   let metroAnimTimer = null;
-  let filterState = filtersApi.defaultState();
+  let filterState = createDefaultFilterState();
   let rawVehicles = [];
   let busVehiclesRaw = [];
   let rawAlerts = [];
@@ -894,7 +901,7 @@
   }
 
   function clearFilters() {
-    filterState = filtersApi.defaultState();
+    filterState = createDefaultFilterState();
     dropdownUi.openId = null;
     dropdownUi.search = Object.create(null);
     dropdownUi.caret = null;
