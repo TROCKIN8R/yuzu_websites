@@ -1,6 +1,6 @@
 {
   "kit": "study-permit-outside-canada",
-  "updated_at": "2026-07-26T21:29:39Z",
+  "updated_at": "2026-07-27T16:15:56Z",
   "files": [
     {
       "file": "imm1294e.pdf",
@@ -12,7 +12,7 @@
       "bytes": 852223,
       "last_modified": "Mon, 20 Jul 2026 19:25:31 GMT",
       "etag": null,
-      "fetched_at": "2026-07-26T21:27:22Z",
+      "fetched_at": "2026-07-27T16:15:07Z",
       "changed": false
     },
     {
@@ -25,7 +25,7 @@
       "bytes": 804108,
       "last_modified": "Mon, 20 Jul 2026 19:45:24 GMT",
       "etag": null,
-      "fetched_at": "2026-07-26T21:27:30Z",
+      "fetched_at": "2026-07-27T16:15:10Z",
       "changed": false
     },
     {
@@ -38,7 +38,7 @@
       "bytes": 1467134,
       "last_modified": "Thu, 11 Apr 2024 21:53:41 GMT",
       "etag": null,
-      "fetched_at": "2026-07-26T21:29:07Z",
+      "fetched_at": "2026-07-27T16:15:47Z",
       "changed": false
     },
     {
@@ -51,8 +51,8 @@
       "bytes": 1612470,
       "last_modified": "Thu, 11 Apr 2024 21:53:46 GMT",
       "etag": null,
-      "fetched_at": "2026-07-26T21:29:15Z",
-      "changed": true
+      "fetched_at": "2026-07-27T16:15:50Z",
+      "changed": false
     },
     {
       "file": "imm5475e.pdf",
@@ -64,7 +64,7 @@
       "bytes": 2278549,
       "last_modified": "Tue, 13 Dec 2022 22:21:42 GMT",
       "etag": null,
-      "fetched_at": "2026-07-26T21:28:51Z",
+      "fetched_at": "2026-07-27T16:15:40Z",
       "changed": false
     },
     {
@@ -77,8 +77,8 @@
       "bytes": 2783501,
       "last_modified": "Tue, 13 Dec 2022 22:23:59 GMT",
       "etag": null,
-      "fetched_at": "2026-07-26T21:28:58Z",
-      "changed": true
+      "fetched_at": "2026-07-27T16:15:42Z",
+      "changed": false
     },
     {
       "file": "imm5476e.pdf",
@@ -90,7 +90,7 @@
       "bytes": 2016187,
       "last_modified": "Mon, 15 Dec 2025 21:04:10 GMT",
       "etag": null,
-      "fetched_at": "2026-07-26T21:28:26Z",
+      "fetched_at": "2026-07-27T16:15:32Z",
       "changed": false
     },
     {
@@ -103,8 +103,8 @@
       "bytes": 2183892,
       "last_modified": "Thu, 11 Dec 2025 22:12:54 GMT",
       "etag": null,
-      "fetched_at": "2026-07-26T21:28:43Z",
-      "changed": true
+      "fetched_at": "2026-07-27T16:15:36Z",
+      "changed": false
     },
     {
       "file": "imm5483e.pdf",
@@ -116,7 +116,7 @@
       "bytes": 1050534,
       "last_modified": "Fri, 12 Sep 2025 17:46:26 GMT",
       "etag": null,
-      "fetched_at": "2026-07-26T21:28:00Z",
+      "fetched_at": "2026-07-27T16:15:28Z",
       "changed": false
     },
     {
@@ -129,8 +129,8 @@
       "bytes": 1051552,
       "last_modified": "Fri, 12 Sep 2025 17:46:29 GMT",
       "etag": null,
-      "fetched_at": "2026-07-26T21:28:14Z",
-      "changed": true
+      "fetched_at": "2026-07-27T16:15:30Z",
+      "changed": false
     },
     {
       "file": "imm5646e.pdf",
@@ -142,7 +142,7 @@
       "bytes": 2925587,
       "last_modified": "Fri, 05 Apr 2024 15:13:08 GMT",
       "etag": null,
-      "fetched_at": "2026-07-26T21:27:40Z",
+      "fetched_at": "2026-07-27T16:15:15Z",
       "changed": false
     },
     {
@@ -155,8 +155,8 @@
       "bytes": 3082898,
       "last_modified": "Fri, 05 Apr 2024 15:13:11 GMT",
       "etag": null,
-      "fetched_at": "2026-07-26T21:27:48Z",
-      "changed": true
+      "fetched_at": "2026-07-27T16:15:21Z",
+      "changed": false
     },
     {
       "file": "imm5707e.pdf",
@@ -168,7 +168,7 @@
       "bytes": 2366133,
       "last_modified": "Mon, 14 Apr 2025 17:37:16 GMT",
       "etag": null,
-      "fetched_at": "2026-07-26T21:29:26Z",
+      "fetched_at": "2026-07-27T16:15:54Z",
       "changed": false
     },
     {
@@ -181,8 +181,8 @@
       "bytes": 2446196,
       "last_modified": "Mon, 14 Apr 2025 17:37:22 GMT",
       "etag": null,
-      "fetched_at": "2026-07-26T21:29:39Z",
-      "changed": true
+      "fetched_at": "2026-07-27T16:15:56Z",
+      "changed": false
     }
   ]
 }
