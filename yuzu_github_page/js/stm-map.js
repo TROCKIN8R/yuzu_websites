@@ -86,6 +86,24 @@ window.StmMap = (function createStmMap() {
     return `${Math.floor(value / 60)}m ago`;
   }
 
+  function formatDirection(vehicle) {
+    const bearing = Number(vehicle?.bearing);
+    const directionCode = vehicle?.directionId;
+    const parts = [];
+
+    if (Number.isFinite(bearing)) {
+      const compass = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+      const index = Math.round((((bearing % 360) + 360) % 360) / 45) % compass.length;
+      parts.push(`${compass[index]} · ${Math.round(bearing)}°`);
+    }
+
+    if (directionCode !== null && directionCode !== undefined && directionCode !== "") {
+      parts.push(`direction ${escapeHtml(String(directionCode))}`);
+    }
+
+    return parts.length ? parts.join(" · ") : "Not reported";
+  }
+
   function normalizeColor(color, fallback) {
     const raw = String(color || "").trim();
     if (!raw) return fallback;
@@ -141,6 +159,27 @@ window.StmMap = (function createStmMap() {
         <div>${formatSpeed(vehicle.speed)} · ${filters?.isMoving?.(vehicle) ? "In motion" : "Stopped"}</div>
         ${headway ? `<div>Scheduled avg headway: ${headway} min</div>` : ""}
         <div class="stm-popup__hint">Click to show line path</div>
+      </div>
+    `;
+  }
+
+  function buildBusTooltip(vehicle, filters, meta) {
+    const routeId = vehicle.routeId || "—";
+    const routeName = meta?.routes?.[routeId]?.name;
+    const load = filters?.getLoadProfile?.(vehicle) || "unknown";
+    const occupancy = vehicle.occupancyLabel
+      ? vehicle.occupancyLabel.replace(/_/g, " ")
+      : load;
+    const speedBand = String(vehicle.speedBand || "unknown").replace(/_/g, " ");
+
+    return `
+      <div class="stm-vehicle-tooltip__content">
+        <strong>Bus ${escapeHtml(vehicle.id || "—")}</strong>
+        <span>Line ${escapeHtml(routeId)}${routeName ? ` · ${escapeHtml(routeName)}` : ""}</span>
+        <span>Direction: ${formatDirection(vehicle)}</span>
+        <span>Speed: ${escapeHtml(formatSpeed(vehicle.speed))} · ${escapeHtml(speedBand)}</span>
+        <span>Busyness: ${escapeHtml(occupancy)}</span>
+        <span>Delay: ${escapeHtml(formatDelay(vehicle.delay))} · ${vehicle.isStale ? "stale" : "fresh"} position</span>
       </div>
     `;
   }
@@ -326,7 +365,7 @@ window.StmMap = (function createStmMap() {
       const isSelected = selectedVehicleId && String(vehicle.id) === String(selectedVehicleId);
       const layer = vehicle.isMetro ? metroTrainLayer : markerLayer;
 
-      L.marker([lat, lng], {
+      const marker = L.marker([lat, lng], {
         icon: createVehicleIcon(vehicle, {
           fillColor,
           isSelected,
@@ -335,7 +374,19 @@ window.StmMap = (function createStmMap() {
         }),
         zIndexOffset: isSelected ? 800 : vehicle.isMetro ? 600 : 400
       })
-        .bindPopup(buildVehiclePopup(vehicle, filters, meta, headways))
+        .bindPopup(buildVehiclePopup(vehicle, filters, meta, headways));
+
+      if (!vehicle.isMetro) {
+        marker.bindTooltip(buildBusTooltip(vehicle, filters, meta), {
+          className: "stm-vehicle-tooltip",
+          direction: "top",
+          offset: [0, -8],
+          opacity: 1,
+          sticky: true
+        });
+      }
+
+      marker
         .on("click", () => {
           if (vehicle.isMetro) return;
           selectedVehicleId = vehicle.id || null;
