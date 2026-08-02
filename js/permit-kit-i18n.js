@@ -72,6 +72,12 @@
             translateTextNode(node);
             return;
         }
+        // Document / DocumentFragment: recurse into children (apply(document) is common).
+        if (node.nodeType === Node.DOCUMENT_NODE || node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+            const children = Array.from(node.childNodes);
+            for (const child of children) walk(child);
+            return;
+        }
         if (node.nodeType !== Node.ELEMENT_NODE) return;
         const tag = node.tagName;
         if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'SVG' || tag === 'TEXTAREA' || tag === 'CODE') {
@@ -96,7 +102,7 @@
 
     function apply(root = document.body) {
         if (!dict || !Object.keys(dict).length) return;
-        walk(root);
+        walk(root || document.body);
         if (document.title && dict[document.title]) {
             document.title = dict[document.title];
         }
