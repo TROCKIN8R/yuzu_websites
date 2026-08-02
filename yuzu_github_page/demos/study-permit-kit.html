@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="../css/site.css">
     <link rel="stylesheet" href="../css/logo.css">
     <link rel="stylesheet" href="../css/imm1294-form.css">
-    <link rel="stylesheet" href="../css/study-permit-kit.css">
+    <link rel="stylesheet" href="../css/permit-kit.css">
 </head>
 <body class="min-h-screen flex flex-col imm-page">
 
@@ -47,19 +47,19 @@
 </nav>
 
 <main class="flex-1 w-[94%] max-w-6xl mx-auto px-0 py-6 md:py-8">
-    <div class="spk-entry" id="spkEntry">
-        <header class="spk-hero">
-            <p class="spk-hero-eyebrow">Study permit kit</p>
+    <div class="pk-entry" id="spkEntry">
+        <header class="pk-hero">
+            <p class="pk-hero-eyebrow">Study permit kit</p>
             <h1>Your IRCC forms, filled from one questionnaire</h1>
-            <button type="button" id="spkStartBtn" class="opp-submit spk-hero-cta">Start a new application</button>
+            <button type="button" id="spkStartBtn" class="opp-submit pk-hero-cta">Start a new application</button>
         </header>
 
         <!-- Landing: resume saved progress -->
-        <section class="spk-landing" id="spkLanding" aria-label="Resume a saved application">
-            <p class="spk-landing-divider" aria-hidden="true"><span>Or</span></p>
-            <div class="spk-landing-card" id="spkResumeCard">
+        <section class="pk-landing" id="spkLanding" aria-label="Resume a saved application">
+            <p class="pk-landing-divider" aria-hidden="true"><span>Or</span></p>
+            <div class="pk-landing-card" id="spkResumeCard">
                 <h3>Resume a saved application</h3>
-                <div class="spk-landing-fields">
+                <div class="pk-landing-fields">
                     <div class="opp-field">
                         <label for="spk-resume-code">Resume code</label>
                         <input id="spk-resume-code" type="text" maxlength="20" autocomplete="off" placeholder="YUZU-XXXX-XXXX" spellcheck="false">
@@ -69,7 +69,7 @@
                         <input id="spk-resume-familyName" type="text" maxlength="120" autocomplete="family-name">
                     </div>
                 </div>
-                <div class="spk-landing-card__actions">
+                <div class="pk-landing-card__actions">
                     <button type="button" id="spkResumeBtn" class="opp-submit">Resume application</button>
                     <p id="spkResumeStatus" class="opp-form-status" hidden></p>
                 </div>
@@ -78,37 +78,37 @@
     </div>
 
     <!-- Wizard (hidden until start or resume) -->
-    <div class="spk-wizard" id="spkWizard" hidden>
-        <aside class="spk-rail" aria-label="Progress">
-            <p class="spk-rail__title">Progress</p>
-            <div class="spk-rail__meter" aria-hidden="true">
-                <div class="spk-rail__meter-fill" id="spkRailMeter"></div>
+    <div class="pk-wizard" id="spkWizard" hidden>
+        <aside class="pk-rail" aria-label="Progress">
+            <p class="pk-rail__title">Progress</p>
+            <div class="pk-rail__meter" aria-hidden="true">
+                <div class="pk-rail__meter-fill" id="spkRailMeter"></div>
             </div>
-            <p class="spk-rail__pct" id="spkRailPct">0% complete</p>
-            <ol class="spk-rail__steps" id="spkSteps"></ol>
+            <p class="pk-rail__pct" id="spkRailPct">0% complete</p>
+            <ol class="pk-rail__steps" id="spkSteps"></ol>
         </aside>
 
-        <div class="spk-wizard__main">
-            <div class="spk-mobile-progress" id="spkMobileProgress" aria-live="polite">
-                <div class="spk-mobile-progress__meta">
+        <div class="pk-wizard__main">
+            <div class="pk-mobile-progress" id="spkMobileProgress" aria-live="polite">
+                <div class="pk-mobile-progress__meta">
                     <span id="spkMobileStepLabel">Situation</span>
                     <span id="spkMobileStepCount">Step 1 of 10</span>
                 </div>
-                <div class="spk-mobile-progress__bar" aria-hidden="true">
-                    <div class="spk-mobile-progress__fill" id="spkMobileFill"></div>
+                <div class="pk-mobile-progress__bar" aria-hidden="true">
+                    <div class="pk-mobile-progress__fill" id="spkMobileFill"></div>
                 </div>
             </div>
 
-            <div class="spk-save-banner" id="spkSaveBanner" hidden>
-                <p class="spk-save-banner__title">Progress saved</p>
-                <p class="spk-save-banner__code" id="spkSaveCode"></p>
-                <p class="spk-save-banner__meta" id="spkSaveMeta"></p>
+            <div class="pk-save-banner" id="spkSaveBanner" hidden>
+                <p class="pk-save-banner__title">Progress saved</p>
+                <p class="pk-save-banner__code" id="spkSaveCode"></p>
+                <p class="pk-save-banner__meta" id="spkSaveMeta"></p>
                 <button type="button" id="spkCopyCode" class="opp-submit opp-submit--secondary">Copy code</button>
             </div>
 
             <form class="imm-form opp-form" id="spkForm" novalidate>
         <!-- Step 0: situation (no form codes) -->
-        <section class="imm-section spk-step-panel" data-spk-step="0" aria-labelledby="spk-route">
+        <section class="imm-section pk-step-panel" data-spk-step="0" aria-labelledby="spk-route">
             <header class="imm-section__head">
                 <span class="imm-section__num" aria-hidden="true">01</span>
                 <div class="imm-section__titles">
@@ -135,7 +135,7 @@
             <div class="imm-block">
                 <h3 class="imm-block__title">Who’s involved</h3>
                 <p class="imm-block__hint">These answers only decide which optional IRCC forms to include.</p>
-                <div class="spk-q-list">
+                <div class="pk-q-list">
                     <div class="opp-field imm-q">
                         <span class="imm-field-label" id="spk-hasRepresentative-label">Will a lawyer, immigration consultant (RCIC), or other advisor prepare or submit this application for you?</span>
                         <div class="imm-radio-list" role="radiogroup" aria-labelledby="spk-hasRepresentative-label">
@@ -154,7 +154,7 @@
             </div>
             <div class="imm-block">
                 <h3 class="imm-block__title">Family &amp; custody</h3>
-                <div class="spk-q-list">
+                <div class="pk-q-list">
                     <div class="opp-field imm-q">
                         <span class="imm-field-label" id="spk-isCommonLaw-label">Are you living with a partner in a common-law relationship (together for at least 12 months), and not married?</span>
                         <div class="imm-seg" role="radiogroup" aria-labelledby="spk-isCommonLaw-label">
@@ -174,7 +174,7 @@
         </section>
 
         <!-- Step 1: confirm derived forms -->
-        <section class="imm-section spk-step-panel" data-spk-step="1" hidden aria-labelledby="spk-confirm">
+        <section class="imm-section pk-step-panel" data-spk-step="1" hidden aria-labelledby="spk-confirm">
             <header class="imm-section__head">
                 <span class="imm-section__num" aria-hidden="true">02</span>
                 <div class="imm-section__titles">
@@ -182,8 +182,8 @@
                     <p class="imm-section__lede">Based on your answers, we’ll fill these IRCC forms from one shared questionnaire.</p>
                 </div>
             </header>
-            <div class="spk-form-list" id="spkFormList" aria-live="polite"></div>
-            <p class="spk-confirm-note" id="spkConfirmNote"></p>
+            <div class="pk-form-list" id="spkFormList" aria-live="polite"></div>
+            <p class="pk-confirm-note" id="spkConfirmNote"></p>
             <div class="opp-field opp-field--consent" style="margin-top:1.25rem">
                 <label class="opp-consent">
                     <input id="spkFormsConfirm" name="formsConfirmed" type="checkbox" value="yes" required checked>
@@ -194,7 +194,7 @@
         </section>
 
         <!-- Step 2: identity -->
-        <section class="imm-section spk-step-panel" data-spk-step="2" hidden aria-labelledby="spk-you">
+        <section class="imm-section pk-step-panel" data-spk-step="2" hidden aria-labelledby="spk-you">
             <header class="imm-section__head">
                 <span class="imm-section__num" aria-hidden="true">03</span>
                 <div class="imm-section__titles">
@@ -606,7 +606,7 @@
         </section>
 
         <!-- Step 2: contact -->
-        <section class="imm-section spk-step-panel" data-spk-step="3" hidden aria-labelledby="spk-contact">
+        <section class="imm-section pk-step-panel" data-spk-step="3" hidden aria-labelledby="spk-contact">
             <header class="imm-section__head">
                 <span class="imm-section__num" aria-hidden="true">04</span>
                 <div class="imm-section__titles">
@@ -754,7 +754,7 @@
         </section>
 
         <!-- Step 3: study -->
-        <section class="imm-section spk-step-panel" data-spk-step="4" hidden aria-labelledby="spk-study">
+        <section class="imm-section pk-step-panel" data-spk-step="4" hidden aria-labelledby="spk-study">
             <header class="imm-section__head">
                 <span class="imm-section__num" aria-hidden="true">05</span>
                 <div class="imm-section__titles">
@@ -981,7 +981,7 @@
         </section>
 
         <!-- Step 5: passport -->
-        <section class="imm-section spk-step-panel" data-spk-step="5" hidden aria-labelledby="spk-passport">
+        <section class="imm-section pk-step-panel" data-spk-step="5" hidden aria-labelledby="spk-passport">
             <header class="imm-section__head">
                 <span class="imm-section__num" aria-hidden="true">06</span>
                 <div class="imm-section__titles">
@@ -1086,7 +1086,7 @@
         </section>
 
         <!-- Step 6: work -->
-        <section class="imm-section spk-step-panel" data-spk-step="6" hidden aria-labelledby="spk-work">
+        <section class="imm-section pk-step-panel" data-spk-step="6" hidden aria-labelledby="spk-work">
             <header class="imm-section__head">
                 <span class="imm-section__num" aria-hidden="true">07</span>
                 <div class="imm-section__titles">
@@ -1159,7 +1159,7 @@
         </section>
 
         <!-- Step 7: background -->
-        <section class="imm-section spk-step-panel" data-spk-step="7" hidden aria-labelledby="spk-bg">
+        <section class="imm-section pk-step-panel" data-spk-step="7" hidden aria-labelledby="spk-bg">
             <header class="imm-section__head">
                 <span class="imm-section__num" aria-hidden="true">08</span>
                 <div class="imm-section__titles">
@@ -1290,7 +1290,7 @@
         </section>
 
         <!-- Step 8: conditional extras -->
-        <section class="imm-section spk-step-panel" data-spk-step="8" hidden aria-labelledby="spk-extras">
+        <section class="imm-section pk-step-panel" data-spk-step="8" hidden aria-labelledby="spk-extras">
             <header class="imm-section__head">
                 <span class="imm-section__num" aria-hidden="true">09</span>
                 <div class="imm-section__titles">
@@ -1299,7 +1299,7 @@
                 </div>
             </header>
 
-            <div class="spk-extra imm-block" data-spk-extra="imm5476" hidden>
+            <div class="pk-extra imm-block" data-spk-extra="imm5476" hidden>
                 <h3 class="imm-block__title">Representative (IMM 5476)</h3>
                 <p class="imm-block__hint">Person or firm authorized to act on your behalf.</p>
                 <div class="imm-line">
@@ -1378,7 +1378,7 @@
                 </div>
             </div>
 
-            <div class="spk-extra imm-block" data-spk-extra="imm5475" hidden>
+            <div class="pk-extra imm-block" data-spk-extra="imm5475" hidden>
                 <h3 class="imm-block__title">Designated individual (IMM 5475)</h3>
                 <p class="imm-block__hint">Someone who can ask IRCC about your file — not your paid representative.</p>
                 <div class="imm-line">
@@ -1399,7 +1399,7 @@
                 </div>
             </div>
 
-            <div class="spk-extra imm-block" data-spk-extra="imm5409" hidden>
+            <div class="pk-extra imm-block" data-spk-extra="imm5409" hidden>
                 <h3 class="imm-block__title">Common-law partner (IMM 5409)</h3>
                 <div class="imm-line">
                     <div class="opp-field imm-grow">
@@ -1437,7 +1437,7 @@
                 </div>
             </div>
 
-            <div class="spk-extra imm-block" data-spk-extra="imm5646" hidden>
+            <div class="pk-extra imm-block" data-spk-extra="imm5646" hidden>
                 <h3 class="imm-block__title">Custodian in Canada (IMM 5646)</h3>
                 <div class="imm-line">
                     <div class="opp-field imm-grow">
@@ -1478,7 +1478,7 @@
         </section>
 
         <!-- Step 9: deliver -->
-        <section class="imm-section spk-step-panel" data-spk-step="9" hidden aria-labelledby="spk-deliver">
+        <section class="imm-section pk-step-panel" data-spk-step="9" hidden aria-labelledby="spk-deliver">
             <header class="imm-section__head">
                 <span class="imm-section__num" aria-hidden="true">10</span>
                 <div class="imm-section__titles">
@@ -1488,11 +1488,11 @@
             </header>
             <div class="imm-block">
                 <h3 class="imm-block__title">Summary</h3>
-                <dl class="spk-review" id="spkReview"></dl>
+                <dl class="pk-review" id="spkReview"></dl>
             </div>
             <div class="imm-block">
                 <h3 class="imm-block__title">Forms in this kit</h3>
-                <div class="spk-form-list" id="spkFormListFinal"></div>
+                <div class="pk-form-list" id="spkFormListFinal"></div>
             </div>
             <div class="imm-block">
                 <h3 class="imm-block__title">Generate</h3>
@@ -1514,9 +1514,9 @@
             </div>
         </section>
 
-        <div class="spk-nav">
+        <div class="pk-nav">
             <button type="button" id="spkBack" class="opp-submit opp-submit--secondary" hidden>Back</button>
-            <div class="spk-nav__right">
+            <div class="pk-nav__right">
                 <p id="spkSaveStatus" class="opp-form-status" hidden></p>
                 <button type="button" id="spkSave" class="opp-submit opp-submit--secondary" hidden>Save progress</button>
                 <button type="button" id="spkNext" class="opp-submit">Continue</button>
@@ -1546,6 +1546,7 @@
 <script src="../js/imm1294-lov.js"></script>
 <script src="../js/imm1294-dial-codes.js"></script>
 <script src="../js/imm-dynamic-fields.js"></script>
+<script src="../js/permit-kit.js"></script>
 <script src="../js/study-permit-kit.js"></script>
 </body>
 </html>

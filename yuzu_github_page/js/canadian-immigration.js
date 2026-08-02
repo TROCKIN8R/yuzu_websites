@@ -11,7 +11,7 @@
 
     const ROUTES = {
         study: './study-permit-kit.html?new=1',
-        work: './work-permit-kit.html',
+        work: './work-permit-kit.html?new=1',
     };
 
     function selectedPermit() {
@@ -77,7 +77,7 @@
         resumeBtn.disabled = true;
         showStatus('Looking up your draft…', false);
         try {
-            // Today only study drafts exist. Work resumes will route by kit type later.
+            // Resume: hub tries study drafts today; work drafts use work-permit-kit.html directly.
             await loadStudyDraft(code, familyName);
             try {
                 sessionStorage.setItem('spkResumeCode', code);

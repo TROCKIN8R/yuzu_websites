@@ -9,6 +9,7 @@ import {
   saveDraft,
 } from "./drafts.ts";
 import { type KitAnswers, selectForms } from "./patchers.ts";
+import { validateWorkAnswers } from "./validate.ts";
 import {
   EMAIL_MAX_LENGTH,
   cleanText,
@@ -40,16 +41,20 @@ function validateKit(raw: Record<string, unknown>): { ok: true; answers: KitAnsw
     ? "f"
     : "e";
 
+  const applicationLocation = cleanText(raw.applicationLocation, 20).toLowerCase() === "inside"
+    ? "inside"
+    : "outside";
+
   const hasRepresentative = parseBool(raw.hasRepresentative);
   const hasDesignee = parseBool(raw.hasDesignee);
   const isCommonLaw = parseBool(raw.isCommonLaw);
-  const needsCustodian = parseBool(raw.needsCustodian) || parseBool(raw.includeImm5646);
 
-  let forms = selectForms({ hasRepresentative, hasDesignee, isCommonLaw, needsCustodian });
+  let forms = selectForms({ applicationLocation, hasRepresentative, hasDesignee, isCommonLaw });
   if (Array.isArray(raw.forms) && raw.forms.length) {
     forms = resolveForms({
       email,
       formLanguage,
+      applicationLocation,
       forms: (raw.forms as unknown[]).map((f) => cleanText(f, 20).toLowerCase()),
       familyName,
       givenName,
@@ -59,8 +64,7 @@ function validateKit(raw: Record<string, unknown>): { ok: true; answers: KitAnsw
       hasRepresentative,
       hasDesignee,
       isCommonLaw,
-      needsCustodian,
-    });
+    } as KitAnswers);
   }
 
   if (!cleanText(raw.parent1FamilyName) || !cleanText(raw.parent1GivenName)) {
@@ -94,28 +98,24 @@ function validateKit(raw: Record<string, unknown>): { ok: true; answers: KitAnsw
       return { ok: false, error: "Enter how many years you have lived together." };
     }
   }
-  if (needsCustodian) {
-    if (!cleanText(raw.custodianFamilyName) || !cleanText(raw.custodianGivenName)) {
-      return { ok: false, error: "Enter the custodian’s family and given names (IMM 5646)." };
-    }
-    if (!cleanText(raw.custodianAddress, 200)) {
-      return { ok: false, error: "Enter the custodian’s address in Canada." };
-    }
-  }
+  const workCheck = validateWorkAnswers({ ...raw, applicationLocation });
+  if (!workCheck.ok) return workCheck;
 
-  const imm1294 = (raw.imm1294 && typeof raw.imm1294 === "object")
-    ? raw.imm1294 as Record<string, unknown>
+  const primary = (raw.primary && typeof raw.primary === "object")
+    ? raw.primary as Record<string, unknown>
     : {};
 
-  // Flatten IMM 1294 questionnaire fields (including dynamic branches) into imm1294 bag.
+  // Flatten primary application questionnaire fields into primary bag.
   for (const key of [
     "passportNumber", "passportCountry", "passportIssueYear", "passportIssueMonth", "passportIssueDay",
     "passportExpiryYear", "passportExpiryMonth", "passportExpiryDay",
-    "schoolName", "studyLevel", "fieldOfStudy", "schoolProvince", "schoolCity", "schoolAddress", "dli",
-    "studyFromYear", "studyFromMonth", "studyFromDay", "studyToYear", "studyToMonth", "studyToDay",
-    "tuitionAmount", "availableFunds", "funds", "fundsOtherPerson",
+    "workPermitType", "employerName", "employerAddress", "workProvince", "workCity", "workLocationAddress",
+    "jobTitle", "jobDescription", "workFromYear", "workFromMonth", "workFromDay",
+    "workToYear", "workToMonth", "workToDay", "lmiaNumber",
+    "lcpChildCare", "lcpDisabled", "lcpElderly", "lcpOther", "lcpNoPersons",
+    "applyingRestore", "applyingExtend", "applyingNewEmployer", "applyingTrp",
+    "origEntryDate", "origEntryPlace", "purposeOfVisit", "recentEntryDate", "recentEntryPlace", "prevDocNum",
     "caqNumber", "caqExpiryYear", "caqExpiryMonth", "caqExpiryDay",
-    "palNumber", "palExpiryYear", "palExpiryMonth", "palExpiryDay",
     "nativeLang", "ableToCommunicate", "preferredLang", "langTest",
     "maritalStatus", "spouseFamilyName", "spouseGivenName", "marriageYear", "marriageMonth", "marriageDay",
     "currentCountry", "currentStatus", "corOther",
@@ -147,15 +147,21 @@ function validateKit(raw: Record<string, unknown>): { ok: true; answers: KitAnsw
     "bgRefusedDetails", "bgCrime", "bgCrimeDetails", "bgMilitary", "bgMilitaryDetails",
     "bgViolence", "bgWitness", "cicContactConsent", "serviceIn",
   ]) {
-    if (raw[key] !== undefined && imm1294[key] === undefined) {
-      imm1294[key] = raw[key];
+    if (raw[key] !== undefined && primary[key] === undefined) {
+      primary[key] = raw[key];
     }
   }
 
   const answers: KitAnswers = {
     email,
     formLanguage,
+    applicationLocation,
     forms,
+    workPermitType: cleanText(raw.workPermitType, 20) || undefined,
+    applyingRestore: parseBool(raw.applyingRestore),
+    applyingExtend: parseBool(raw.applyingExtend),
+    applyingNewEmployer: parseBool(raw.applyingNewEmployer),
+    applyingTrp: parseBool(raw.applyingTrp),
     familyName,
     givenName,
     sex: cleanText(raw.sex, 20) || undefined,
@@ -176,9 +182,32 @@ function validateKit(raw: Record<string, unknown>): { ok: true; answers: KitAnsw
     provinceState: cleanText(raw.provinceState, 40) || undefined,
     country: cleanText(raw.country) || undefined,
     postalCode: cleanText(raw.postalCode, 20) || undefined,
-    schoolName: cleanText(raw.schoolName) || undefined,
-    schoolAddress: cleanText(raw.schoolAddress, 200) || undefined,
-    imm1294,
+    employerName: cleanText(raw.employerName) || undefined,
+    employerAddress: cleanText(raw.employerAddress, 200) || undefined,
+    workProvince: cleanText(raw.workProvince, 40) || undefined,
+    workCity: cleanText(raw.workCity) || undefined,
+    workLocationAddress: cleanText(raw.workLocationAddress, 200) || undefined,
+    jobTitle: cleanText(raw.jobTitle) || undefined,
+    jobDescription: cleanText(raw.jobDescription, 500) || undefined,
+    workFromYear: digits(raw.workFromYear, 4) || undefined,
+    workFromMonth: digits(raw.workFromMonth, 2) || undefined,
+    workFromDay: digits(raw.workFromDay, 2) || undefined,
+    workToYear: digits(raw.workToYear, 4) || undefined,
+    workToMonth: digits(raw.workToMonth, 2) || undefined,
+    workToDay: digits(raw.workToDay, 2) || undefined,
+    lmiaNumber: cleanText(raw.lmiaNumber, 40) || undefined,
+    lcpChildCare: parseBool(raw.lcpChildCare),
+    lcpDisabled: parseBool(raw.lcpDisabled),
+    lcpElderly: parseBool(raw.lcpElderly),
+    lcpOther: parseBool(raw.lcpOther),
+    lcpNoPersons: cleanText(raw.lcpNoPersons, 10) || undefined,
+    origEntryDate: cleanText(raw.origEntryDate, 20) || undefined,
+    origEntryPlace: cleanText(raw.origEntryPlace) || undefined,
+    purposeOfVisit: cleanText(raw.purposeOfVisit) || undefined,
+    recentEntryDate: cleanText(raw.recentEntryDate, 20) || undefined,
+    recentEntryPlace: cleanText(raw.recentEntryPlace) || undefined,
+    prevDocNum: cleanText(raw.prevDocNum, 40) || undefined,
+    primary,
     parent1FamilyName: cleanText(raw.parent1FamilyName) || undefined,
     parent1GivenName: cleanText(raw.parent1GivenName) || undefined,
     parent1Dob: cleanText(raw.parent1Dob, 20) || undefined,
@@ -221,7 +250,6 @@ function validateKit(raw: Record<string, unknown>): { ok: true; answers: KitAnsw
     designeeGivenName: cleanText(raw.designeeGivenName) || undefined,
     designeeRelationship: cleanText(raw.designeeRelationship) || undefined,
     isCommonLaw,
-    needsCustodian,
     partnerGivenName: cleanText(raw.partnerGivenName) || undefined,
     partnerFamilyName: cleanText(raw.partnerFamilyName) || undefined,
     yearsTogether: cleanText(raw.yearsTogether, 10) || undefined,
@@ -229,34 +257,30 @@ function validateKit(raw: Record<string, unknown>): { ok: true; answers: KitAnsw
     commonLawProvince: cleanText(raw.commonLawProvince, 40) || undefined,
     commonLawCountry: cleanText(raw.commonLawCountry) || undefined,
     commonLawStart: cleanText(raw.commonLawStart, 20) || undefined,
-    custodianFamilyName: cleanText(raw.custodianFamilyName) || undefined,
-    custodianGivenName: cleanText(raw.custodianGivenName) || undefined,
-    custodianDob: cleanText(raw.custodianDob, 20) || undefined,
-    custodianStatus: cleanText(raw.custodianStatus, 40) || undefined,
-    custodianAddress: cleanText(raw.custodianAddress, 200) || undefined,
-    custodianTelephone: cleanText(raw.custodianTelephone, 40) || undefined,
   };
 
   return { ok: true, answers };
 }
 
 servePermitKit<KitAnswers>({
-  rates: { bucketPrefix: "studykit", envPrefix: "STUDY_KIT" },
+  rates: { bucketPrefix: "workkit", envPrefix: "WORK_KIT" },
   email: {
-    kitLabel: "study permit",
-    zipPrefix: "study-permit-kit",
-    userSubject: "Your filled study permit kit (Yuzu demo)",
-    notifySubjectPrefix: "Study permit kit demo",
-    notifyBodyTitle: "Study permit kit filler demo submission",
+    kitLabel: "work permit",
+    zipPrefix: "work-permit-kit",
+    userSubject: "Your filled work permit kit (Yuzu demo)",
+    notifySubjectPrefix: "Work permit kit demo",
+    notifyBodyTitle: "Work permit kit filler demo submission",
   },
   drafts: { DRAFT_TTL_DAYS, saveDraft, loadDraft },
   selectFormsFromPayload: (payload) =>
     selectForms({
+      applicationLocation: cleanText(payload.applicationLocation, 20).toLowerCase() ===
+          "inside"
+        ? "inside"
+        : "outside",
       hasRepresentative: parseBool(payload.hasRepresentative),
       hasDesignee: parseBool(payload.hasDesignee),
       isCommonLaw: parseBool(payload.isCommonLaw),
-      needsCustodian: parseBool(payload.needsCustodian) ||
-        parseBool(payload.includeImm5646),
     }),
   validateKit,
   fillKitForms,

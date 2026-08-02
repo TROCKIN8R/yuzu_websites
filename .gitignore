@@ -8,3 +8,6 @@ yuzu_github_page/blog/
 yuzu_github_page/fr/blog/
 yuzu_github_page/es/blog/
 yuzu_github_page/js/stm-config.local.js
+
+# Local IRCC field dump / smoke outputs
+scripts/_tmp_work_fields/

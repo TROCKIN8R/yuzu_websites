@@ -4,7 +4,7 @@
 import JSZip from "npm:jszip@3.10.1";
 import { fillImm1294Pdf } from "../imm1294-filler/fill.ts";
 import { validateAnswers } from "../imm1294-filler/validate.ts";
-import formMeta from "./form-meta.json" with { type: "json" };
+import formMeta from "../_shared/form-meta.json" with { type: "json" };
 import {
   type KitAnswers,
   patchImm5409,
@@ -15,7 +15,7 @@ import {
   patchImm5707,
   selectForms,
 } from "./patchers.ts";
-import { fillXfaDatasetsIncremental, type FormMeta } from "./xfa_incremental.ts";
+import { fillXfaDatasetsIncremental, type FormMeta } from "../_shared/xfa_incremental.ts";
 
 const SITE_URL = "https://yuzu.solutions";
 const FORM_CODES = [

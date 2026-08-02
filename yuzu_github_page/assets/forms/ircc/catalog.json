@@ -1,11 +1,27 @@
 {
-  "description": "IRCC forms required for a study permit application (outside Canada). Synced by scripts/sync_ircc_forms.py.",
-  "kit": "study-permit-outside-canada",
+  "description": "IRCC forms for study and work permit kits. Synced by scripts/sync_ircc_forms.py.",
+  "kits": {
+    "study-permit-outside-canada": ["imm1294", "imm5707", "imm5483", "imm5476", "imm5475", "imm5409", "imm5646"],
+    "work-permit-outside-canada": ["imm1295", "imm5707", "imm5488", "imm5476", "imm5475", "imm5409"],
+    "work-permit-inside-canada": ["imm5710", "imm5707", "imm5556", "imm5476", "imm5475", "imm5409"]
+  },
   "forms": [
     {
       "code": "imm1294",
       "title_en": "Application for Study Permit Outside Canada",
       "title_fr": "Demande de permis d'études à l'extérieur du Canada",
+      "required": true
+    },
+    {
+      "code": "imm1295",
+      "title_en": "Application for a Work Permit Made Outside of Canada",
+      "title_fr": "Demande de permis de travail présentée à l'extérieur du Canada",
+      "required": true
+    },
+    {
+      "code": "imm5710",
+      "title_en": "Application to Change Conditions, Extend my Stay or Remain in Canada as a Worker",
+      "title_fr": "Demande pour modifier les conditions de séjour, le prolonger ou demeurer au Canada à titre de travailleur",
       "required": true
     },
     {
@@ -18,6 +34,18 @@
       "code": "imm5483",
       "title_en": "Document Checklist — Study Permit",
       "title_fr": "Liste de contrôle des documents — Permis d'études",
+      "required": true
+    },
+    {
+      "code": "imm5488",
+      "title_en": "Document Checklist: Work Permit (Applied outside Canada)",
+      "title_fr": "Liste de contrôle des documents : Permis de travail (demande à l'extérieur du Canada)",
+      "required": true
+    },
+    {
+      "code": "imm5556",
+      "title_en": "Document Checklist: Worker (in Canada Applicant)",
+      "title_fr": "Liste de contrôle des documents : Travailleur (demandeur au Canada)",
       "required": true
     },
     {
