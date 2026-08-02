@@ -69,18 +69,21 @@
         },
         emptyConfirmNote(form, g) {
             const loc = applicationLocation(form, g);
-            return `Core ${loc === 'inside' ? 'inside-Canada' : 'outside-Canada'} kit only.`;
+            return loc === 'inside'
+                ? 'Core inside-Canada kit only.'
+                : 'Core outside-Canada kit only.';
         },
         reviewExtraRows(data, _forms, g) {
+            const t = (s) => window.PermitKitI18n?.t(s) || s;
             return [
                 ['Employer', g(data, 'employerName')],
                 ['Job title', g(data, 'jobTitle')],
                 ['Location', `${g(data, 'workCity')}, ${g(data, 'workProvince')}`],
                 [
                     'Applying from',
-                    g(data, 'applicationLocation') === 'inside'
+                    t(g(data, 'applicationLocation') === 'inside'
                         ? 'Inside Canada'
-                        : 'Outside Canada',
+                        : 'Outside Canada'),
                 ],
             ];
         },

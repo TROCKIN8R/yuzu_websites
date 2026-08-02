@@ -79,7 +79,9 @@
                 const opt = document.createElement('option');
                 const code = row.value ?? row.code ?? '';
                 opt.value = code;
-                opt.textContent = row.label || code;
+                opt.textContent = (global.PermitKitI18n && typeof global.PermitKitI18n.lovLabel === 'function')
+                    ? global.PermitKitI18n.lovLabel(row) || code
+                    : (row.label || code);
                 select.appendChild(opt);
             }
             if (keep && [...select.options].some((o) => o.value === keep)) {

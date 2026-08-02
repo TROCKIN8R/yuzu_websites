@@ -4,11 +4,15 @@
  */
 
 window.createPermitKit = function createPermitKit(opts) {
+    const i18n = window.PermitKitI18n;
+    const t = (key, vars) => (i18n && typeof i18n.t === 'function' ? i18n.t(key, vars) : String(key ?? ''));
+    if (i18n && typeof i18n.apply === 'function') i18n.apply(document);
+
     const prefix = opts.prefix; // 'spk' | 'wpk'
     const config = window[opts.configKey] || {};
     const formMeta = config.forms || {};
     const captchaRequired = Boolean((config.turnstile?.siteKey || '').trim());
-    const STEP_LABELS = opts.stepLabels;
+    const STEP_LABELS = (opts.stepLabels || []).map((label) => t(label));
     const situationFields = opts.situationFields || ['hasRepresentative', 'hasDesignee', 'isCommonLaw'];
     const domainTextKeys = opts.domainTextKeys || [];
     const draftDatePairs = opts.draftDatePairs || [];
@@ -80,13 +84,13 @@ window.createPermitKit = function createPermitKit(opts) {
         const languages = Array.isArray(data.languages) ? data.languages : [];
         root.querySelectorAll('select[data-imm-lov="country"]').forEach((select) => {
             fillSelectOptions(select, countries, {
-                placeholder: 'Select country…',
+                placeholder: t('Select country…'),
                 selected: select.dataset.immDefault || select.value,
             });
         });
         root.querySelectorAll('select[data-imm-lov="language"]').forEach((select) => {
             fillSelectOptions(select, languages, {
-                placeholder: 'Select language…',
+                placeholder: t('Select language…'),
                 selected: select.dataset.immDefault || select.value,
             });
         });
@@ -132,13 +136,16 @@ window.createPermitKit = function createPermitKit(opts) {
         target.innerHTML = '';
         for (const code of forms) {
             const meta = formMeta[code] || { title: code.toUpperCase(), required: false };
-            const reason = meta.why
-                || (meta.required ? 'Always included for this kit.' : 'Included from your situation answers.');
+            const reason = t(
+                meta.why
+                || (meta.required ? 'Always included for this kit.' : 'Included from your situation answers.'),
+            );
             const item = document.createElement('div');
             item.className = 'pk-form-item is-on';
+            const title = t(meta.title || code);
             item.innerHTML =
                 `<span class="pk-code">${code.toUpperCase()}</span>` +
-                `<div><strong>${meta.title || code}</strong>` +
+                `<div><strong>${title}</strong>` +
                 `<p>${reason}</p></div>`;
             target.appendChild(item);
         }
@@ -149,9 +156,14 @@ window.createPermitKit = function createPermitKit(opts) {
         renderFormList(formList, forms);
         if (confirmNote) {
             const optional = forms.filter((code) => !(formMeta[code] || {}).required);
-            confirmNote.textContent = optional.length
-                ? `Core kit (3 forms) plus ${optional.length} situation-specific form${optional.length === 1 ? '' : 's'}.`
-                : emptyConfirmNote(form, g, yn);
+            if (optional.length) {
+                const key = optional.length === 1
+                    ? 'Core kit (3 forms) plus {n} situation-specific form.'
+                    : 'Core kit (3 forms) plus {n} situation-specific forms.';
+                confirmNote.textContent = t(key, { n: optional.length });
+            } else {
+                confirmNote.textContent = t(emptyConfirmNote(form, g, yn));
+            }
         }
     }
 
@@ -195,13 +207,15 @@ window.createPermitKit = function createPermitKit(opts) {
         select.innerHTML = '';
         const ph = document.createElement('option');
         ph.value = '';
-        ph.textContent = placeholder;
+        ph.textContent = t(placeholder);
         ph.disabled = true;
         select.appendChild(ph);
         for (const row of rows) {
             const opt = document.createElement('option');
             opt.value = row.value;
-            opt.textContent = row.label;
+            opt.textContent = (i18n && typeof i18n.lovLabel === 'function')
+                ? i18n.lovLabel(row)
+                : (row.label || '');
             select.appendChild(opt);
         }
         if (keep && [...select.options].some((o) => o.value === keep)) {
@@ -431,7 +445,7 @@ window.createPermitKit = function createPermitKit(opts) {
 
     async function postKitAction(body) {
         const { base, anonKey, kitFunction } = apiBase();
-        if (!base || !anonKey) throw new Error('Configuration is missing. Please refresh and try again.');
+        if (!base || !anonKey) throw new Error(t('Configuration is missing. Please refresh and try again.'));
         const response = await fetch(`${base}/functions/v1/${kitFunction}`, {
             method: 'POST',
             headers: {
@@ -451,14 +465,14 @@ window.createPermitKit = function createPermitKit(opts) {
     async function handleSaveDraft() {
         if (draftBusy) return;
         if (step < STEP_ABOUT) {
-            showSideStatus(saveStatusEl, 'Save becomes available on the About you step.', true);
+            showSideStatus(saveStatusEl, t('Save becomes available on the About you step.'), true);
             return;
         }
         const payload = collectPayload('download');
         const familyName = String(payload.familyName || '').trim();
         if (!familyName) {
             goToStep(STEP_ABOUT);
-            showSideStatus(saveStatusEl, 'Enter your family name (last name) before saving — it’s needed to resume later.', true);
+            showSideStatus(saveStatusEl, t('Enter your family name (last name) before saving — it’s needed to resume later.'), true);
             const familyInput = elHyphen('familyName');
             familyInput?.focus();
             return;
@@ -466,7 +480,7 @@ window.createPermitKit = function createPermitKit(opts) {
 
         draftBusy = true;
         if (saveBtn) saveBtn.disabled = true;
-        showSideStatus(saveStatusEl, 'Saving progress…', false);
+        showSideStatus(saveStatusEl, t('Saving progress…'), false);
         try {
             const result = await postKitAction({
                 action: 'save-draft',
@@ -482,7 +496,10 @@ window.createPermitKit = function createPermitKit(opts) {
                             year: 'numeric', month: 'short', day: 'numeric',
                         })
                         : '30 days from now';
-                    saveMetaEl.textContent = `Expires ${expires}. Resume with this code + your family name (last name).`;
+                    saveMetaEl.textContent = t(
+                        'Expires {date}. Resume with this code + your family name (last name).',
+                        { date: expires },
+                    );
                 }
                 saveBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
@@ -491,7 +508,7 @@ window.createPermitKit = function createPermitKit(opts) {
             } catch {
                 // ignore
             }
-            showSideStatus(saveStatusEl, 'Saved. Copy your resume code below.', false);
+            showSideStatus(saveStatusEl, t('Saved. Copy your resume code below.'), false);
         } catch (error) {
             showSideStatus(saveStatusEl, error instanceof Error ? error.message : String(error), true);
         } finally {
@@ -505,13 +522,13 @@ window.createPermitKit = function createPermitKit(opts) {
         const code = elHyphen('resume-code')?.value?.trim() || '';
         const familyName = elHyphen('resume-familyName')?.value?.trim() || '';
         if (!code || !familyName) {
-            showSideStatus(resumeStatusEl, 'Enter resume code and family name (last name).', true);
+            showSideStatus(resumeStatusEl, t('Enter resume code and family name (last name).'), true);
             return;
         }
 
         draftBusy = true;
         if (resumeBtn) resumeBtn.disabled = true;
-        showSideStatus(resumeStatusEl, 'Looking up your draft…', false);
+        showSideStatus(resumeStatusEl, t('Looking up your draft…'), false);
         try {
             const result = await postKitAction({
                 action: 'load-draft',
@@ -519,7 +536,7 @@ window.createPermitKit = function createPermitKit(opts) {
                 familyName,
             });
             applyDraftPayload(result.draft || {}, result.step);
-            showSideStatus(saveStatusEl, 'Draft restored. Continue where you left off.', false);
+            showSideStatus(saveStatusEl, t('Draft restored. Continue where you left off.'), false);
             if (saveBanner) saveBanner.hidden = true;
         } catch (error) {
             showSideStatus(resumeStatusEl, error instanceof Error ? error.message : String(error), true);
@@ -636,11 +653,11 @@ window.createPermitKit = function createPermitKit(opts) {
         const rows = [
             ['Applicant', `${g(data, 'givenName')} ${g(data, 'familyName')}`],
             ['Email', g(data, 'email')],
-            ['Language', g(data, 'formLanguage') === 'f' ? 'French' : 'English'],
+            ['Language', t(g(data, 'formLanguage') === 'f' ? 'French' : 'English')],
             ...reviewExtraRows(data, forms, g, yn),
             ['Forms', forms.map((c) => c.toUpperCase()).join(', ')],
         ];
-        reviewEl.innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${v || '—'}</dd>`).join('');
+        reviewEl.innerHTML = rows.map(([k, v]) => `<dt>${t(k)}</dt><dd>${v || '—'}</dd>`).join('');
         renderFormList(formListFinal, forms);
     }
 
@@ -687,15 +704,23 @@ window.createPermitKit = function createPermitKit(opts) {
             const btn = li.querySelector('button');
             if (btn) {
                 btn.disabled = !isReachable || isCurrent;
-                btn.setAttribute('aria-label', `${STEP_LABELS[n]}${isDone ? ' (completed)' : isCurrent ? ' (current)' : ''}`);
+                btn.setAttribute(
+                    'aria-label',
+                    `${STEP_LABELS[n]}${isDone ? t(' (completed)') : isCurrent ? t(' (current)') : ''}`,
+                );
             }
         });
 
         const pct = progressPct();
         if (railMeter) railMeter.style.width = `${pct}%`;
-        if (railPct) railPct.textContent = `${pct}% complete`;
+        if (railPct) railPct.textContent = t('{pct}% complete', { pct });
         if (mobileStepLabel) mobileStepLabel.textContent = STEP_LABELS[step] || '';
-        if (mobileStepCount) mobileStepCount.textContent = `Step ${step + 1} of ${STEP_COUNT}`;
+        if (mobileStepCount) {
+            mobileStepCount.textContent = t('Step {n} of {total}', {
+                n: step + 1,
+                total: STEP_COUNT,
+            });
+        }
         if (mobileFill) mobileFill.style.width = `${pct}%`;
     }
 
@@ -727,7 +752,7 @@ window.createPermitKit = function createPermitKit(opts) {
         if (backBtn) backBtn.hidden = step === 0;
         if (nextBtn) {
             nextBtn.hidden = step === STEP_COUNT - 1;
-            nextBtn.textContent = step === STEP_CONFIRM ? 'Confirm & continue' : 'Continue';
+            nextBtn.textContent = step === STEP_CONFIRM ? t('Confirm & continue') : t('Continue');
         }
         if (step === STEP_CONFIRM) refreshConfirmStep();
         if (step === STEP_EXTRAS) syncExtras();
@@ -987,11 +1012,11 @@ window.createPermitKit = function createPermitKit(opts) {
     async function handleFill(delivery) {
         const payload = collectPayload(delivery);
         if (!payload.consent) {
-            showStatus('Please confirm the consent checkbox.', true);
+            showStatus(t('Please confirm the consent checkbox.'), true);
             return;
         }
         if (captchaRequired && !payload.captchaToken) {
-            showStatus('Complete the security check first.', true);
+            showStatus(t('Complete the security check first.'), true);
             return;
         }
 
@@ -999,13 +1024,18 @@ window.createPermitKit = function createPermitKit(opts) {
         const anonKey = config.supabase?.anonKey || '';
         const kitFunction = config.supabase?.kitFunction || opts.kitFunction || 'permit-kit';
         if (!base || !anonKey) {
-            showStatus('Configuration is missing. Please refresh and try again.', true);
+            showStatus(t('Configuration is missing. Please refresh and try again.'), true);
             return;
         }
 
         submitting = true;
         updateActionButtons();
-        showStatus(delivery === 'download' ? 'Filling kit… preparing ZIP…' : 'Filling kit… sending email…', false);
+        showStatus(
+            delivery === 'download'
+                ? t('Filling kit… preparing ZIP…')
+                : t('Filling kit… sending email…'),
+            false,
+        );
 
         try {
             const response = await fetch(`${base}/functions/v1/${kitFunction}`, {
@@ -1032,11 +1062,11 @@ window.createPermitKit = function createPermitKit(opts) {
                 a.click();
                 a.remove();
                 URL.revokeObjectURL(url);
-                showStatus(`Downloaded ZIP with ${payload.forms.length} forms.`, false);
+                showStatus(t('Downloaded ZIP with {n} forms.', { n: payload.forms.length }), false);
             } else {
                 const result = await response.json().catch(() => ({}));
                 if (!response.ok) throw new Error(result.error || `Request failed (${response.status})`);
-                showStatus(`Kit emailed to ${result.email || payload.email}.`, false);
+                showStatus(t('Kit emailed to {email}.', { email: result.email || payload.email }), false);
             }
         } catch (error) {
             showStatus(error instanceof Error ? error.message : String(error), true);
@@ -1088,9 +1118,9 @@ window.createPermitKit = function createPermitKit(opts) {
         if (!code) return;
         try {
             await navigator.clipboard.writeText(code);
-            showSideStatus(saveStatusEl, 'Code copied to clipboard.', false);
+            showSideStatus(saveStatusEl, t('Code copied to clipboard.'), false);
         } catch {
-            showSideStatus(saveStatusEl, 'Could not copy automatically — select the code and copy it.', true);
+            showSideStatus(saveStatusEl, t('Could not copy automatically — select the code and copy it.'), true);
         }
     });
 
