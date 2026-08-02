@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Work Permit Application Kit | Yuzu.solutions</title>
-    <meta name="description" content="Work permit kit (coming next): one questionnaire for IRCC work permits — inside or outside Canada decided in your situation questions.">
+    <meta name="description" content="Answer a short set of questions once. We select the IRCC work-permit forms you need (inside or outside Canada), fill them from your answers, and deliver a ZIP.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Yuzu.solutions">
     <meta property="og:title" content="Work Permit Application Kit | Yuzu.solutions">
@@ -23,8 +23,7 @@
     <link rel="stylesheet" href="../css/site.css">
     <link rel="stylesheet" href="../css/logo.css">
     <link rel="stylesheet" href="../css/imm1294-form.css">
-    <link rel="stylesheet" href="../css/canadian-immigration.css">
-    <link rel="stylesheet" href="../css/study-permit-kit.css">
+    <link rel="stylesheet" href="../css/permit-kit.css">
 </head>
 <body class="min-h-screen flex flex-col imm-page">
 
@@ -38,7 +37,7 @@
         <div class="nav-bar-center hidden md:flex">
             <div class="nav-pill-group">
                 <a href="./canadian-immigration.html" class="nav-pill-item">Immigration kits</a>
-                <a href="./study-permit-kit.html" class="nav-pill-item">Study kit</a>
+                <a href="./imm1294-filler.html" class="nav-pill-item">work permit</a>
             </div>
         </div>
         <div class="nav-bar-right flex items-center gap-2">
@@ -48,28 +47,1377 @@
 </nav>
 
 <main class="flex-1 w-[94%] max-w-6xl mx-auto px-0 py-6 md:py-8">
-    <div class="cim-entry">
-        <header class="cim-hero">
-            <p class="cim-hero-eyebrow">Work permit kit</p>
-            <h1>Coming next — one questionnaire for work permits</h1>
-            <p class="cim-hero-lede">Situation questions will decide whether you’re applying from outside Canada (IMM&nbsp;1295) or inside Canada (IMM&nbsp;5710), then fill the matching IRCC package.</p>
+    <div class="pk-entry" id="wpkEntry">
+        <header class="pk-hero">
+            <p class="pk-hero-eyebrow">Work permit kit</p>
+            <h1>Your IRCC forms, filled from one questionnaire</h1>
+            <button type="button" id="wpkStartBtn" class="opp-submit pk-hero-cta">Start a new application</button>
         </header>
 
-        <section class="cim-resume" aria-label="Planned coverage">
-            <h2>What this kit will cover</h2>
-            <ul class="cim-resume__list">
-                <li>Employer-specific and open work permits</li>
-                <li>Post-graduation and bridging open work permits</li>
-                <li>Shared companion forms (representative, designated individual, common-law, family info)</li>
-                <li>Save and resume with a code — same pattern as the study kit</li>
-            </ul>
-            <div class="cim-resume__actions">
-                <a href="./canadian-immigration.html" class="opp-submit">Back to permit types</a>
-                <a href="./study-permit-kit.html" class="opp-submit opp-submit--secondary">Open study permit kit</a>
+        <!-- Landing: resume saved progress -->
+        <section class="pk-landing" id="wpkLanding" aria-label="Resume a saved application">
+            <p class="pk-landing-divider" aria-hidden="true"><span>Or</span></p>
+            <div class="pk-landing-card" id="wpkResumeCard">
+                <h3>Resume a saved application</h3>
+                <div class="pk-landing-fields">
+                    <div class="opp-field">
+                        <label for="wpk-resume-code">Resume code</label>
+                        <input id="wpk-resume-code" type="text" maxlength="20" autocomplete="off" placeholder="YUZU-XXXX-XXXX" spellcheck="false">
+                    </div>
+                    <div class="opp-field">
+                        <label for="wpk-resume-familyName">Family name</label>
+                        <input id="wpk-resume-familyName" type="text" maxlength="120" autocomplete="family-name">
+                    </div>
+                </div>
+                <div class="pk-landing-card__actions">
+                    <button type="button" id="wpkResumeBtn" class="opp-submit">Resume application</button>
+                    <p id="wpkResumeStatus" class="opp-form-status" hidden></p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Wizard (hidden until start or resume) -->
+    <div class="pk-wizard" id="wpkWizard" hidden>
+        <aside class="pk-rail" aria-label="Progress">
+            <p class="pk-rail__title">Progress</p>
+            <div class="pk-rail__meter" aria-hidden="true">
+                <div class="pk-rail__meter-fill" id="wpkRailMeter"></div>
+            </div>
+            <p class="pk-rail__pct" id="wpkRailPct">0% complete</p>
+            <ol class="pk-rail__steps" id="wpkSteps"></ol>
+        </aside>
+
+        <div class="pk-wizard__main">
+            <div class="pk-mobile-progress" id="wpkMobileProgress" aria-live="polite">
+                <div class="pk-mobile-progress__meta">
+                    <span id="wpkMobileStepLabel">Situation</span>
+                    <span id="wpkMobileStepCount">Step 1 of 10</span>
+                </div>
+                <div class="pk-mobile-progress__bar" aria-hidden="true">
+                    <div class="pk-mobile-progress__fill" id="wpkMobileFill"></div>
+                </div>
+            </div>
+
+            <div class="pk-save-banner" id="wpkSaveBanner" hidden>
+                <p class="pk-save-banner__title">Progress saved</p>
+                <p class="pk-save-banner__code" id="wpkSaveCode"></p>
+                <p class="pk-save-banner__meta" id="wpkSaveMeta"></p>
+                <button type="button" id="wpkCopyCode" class="opp-submit opp-submit--secondary">Copy code</button>
+            </div>
+
+            <form class="imm-form opp-form" id="wpkForm" novalidate>
+        <!-- Step 0: situation (no form codes) -->
+        <section class="imm-section pk-step-panel" data-wpk-step="0" aria-labelledby="wpk-route">
+            <header class="imm-section__head">
+                <span class="imm-section__num" aria-hidden="true">01</span>
+                <div class="imm-section__titles">
+                    <h2 id="wpk-route">Tell us about your situation</h2>
+                    <p class="imm-section__lede">Plain questions only — we’ll figure out which IRCC forms apply, then show you the list to confirm.</p>
+                </div>
+            </header>
+            <div class="imm-block">
+                <h3 class="imm-block__title">Contact preference</h3>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-md">
+                        <span class="imm-field-label" id="wpk-formLanguage-label">Preferred form language</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-formLanguage-label">
+                            <label class="imm-seg__opt"><input type="radio" name="formLanguage" value="e" required checked><span>English</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="formLanguage" value="f" required><span>French</span></label>
+                        </div>
+                    </div>
+                    <div class="opp-field imm-w-lg">
+                        <label for="wpk-email">Email</label>
+                        <input id="wpk-email" name="email" type="email" required maxlength="254" autocomplete="email" placeholder="you@email.com" value="you@example.com">
+                    </div>
+                </div>
+            </div>
+            <div class="imm-block">
+                <h3 class="imm-block__title">Where you’re applying from</h3>
+                <div class="pk-q-list">
+                    <div class="opp-field imm-q">
+                        <span class="imm-field-label" id="wpk-applicationLocation-label">Are you applying from inside or outside Canada?</span>
+                        <div class="imm-radio-list" role="radiogroup" aria-labelledby="wpk-applicationLocation-label">
+                            <label class="imm-radio-list__opt"><input type="radio" name="applicationLocation" value="outside" required checked><span>Outside Canada (IMM 1295 + checklist 5488)</span></label>
+                            <label class="imm-radio-list__opt"><input type="radio" name="applicationLocation" value="inside" required><span>Inside Canada (IMM 5710 + checklist 5556)</span></label>
+                        </div>
+                    </div>
+                    <div class="opp-field imm-w-lg">
+                        <label for="wpk-workPermitType">Work permit type</label>
+                        <select id="wpk-workPermitType" name="workPermitType" required>
+                            <option value="LMOS" selected>Employer-specific (LMIA / offer)</option>
+                            <option value="OWP">Open work permit</option>
+                            <option value="ELMO">International Experience Canada</option>
+                            <option value="SAWP">Seasonal agricultural</option>
+                            <option value="SBC">Significant benefit / entrepreneur</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="imm-block">
+                <h3 class="imm-block__title">Who’s involved</h3>
+                <p class="imm-block__hint">These answers only decide which optional IRCC forms to include.</p>
+                <div class="pk-q-list">
+                    <div class="opp-field imm-q">
+                        <span class="imm-field-label" id="wpk-hasRepresentative-label">Will a lawyer, immigration consultant (RCIC), or other advisor prepare or submit this application for you?</span>
+                        <div class="imm-radio-list" role="radiogroup" aria-labelledby="wpk-hasRepresentative-label">
+                            <label class="imm-radio-list__opt"><input type="radio" name="hasRepresentative" value="N" required><span>No — I’m applying myself</span></label>
+                            <label class="imm-radio-list__opt"><input type="radio" name="hasRepresentative" value="Y" required checked><span>Yes — someone else will represent me</span></label>
+                        </div>
+                    </div>
+                    <div class="opp-field imm-q">
+                        <span class="imm-field-label" id="wpk-hasDesignee-label">Do you want a friend or family member (who is not your official representative) to be able to ask IRCC about your application?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-hasDesignee-label">
+                            <label class="imm-seg__opt"><input type="radio" name="hasDesignee" value="N" required><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="hasDesignee" value="Y" required checked><span>Yes</span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="imm-block">
+                <h3 class="imm-block__title">Family</h3>
+                <div class="pk-q-list">
+                    <div class="opp-field imm-q">
+                        <span class="imm-field-label" id="wpk-isCommonLaw-label">Are you living with a partner in a common-law relationship (together for at least 12 months), and not married?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-isCommonLaw-label">
+                            <label class="imm-seg__opt"><input type="radio" name="isCommonLaw" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="isCommonLaw" value="Y" required><span>Yes</span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="imm-block" data-wpk-show="applicationLocation=inside" hidden>
+                <h3 class="imm-block__title">Why you’re applying (inside Canada)</h3>
+                <p class="imm-block__hint">Select all that apply — these map to IMM 5710 checkboxes.</p>
+                <div class="pk-q-list">
+                    <label class="opp-consent"><input type="checkbox" name="applyingExtend" value="Y"><span>Extend my current work permit</span></label>
+                    <label class="opp-consent"><input type="checkbox" name="applyingNewEmployer" value="Y"><span>Work for a new employer</span></label>
+                    <label class="opp-consent"><input type="checkbox" name="applyingRestore" value="Y"><span>Restore my status</span></label>
+                    <label class="opp-consent"><input type="checkbox" name="applyingTrp" value="Y"><span>Temporary resident permit (TRP)</span></label>
+                </div>
+            </div>
+            <div class="imm-block" data-wpk-show="workPermitType=LCP" hidden>
+                <h3 class="imm-block__title">Live-in caregiver (LCP)</h3>
+                <div class="imm-line">
+                    <label class="opp-consent"><input type="checkbox" name="lcpChildCare" value="Y"><span>Child care</span></label>
+                    <label class="opp-consent"><input type="checkbox" name="lcpDisabled" value="Y"><span>Persons with disabilities</span></label>
+                    <label class="opp-consent"><input type="checkbox" name="lcpElderly" value="Y"><span>Elderly persons</span></label>
+                    <label class="opp-consent"><input type="checkbox" name="lcpOther" value="Y"><span>Other</span></label>
+                </div>
+                <div class="opp-field imm-w-sm">
+                    <label for="wpk-lcpNoPersons">Number of persons in care</label>
+                    <input id="wpk-lcpNoPersons" name="lcpNoPersons" type="number" min="0" max="99" inputmode="numeric">
+                </div>
             </div>
         </section>
 
-        <p class="cim-note">Demo / educational use — not legal advice. Always verify against current IRCC instructions before filing.</p>
+        <!-- Step 1: confirm derived forms -->
+        <section class="imm-section pk-step-panel" data-wpk-step="1" hidden aria-labelledby="wpk-confirm">
+            <header class="imm-section__head">
+                <span class="imm-section__num" aria-hidden="true">02</span>
+                <div class="imm-section__titles">
+                    <h2 id="wpk-confirm">Confirm your form package</h2>
+                    <p class="imm-section__lede">Based on your answers, we’ll fill these IRCC forms from one shared questionnaire.</p>
+                </div>
+            </header>
+            <div class="pk-form-list" id="wpkFormList" aria-live="polite"></div>
+            <p class="pk-confirm-note" id="wpkConfirmNote"></p>
+            <div class="opp-field opp-field--consent" style="margin-top:1.25rem">
+                <label class="opp-consent">
+                    <input id="wpkFormsConfirm" name="formsConfirmed" type="checkbox" value="yes" required checked>
+                    <span>I confirm this list matches my situation. Continue to the shared questionnaire.</span>
+                </label>
+            </div>
+            <p class="imm-note">Need to change something? Use <strong>Back</strong> to update your situation answers — the list will refresh.</p>
+        </section>
+
+        <!-- Step 2: identity -->
+        <section class="imm-section pk-step-panel" data-wpk-step="2" hidden aria-labelledby="wpk-you">
+            <header class="imm-section__head">
+                <span class="imm-section__num" aria-hidden="true">03</span>
+                <div class="imm-section__titles">
+                    <h2 id="wpk-you">About you</h2>
+                    <p class="imm-section__lede">Shared once across every selected form.</p>
+                </div>
+            </header>
+
+            <div class="imm-block">
+                <h3 class="imm-block__title">Identity</h3>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-familyName">Family name</label>
+                        <input id="wpk-familyName" name="familyName" required maxlength="120" autocomplete="family-name" value="Dupont">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-givenName">Given name(s)</label>
+                        <input id="wpk-givenName" name="givenName" required maxlength="120" autocomplete="given-name" value="Marie Claire">
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-lg">
+                        <span class="imm-field-label" id="wpk-sex-label">Sex</span>
+                        <div class="imm-seg imm-seg--wrap" role="radiogroup" aria-labelledby="wpk-sex-label">
+                            <label class="imm-seg__opt"><input type="radio" name="sex" value="Female" required checked><span>Female</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="sex" value="Male" required><span>Male</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="sex" value="Unknown" required><span>Unknown</span></label>
+                        </div>
+                    </div>
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-hasAlias-label">Other name / alias?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-hasAlias-label">
+                            <label class="imm-seg__opt"><input type="radio" name="hasAlias" value="N" required><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="hasAlias" value="Y" required checked><span>Yes</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="imm-branch" data-imm-show="hasAlias=Y" hidden>
+                    <div class="imm-line">
+                        <div class="opp-field imm-grow">
+                            <label for="wpk-aliasFamilyName">Alias family name</label>
+                            <input id="wpk-aliasFamilyName" name="aliasFamilyName" type="text" maxlength="120" data-imm-required value="Martin">
+                        </div>
+                        <div class="opp-field imm-grow">
+                            <label for="wpk-aliasGivenName">Alias given name(s)</label>
+                            <input id="wpk-aliasGivenName" name="aliasGivenName" type="text" maxlength="120" data-imm-required value="Claire">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="imm-block">
+                <h3 class="imm-block__title">Birth &amp; citizenship</h3>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-md">
+                        <label for="wpk-dob">Date of birth</label>
+                        <input id="wpk-dob" name="dob" type="date" required value="1998-04-12">
+                    </div>
+                    <div class="opp-field imm-w-lg">
+                        <label for="wpk-placeBirthCity">City of birth</label>
+                        <input id="wpk-placeBirthCity" name="placeBirthCity" required maxlength="120" value="Lyon">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-placeBirthCountry">Country of birth</label>
+                        <select id="wpk-placeBirthCountry" name="placeBirthCountry" required data-imm-lov="country" data-imm-default="022"></select>
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-citizenship">Citizenship</label>
+                        <select id="wpk-citizenship" name="citizenship" required data-imm-lov="country" data-imm-default="022"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="imm-block">
+                <h3 class="imm-block__title">Marital status</h3>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-lg">
+                        <label for="wpk-maritalStatus">Current status</label>
+                        <select id="wpk-maritalStatus" name="maritalStatus" required>
+                            <option value="02">Single</option>
+                            <option value="01">Married</option>
+                            <option value="03" selected>Common-law</option>
+                            <option value="04">Divorced</option>
+                            <option value="05">Separated</option>
+                            <option value="06">Widowed</option>
+                        </select>
+                    </div>
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-previouslyMarried-label">Previously married / common-law?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-previouslyMarried-label">
+                            <label class="imm-seg__opt"><input type="radio" name="previouslyMarried" value="N" required><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="previouslyMarried" value="Y" required checked><span>Yes</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="imm-branch" data-imm-show="maritalStatus=01|03" hidden>
+                    <h3 class="imm-branch__title">Spouse / common-law partner</h3>
+                    <div class="imm-line">
+                        <div class="opp-field imm-grow">
+                            <label for="wpk-spouseFamilyName">Spouse family name</label>
+                            <input id="wpk-spouseFamilyName" name="spouseFamilyName" type="text" maxlength="120" data-imm-required value="Leroy">
+                        </div>
+                        <div class="opp-field imm-grow">
+                            <label for="wpk-spouseGivenName">Spouse given name(s)</label>
+                            <input id="wpk-spouseGivenName" name="spouseGivenName" type="text" maxlength="120" value="Alex">
+                        </div>
+                        <div class="opp-field imm-w-md">
+                            <label for="wpk-marriageDate">Marriage / union date</label>
+                            <input id="wpk-marriageDate" name="marriageDate" type="date" data-imm-required value="2022-06-01">
+                        </div>
+                    </div>
+                </div>
+                <div class="imm-branch" data-imm-show="previouslyMarried=Y" hidden>
+                    <h3 class="imm-branch__title">Previous spouse / common-law partner</h3>
+                    <div class="imm-line">
+                        <div class="opp-field imm-grow">
+                            <label for="wpk-prevSpouseFamilyName">Family name</label>
+                            <input id="wpk-prevSpouseFamilyName" name="prevSpouseFamilyName" type="text" maxlength="120" data-imm-required value="Moreau">
+                        </div>
+                        <div class="opp-field imm-grow">
+                            <label for="wpk-prevSpouseGivenName">Given name(s)</label>
+                            <input id="wpk-prevSpouseGivenName" name="prevSpouseGivenName" type="text" maxlength="120" value="Thomas">
+                        </div>
+                        <div class="opp-field imm-w-md">
+                            <label for="wpk-prevSpouseDob">Date of birth</label>
+                            <input id="wpk-prevSpouseDob" name="prevSpouseDob" type="date" data-imm-required value="1996-08-20">
+                        </div>
+                    </div>
+                    <div class="imm-line">
+                        <div class="opp-field imm-w-md">
+                            <label for="wpk-prevSpouseRelationship">Relationship</label>
+                            <select id="wpk-prevSpouseRelationship" name="prevSpouseRelationship" data-imm-required>
+                                <option value="" disabled>Select…</option>
+                                <option value="01" selected>Married</option>
+                                <option value="03">Common-law</option>
+                            </select>
+                        </div>
+                        <div class="opp-field imm-w-md">
+                            <label for="wpk-prevSpouseFrom">From</label>
+                            <input id="wpk-prevSpouseFrom" name="prevSpouseFrom" type="date" data-imm-required value="2018-05-01">
+                        </div>
+                        <div class="opp-field imm-w-md">
+                            <label for="wpk-prevSpouseTo">To</label>
+                            <input id="wpk-prevSpouseTo" name="prevSpouseTo" type="date" data-imm-required value="2020-11-15">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="imm-block">
+                <h3 class="imm-block__title">Languages</h3>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-nativeLang">Native language</label>
+                        <select id="wpk-nativeLang" name="nativeLang" required data-imm-lov="language" data-imm-default="002"></select>
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <span class="imm-field-label" id="wpk-ableToCommunicate-label">Able to communicate in</span>
+                        <div class="imm-seg imm-seg--wrap" role="radiogroup" aria-labelledby="wpk-ableToCommunicate-label">
+                            <label class="imm-seg__opt"><input type="radio" name="ableToCommunicate" value="Both" required checked><span>English &amp; French</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="ableToCommunicate" value="English" required><span>English</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="ableToCommunicate" value="French" required><span>French</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="ableToCommunicate" value="Neither" required><span>Neither</span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="imm-block">
+                <h3 class="imm-block__title">Current country of residence</h3>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-currentCountry">Country or territory</label>
+                        <select id="wpk-currentCountry" name="currentCountry" required data-imm-lov="country" data-imm-default="022"></select>
+                    </div>
+                    <div class="opp-field imm-w-lg">
+                        <label for="wpk-currentStatus">Status there</label>
+                        <select id="wpk-currentStatus" name="currentStatus" required>
+                            <option value="01" selected>Citizen</option>
+                            <option value="02">Permanent resident</option>
+                            <option value="03">Visitor</option>
+                            <option value="04">Worker</option>
+                            <option value="05">Student</option>
+                            <option value="06">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="imm-branch" data-imm-show="currentStatus=06" hidden>
+                    <div class="imm-line">
+                        <div class="opp-field imm-grow">
+                            <label for="wpk-corOther">Describe other status</label>
+                            <input id="wpk-corOther" name="corOther" type="text" maxlength="80" data-imm-required value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="imm-branch" data-imm-show="currentStatus=03|04|05|06" hidden>
+                    <div class="imm-line">
+                        <div class="opp-field imm-w-md">
+                            <label for="wpk-corFrom">Status from</label>
+                            <input id="wpk-corFrom" name="corFrom" type="date" data-imm-required value="">
+                        </div>
+                        <div class="opp-field imm-w-md">
+                            <label for="wpk-corTo">Status to</label>
+                            <input id="wpk-corTo" name="corTo" type="date" data-imm-required value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-previousCor-label">Other countries (last 5 yrs)?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-previousCor-label">
+                            <label class="imm-seg__opt"><input type="radio" name="previousCor" value="N" required><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="previousCor" value="Y" required checked><span>Yes</span></label>
+                        </div>
+                    </div>
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-sameAsCor-label">Applying from residence country?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-sameAsCor-label">
+                            <label class="imm-seg__opt"><input type="radio" name="sameAsCor" value="Y" required checked><span>Yes</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="sameAsCor" value="N" required><span>No</span></label>
+                        </div>
+                    </div>
+                </div>
+            <div class="imm-branch" data-imm-show="previousCor=Y" hidden>
+                <h3 class="imm-branch__title">Previous countries of residence (up to 2)</h3>
+                <p class="imm-branch__hint">List each country from the last 5 years (other than your current residence). Add, remove, or drag to reorder — row 1 is first on the PDF.</p>
+                <div class="imm-table-wrap">
+                    <div class="imm-table-head imm-table-head--pcor" aria-hidden="true">
+                        <span></span>
+                        <span>#</span>
+                        <span>Country</span>
+                        <span>Status</span>
+                        <span>From</span>
+                        <span>To</span>
+                        <span>Other</span>
+                        <span></span>
+                    </div>
+                    <div id="wpk-pcor-list" class="imm-sortable imm-sortable--table" aria-label="Previous countries of residence"></div>
+                </div>
+                <div class="imm-job-actions">
+                    <button type="button" id="wpk-add-pcor" class="imm-link-btn">+ Add country</button>
+                </div>
+                <template id="wpk-pcor-template">
+                    <article class="imm-sortable-item imm-table-row imm-table-row--pcor imm-pcor-card" draggable="true" data-pcor-slot>
+                        <button type="button" class="imm-drag-handle" aria-label="Drag to reorder" title="Drag to reorder">⋮⋮</button>
+                        <span class="imm-sortable-item__label">1</span>
+                        <div class="opp-field">
+                            <label class="imm-field-label">Country</label>
+                            <select data-pcor="country" data-imm-lov="country" required>
+                                <option value="" selected disabled>Select country…</option>
+                            </select>
+                        </div>
+                        <div class="opp-field">
+                            <label class="imm-field-label">Status</label>
+                            <select data-pcor="status" required>
+                                <option value="" selected disabled>Select…</option>
+                                <option value="01">Citizen</option>
+                                <option value="02">Permanent resident</option>
+                                <option value="03">Visitor</option>
+                                <option value="04">Worker</option>
+                                <option value="05">Student</option>
+                                <option value="06">Other</option>
+                            </select>
+                        </div>
+                        <div class="opp-field">
+                            <label class="imm-field-label">From</label>
+                            <input data-pcor="from" type="date" required value="">
+                        </div>
+                        <div class="opp-field">
+                            <label class="imm-field-label">To</label>
+                            <input data-pcor="to" type="date" required value="">
+                        </div>
+                        <div class="opp-field imm-pcor-other" hidden>
+                            <label class="imm-field-label">Other status</label>
+                            <input data-pcor="other" type="text" maxlength="80" placeholder="If status is Other" value="">
+                        </div>
+                        <button type="button" class="imm-link-btn imm-remove-pcor" hidden>Remove</button>
+                    </article>
+                </template>
+            </div>
+            <div class="imm-branch" data-imm-show="sameAsCor=N" hidden>
+                <h3 class="imm-branch__title">Country where you are applying</h3>
+                <div class="imm-table-wrap">
+                    <div class="imm-table-head imm-table-head--cwa" aria-hidden="true">
+                        <span></span>
+                        <span>#</span>
+                        <span>Country</span>
+                        <span>Status</span>
+                        <span>From</span>
+                        <span>To</span>
+                        <span>Other</span>
+                    </div>
+                    <div class="imm-sortable imm-sortable--table">
+                        <article class="imm-sortable-item imm-table-row imm-table-row--cwa">
+                            <span class="imm-drag-handle" aria-hidden="true" style="visibility:hidden">⋮⋮</span>
+                            <span class="imm-sortable-item__label">1</span>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-cwaCountry">Country</label>
+                                <select id="wpk-cwaCountry" name="cwaCountry" data-imm-lov="country" data-imm-required>
+                                    <option value="" selected disabled>Select country…</option>
+                                </select>
+                            </div>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-cwaStatus">Status</label>
+                                <select id="wpk-cwaStatus" name="cwaStatus" data-imm-required>
+                                    <option value="" selected disabled>Select…</option>
+                                    <option value="01">Citizen</option>
+                                    <option value="02">Permanent resident</option>
+                                    <option value="03">Visitor</option>
+                                    <option value="04">Worker</option>
+                                    <option value="05">Student</option>
+                                    <option value="06">Other</option>
+                                </select>
+                            </div>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-cwaFrom">From</label>
+                                <input id="wpk-cwaFrom" name="cwaFrom" type="date" data-imm-required value="">
+                            </div>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-cwaTo">To</label>
+                                <input id="wpk-cwaTo" name="cwaTo" type="date" data-imm-required value="">
+                            </div>
+                            <div class="opp-field imm-pcor-other" data-imm-show="sameAsCor=N,cwaStatus=06" hidden>
+                                <label class="imm-field-label" for="wpk-cwaOther">Other</label>
+                                <input id="wpk-cwaOther" name="cwaOther" type="text" maxlength="80" data-imm-required value="">
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="imm-block">
+                <h3 class="imm-block__title">Parents / guardians</h3>
+                <p class="imm-block__hint">Used on family information forms.</p>
+                <h4 class="imm-block__subtitle">Parent / guardian 1</h4>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-parent1FamilyName">Family name</label>
+                        <input id="wpk-parent1FamilyName" name="parent1FamilyName" required maxlength="120" value="Dupont">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-parent1GivenName">Given name(s)</label>
+                        <input id="wpk-parent1GivenName" name="parent1GivenName" required maxlength="120" value="Jean">
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-md">
+                        <label for="wpk-parent1Dob">Date of birth</label>
+                        <input id="wpk-parent1Dob" name="parent1Dob" type="date" value="1965-03-18">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-parent1Cob">Country of birth</label>
+                        <select id="wpk-parent1Cob" name="parent1Cob" data-imm-lov="country" data-imm-default="022"></select>
+                    </div>
+                    <div class="opp-field imm-w-lg">
+                        <label for="wpk-parent1Occupation">Occupation</label>
+                        <input id="wpk-parent1Occupation" name="parent1Occupation" maxlength="80" value="Engineer">
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow-lg">
+                        <label for="wpk-parent1Address">Address</label>
+                        <input id="wpk-parent1Address" name="parent1Address" maxlength="200" value="10 Rue de la République, 69002 Lyon, France">
+                    </div>
+                    <div class="opp-field imm-w-phone">
+                        <label for="wpk-parent1Telephone">Telephone</label>
+                        <input id="wpk-parent1Telephone" name="parent1Telephone" type="tel" maxlength="40" value="33472112233">
+                    </div>
+                </div>
+                <h4 class="imm-block__subtitle">Parent / guardian 2</h4>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-parent2FamilyName">Family name</label>
+                        <input id="wpk-parent2FamilyName" name="parent2FamilyName" required maxlength="120" value="Martin">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-parent2GivenName">Given name(s)</label>
+                        <input id="wpk-parent2GivenName" name="parent2GivenName" required maxlength="120" value="Sophie">
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-md">
+                        <label for="wpk-parent2Dob">Date of birth</label>
+                        <input id="wpk-parent2Dob" name="parent2Dob" type="date" value="1968-11-02">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-parent2Cob">Country of birth</label>
+                        <select id="wpk-parent2Cob" name="parent2Cob" data-imm-lov="country" data-imm-default="022"></select>
+                    </div>
+                    <div class="opp-field imm-w-lg">
+                        <label for="wpk-parent2Occupation">Occupation</label>
+                        <input id="wpk-parent2Occupation" name="parent2Occupation" maxlength="80" value="Teacher">
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow-lg">
+                        <label for="wpk-parent2Address">Address</label>
+                        <input id="wpk-parent2Address" name="parent2Address" maxlength="200" value="10 Rue de la République, 69002 Lyon, France">
+                    </div>
+                    <div class="opp-field imm-w-phone">
+                        <label for="wpk-parent2Telephone">Telephone</label>
+                        <input id="wpk-parent2Telephone" name="parent2Telephone" type="tel" maxlength="40" value="33472112234">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 2: contact -->
+        <section class="imm-section pk-step-panel" data-wpk-step="3" hidden aria-labelledby="wpk-contact">
+            <header class="imm-section__head">
+                <span class="imm-section__num" aria-hidden="true">04</span>
+                <div class="imm-section__titles">
+                    <h2 id="wpk-contact">Contact &amp; address</h2>
+                    <p class="imm-section__lede">Mailing address and phone reused on every form that needs them.</p>
+                </div>
+            </header>
+
+            <div class="imm-block">
+                <h3 class="imm-block__title">Mailing address</h3>
+                <div class="imm-table-wrap">
+                    <div class="imm-table-head imm-table-head--mail" aria-hidden="true">
+                        <span></span>
+                        <span>No.</span>
+                        <span>Street</span>
+                        <span>City</span>
+                        <span>Prov / state</span>
+                        <span>Country</span>
+                        <span>Postal</span>
+                    </div>
+                    <div class="imm-sortable imm-sortable--table">
+                        <article class="imm-sortable-item imm-table-row imm-table-row--mail">
+                            <span class="imm-drag-handle" aria-hidden="true" style="visibility:hidden">⋮⋮</span>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-streetNum">No.</label>
+                                <input id="wpk-streetNum" name="streetNum" required maxlength="20" value="10">
+                            </div>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-streetName">Street</label>
+                                <input id="wpk-streetName" name="streetName" required maxlength="120" value="Rue de la République">
+                            </div>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-city">City</label>
+                                <input id="wpk-city" name="city" required maxlength="120" value="Lyon">
+                            </div>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-provinceState">Prov</label>
+                                <div data-imm-province-wrap data-imm-country-ref="wpk-country" data-imm-name="provinceState">
+                                    <select id="wpk-provinceState" data-imm-province-mode="lov" hidden disabled>
+                                        <option value="">Select…</option>
+                                    </select>
+                                    <input id="wpk-provinceStateText" name="provinceState" data-imm-province-mode="text" type="text" maxlength="80" value="Auvergne-Rhône-Alpes" placeholder="Region / state if any">
+                                </div>
+                            </div>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-country">Country</label>
+                                <select id="wpk-country" name="country" required data-imm-lov="country" data-imm-default="022"></select>
+                            </div>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-postalCode">Postal</label>
+                                <input id="wpk-postalCode" name="postalCode" required maxlength="20" value="69002">
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-sameAsMailing-label">Same residential?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-sameAsMailing-label">
+                            <label class="imm-seg__opt"><input type="radio" name="sameAsMailing" value="Y" required checked><span>Yes</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="sameAsMailing" value="N" required><span>No</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="imm-branch" data-imm-show="sameAsMailing=N" hidden>
+                    <h3 class="imm-branch__title">Residential address</h3>
+                    <div class="imm-table-wrap">
+                        <div class="imm-table-head imm-table-head--addr" aria-hidden="true">
+                            <span></span>
+                            <span>No.</span>
+                            <span>Street</span>
+                            <span>Apt</span>
+                            <span>City</span>
+                            <span>Prov / state</span>
+                            <span>Country</span>
+                            <span>Postal</span>
+                        </div>
+                        <div class="imm-sortable imm-sortable--table">
+                            <article class="imm-sortable-item imm-table-row imm-table-row--addr">
+                                <span class="imm-drag-handle" aria-hidden="true" style="visibility:hidden">⋮⋮</span>
+                                <div class="opp-field">
+                                    <label class="imm-field-label" for="wpk-resStreetNum">No.</label>
+                                    <input id="wpk-resStreetNum" name="resStreetNum" type="text" maxlength="20" data-imm-required value="">
+                                </div>
+                                <div class="opp-field">
+                                    <label class="imm-field-label" for="wpk-resStreetName">Street</label>
+                                    <input id="wpk-resStreetName" name="resStreetName" type="text" maxlength="120" data-imm-required value="">
+                                </div>
+                                <div class="opp-field">
+                                    <label class="imm-field-label" for="wpk-resAptUnit">Apt</label>
+                                    <input id="wpk-resAptUnit" name="resAptUnit" type="text" maxlength="20" value="">
+                                </div>
+                                <div class="opp-field">
+                                    <label class="imm-field-label" for="wpk-resCity">City</label>
+                                    <input id="wpk-resCity" name="resCity" type="text" maxlength="120" data-imm-required value="">
+                                </div>
+                                <div class="opp-field">
+                                    <label class="imm-field-label" for="wpk-resProvinceState">Prov</label>
+                                    <div data-imm-province-wrap data-imm-country-ref="wpk-resCountry" data-imm-name="resProvinceState">
+                                        <select id="wpk-resProvinceState" data-imm-province-mode="lov" hidden disabled>
+                                            <option value="">Select…</option>
+                                        </select>
+                                        <input id="wpk-resProvinceStateText" name="resProvinceState" data-imm-province-mode="text" type="text" maxlength="80" value="" placeholder="If applicable">
+                                    </div>
+                                </div>
+                                <div class="opp-field">
+                                    <label class="imm-field-label" for="wpk-resCountry">Country</label>
+                                    <select id="wpk-resCountry" name="resCountry" data-imm-lov="country" data-imm-required>
+                                        <option value="" selected disabled>Select country…</option>
+                                    </select>
+                                </div>
+                                <div class="opp-field">
+                                    <label class="imm-field-label" for="wpk-resPostalCode">Postal</label>
+                                    <input id="wpk-resPostalCode" name="resPostalCode" type="text" maxlength="20" data-imm-required value="">
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="imm-block">
+                <h3 class="imm-block__title">Phone</h3>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <span class="imm-field-label" id="wpk-phoneType-label">Phone type</span>
+                        <div class="imm-seg imm-seg--wrap" role="radiogroup" aria-labelledby="wpk-phoneType-label">
+                            <label class="imm-seg__opt"><input type="radio" name="phoneType" value="02" required checked><span>Cellular</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="phoneType" value="01" required><span>Residence</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="phoneType" value="03" required><span>Business</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="phoneType" value="05" required><span>Other</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-phoneCountryCode">Country code &amp; number</label>
+                        <div class="imm-phone-combo">
+                            <select id="wpk-phoneCountryCode" name="phoneCountryCode" required aria-label="Country calling code"></select>
+                            <input id="wpk-phone" name="phone" type="tel" required maxlength="40" autocomplete="tel" placeholder="6 12 34 56 78" value="612345678">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 4: work details -->
+        <section class="imm-section pk-step-panel" data-wpk-step="4" hidden aria-labelledby="wpk-work">
+            <header class="imm-section__head">
+                <span class="imm-section__num" aria-hidden="true">05</span>
+                <div class="imm-section__titles">
+                    <h2 id="wpk-work">Work details</h2>
+                    <p class="imm-section__lede">Employer, job, and intended location in Canada (IMM 1295 / 5710).</p>
+                </div>
+            </header>
+            <div class="imm-block">
+                <h3 class="imm-block__title">Employer</h3>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-employerName">Employer name</label>
+                        <input id="wpk-employerName" name="employerName" required maxlength="120" value="Maple Tech Inc">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-employerAddress">Employer address</label>
+                        <input id="wpk-employerAddress" name="employerAddress" required maxlength="200" value="100 King St W, Toronto ON">
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-jobTitle">Job title</label>
+                        <input id="wpk-jobTitle" name="jobTitle" required maxlength="80" value="Software Developer">
+                    </div>
+                    <div class="opp-field imm-w-id">
+                        <label for="wpk-lmiaNumber">LMIA / offer number</label>
+                        <input id="wpk-lmiaNumber" name="lmiaNumber" maxlength="40" value="A1234567" spellcheck="false" placeholder="Leave blank for open permit">
+                    </div>
+                </div>
+                <div class="opp-field imm-grow">
+                    <label for="wpk-jobDescription">Job duties (brief)</label>
+                    <textarea id="wpk-jobDescription" name="jobDescription" required maxlength="500" rows="3">Develop and maintain web applications for clients.</textarea>
+                </div>
+            </div>
+            <div class="imm-block">
+                <h3 class="imm-block__title">Location &amp; dates in Canada</h3>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-sm">
+                        <label for="wpk-workProvince">Province</label>
+                        <select id="wpk-workProvince" name="workProvince" required>
+                            <option value="ON" selected>Ontario</option>
+                            <option value="BC">British Columbia</option>
+                            <option value="QC">Quebec</option>
+                            <option value="AB">Alberta</option>
+                            <option value="MB">Manitoba</option>
+                            <option value="SK">Saskatchewan</option>
+                            <option value="NS">Nova Scotia</option>
+                            <option value="NB">New Brunswick</option>
+                            <option value="NL">Newfoundland and Labrador</option>
+                            <option value="PE">Prince Edward Island</option>
+                            <option value="NT">Northwest Territories</option>
+                            <option value="NU">Nunavut</option>
+                            <option value="YT">Yukon</option>
+                        </select>
+                    </div>
+                    <div class="opp-field imm-w-lg">
+                        <label for="wpk-workCity">City</label>
+                        <input id="wpk-workCity" name="workCity" required maxlength="80" value="Toronto">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-workLocationAddress">Work address (optional)</label>
+                        <input id="wpk-workLocationAddress" name="workLocationAddress" maxlength="200" value="100 King St W">
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-md">
+                        <label for="wpk-workFrom">Work from</label>
+                        <input id="wpk-workFrom" name="workFrom" type="date" required value="2026-09-01">
+                    </div>
+                    <div class="opp-field imm-w-md">
+                        <label for="wpk-workTo">Work to</label>
+                        <input id="wpk-workTo" name="workTo" type="date" required value="2028-08-31">
+                    </div>
+                </div>
+                <div class="imm-branch" data-imm-show="workProvince=QC" hidden>
+                    <div class="imm-line">
+                        <div class="opp-field imm-w-id">
+                            <label for="wpk-caqNumber">CAQ number</label>
+                            <input id="wpk-caqNumber" name="caqNumber" type="text" maxlength="40" data-imm-required spellcheck="false">
+                        </div>
+                        <div class="opp-field imm-w-md">
+                            <label for="wpk-caqExpiry">CAQ expiry</label>
+                            <input id="wpk-caqExpiry" name="caqExpiry" type="date" data-imm-required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="imm-block" data-wpk-show="applicationLocation=inside" hidden>
+                <h3 class="imm-block__title">Entry to Canada</h3>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-md">
+                        <label for="wpk-origEntryDate">Original entry date</label>
+                        <input id="wpk-origEntryDate" name="origEntryDate" type="date" value="2024-01-10">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-origEntryPlace">Original entry place</label>
+                        <input id="wpk-origEntryPlace" name="origEntryPlace" maxlength="80" value="Toronto Pearson">
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-md">
+                        <label for="wpk-recentEntryDate">Most recent entry</label>
+                        <input id="wpk-recentEntryDate" name="recentEntryDate" type="date" value="2025-06-01">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-recentEntryPlace">Recent entry place</label>
+                        <input id="wpk-recentEntryPlace" name="recentEntryPlace" maxlength="80" value="Toronto Pearson">
+                    </div>
+                </div>
+                <div class="opp-field imm-w-id">
+                    <label for="wpk-prevDocNum">Previous document number</label>
+                    <input id="wpk-prevDocNum" name="prevDocNum" maxlength="40" value="W1234567" spellcheck="false">
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 5: passport -->
+        <section class="imm-section pk-step-panel" data-wpk-step="5" hidden aria-labelledby="wpk-passport">
+            <header class="imm-section__head">
+                <span class="imm-section__num" aria-hidden="true">06</span>
+                <div class="imm-section__titles">
+                    <h2 id="wpk-passport">Passport</h2>
+                    <p class="imm-section__lede">Travel document details for work permit.</p>
+                </div>
+            </header>
+            <div class="imm-block">
+                <h3 class="imm-block__title">Travel document</h3>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-id">
+                        <label for="wpk-passportNumber">Passport number</label>
+                        <input id="wpk-passportNumber" name="passportNumber" required maxlength="40" value="12AB34567" spellcheck="false">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-passportCountry">Country of issue</label>
+                        <select id="wpk-passportCountry" name="passportCountry" required data-imm-lov="country" data-imm-default="022"></select>
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-md">
+                        <label for="wpk-passportIssue">Issue date</label>
+                        <input id="wpk-passportIssue" name="passportIssue" type="date" required value="2020-06-15">
+                    </div>
+                    <div class="opp-field imm-w-md">
+                        <label for="wpk-passportExpiry">Expiry date</label>
+                        <input id="wpk-passportExpiry" name="passportExpiry" type="date" required value="2030-06-15">
+                    </div>
+                </div>
+            </div>
+            <div class="imm-block">
+                <h3 class="imm-block__title">Language &amp; other IDs</h3>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-md">
+                        <span class="imm-field-label" id="wpk-preferredLang-label">Preferred language</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-preferredLang-label">
+                            <label class="imm-seg__opt"><input type="radio" name="preferredLang" value="English" required checked><span>English</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="preferredLang" value="French" required><span>French</span></label>
+                        </div>
+                    </div>
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-langTest-label">Language test?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-langTest-label">
+                            <label class="imm-seg__opt"><input type="radio" name="langTest" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="langTest" value="Y" required><span>Yes</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-hasNatId-label">National ID?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-hasNatId-label">
+                            <label class="imm-seg__opt"><input type="radio" name="hasNatId" value="N" required><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="hasNatId" value="Y" required checked><span>Yes</span></label>
+                        </div>
+                    </div>
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-hasUsCard-label">U.S. PR card?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-hasUsCard-label">
+                            <label class="imm-seg__opt"><input type="radio" name="hasUsCard" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="hasUsCard" value="Y" required><span>Yes</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="imm-branch" data-imm-show="hasNatId=Y" hidden>
+                    <div class="imm-line">
+                        <div class="opp-field imm-w-id">
+                            <label for="wpk-natIdNumber">Nat. ID number</label>
+                            <input id="wpk-natIdNumber" name="natIdNumber" type="text" maxlength="40" data-imm-required value="FR123456789" spellcheck="false">
+                        </div>
+                        <div class="opp-field imm-grow">
+                            <label for="wpk-natIdCountry">Country of issue</label>
+                            <select id="wpk-natIdCountry" name="natIdCountry" data-imm-lov="country" data-imm-default="022" data-imm-required>
+                                <option value="" disabled>Select country…</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="imm-line">
+                        <div class="opp-field imm-w-md">
+                            <label for="wpk-natIdIssue">Issue</label>
+                            <input id="wpk-natIdIssue" name="natIdIssue" type="date" value="2015-01-10">
+                        </div>
+                        <div class="opp-field imm-w-md">
+                            <label for="wpk-natIdExpiry">Expiry</label>
+                            <input id="wpk-natIdExpiry" name="natIdExpiry" type="date" value="2030-01-10">
+                        </div>
+                    </div>
+                </div>
+                <div class="imm-branch" data-imm-show="hasUsCard=Y" hidden>
+                    <div class="imm-line">
+                        <div class="opp-field imm-w-id">
+                            <label for="wpk-usCardNumber">U.S. card number</label>
+                            <input id="wpk-usCardNumber" name="usCardNumber" type="text" maxlength="40" data-imm-required value="" spellcheck="false">
+                        </div>
+                        <div class="opp-field imm-w-md">
+                            <label for="wpk-usCardExpiry">Expiry</label>
+                            <input id="wpk-usCardExpiry" name="usCardExpiry" type="date" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 6: work -->
+        <section class="imm-section pk-step-panel" data-wpk-step="6" hidden aria-labelledby="wpk-work">
+            <header class="imm-section__head">
+                <span class="imm-section__num" aria-hidden="true">07</span>
+                <div class="imm-section__titles">
+                    <h2 id="wpk-work">Employment / activity history</h2>
+                    <p class="imm-section__lede">Most recent first — drag to reorder. Same rows feed work permit.</p>
+                </div>
+            </header>
+            <div class="imm-block">
+                <h3 class="imm-block__title">Jobs &amp; activities</h3>
+                <p class="imm-block__hint">Up to 3 rows. Drag to reorder — row 1 is most recent on the PDF. Leave To blank if current.</p>
+                <div class="imm-table-wrap">
+                    <div class="imm-table-head imm-table-head--job" aria-hidden="true">
+                        <span></span>
+                        <span>#</span>
+                        <span>Occupation</span>
+                        <span>Employer / school</span>
+                        <span>City</span>
+                        <span>Country</span>
+                        <span>Prov / state</span>
+                        <span>From</span>
+                        <span>To</span>
+                        <span></span>
+                    </div>
+                    <div id="wpk-job-list" class="imm-sortable imm-sortable--table" aria-label="Employment rows"></div>
+                </div>
+                <div class="imm-job-actions">
+                    <button type="button" id="wpk-add-job" class="imm-link-btn">+ Add job</button>
+                </div>
+                <template id="wpk-job-template">
+                    <article class="imm-sortable-item imm-table-row imm-table-row--job imm-job-card" draggable="true">
+                        <button type="button" class="imm-drag-handle" aria-label="Drag to reorder" title="Drag to reorder">⋮⋮</button>
+                        <span class="imm-sortable-item__label">1</span>
+                        <div class="opp-field">
+                            <label class="imm-field-label">Occupation</label>
+                            <input data-job="occupation" type="text" required maxlength="80" value="">
+                        </div>
+                        <div class="opp-field">
+                            <label class="imm-field-label">Employer / school</label>
+                            <input data-job="employer" type="text" required maxlength="120" value="">
+                        </div>
+                        <div class="opp-field">
+                            <label class="imm-field-label">City</label>
+                            <input data-job="city" type="text" required maxlength="80" value="">
+                        </div>
+                        <div class="opp-field">
+                            <label class="imm-field-label">Country</label>
+                            <select data-job="country" required data-imm-lov="country">
+                                <option value="" selected disabled>Select…</option>
+                            </select>
+                        </div>
+                        <div class="opp-field" data-imm-province-wrap data-imm-province-for-job="country" data-imm-name="provinceState">
+                            <label class="imm-field-label">Province / state</label>
+                            <select data-job="provinceState" data-imm-province-mode="lov" hidden disabled>
+                                <option value="">Select…</option>
+                            </select>
+                            <input data-job="provinceState" data-imm-province-mode="text" type="text" maxlength="80" value="" placeholder="If applicable">
+                        </div>
+                        <div class="opp-field">
+                            <label class="imm-field-label">From</label>
+                            <input data-job="from" type="month" required value="">
+                        </div>
+                        <div class="opp-field">
+                            <label class="imm-field-label">To</label>
+                            <input data-job="to" type="month" value="" placeholder="">
+                        </div>
+                        <button type="button" class="imm-link-btn imm-remove-job" hidden>Remove</button>
+                    </article>
+                </template>
+            </div>
+        </section>
+
+        <!-- Step 7: background -->
+        <section class="imm-section pk-step-panel" data-wpk-step="7" hidden aria-labelledby="wpk-bg">
+            <header class="imm-section__head">
+                <span class="imm-section__num" aria-hidden="true">08</span>
+                <div class="imm-section__titles">
+                    <h2 id="wpk-bg">Background questions</h2>
+                    <p class="imm-section__lede">IRCC yes/no questions — detail fields appear only if needed.</p>
+                </div>
+            </header>
+
+            <div class="imm-block">
+                <h3 class="imm-block__title">Health</h3>
+                <div class="imm-yn-pair">
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-bgTb-label">TB (last 2 years)?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-bgTb-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgTb" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgTb" value="Y" required><span>Yes</span></label>
+                        </div>
+                    </div>
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-bgDisorder-label">Serious health disorder?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-bgDisorder-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgDisorder" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgDisorder" value="Y" required><span>Yes</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="imm-branch" data-imm-show="bgTb=Y,bgDisorder=Y" data-imm-show-mode="any" hidden>
+                    <div class="opp-field">
+                        <label for="wpk-bgMedicalDetails">Medical / TB details</label>
+                        <textarea id="wpk-bgMedicalDetails" name="bgMedicalDetails" rows="3" maxlength="500" data-imm-required placeholder="Provide details required by IRCC"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="imm-block">
+                <h3 class="imm-block__title">Immigration history</h3>
+                <div class="imm-yn-pair">
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-bgOverstay-label">Overstay / unauthorized?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-bgOverstay-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgOverstay" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgOverstay" value="Y" required><span>Yes</span></label>
+                        </div>
+                    </div>
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-bgRefused-label">Visa refused?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-bgRefused-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgRefused" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgRefused" value="Y" required><span>Yes</span></label>
+                        </div>
+                    </div>
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-bgClaimAsylum-label">Prior asylum claim?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-bgClaimAsylum-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgClaimAsylum" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgClaimAsylum" value="Y" required><span>Yes</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="imm-branch" data-imm-show="bgOverstay=Y,bgRefused=Y,bgClaimAsylum=Y" data-imm-show-mode="any" hidden>
+                    <div class="opp-field">
+                        <label for="wpk-bgRefusedDetails">Immigration history details</label>
+                        <textarea id="wpk-bgRefusedDetails" name="bgRefusedDetails" rows="3" maxlength="500" data-imm-required placeholder="Dates, countries, and outcomes"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="imm-block">
+                <h3 class="imm-block__title">Security &amp; background</h3>
+                <div class="imm-yn-pair">
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-bgCrime-label">Criminal history?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-bgCrime-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgCrime" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgCrime" value="Y" required><span>Yes</span></label>
+                        </div>
+                    </div>
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-bgMilitary-label">Military / police?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-bgMilitary-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgMilitary" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgMilitary" value="Y" required><span>Yes</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="imm-yn-pair">
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-bgViolence-label">Violent group?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-bgViolence-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgViolence" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgViolence" value="Y" required><span>Yes</span></label>
+                        </div>
+                    </div>
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-bgWitness-label">Abuse / looting?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-bgWitness-label">
+                            <label class="imm-seg__opt"><input type="radio" name="bgWitness" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="bgWitness" value="Y" required><span>Yes</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="imm-branch" data-imm-show="bgCrime=Y" hidden>
+                    <div class="opp-field">
+                        <label for="wpk-bgCrimeDetails">Criminal history details</label>
+                        <textarea id="wpk-bgCrimeDetails" name="bgCrimeDetails" rows="3" maxlength="500" data-imm-required></textarea>
+                    </div>
+                </div>
+                <div class="imm-branch" data-imm-show="bgMilitary=Y" hidden>
+                    <div class="opp-field">
+                        <label for="wpk-bgMilitaryDetails">Military / police / intelligence details</label>
+                        <textarea id="wpk-bgMilitaryDetails" name="bgMilitaryDetails" rows="3" maxlength="500" data-imm-required></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="imm-block">
+                <h3 class="imm-block__title">Consent</h3>
+                <div class="imm-yn-pair">
+                    <div class="opp-field imm-yn">
+                        <span class="imm-field-label" id="wpk-cicContactConsent-label">IRCC research contact?</span>
+                        <div class="imm-seg" role="radiogroup" aria-labelledby="wpk-cicContactConsent-label">
+                            <label class="imm-seg__opt"><input type="radio" name="cicContactConsent" value="N" required checked><span>No</span></label>
+                            <label class="imm-seg__opt"><input type="radio" name="cicContactConsent" value="Y" required><span>Yes</span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 8: conditional extras -->
+        <section class="imm-section pk-step-panel" data-wpk-step="8" hidden aria-labelledby="wpk-extras">
+            <header class="imm-section__head">
+                <span class="imm-section__num" aria-hidden="true">09</span>
+                <div class="imm-section__titles">
+                    <h2 id="wpk-extras">Situation-specific details</h2>
+                    <p class="imm-section__lede">Only the sections matching your form selection appear.</p>
+                </div>
+            </header>
+
+            <div class="pk-extra imm-block" data-wpk-extra="imm5476" hidden>
+                <h3 class="imm-block__title">Representative (IMM 5476)</h3>
+                <p class="imm-block__hint">Person or firm authorized to act on your behalf.</p>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-repFamilyName">Rep. family name</label>
+                        <input id="wpk-repFamilyName" name="repFamilyName" maxlength="120" value="Martin">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-repGivenName">Rep. given name</label>
+                        <input id="wpk-repGivenName" name="repGivenName" maxlength="120" value="Paul">
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-repOrganization">Organization</label>
+                        <input id="wpk-repOrganization" name="repOrganization" maxlength="120" value="Yuzu Demo Advisors">
+                    </div>
+                    <div class="opp-field imm-w-id">
+                        <label for="wpk-repMembershipId">Membership ID</label>
+                        <input id="wpk-repMembershipId" name="repMembershipId" maxlength="40" value="R123456" spellcheck="false">
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-repEmail">Rep. email</label>
+                        <input id="wpk-repEmail" name="repEmail" type="email" maxlength="254" value="rep@example.com">
+                    </div>
+                    <div class="opp-field imm-w-xs">
+                        <label for="wpk-repPhoneCountryCode">Code</label>
+                        <input id="wpk-repPhoneCountryCode" name="repPhoneCountryCode" maxlength="6" value="1" inputmode="numeric">
+                    </div>
+                    <div class="opp-field imm-w-phone">
+                        <label for="wpk-repPhone">Rep. phone</label>
+                        <input id="wpk-repPhone" name="repPhone" type="tel" maxlength="40" value="5145550100">
+                    </div>
+                </div>
+                <div class="imm-table-wrap">
+                    <div class="imm-table-head imm-table-head--mail" aria-hidden="true">
+                        <span></span>
+                        <span>No.</span>
+                        <span>Street</span>
+                        <span>City</span>
+                        <span>Prov / state</span>
+                        <span>Country</span>
+                        <span>Postal</span>
+                    </div>
+                    <div class="imm-sortable imm-sortable--table">
+                        <article class="imm-sortable-item imm-table-row imm-table-row--mail">
+                            <span class="imm-drag-handle" aria-hidden="true" style="visibility:hidden">⋮⋮</span>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-repStreetNum">No.</label>
+                                <input id="wpk-repStreetNum" name="repStreetNum" maxlength="20" value="100">
+                            </div>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-repStreetName">Street</label>
+                                <input id="wpk-repStreetName" name="repStreetName" maxlength="120" value="Rue Saint-Jacques">
+                            </div>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-repCity">City</label>
+                                <input id="wpk-repCity" name="repCity" maxlength="120" value="Montreal">
+                            </div>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-repProvince">Prov</label>
+                                <input id="wpk-repProvince" name="repProvince" maxlength="40" value="QC">
+                            </div>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-repCountry">Country</label>
+                                <select id="wpk-repCountry" name="repCountry" data-imm-lov="country" data-imm-default="511"></select>
+                            </div>
+                            <div class="opp-field">
+                                <label class="imm-field-label" for="wpk-repPostalCode">Postal</label>
+                                <input id="wpk-repPostalCode" name="repPostalCode" maxlength="20" value="H2Y1L6">
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pk-extra imm-block" data-wpk-extra="imm5475" hidden>
+                <h3 class="imm-block__title">Designated individual (IMM 5475)</h3>
+                <p class="imm-block__hint">Someone who can ask IRCC about your file — not your paid representative.</p>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-designeeFamilyName">Family name</label>
+                        <input id="wpk-designeeFamilyName" name="designeeFamilyName" maxlength="120" value="Bernard">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-designeeGivenName">Given name</label>
+                        <input id="wpk-designeeGivenName" name="designeeGivenName" maxlength="120" value="Luc">
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-lg">
+                        <label for="wpk-designeeRelationship">Relationship</label>
+                        <input id="wpk-designeeRelationship" name="designeeRelationship" maxlength="80" placeholder="e.g. Sibling" value="Sibling">
+                    </div>
+                </div>
+            </div>
+
+            <div class="pk-extra imm-block" data-wpk-extra="imm5409" hidden>
+                <h3 class="imm-block__title">Common-law partner (IMM 5409)</h3>
+                <div class="imm-line">
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-partnerFamilyName">Partner family name</label>
+                        <input id="wpk-partnerFamilyName" name="partnerFamilyName" maxlength="120" value="Leroy">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-partnerGivenName">Partner given name</label>
+                        <input id="wpk-partnerGivenName" name="partnerGivenName" maxlength="120" value="Alex">
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-xs">
+                        <label for="wpk-yearsTogether">Years together</label>
+                        <input id="wpk-yearsTogether" name="yearsTogether" type="number" inputmode="numeric" min="0" max="99" maxlength="10" value="3">
+                    </div>
+                    <div class="opp-field imm-w-md">
+                        <label for="wpk-commonLawStart">Living together since</label>
+                        <input id="wpk-commonLawStart" name="commonLawStart" type="date" value="2022-06-01">
+                    </div>
+                </div>
+                <div class="imm-line">
+                    <div class="opp-field imm-w-lg">
+                        <label for="wpk-commonLawCity">City where you live together</label>
+                        <input id="wpk-commonLawCity" name="commonLawCity" maxlength="120" value="Lyon">
+                    </div>
+                    <div class="opp-field imm-w-lg">
+                        <label for="wpk-commonLawProvince">Province / state</label>
+                        <input id="wpk-commonLawProvince" name="commonLawProvince" maxlength="40" value="Auvergne-Rhône-Alpes">
+                    </div>
+                    <div class="opp-field imm-grow">
+                        <label for="wpk-commonLawCountry">Country</label>
+                        <select id="wpk-commonLawCountry" name="commonLawCountry" data-imm-lov="country" data-imm-default="022"></select>
+                    </div>
+                </div>
+            </div>
+
+
+            <p id="wpkExtrasEmpty" class="text-sm text-stone-500" hidden>No optional forms selected — you can continue.</p>
+        </section>
+
+        <!-- Step 9: deliver -->
+        <section class="imm-section pk-step-panel" data-wpk-step="9" hidden aria-labelledby="wpk-deliver">
+            <header class="imm-section__head">
+                <span class="imm-section__num" aria-hidden="true">10</span>
+                <div class="imm-section__titles">
+                    <h2 id="wpk-deliver">Review &amp; deliver</h2>
+                    <p class="imm-section__lede">We fill every selected form once, then package them as a ZIP.</p>
+                </div>
+            </header>
+            <div class="imm-block">
+                <h3 class="imm-block__title">Summary</h3>
+                <dl class="pk-review" id="wpkReview"></dl>
+            </div>
+            <div class="imm-block">
+                <h3 class="imm-block__title">Forms in this kit</h3>
+                <div class="pk-form-list" id="wpkFormListFinal"></div>
+            </div>
+            <div class="imm-block">
+                <h3 class="imm-block__title">Generate</h3>
+                <div class="imm-actions" style="margin-top:0">
+                    <div class="opp-field opp-field--consent">
+                        <label class="opp-consent">
+                            <input id="wpkConsent" name="consent" type="checkbox" value="yes" required checked>
+                            <span>I confirm my answers are accurate and I want to generate the filled PDFs (download or email). This is not an official IRCC submission.</span>
+                        </label>
+                    </div>
+                    <div id="wpkTurnstile" class="opp-turnstile" aria-label="Security check"></div>
+                    <p id="wpkFormStatus" class="opp-form-status" hidden></p>
+                    <div class="imm-actions__buttons">
+                        <button type="submit" id="wpkSubmit" class="opp-submit" disabled aria-disabled="true">Email kit ZIP</button>
+                        <button type="button" id="wpkDownload" class="opp-submit opp-submit--secondary" disabled aria-disabled="true">Download ZIP</button>
+                    </div>
+                    <p class="imm-note">Open each PDF in Adobe Acrobat or Reader. work permit keeps IRCC certification; other kit forms use UR3-safe incremental fills.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="pk-nav">
+            <button type="button" id="wpkBack" class="opp-submit opp-submit--secondary" hidden>Back</button>
+            <div class="pk-nav__right">
+                <p id="wpkSaveStatus" class="opp-form-status" hidden></p>
+                <button type="button" id="wpkSave" class="opp-submit opp-submit--secondary" hidden>Save progress</button>
+                <button type="button" id="wpkNext" class="opp-submit">Continue</button>
+            </div>
+        </div>
+            </form>
+        </div>
     </div>
 </main>
 
@@ -88,5 +1436,11 @@
 </footer>
 
 <script src="../js/site.js"></script>
+<script src="../js/work-permit-kit-config.js"></script>
+<script src="../js/imm1294-lov.js"></script>
+<script src="../js/imm1294-dial-codes.js"></script>
+<script src="../js/imm-dynamic-fields.js"></script>
+<script src="../js/permit-kit.js"></script>
+<script src="../js/work-permit-kit.js"></script>
 </body>
 </html>

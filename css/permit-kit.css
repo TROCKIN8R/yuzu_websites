@@ -1,0 +1,509 @@
+/* Shared IRCC permit-kit chrome (study, work, future visas) */
+
+/* Entry (landing) composition — one column, not stranded in a wide canvas */
+.pk-entry {
+  width: 100%;
+  max-width: 40rem;
+}
+
+body:has(.pk-landing:not([hidden])) main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Keep a little air under the sticky nav; avoid a stranded top-left block */
+  padding-block: clamp(1rem, 5vh, 3rem);
+}
+
+body:has(.pk-landing:not([hidden])) .pk-entry {
+  margin-top: 0;
+}
+
+.pk-hero {
+  margin: 0 0 0.25rem;
+  max-width: none;
+}
+
+.pk-hero-eyebrow {
+  margin: 0 0 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--yuzu-700);
+}
+
+.pk-hero h1 {
+  margin: 0;
+  font-size: clamp(1.65rem, 3vw, 2.15rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--carbon-500);
+}
+
+.pk-hero-cta {
+  margin-top: 1.35rem;
+}
+
+.pk-hero-cta[hidden] {
+  display: none !important;
+}
+
+/* —— Landing —— */
+.pk-landing {
+  margin: 0 0 1rem;
+  max-width: none;
+  width: 100%;
+}
+
+.pk-landing-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin: 1.5rem 0 1.15rem;
+  color: var(--carbon-300);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pk-landing-divider::before,
+.pk-landing-divider::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--carbon-100);
+}
+
+.pk-landing-card {
+  padding: 1.25rem 1.3rem 1.35rem;
+  border-radius: var(--radius-lg);
+  background: var(--paper-25);
+  border: 1px solid var(--carbon-100);
+  box-shadow: var(--shadow-sm);
+}
+
+.pk-landing-card h3 {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--carbon-500);
+}
+
+.pk-landing-fields {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.pk-landing-fields .opp-field {
+  width: 100%;
+  max-width: none;
+}
+
+.pk-landing-fields .opp-field input {
+  width: 100%;
+}
+
+.pk-landing-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.pk-landing[hidden],
+.pk-wizard[hidden] {
+  display: none !important;
+}
+
+/* When wizard is open, entry collapses to the page title only (left-aligned with form) */
+body:has(.pk-wizard:not([hidden])) main {
+  align-items: stretch;
+  justify-content: flex-start;
+  padding-block: unset;
+}
+
+body:has(.pk-wizard:not([hidden])) .pk-entry {
+  max-width: none;
+  margin-top: 0;
+}
+
+body:has(.pk-wizard:not([hidden])) .pk-hero {
+  max-width: var(--max-width-prose, 42rem);
+  margin-bottom: 1.25rem;
+}
+
+/* —— Wizard shell —— */
+.pk-wizard {
+  display: block;
+}
+
+/* Desktop sticky vertical rail — only when progress is active */
+.pk-rail {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  .pk-wizard--with-progress {
+    display: grid;
+    grid-template-columns: minmax(11.5rem, 14rem) minmax(0, 1fr);
+    gap: 1.75rem 2rem;
+    align-items: start;
+  }
+
+  .pk-wizard--with-progress .pk-rail {
+    display: block;
+    position: sticky;
+    top: 5.75rem;
+    align-self: start;
+    max-height: calc(100vh - 6.5rem);
+    overflow-y: auto;
+    padding: 1rem 0.85rem 1.1rem;
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--carbon-500) 3%, transparent);
+    border: 1px solid var(--carbon-100);
+  }
+}
+
+.pk-rail__title {
+  margin: 0 0 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--carbon-300);
+}
+
+.pk-rail__meter {
+  height: 0.35rem;
+  border-radius: var(--radius-full);
+  background: var(--carbon-100);
+  overflow: hidden;
+  margin-bottom: 0.4rem;
+}
+
+.pk-rail__meter-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--yuzu-500), var(--yuzu-600));
+  transition: width var(--duration-fast, 200ms) var(--ease-default, ease);
+}
+
+.pk-rail__pct {
+  margin: 0 0 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--carbon-400);
+}
+
+.pk-rail__steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.15rem;
+  position: relative;
+}
+
+.pk-rail__steps::before {
+  content: "";
+  position: absolute;
+  left: 0.82rem;
+  top: 0.7rem;
+  bottom: 0.7rem;
+  width: 2px;
+  background: var(--carbon-100);
+  z-index: 0;
+}
+
+.pk-rail__steps li {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+}
+
+.pk-rail__steps button {
+  appearance: none;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.65rem 1fr;
+  gap: 0.55rem;
+  align-items: center;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 0.4rem 0.35rem;
+  border-radius: var(--radius-sm);
+  cursor: default;
+  color: var(--carbon-300);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.pk-rail__steps button .pk-rail__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.68rem;
+  font-weight: 800;
+  background: var(--paper-25);
+  border: 2px solid var(--carbon-100);
+  color: var(--carbon-300);
+}
+
+.pk-rail__steps li.is-current button {
+  color: var(--carbon-500);
+  background: var(--yuzu-100);
+  cursor: default;
+}
+
+.pk-rail__steps li.is-current button .pk-rail__num {
+  border-color: var(--yuzu-500);
+  background: var(--yuzu-500);
+  color: var(--carbon-500);
+}
+
+.pk-rail__steps li.is-done button {
+  color: var(--carbon-500);
+  cursor: pointer;
+}
+
+.pk-rail__steps li.is-done button .pk-rail__num {
+  border-color: var(--carbon-500);
+  background: var(--carbon-500);
+  color: var(--paper-25);
+}
+
+.pk-rail__steps li.is-done button:hover {
+  background: color-mix(in srgb, var(--carbon-500) 6%, transparent);
+}
+
+.pk-rail__steps li.is-reachable:not(.is-current):not(.is-done) button {
+  cursor: pointer;
+  color: var(--carbon-400);
+}
+
+.pk-rail__steps li.is-reachable:not(.is-current):not(.is-done) button:hover {
+  background: color-mix(in srgb, var(--carbon-500) 5%, transparent);
+}
+
+.pk-rail__steps li.is-locked button {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Mobile top progress — only after situation is completed */
+.pk-mobile-progress {
+  display: none;
+  margin: 0 0 1.15rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--carbon-500) 3%, transparent);
+  border: 1px solid var(--carbon-100);
+  position: sticky;
+  top: 4.75rem;
+  z-index: 20;
+  backdrop-filter: blur(8px);
+}
+
+.pk-wizard--with-progress .pk-mobile-progress {
+  display: block;
+}
+
+@media (min-width: 960px) {
+  .pk-wizard--with-progress .pk-mobile-progress {
+    display: none;
+  }
+}
+
+.pk-mobile-progress__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--carbon-500);
+}
+
+.pk-mobile-progress__meta span:last-child {
+  font-weight: 600;
+  color: var(--carbon-300);
+  font-size: 0.75rem;
+}
+
+.pk-mobile-progress__bar {
+  height: 0.35rem;
+  border-radius: var(--radius-full);
+  background: var(--carbon-100);
+  overflow: hidden;
+}
+
+.pk-mobile-progress__fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--yuzu-500), var(--yuzu-600));
+  transition: width var(--duration-fast, 200ms) var(--ease-default, ease);
+}
+
+.pk-step-panel[hidden] {
+  display: none !important;
+}
+
+.pk-form-list {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0.75rem 0 0;
+}
+
+.pk-form-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--carbon-500) 3%, transparent);
+  border: 1px solid transparent;
+}
+
+.pk-form-item.is-on {
+  background: var(--yuzu-100);
+  border-color: color-mix(in srgb, var(--yuzu-500) 45%, transparent);
+}
+
+.pk-form-item .pk-code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--yuzu-700);
+  min-width: 4.5rem;
+}
+
+.pk-form-item p {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: var(--carbon-400);
+}
+
+.pk-q-list {
+  display: grid;
+  gap: 1.35rem;
+  margin-top: 0.25rem;
+}
+
+.pk-q-list .opp-field > .imm-field-label,
+.pk-q-list .opp-field > label:not(.imm-seg__opt):not(.imm-radio-list__opt) {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  margin-bottom: 0.45rem;
+  color: var(--carbon-500);
+}
+
+.pk-q-list .imm-radio-list,
+.pk-q-list .imm-seg {
+  max-width: 28rem;
+}
+
+.pk-q-list .imm-seg {
+  width: 9rem;
+  min-width: 9rem;
+}
+
+.pk-extra.imm-block[hidden] {
+  display: none !important;
+}
+
+.pk-extra.imm-block {
+  margin-bottom: 1.65rem;
+}
+
+.pk-extra .imm-block__title {
+  font-size: 0.78rem;
+  color: var(--carbon-500);
+  letter-spacing: 0.04em;
+}
+
+.pk-confirm-note {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+  color: var(--carbon-400);
+}
+
+.pk-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--carbon-100);
+}
+
+.pk-nav .opp-submit {
+  min-width: 9rem;
+}
+
+.pk-nav__right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-left: auto;
+  align-items: center;
+}
+
+.pk-save-banner {
+  margin: 0 0 1.25rem;
+  padding: 1.15rem 1.25rem;
+  border-radius: var(--radius-lg);
+  background: var(--yuzu-100);
+  border: 1px solid color-mix(in srgb, var(--yuzu-500) 55%, transparent);
+}
+
+.pk-save-banner__title {
+  margin: 0 0 0.35rem;
+  font-weight: 800;
+  color: var(--carbon-500);
+}
+
+.pk-save-banner__code {
+  margin: 0.65rem 0;
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--yuzu-700);
+  word-break: break-all;
+}
+
+.pk-save-banner__meta {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: var(--carbon-400);
+}
+
+.pk-review {
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+}
+
+.pk-review dt {
+  font-weight: 700;
+  color: var(--carbon-500);
+}
+
+.pk-review dd {
+  margin: 0 0 0.6rem;
+  color: var(--carbon-400);
+}

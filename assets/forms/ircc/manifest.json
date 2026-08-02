@@ -1,6 +1,6 @@
 {
-  "kit": "study-permit-outside-canada",
-  "updated_at": "2026-07-27T16:15:56Z",
+  "kit": null,
+  "updated_at": "2026-08-02T19:37:11Z",
   "files": [
     {
       "file": "imm1294e.pdf",
@@ -27,6 +27,32 @@
       "etag": null,
       "fetched_at": "2026-07-27T16:15:10Z",
       "changed": false
+    },
+    {
+      "file": "imm1295e.pdf",
+      "code": "imm1295",
+      "language": "e",
+      "url": "https://www.canada.ca/content/dam/ircc/documents/pdf/english/kits/forms/imm1295/01-09-2023/imm1295e.pdf",
+      "version_folder": "01-09-2023",
+      "sha256": "57fc256eef7d9d856e4ae85ebf8bfe80da41833ebde7a8c7ed78f2483470d7bb",
+      "bytes": 851860,
+      "last_modified": "Mon, 20 Jul 2026 19:31:15 GMT",
+      "etag": null,
+      "fetched_at": "2026-08-02T19:36:32Z",
+      "changed": true
+    },
+    {
+      "file": "imm1295f.pdf",
+      "code": "imm1295",
+      "language": "f",
+      "url": "https://www.canada.ca/content/dam/ircc/documents/pdf/francais/trousses/form/imm1295/01-09-2023/imm1295f.pdf",
+      "version_folder": "01-09-2023",
+      "sha256": "a96bf832ace02f063e288ceefaa4c00df62a5f272eb768751299450c9b4fb343",
+      "bytes": 1540314,
+      "last_modified": "Mon, 20 Jul 2026 19:47:59 GMT",
+      "etag": null,
+      "fetched_at": "2026-08-02T19:36:39Z",
+      "changed": true
     },
     {
       "file": "imm5409e.pdf",
@@ -133,6 +159,58 @@
       "changed": false
     },
     {
+      "file": "imm5488e.pdf",
+      "code": "imm5488",
+      "language": "e",
+      "url": "https://www.canada.ca/content/dam/ircc/documents/pdf/english/kits/forms/imm5488/01-10-2024/imm5488e.pdf",
+      "version_folder": "01-10-2024",
+      "sha256": "0c8fa194789eb5f7840737c96d3120d81e2a7504663b2ebef457538168d24ec8",
+      "bytes": 2828035,
+      "last_modified": "Mon, 28 Oct 2024 14:49:10 GMT",
+      "etag": null,
+      "fetched_at": "2026-08-02T19:36:54Z",
+      "changed": true
+    },
+    {
+      "file": "imm5488f.pdf",
+      "code": "imm5488",
+      "language": "f",
+      "url": "https://www.canada.ca/content/dam/ircc/documents/pdf/francais/trousses/form/imm5488/01-10-2024/imm5488f.pdf",
+      "version_folder": "01-10-2024",
+      "sha256": "33224be6df43ba2dd330ce8f9e6d74d5449d17a92e853bea03bfdbd0c9b3cbc7",
+      "bytes": 3732855,
+      "last_modified": "Mon, 28 Oct 2024 14:49:14 GMT",
+      "etag": null,
+      "fetched_at": "2026-08-02T19:37:00Z",
+      "changed": true
+    },
+    {
+      "file": "imm5556e.pdf",
+      "code": "imm5556",
+      "language": "e",
+      "url": "https://www.canada.ca/content/dam/ircc/documents/pdf/english/kits/forms/imm5556/01-03-2024/imm5556e.pdf",
+      "version_folder": "01-03-2024",
+      "sha256": "52eea5757f3eec9533168311ee99b03d85a88e63c477a35dcdcbcc5854badb10",
+      "bytes": 534470,
+      "last_modified": "Wed, 10 Apr 2024 14:38:10 GMT",
+      "etag": null,
+      "fetched_at": "2026-08-02T19:37:05Z",
+      "changed": true
+    },
+    {
+      "file": "imm5556f.pdf",
+      "code": "imm5556",
+      "language": "f",
+      "url": "https://www.canada.ca/content/dam/ircc/documents/pdf/francais/trousses/form/imm5556/01-03-2024/imm5556f.pdf",
+      "version_folder": "01-03-2024",
+      "sha256": "2ce4d1c067f99fab958198472dd6eb36ed62ddeb056f0eec3fc778cf82c16d59",
+      "bytes": 615100,
+      "last_modified": "Wed, 10 Apr 2024 14:38:21 GMT",
+      "etag": null,
+      "fetched_at": "2026-08-02T19:37:11Z",
+      "changed": true
+    },
+    {
       "file": "imm5646e.pdf",
       "code": "imm5646",
       "language": "e",
@@ -183,6 +261,32 @@
       "etag": null,
       "fetched_at": "2026-07-27T16:15:56Z",
       "changed": false
+    },
+    {
+      "file": "imm5710e.pdf",
+      "code": "imm5710",
+      "language": "e",
+      "url": "https://www.canada.ca/content/dam/ircc/documents/pdf/english/kits/forms/imm5710/01-09-2023/imm5710e.pdf",
+      "version_folder": "01-09-2023",
+      "sha256": "22073379f73a0bd31b1b37cda266e797be0e67b4e8693efcf6cf92325f985672",
+      "bytes": 865522,
+      "last_modified": "Mon, 20 Jul 2026 19:42:14 GMT",
+      "etag": null,
+      "fetched_at": "2026-08-02T19:36:44Z",
+      "changed": true
+    },
+    {
+      "file": "imm5710f.pdf",
+      "code": "imm5710",
+      "language": "f",
+      "url": "https://www.canada.ca/content/dam/ircc/documents/pdf/francais/trousses/form/imm5710/01-09-2023/imm5710f.pdf",
+      "version_folder": "01-09-2023",
+      "sha256": "3a3edb30fd55ec6be8477434b335dbb73c9cd9cca9cb79ea450224a9cc0e758a",
+      "bytes": 891907,
+      "last_modified": "Mon, 20 Jul 2026 19:53:53 GMT",
+      "etag": null,
+      "fetched_at": "2026-08-02T19:36:50Z",
+      "changed": true
     }
   ]
 }
