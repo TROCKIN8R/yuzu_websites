@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canadian Immigration Kits | Yuzu.solutions</title>
+    <meta name="description" content="Choose a Canadian permit type — study or work — and fill the IRCC forms that apply from one questionnaire. Or resume a saved application with your code.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Yuzu.solutions">
+    <meta property="og:title" content="Canadian Immigration Kits | Yuzu.solutions">
+    <meta property="og:url" content="https://yuzu.solutions/demos/canadian-immigration.html">
+    <meta property="og:image" content="https://yuzu.solutions/assets/og-image.png">
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="canonical" href="https://yuzu.solutions/demos/canadian-immigration.html">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#F9F9F9">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/design-tokens.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../css/site.css">
+    <link rel="stylesheet" href="../css/logo.css">
+    <link rel="stylesheet" href="../css/imm1294-form.css">
+    <link rel="stylesheet" href="../css/canadian-immigration.css">
+</head>
+<body class="min-h-screen flex flex-col imm-page">
+
+<nav class="sticky top-4 z-50 w-[94%] max-w-6xl mx-auto mt-4" id="mainNav">
+    <div class="nav-bar-inner glass-surface pl-5 pr-3 py-3 rounded-full">
+        <div class="shrink-0">
+            <a href="../index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--nav" aria-label="Yuzu Solutions">
+                <object type="image/svg+xml" data="../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+            </a>
+        </div>
+        <div class="nav-bar-center hidden md:flex">
+            <div class="nav-pill-group">
+                <a href="../services/ai-automation.html" class="nav-pill-item">AI &amp; Automation</a>
+                <a href="./study-permit-kit.html" class="nav-pill-item">Study kit</a>
+            </div>
+        </div>
+        <div class="nav-bar-right flex items-center gap-2">
+            <a href="../services/ai-automation.html" class="hidden sm:inline-flex text-sm font-semibold text-stone-600 hover:text-stone-900">← Automation</a>
+        </div>
+    </div>
+</nav>
+
+<main class="flex-1 w-[94%] max-w-6xl mx-auto px-0 py-6 md:py-8">
+    <div class="cim-entry">
+        <header class="cim-hero">
+            <p class="cim-hero-eyebrow">Canadian immigration</p>
+            <h1>Choose your permit type</h1>
+            <p class="cim-hero-lede">Answer once. We select and fill the IRCC forms that apply — or pick up where you left off with a save code.</p>
+        </header>
+
+        <section aria-labelledby="cimStartHeading">
+            <h2 id="cimStartHeading" class="cim-section-title">Start a new application</h2>
+            <div class="cim-choices" role="radiogroup" aria-labelledby="cimStartHeading">
+                <label class="cim-choice">
+                    <input type="radio" name="cim-permit" value="study" checked>
+                    <span class="cim-choice__mark" aria-hidden="true"></span>
+                    <span class="cim-choice__body">
+                        <span class="cim-choice__title">Study permit</span>
+                        <span class="cim-choice__desc">Outside Canada applications and related companion forms — already live.</span>
+                    </span>
+                    <span class="cim-choice__badge cim-choice__badge--live">Live</span>
+                </label>
+                <label class="cim-choice">
+                    <input type="radio" name="cim-permit" value="work">
+                    <span class="cim-choice__mark" aria-hidden="true"></span>
+                    <span class="cim-choice__body">
+                        <span class="cim-choice__title">Work permit</span>
+                        <span class="cim-choice__desc">Inside or outside Canada is decided in your situation questions (IMM 5710 or IMM 1295).</span>
+                    </span>
+                    <span class="cim-choice__badge cim-choice__badge--soon">Next</span>
+                </label>
+            </div>
+            <button type="button" id="cimContinueBtn" class="opp-submit cim-continue">Continue</button>
+        </section>
+
+        <p class="cim-divider" aria-hidden="true"><span>Or</span></p>
+
+        <section class="cim-resume" aria-labelledby="cimResumeHeading">
+            <h2 id="cimResumeHeading">Resume a saved application</h2>
+            <div class="cim-resume-fields">
+                <div class="opp-field">
+                    <label for="cim-resume-code">Resume code</label>
+                    <input id="cim-resume-code" type="text" maxlength="20" autocomplete="off" placeholder="YUZU-XXXX-XXXX" spellcheck="false">
+                </div>
+                <div class="opp-field">
+                    <label for="cim-resume-familyName">Family name</label>
+                    <input id="cim-resume-familyName" type="text" maxlength="120" autocomplete="family-name">
+                </div>
+            </div>
+            <div class="cim-resume__actions">
+                <button type="button" id="cimResumeBtn" class="opp-submit">Resume application</button>
+                <p id="cimResumeStatus" class="opp-form-status" hidden></p>
+            </div>
+        </section>
+
+        <p class="cim-note">Demo / educational use — not legal advice. Always verify against current IRCC instructions before filing.</p>
+    </div>
+</main>
+
+<footer class="site-footer site-footer--compact mt-auto">
+    <div class="site-footer__inner">
+        <a href="../index.html" class="yuzu-logo yuzu-logo--horizontal yuzu-logo--footer yuzu-logo--on-dark" aria-label="Yuzu Solutions">
+            <object type="image/svg+xml" data="../assets/yuzu-horizontal.svg" class="yuzu-logo__media" aria-hidden="true"></object>
+        </a>
+        <p class="site-footer__quip">Ask once. Fill the whole kit.</p>
+        <address class="site-footer__contact">
+            <a href="mailto:info@yuzu.solutions">info@yuzu.solutions</a>
+            <a href="tel:+14383948474">+1 438 394 8474</a>
+        </address>
+        <p class="site-footer__copy">© 2026 Yuzu.solutions</p>
+    </div>
+</footer>
+
+<script src="../js/site.js"></script>
+<script src="../js/study-permit-kit-config.js"></script>
+<script src="../js/canadian-immigration.js"></script>
+</body>
+</html>
