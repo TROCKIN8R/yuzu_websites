@@ -11,8 +11,8 @@ body:has(.pk-landing:not([hidden])) main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* Keep a little air under the sticky nav; avoid a stranded top-left block */
-  padding-block: clamp(1rem, 5vh, 3rem);
+  /* Clear sticky nav + give the hero room to breathe */
+  padding-block: clamp(1.75rem, 5vh, 3.25rem);
 }
 
 body:has(.pk-landing:not([hidden])) .pk-entry {
@@ -122,8 +122,8 @@ body:has(.pk-landing:not([hidden])) .pk-entry {
 body:has(.pk-wizard:not([hidden])) main {
   align-items: stretch;
   justify-content: flex-start;
-  /* Keep top flush under nav; leave air above the site footer */
-  padding-block: 0 clamp(2.5rem, 7vh, 4.5rem);
+  /* Space under sticky nav; leave air above the site footer */
+  padding-block: clamp(1.25rem, 3.5vh, 2rem) clamp(2.5rem, 7vh, 4.5rem);
 }
 
 body:has(.pk-wizard:not([hidden])) .pk-entry {
