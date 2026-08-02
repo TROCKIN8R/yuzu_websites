@@ -2,6 +2,13 @@
  * Canadian immigration hub — route to a kit or resume a draft.
  */
 (function initCanadianImmigrationHub() {
+    const i18n = window.PermitKitI18n;
+    const t = (key) => (i18n && typeof i18n.t === 'function' ? i18n.t(key) : key);
+    if (i18n && typeof i18n.apply === 'function') {
+        i18n.setLocale(i18n.detectLocale());
+        i18n.apply(document);
+    }
+
     const continueBtn = document.getElementById('cimContinueBtn');
     const resumeBtn = document.getElementById('cimResumeBtn');
     const resumeStatusEl = document.getElementById('cimResumeStatus');
@@ -38,7 +45,7 @@
     async function loadStudyDraft(code, familyName) {
         const { base, anonKey, kitFunction } = apiBase();
         if (!base || !anonKey) {
-            throw new Error('Configuration is missing. Please refresh and try again.');
+            throw new Error(t('Configuration is missing. Please refresh and try again.'));
         }
         const response = await fetch(`${base}/functions/v1/${kitFunction}`, {
             method: 'POST',
@@ -70,14 +77,13 @@
         const code = codeInput?.value?.trim() || '';
         const familyName = familyInput?.value?.trim() || '';
         if (!code || !familyName) {
-            showStatus('Enter resume code and family name (last name).', true);
+            showStatus(t('Enter resume code and family name (last name).'), true);
             return;
         }
 
         resumeBtn.disabled = true;
-        showStatus('Looking up your draft…', false);
+        showStatus(t('Looking up your draft…'), false);
         try {
-            // Resume: hub tries study drafts today; work drafts use work-permit-kit.html directly.
             await loadStudyDraft(code, familyName);
             try {
                 sessionStorage.setItem('spkResumeCode', code);
