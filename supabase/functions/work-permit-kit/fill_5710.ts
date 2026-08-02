@@ -494,7 +494,7 @@ export function buildFilledForm5710(template: string, raw: Imm5710Answers): stri
       (a.workLocationAddress ? `<Addr\n>${esc(a.workLocationAddress)}</Addr\n>` : `<Addr\n/>`) +
       `</Location\n><Occupation\n><Job\n>${esc(a.jobTitle)}</Job\n><Desc\n>${esc(a.jobDescription)}</Desc\n></Occupation\n>` +
       `<Duration\n><FromDate\n>${esc(workFrom)}</FromDate\n><ToDate\n>${esc(workTo)}</ToDate\n>` +
-      `<LMO\n>${esc(a.lmiaNumber || "")}</LMO\n></Duration\n>` +
+      `<LMO\n>${esc(String(a.lmiaNumber || "").replace(/\D/g, ""))}</LMO\n></Duration\n>` +
       (a.caqNumber
         ? `<CAQ\n><CertNum\n>${esc(a.caqNumber)}</CertNum\n>` +
           (a.caqExpiryYear

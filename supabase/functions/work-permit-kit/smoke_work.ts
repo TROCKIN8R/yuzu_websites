@@ -48,7 +48,7 @@ function baseAnswers(overrides: Partial<KitAnswers> = {}): KitAnswers {
     workToYear: "2028",
     workToMonth: "08",
     workToDay: "31",
-    lmiaNumber: "A1234567",
+    lmiaNumber: "71234567",
     parent1FamilyName: "Martin",
     parent1GivenName: "Jean",
     parent1Occupation: "Engineer",

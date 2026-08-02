@@ -15,3 +15,6 @@ verify_jwt = false
 
 [functions.study-permit-kit]
 verify_jwt = false
+
+[functions.work-permit-kit]
+verify_jwt = false

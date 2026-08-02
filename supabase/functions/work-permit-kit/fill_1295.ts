@@ -147,7 +147,8 @@ function patchWorkSections(xml: string, a: Imm1295Answers): string {
   const permitType = resolveWorkPermitType(a.workPermitType);
   const workFrom = isoDate(a.workFromYear, a.workFromMonth, a.workFromDay);
   const workTo = isoDate(a.workToYear, a.workToMonth, a.workToDay);
-  const lmo = (a.lmiaNumber || "").trim();
+  // Acrobat validates LMIA No. as an integer in [6000000, 99999999].
+  const lmo = String(a.lmiaNumber || "").replace(/\D/g, "").trim();
   const workProv = resolveProvinceLic(a.workProvince);
   const workCity = resolveCityLic(a.workCity);
 

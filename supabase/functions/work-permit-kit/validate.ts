@@ -55,5 +55,20 @@ export function validateWorkAnswers(
     }
   }
 
+  // IMM 1295/5710 Acrobat rule: LMIA No. ∈ [6000000, 99999999] when present.
+  const lmiaRaw = cleanText(raw.lmiaNumber, 40);
+  if (lmiaRaw) {
+    const lmiaDigits = lmiaRaw.replace(/\D/g, "");
+    const n = Number(lmiaDigits);
+    if (!lmiaDigits || !Number.isFinite(n) || n < 6_000_000 || n > 99_999_999) {
+      return {
+        ok: false,
+        error:
+          "LMIA number must be 7–8 digits between 6000000 and 99999999 (IRCC form rule). Leave blank if you have no LMIA.",
+      };
+    }
+    raw.lmiaNumber = lmiaDigits;
+  }
+
   return { ok: true };
 }
