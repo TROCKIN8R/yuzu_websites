@@ -1168,7 +1168,39 @@
         if (remembered && resumeCodeInput && !resumeCodeInput.value) {
             resumeCodeInput.value = remembered;
         }
+        const rememberedFamily = sessionStorage.getItem('spkResumeFamilyName');
+        const resumeFamilyInput = document.getElementById('spk-resume-familyName');
+        if (rememberedFamily && resumeFamilyInput && !resumeFamilyInput.value) {
+            resumeFamilyInput.value = rememberedFamily;
+        }
     } catch {
         // ignore
+    }
+
+    // Hub / deep-link entry: ?new=1 starts a fresh kit; ?resume=1 (+ code/family) restores a draft.
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const resumeCodeInput = document.getElementById('spk-resume-code');
+        const resumeFamilyInput = document.getElementById('spk-resume-familyName');
+        const codeParam = params.get('code')?.trim() || '';
+        const familyParam = params.get('family')?.trim() || '';
+        if (codeParam && resumeCodeInput && !resumeCodeInput.value) resumeCodeInput.value = codeParam;
+        if (familyParam && resumeFamilyInput && !resumeFamilyInput.value) resumeFamilyInput.value = familyParam;
+
+        const wantsResume = params.get('resume') === '1' || sessionStorage.getItem('spkAutoResume') === '1';
+        if (wantsResume && resumeCodeInput?.value && resumeFamilyInput?.value) {
+            try { sessionStorage.removeItem('spkAutoResume'); } catch { /* ignore */ }
+            handleResumeDraft();
+        } else if (params.get('new') === '1') {
+            maxReachedStep = 0;
+            openWizard(0);
+        }
+
+        if (params.has('new') || params.has('resume') || params.has('code') || params.has('family')) {
+            const cleanUrl = `${window.location.pathname}${window.location.hash || ''}`;
+            window.history.replaceState({}, '', cleanUrl);
+        }
+    } catch {
+        // ignore deep-link failures — landing still works
     }
 })();
