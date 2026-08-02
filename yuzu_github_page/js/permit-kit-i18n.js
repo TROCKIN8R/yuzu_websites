@@ -4,10 +4,15 @@
  *
  * Locale comes from <html lang> (fr / fr-CA → fr, es → es, else en).
  * Path /fr/… or /es/… should set lang on the page.
+ *
+ * Language switcher changes locale in-place (no navigation) so wizard state
+ * is preserved. English source strings are remembered for re-apply.
  */
 (function initPermitKitI18n(global) {
     const FR = global.__PERMIT_KIT_I18N_FR__ || null;
     const ES = global.__PERMIT_KIT_I18N_ES__ || null;
+    const textOriginals = new WeakMap();
+    let titleOriginal = null;
 
     function normalizeLocale(raw) {
         const v = String(raw || '').toLowerCase();
@@ -25,6 +30,13 @@
         return 'en';
     }
 
+    function isUiKey(key) {
+        if (!key) return false;
+        if (FR && Object.prototype.hasOwnProperty.call(FR, key)) return true;
+        if (ES && Object.prototype.hasOwnProperty.call(ES, key)) return true;
+        return false;
+    }
+
     let locale = 'en';
     let dict = {};
 
@@ -36,7 +48,7 @@
 
     function t(key, vars) {
         const source = String(key ?? '');
-        let out = (dict && dict[source]) || source;
+        let out = (locale !== 'en' && dict && dict[source]) || source;
         if (vars && typeof vars === 'object') {
             out = out.replace(/\{(\w+)\}/g, (_, name) =>
                 vars[name] != null ? String(vars[name]) : `{${name}}`
@@ -45,25 +57,38 @@
         return out;
     }
 
+    function translated(key) {
+        if (locale === 'en') return key;
+        return (dict && dict[key]) || key;
+    }
+
     function translateOption(el) {
-        const key = el.textContent.replace(/\s+/g, ' ').trim();
-        if (!key || !dict[key]) return;
-        const explicit = el.getAttribute('value');
-        const preserved = explicit !== null ? explicit : key;
-        el.textContent = dict[key];
-        el.setAttribute('value', preserved);
-        el.value = preserved;
+        let key = el.getAttribute('data-i18n-src');
+        if (!key) {
+            key = el.textContent.replace(/\s+/g, ' ').trim();
+            if (!key || !isUiKey(key)) return;
+            el.setAttribute('data-i18n-src', key);
+            if (el.getAttribute('value') === null) {
+                el.setAttribute('value', key);
+                el.value = key;
+            }
+        }
+        el.textContent = translated(key);
     }
 
     function translateTextNode(node) {
         const raw = node.nodeValue;
         if (!raw) return;
-        const trimmed = raw.replace(/\s+/g, ' ').trim();
-        if (!trimmed || !dict[trimmed]) return;
-        // Preserve surrounding whitespace from the original node value.
+        let key = textOriginals.get(node);
+        if (key == null) {
+            const trimmed = raw.replace(/\s+/g, ' ').trim();
+            if (!trimmed || !isUiKey(trimmed)) return;
+            textOriginals.set(node, trimmed);
+            key = trimmed;
+        }
         const leading = raw.match(/^\s*/)?.[0] || '';
         const trailing = raw.match(/\s*$/)?.[0] || '';
-        node.nodeValue = leading + dict[trimmed] + trailing;
+        node.nodeValue = leading + translated(key) + trailing;
     }
 
     function walk(node) {
@@ -92,20 +117,43 @@
 
         for (const attr of ['placeholder', 'aria-label', 'title', 'alt']) {
             if (!node.hasAttribute(attr)) continue;
-            const v = node.getAttribute(attr);
-            if (v && dict[v]) node.setAttribute(attr, dict[v]);
+            const srcAttr = `data-i18n-${attr}`;
+            let key = node.getAttribute(srcAttr);
+            if (!key) {
+                const v = node.getAttribute(attr);
+                if (!v || !isUiKey(v)) continue;
+                node.setAttribute(srcAttr, v);
+                key = v;
+            }
+            node.setAttribute(attr, translated(key));
         }
 
         const children = Array.from(node.childNodes);
         for (const child of children) walk(child);
     }
 
-    function apply(root = document.body) {
-        if (!dict || !Object.keys(dict).length) return;
-        walk(root || document.body);
-        if (document.title && dict[document.title]) {
-            document.title = dict[document.title];
+    function applyTitle() {
+        if (!document.title) return;
+        if (!titleOriginal) {
+            titleOriginal = document.title;
+            if (!isUiKey(titleOriginal)) {
+                for (const d of [FR, ES]) {
+                    if (!d) continue;
+                    for (const [en, tr] of Object.entries(d)) {
+                        if (tr === titleOriginal) {
+                            titleOriginal = en;
+                            break;
+                        }
+                    }
+                }
+            }
         }
+        document.title = translated(titleOriginal);
+    }
+
+    function apply(root = document.body) {
+        walk(root || document.body);
+        applyTitle();
     }
 
     function lovLabel(row) {
@@ -122,13 +170,66 @@
         const base = path.includes('/fr/') || path.includes('/es/')
             ? path.replace(/\/(fr|es)\/demos\/[^/]+$/, '')
             : path.replace(/\/demos\/[^/]+$/, '');
-        // On GitHub pages project site, base may include /yuzu_websites
         const root = base || '';
         return {
             en: `${root}/demos/${file}`,
             fr: `${root}/fr/demos/${file}`,
             es: `${root}/es/demos/${file}`,
         };
+    }
+
+    function syncUrlForLocale(code) {
+        const urls = localeUrls();
+        const path = urls[code];
+        if (!path) return;
+        const next = path + location.search + location.hash;
+        const current = location.pathname + location.search + location.hash;
+        if (current !== next) {
+            history.replaceState(null, '', next);
+        }
+    }
+
+    function updateLangSwitchUi() {
+        document.querySelectorAll('.lang-switch').forEach((nav) => {
+            nav.setAttribute('aria-label', t('Language'));
+            nav.querySelectorAll('a[hreflang], a[lang]').forEach((a) => {
+                const code = normalizeLocale(a.getAttribute('hreflang') || a.getAttribute('lang'));
+                a.classList.toggle('active', code === locale);
+            });
+        });
+    }
+
+    function switchLocale(next, opts = {}) {
+        const code = normalizeLocale(next);
+        if (code === locale && opts.force !== true) {
+            updateLangSwitchUi();
+            return locale;
+        }
+        setLocale(code);
+        if (document.documentElement) {
+            document.documentElement.lang = code === 'fr' ? 'fr-CA' : code;
+        }
+        apply(document);
+        updateLangSwitchUi();
+        if (opts.syncUrl !== false) syncUrlForLocale(code);
+        document.dispatchEvent(new CustomEvent('permitkit:localechange', { detail: { locale: code } }));
+        return locale;
+    }
+
+    function bindLangSwitch(root = document) {
+        const scopes = root.querySelectorAll ? root.querySelectorAll('.lang-switch') : [];
+        const list = scopes.length ? scopes : [];
+        list.forEach((nav) => {
+            if (nav.dataset.i18nBound === '1') return;
+            nav.dataset.i18nBound = '1';
+            nav.addEventListener('click', (event) => {
+                const a = event.target.closest('a[hreflang], a[lang]');
+                if (!a || !nav.contains(a)) return;
+                event.preventDefault();
+                const code = normalizeLocale(a.getAttribute('hreflang') || a.getAttribute('lang'));
+                switchLocale(code);
+            });
+        });
     }
 
     function mountLangSwitch(container) {
@@ -149,18 +250,22 @@
             return `<a href="${href}" class="${cls}" hreflang="${hreflang}" lang="${hreflang}">${label}</a>`;
         }).join('');
         container.prepend(wrap);
+        bindLangSwitch(container);
     }
 
     setLocale(detectLocale());
+    bindLangSwitch(document);
 
     global.PermitKitI18n = {
         t,
         apply,
         setLocale,
+        switchLocale,
         detectLocale,
         getLocale: () => locale,
         lovLabel,
         localeUrls,
         mountLangSwitch,
+        bindLangSwitch,
     };
 })(window);

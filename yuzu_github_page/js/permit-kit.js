@@ -12,7 +12,8 @@ window.createPermitKit = function createPermitKit(opts) {
     const config = window[opts.configKey] || {};
     const formMeta = config.forms || {};
     const captchaRequired = Boolean((config.turnstile?.siteKey || '').trim());
-    const STEP_LABELS = (opts.stepLabels || []).map((label) => t(label));
+    const STEP_LABEL_KEYS = opts.stepLabels || [];
+    const stepLabel = (index) => t(STEP_LABEL_KEYS[index] || '');
     const situationFields = opts.situationFields || ['hasRepresentative', 'hasDesignee', 'isCommonLaw'];
     const domainTextKeys = opts.domainTextKeys || [];
     const draftDatePairs = opts.draftDatePairs || [];
@@ -670,12 +671,12 @@ window.createPermitKit = function createPermitKit(opts) {
     function renderStepsNav() {
         if (!stepsNav) return;
         stepsNav.innerHTML = '';
-        STEP_LABELS.forEach((label, index) => {
+        STEP_LABEL_KEYS.forEach((_, index) => {
             const li = document.createElement('li');
             li.setAttribute('data-step', String(index));
             const btn = document.createElement('button');
             btn.type = 'button';
-            btn.innerHTML = `<span class="pk-rail__num" aria-hidden="true">${index + 1}</span><span>${label}</span>`;
+            btn.innerHTML = `<span class="pk-rail__num" aria-hidden="true">${index + 1}</span><span>${stepLabel(index)}</span>`;
             btn.addEventListener('click', () => {
                 if (index === step) return;
                 if (index > maxReachedStep) return;
@@ -704,9 +705,11 @@ window.createPermitKit = function createPermitKit(opts) {
             const btn = li.querySelector('button');
             if (btn) {
                 btn.disabled = !isReachable || isCurrent;
+                const labelSpan = btn.querySelector('span:last-child');
+                if (labelSpan) labelSpan.textContent = stepLabel(n);
                 btn.setAttribute(
                     'aria-label',
-                    `${STEP_LABELS[n]}${isDone ? t(' (completed)') : isCurrent ? t(' (current)') : ''}`,
+                    `${stepLabel(n)}${isDone ? t(' (completed)') : isCurrent ? t(' (current)') : ''}`,
                 );
             }
         });
@@ -714,7 +717,7 @@ window.createPermitKit = function createPermitKit(opts) {
         const pct = progressPct();
         if (railMeter) railMeter.style.width = `${pct}%`;
         if (railPct) railPct.textContent = t('{pct}% complete', { pct });
-        if (mobileStepLabel) mobileStepLabel.textContent = STEP_LABELS[step] || '';
+        if (mobileStepLabel) mobileStepLabel.textContent = stepLabel(step);
         if (mobileStepCount) {
             mobileStepCount.textContent = t('Step {n} of {total}', {
                 n: step + 1,
@@ -723,6 +726,21 @@ window.createPermitKit = function createPermitKit(opts) {
         }
         if (mobileFill) mobileFill.style.width = `${pct}%`;
     }
+
+    function refreshLocaleUi() {
+        updateStepsNav();
+        if (nextBtn && !nextBtn.hidden) {
+            nextBtn.textContent = step === STEP_CONFIRM ? t('Confirm & continue') : t('Continue');
+        }
+        populateLovSelects();
+        if (step === STEP_CONFIRM) refreshConfirmStep();
+        if (step === STEP_EXTRAS) syncExtras();
+        if (step === STEP_COUNT - 1) renderReview();
+        updateSaveButton();
+        updateActionButtons();
+    }
+
+    document.addEventListener('permitkit:localechange', refreshLocaleUi);
 
     function openWizard(targetStep = 0) {
         wizardOpen = true;
