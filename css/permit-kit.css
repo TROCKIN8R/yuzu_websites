@@ -122,7 +122,8 @@ body:has(.pk-landing:not([hidden])) .pk-entry {
 body:has(.pk-wizard:not([hidden])) main {
   align-items: stretch;
   justify-content: flex-start;
-  padding-block: unset;
+  /* Keep top flush under nav; leave air above the site footer */
+  padding-block: 0 clamp(2.5rem, 7vh, 4.5rem);
 }
 
 body:has(.pk-wizard:not([hidden])) .pk-entry {
@@ -138,6 +139,7 @@ body:has(.pk-wizard:not([hidden])) .pk-hero {
 /* —— Wizard shell —— */
 .pk-wizard {
   display: block;
+  padding-bottom: 0.5rem;
 }
 
 /* Desktop sticky vertical rail — only when progress is active */
@@ -446,6 +448,7 @@ body:has(.pk-wizard:not([hidden])) .pk-hero {
   justify-content: space-between;
   align-items: center;
   margin-top: 1.5rem;
+  margin-bottom: 0.25rem;
   padding-top: 1.25rem;
   border-top: 1px solid var(--carbon-100);
 }
