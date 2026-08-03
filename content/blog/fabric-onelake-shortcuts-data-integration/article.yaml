@@ -8,7 +8,7 @@ description:
   fr: "Les shortcuts OneLake réduisent la duplication — avec permissions inter-workspaces, ordre de refresh et éligibilité Direct Lake maîtrisés."
   es: "Los shortcuts OneLake reducen duplicación — entendiendo permisos entre workspaces, orden de refresh y elegibilidad Direct Lake."
 publish_at: "2026-08-03T13:00:00Z"
-status: scheduled
+status: published
 author: Adrien Yvin
 category: new-tech
 tags:
