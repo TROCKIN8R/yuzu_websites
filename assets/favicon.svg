@@ -1,4 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Lemon">
-  <rect width="64" height="64" rx="12" fill="#FEFAEB"/>
-  <text x="32" y="46" text-anchor="middle" font-size="40" font-family="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif">🍋</text>
+  <!-- Soft cream tile -->
+  <rect width="64" height="64" rx="14" fill="#FEF6DA"/>
+  <!-- Leaf -->
+  <ellipse cx="40" cy="16" rx="7" ry="3.5" fill="#6B8F3C" transform="rotate(-35 40 16)"/>
+  <path d="M36 18 Q38 12 42 10" fill="none" stroke="#4F6B2C" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- Lemon body -->
+  <ellipse cx="32" cy="36" rx="20" ry="16" fill="#F8C607" transform="rotate(-18 32 36)"/>
+  <!-- Tip bumps -->
+  <ellipse cx="15" cy="42" rx="4" ry="3.2" fill="#F8C607" transform="rotate(-18 15 42)"/>
+  <ellipse cx="49" cy="30" rx="4" ry="3.2" fill="#F8C607" transform="rotate(-18 49 30)"/>
+  <!-- Shade -->
+  <ellipse cx="28" cy="40" rx="12" ry="9" fill="#E0A800" opacity="0.35" transform="rotate(-18 28 40)"/>
+  <!-- Highlight -->
+  <ellipse cx="36" cy="28" rx="7" ry="4" fill="#FFE56A" opacity="0.85" transform="rotate(-18 36 28)"/>
 </svg>
