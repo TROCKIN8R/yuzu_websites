@@ -552,8 +552,7 @@ def head_common(
     <meta property="og:image:alt" content="🍋 Yuzu.solutions">{article_meta}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="{BASE}/assets/og-image.png">
-    <link rel="icon" href="{paths['assets']}/favicon.svg?v=2" type="image/svg+xml">
-    <link rel="icon" href="{paths['assets']}/favicon-32.png?v=2" type="image/png" sizes="32x32">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍋</text></svg>">
     <link rel="canonical" href="{canonical}">
 {hreflang_block(page, slug)}
     <meta property="og:locale" content="{lm['og_locale']}">
