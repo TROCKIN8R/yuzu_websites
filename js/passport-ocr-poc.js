@@ -112,37 +112,99 @@
     }
 
     /**
-     * Pull candidate TD3 (passport) MRZ lines from noisy OCR text.
+     * MRZ filler `<` is very often OCR'd as K (also L/C in padding).
+     * Do NOT treat I as a global `<` stand-in — that destroys names like ERIKSSON.
      */
+    function fixChevronConfusions(line) {
+        let s = String(line || '').toUpperCase();
+
+        // Document type is almost always P<…, not PK…
+        if (s.startsWith('PK')) s = `P<${s.slice(2)}`;
+        if (s.startsWith('IK') && !/^IK[A-Z]{2}/.test(s)) s = `I<${s.slice(2)}`;
+        if (s.startsWith('AK')) s = `A<${s.slice(2)}`;
+        if (s.startsWith('CK')) s = `C<${s.slice(2)}`;
+
+        // K touching a chevron is always a chevron
+        let prev;
+        do {
+            prev = s;
+            s = s.replace(/K</g, '<<').replace(/<K/g, '<<');
+            // L/C next to chevron in filler (safe); avoid I here
+            s = s.replace(/[LC]</g, '<<').replace(/<[LC]/g, '<<');
+        } while (s !== prev);
+
+        // Runs of K (the main < confusion) → chevrons
+        s = s.replace(/K{2,}/g, (m) => '<'.repeat(m.length));
+
+        // Lone K not between two letters → chevron (keeps ERIKSSON / MARK)
+        s = s.replace(/(?<![A-Z])K(?![A-Z])/g, '<');
+
+        return s;
+    }
+
     function sanitizeTd3Line(line, lineIndex) {
         let s = String(line || '')
             .toUpperCase()
             .replace(/[«»|]/g, '<')
             .replace(/[^A-Z0-9<]/g, '');
 
+        s = fixChevronConfusions(s);
+
         if (lineIndex === 0) {
-            // Trailing MRZ filler is almost always <; OCR often reads it as L/C/I/1/K
             const sep = s.indexOf('<<');
             if (sep >= 0) {
                 const head = s.slice(0, sep + 2);
                 let rest = s.slice(sep + 2);
-                // Given names then padding: once padding-like run starts, force <
-                rest = rest.replace(/([A-Z]+(?:<[A-Z]+)*)(.*)$/, (_, names, pad) => {
-                    const cleanedPad = String(pad || '').replace(/[LC1IK]/g, '<');
-                    return names + cleanedPad;
-                });
+                // Given names then padding — scrub K/L/C/I/1 only in the pad
+                rest = rest.replace(/^([A-Z]+(?:<[A-Z]+)*)(.*)$/, (_, names, pad) => (
+                    names + String(pad || '').replace(/[KLC1I]/g, '<')
+                ));
                 s = head + rest;
             }
-            s = s.replace(/[LC1IK]{3,}$/g, (m) => '<'.repeat(m.length));
+            s = s.replace(/[KLC1I]+$/g, (m) => '<'.repeat(m.length));
         } else {
-            // Line 2: letters in numeric fields — light cleanup left to mrz autocorrect
-            // Fix common end-padding OCR noise
-            s = s.replace(/[LC1IK]{2,}$/g, (m) => '<'.repeat(m.length));
+            // Line 2: optional data (pos 28+) is often filler <; fix K there, not digits
+            if (s.length >= 28) {
+                const head = s.slice(0, 28);
+                let tail = s.slice(28);
+                tail = fixChevronConfusions(tail);
+                // Runs of L/C in optional filler (not single digits)
+                tail = tail.replace(/[LC]{2,}/g, (m) => '<'.repeat(m.length));
+                tail = tail.replace(/[KLC]+$/g, (m) => '<'.repeat(m.length));
+                s = head + tail;
+            }
+            s = s.replace(/[KLC]+$/g, (m) => '<'.repeat(m.length));
         }
 
         if (s.length > 44) s = s.slice(0, 44);
         if (s.length >= 40 && s.length < 44) s = s.padEnd(44, '<');
+        if (s.length === 44) s = fixChevronConfusions(s);
         return s;
+    }
+
+    /** Extra candidates: also try aggressive K→< when check digits fail. */
+    function expandLineVariants(line, lineIndex) {
+        const base = sanitizeTd3Line(line, lineIndex);
+        const variants = new Set();
+        if (base.length === 44) variants.add(base);
+
+        const raw = String(line || '')
+            .toUpperCase()
+            .replace(/[«»|]/g, '<')
+            .replace(/[^A-Z0-9<]/g, '');
+
+        // Aggressive: every K → < (may break rare names with filler-looking K; ranked by check digits)
+        const aggressive = sanitizeTd3Line(raw.replace(/K/g, '<'), lineIndex);
+        if (aggressive.length === 44) variants.add(aggressive);
+
+        // Keep interior name K only
+        const keepNameK = sanitizeTd3Line(
+            raw.replace(/(?<![A-Z])K(?![A-Z])/g, '<').replace(/K{2,}/g, (m) => '<'.repeat(m.length)),
+            lineIndex,
+        );
+        if (keepNameK.length === 44) variants.add(keepNameK);
+
+        return [...variants];
     }
 
     function extractMrzCandidates(ocrText) {
@@ -156,40 +218,40 @@
             .map((line) => line.replace(/[^A-Z0-9<]/g, ''))
             .filter((line) => line.length >= 30);
 
-        const padded = lines.map((line, i) => {
-            // Heuristic: lines starting with P are line0; otherwise keep index for sanitize
-            const idx = /^P[A-Z<]/.test(line) ? 0 : 1;
-            return sanitizeTd3Line(line, idx);
-        }).filter((line) => line.length === 44);
-
-        const withP = padded.filter((l) => /^P[A-Z<]/.test(l));
-        const longEnough = padded.filter((l) => l.length === 44);
-
         const candidates = [];
+        const pushPair = (aRaw, bRaw) => {
+            const aVars = expandLineVariants(aRaw, 0);
+            const bVars = expandLineVariants(bRaw, 1);
+            for (const a of aVars) {
+                for (const b of bVars) {
+                    candidates.push([a, b]);
+                }
+            }
+        };
 
-        for (let i = 0; i < padded.length; i++) {
-            const a = padded[i];
-            const b = padded[i + 1];
-            if (a && b && /^P[A-Z<]/.test(a)) {
-                candidates.push([sanitizeTd3Line(a, 0), sanitizeTd3Line(b, 1)]);
+        for (let i = 0; i < lines.length - 1; i++) {
+            const a = lines[i];
+            const b = lines[i + 1];
+            if (/^P[A-Z<]/.test(a) || (a.length >= 40 && b.length >= 40)) {
+                pushPair(a, b);
             }
         }
 
-        for (let i = 0; i < longEnough.length - 1; i++) {
-            candidates.push([
-                sanitizeTd3Line(longEnough[i], /^P/.test(longEnough[i]) ? 0 : 1),
-                sanitizeTd3Line(longEnough[i + 1], 1),
-            ]);
+        const withP = lines.filter((l) => /^P[A-Z<]/.test(l));
+        const others = lines.filter((l) => !/^P[A-Z<]/.test(l) && l.length >= 40);
+        if (withP.length && others.length) {
+            pushPair(withP[0], others[0]);
         }
 
-        if (withP.length && longEnough.length) {
-            const a = sanitizeTd3Line(withP[0], 0);
-            const b = sanitizeTd3Line(longEnough.find((l) => l !== a) || longEnough[0], 1);
-            if (a && b) candidates.push([a, b]);
-        }
+        // Prefer pairs whose first line looks like a passport MRZ
+        candidates.sort((x, y) => {
+            const score = (pair) => (/^P[A-Z<]/.test(pair[0]) ? 2 : 0) + (pair[0].includes('<<') ? 1 : 0);
+            return score(y) - score(x);
+        });
 
         const seen = new Set();
         return candidates.filter(([a, b]) => {
+            if (a.length !== 44 || b.length !== 44) return false;
             const key = `${a}\n${b}`;
             if (seen.has(key)) return false;
             seen.add(key);
@@ -226,38 +288,61 @@
     }
 
     /**
-     * Crop bottom band (MRZ zone), upscale, boost contrast for Tesseract.
+     * Crop bottom band (MRZ zone) and return a few preprocess variants.
+     * Hard binarization often turns `<` into K-like blobs — keep a soft grayscale too.
      */
-    async function prepareMrzCanvas(file) {
+    async function prepareMrzCanvases(file) {
         const bitmap = await createImageBitmap(file);
         const w = bitmap.width;
         const h = bitmap.height;
-        const bandTop = Math.floor(h * 0.62);
+        const bandTop = Math.floor(h * 0.58);
         const bandH = h - bandTop;
-        const scale = Math.min(3, Math.max(2, Math.ceil(900 / Math.max(w, 1))));
+        const scale = Math.min(3.2, Math.max(2.2, Math.ceil(1000 / Math.max(w, 1))));
+        const cw = Math.round(w * scale);
+        const ch = Math.round(bandH * scale);
 
-        const canvas = document.createElement('canvas');
-        canvas.width = Math.round(w * scale);
-        canvas.height = Math.round(bandH * scale);
-        const ctx = canvas.getContext('2d', { willReadFrequently: true });
-        if (!ctx) throw new Error('Canvas not available');
+        const drawBand = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = cw;
+            canvas.height = ch;
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            if (!ctx) throw new Error('Canvas not available');
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, cw, ch);
+            ctx.drawImage(bitmap, 0, bandTop, w, bandH, 0, 0, cw, ch);
+            return { canvas, ctx };
+        };
 
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
-        ctx.drawImage(bitmap, 0, bandTop, w, bandH, 0, 0, canvas.width, canvas.height);
-        bitmap.close();
-
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const d = imageData.data;
-        for (let i = 0; i < d.length; i += 4) {
-            const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-            // Contrast stretch around mid-gray
-            const v = Math.max(0, Math.min(255, (gray - 128) * 1.55 + 128));
-            const bw = v > 145 ? 255 : 0;
-            d[i] = d[i + 1] = d[i + 2] = bw;
+        const soft = drawBand();
+        {
+            const imageData = soft.ctx.getImageData(0, 0, cw, ch);
+            const d = imageData.data;
+            for (let i = 0; i < d.length; i += 4) {
+                const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+                // Gentle contrast — preserves thin chevrons better than hard threshold
+                const v = Math.max(0, Math.min(255, (gray - 128) * 1.35 + 128));
+                d[i] = d[i + 1] = d[i + 2] = v;
+            }
+            soft.ctx.putImageData(imageData, 0, 0);
         }
-        ctx.putImageData(imageData, 0, 0);
-        return canvas;
+
+        const hard = drawBand();
+        {
+            const imageData = hard.ctx.getImageData(0, 0, cw, ch);
+            const d = imageData.data;
+            for (let i = 0; i < d.length; i += 4) {
+                const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+                const v = Math.max(0, Math.min(255, (gray - 128) * 1.55 + 128));
+                const bw = v > 150 ? 255 : 0;
+                d[i] = d[i + 1] = d[i + 2] = bw;
+            }
+            hard.ctx.putImageData(imageData, 0, 0);
+        }
+
+        bitmap.close();
+        return [soft.canvas, hard.canvas];
     }
 
     async function getWorker() {
@@ -284,15 +369,32 @@
 
     async function runOcr(file) {
         setStatus('Preparing image (MRZ band)…');
-        const bandCanvas = await prepareMrzCanvas(file);
+        const canvases = await prepareMrzCanvases(file);
 
         setStatus('Loading OCR engine (first run may take a moment)…');
         const worker = await getWorker();
 
-        setStatus('Reading MRZ (cropped band)…');
-        let { data } = await worker.recognize(bandCanvas);
-        let ocrText = data?.text || '';
-        let candidates = extractMrzCandidates(ocrText);
+        const ocrChunks = [];
+        let candidates = [];
+
+        for (let i = 0; i < canvases.length; i++) {
+            setStatus(`Reading MRZ (${i === 0 ? 'soft contrast' : 'high contrast'})…`);
+            const { data } = await worker.recognize(canvases[i]);
+            const text = data?.text || '';
+            ocrChunks.push(`--- pass ${i + 1} ---\n${text}`);
+            candidates = candidates.concat(extractMrzCandidates(text));
+        }
+
+        // Deduplicate candidate pairs
+        const seen = new Set();
+        candidates = candidates.filter(([a, b]) => {
+            const key = `${a}\n${b}`;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+
+        let ocrText = ocrChunks.join('\n\n');
 
         if (!candidates.length) {
             setStatus('Band OCR weak — trying full image…');
@@ -304,7 +406,7 @@
             const ctx = canvas.getContext('2d');
             ctx.drawImage(full, 0, 0, canvas.width, canvas.height);
             full.close();
-            ({ data } = await worker.recognize(canvas));
+            const { data } = await worker.recognize(canvas);
             ocrText = `${ocrText}\n\n--- full image ---\n${data?.text || ''}`;
             candidates = extractMrzCandidates(data?.text || '');
         }
